@@ -12,7 +12,7 @@
  */
 
 #include <cstdint>
-#include "desperado/Logger.h"
+#include "com/diag/desperado/Logger.h"
 
 namespace com {
 namespace diag {

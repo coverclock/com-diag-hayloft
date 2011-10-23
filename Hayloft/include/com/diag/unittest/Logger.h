@@ -7,10 +7,10 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "lariat/lariat.h"
-#include "hayloft/Logger.h"
-#include "desperado/Platform.h"
-#include "desperado/LogOutput.h"
+#include "com/diag/lariat/lariat.h"
+#include "com/diag/hayloft/Logger.h"
+#include "com/diag/desperado/Platform.h"
+#include "com/diag/desperado/LogOutput.h"
 
 namespace com {
 namespace diag {
