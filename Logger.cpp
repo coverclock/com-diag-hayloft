@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "hayloft/Logger.h"
+#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
