@@ -11,8 +11,10 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <new>
 #include <cstdint>
 #include "com/diag/desperado/Logger.h"
+#include "com/diag/desperado/Platform.h"
 
 namespace com {
 namespace diag {
@@ -65,37 +67,31 @@ public:
 
 	/**
 	 * Ctor.
-	 * @param po points to an Output object to which log messages are emitted.
 	 */
-    explicit Logger(::com::diag::desperado::Output * po = 0)
-    : ::com::diag::desperado::Logger(po)
-    , mask(0)
-    {
-    }
-
-	/**
-	 * Ctor.
-	 * @param ro refers to an Output object to which log messages are emitted.
-	 */
-    explicit Logger(::com::diag::desperado::Output& ro)
-    : ::com::diag::desperado::Logger(ro)
+    explicit Logger()
+    : ::com::diag::desperado::Logger(::com::diag::desperado::Platform::instance().log())
     , mask(0)
     {
     }
 
     /**
-     * Dtor. Any buffered output is flushed.
+     * Dtor.
+     * Any buffered output is flushed.
      */
     virtual ~Logger() {
     	(output())();
     }
 
     /**
-     * Returns true if the specified log level is enabled, false otherwise.
-     * @return true if the specified log level is enabled, false otherwise.
+     * Set the Output functor to which log messages are emitted.
+	 * @param ro refers to an Output functor to which log messages are emitted.
+     * @return a reference to this object.
      */
-    virtual bool isEnabled(Level level) {
-    	return (mask & ((Mask)1 << level)) != 0;
+    Logger & setOutput(::com::diag::desperado::Output& ro) {
+    	Mask temporary = mask;
+    	initialize(ro);
+        mask = temporary;
+    	return *this;
     }
 
     /**
@@ -116,6 +112,14 @@ public:
     Logger & disable(Level level) {
     	mask &= ~((Mask)1 << level);
     	return *this;
+    }
+
+    /**
+     * Returns true if the specified log level is enabled, false otherwise.
+     * @return true if the specified log level is enabled, false otherwise.
+     */
+    virtual bool isEnabled(Level level) {
+    	return (mask & ((Mask)1 << level)) != 0;
     }
 
     using ::com::diag::desperado::Logger::output;
@@ -165,6 +169,39 @@ private:
      * Assignment is disabled.
      */
     Logger& operator=(const Logger& that);
+
+	/**
+	 * Ctor.
+     * This only exists so we can leverage the initialize function in the
+     * Desperado base class. It is private because it is really a bad idea
+     * and I wish I had never done it. Alas, it permeates Desperado.
+	 * @param ro refers to an Output functor to which log messages are emitted.
+	 */
+    explicit Logger(::com::diag::desperado::Output& ro)
+    : ::com::diag::desperado::Logger(ro)
+    , mask(0)
+    {
+    }
+
+    /**
+     * Initializes this object, returning it to its just constructed state.
+     * This only exists so we can leverage the initialize function in the
+     * Desperado base class. It is private because it is really a bad idea
+     * and I wish I had never done it. Alas, it permeates Desperado.
+     * @param ro refers to an output object.
+     * @return true if successful, false otherwise.
+     */
+    virtual bool initialize(::com::diag::desperado::Output& ro) {
+        bool rc = false;
+        try {
+            this->~Logger();
+            new(this) Logger(ro);
+            rc = true;
+        } catch (...) {
+            rc = false;
+        }
+        return rc;
+    }
 
 };
 
