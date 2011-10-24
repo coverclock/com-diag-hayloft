@@ -8,13 +8,14 @@
  */
 
 #include "com/diag/hayloft/Logger.h"
+#include "com/diag/desperado/Platform.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
 Logger & Logger::factory() {
-    Logger & logger = (*(new Logger()))
+    Logger & logger = (*(new Logger))
     	.disable(FINEST)
     	.disable(FINER)
     	.disable(FINE)

@@ -116,8 +116,8 @@ TEST(LoggerTest, EnableDisable) {
 
 TEST(LoggerTest, Logging) {
 	::com::diag::desperado::LogOutput output(::com::diag::desperado::Platform::instance().error());
-    Logger logger(output);
-    output.initialize(::com::diag::desperado::Platform::instance().error(), logger);
+    Logger logger;
+	logger.setOutput(output);
 	logger.enable(logger.FINEST);
 	logger.enable(logger.FINER);
 	logger.enable(logger.FINE);
