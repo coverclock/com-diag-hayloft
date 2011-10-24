@@ -77,7 +77,7 @@ TEST(LoggerTest, Instance) {
 
 TEST(LoggerTest, EnableDisable) {
 	Logger logger;
-	for (int mask = 0; mask < 0x10000; ++mask) {
+	for (int mask = 0; mask <= 0xffff; ++mask) {
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.FINEST);
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.FINER);
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.FINE);
@@ -94,7 +94,6 @@ TEST(LoggerTest, EnableDisable) {
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.FATAL);
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.EMERGENCY);
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.PRINT);
-		//
 		LOGGER_TEST_ENABLEDISABLE_TEST(logger.FINEST);
 		LOGGER_TEST_ENABLEDISABLE_TEST(logger.FINER);
 		LOGGER_TEST_ENABLEDISABLE_TEST(logger.FINE);
@@ -114,10 +113,32 @@ TEST(LoggerTest, EnableDisable) {
 	}
 }
 
+static ::com::diag::desperado::LogOutput logoutput(::com::diag::desperado::Platform::instance().error());
+
+TEST(LoggerTest, Reinitialization) {
+	Logger & logger = Logger::instance();
+	logger.setOutput(logoutput);
+	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
+	EXPECT_FALSE(logger.isEnabled(logger.FINER));
+	EXPECT_FALSE(logger.isEnabled(logger.FINE));
+	EXPECT_FALSE(logger.isEnabled(logger.TRACE));
+	EXPECT_FALSE(logger.isEnabled(logger.DEBUG));
+	EXPECT_FALSE(logger.isEnabled(logger.INFORMATION));
+	EXPECT_FALSE(logger.isEnabled(logger.CONFIGURATION));
+	EXPECT_TRUE(logger.isEnabled(logger.NOTICE));
+	EXPECT_TRUE(logger.isEnabled(logger.WARNING));
+	EXPECT_TRUE(logger.isEnabled(logger.ERROR));
+	EXPECT_TRUE(logger.isEnabled(logger.SEVERE));
+	EXPECT_TRUE(logger.isEnabled(logger.CRITICAL));
+	EXPECT_TRUE(logger.isEnabled(logger.ALERT));
+	EXPECT_TRUE(logger.isEnabled(logger.FATAL));
+	EXPECT_TRUE(logger.isEnabled(logger.EMERGENCY));
+	EXPECT_TRUE(logger.isEnabled(logger.PRINT));
+}
+
 TEST(LoggerTest, Logging) {
-	::com::diag::desperado::LogOutput output(::com::diag::desperado::Platform::instance().error());
-    Logger logger;
-	logger.setOutput(output);
+	Logger & logger = Logger::instance();
+	logger.setOutput(logoutput);
 	logger.enable(logger.FINEST);
 	logger.enable(logger.FINER);
 	logger.enable(logger.FINE);

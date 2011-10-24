@@ -88,9 +88,7 @@ public:
      * @return a reference to this object.
      */
     Logger & setOutput(::com::diag::desperado::Output& ro) {
-    	Mask temporary = mask;
-    	initialize(ro);
-        mask = temporary;
+    	initialize(ro, mask);
     	return *this;
     }
 
@@ -176,10 +174,11 @@ private:
      * Desperado base class. It is private because it is really a bad idea
      * and I wish I had never done it. Alas, it permeates Desperado.
 	 * @param ro refers to an Output functor to which log messages are emitted.
+	 * @param mv is the initial value of the enable bitmask.
 	 */
-    explicit Logger(::com::diag::desperado::Output& ro)
+    explicit Logger(::com::diag::desperado::Output& ro, Mask mv)
     : ::com::diag::desperado::Logger(ro)
-    , mask(0)
+    , mask(mv)
     {
     }
 
@@ -188,14 +187,15 @@ private:
      * This only exists so we can leverage the initialize function in the
      * Desperado base class. It is private because it is really a bad idea
      * and I wish I had never done it. Alas, it permeates Desperado.
-     * @param ro refers to an output object.
+	 * @param ro refers to an Output functor to which log messages are emitted.
+	 * @param mv is the initial value of the enable bitmask.
      * @return true if successful, false otherwise.
      */
-    virtual bool initialize(::com::diag::desperado::Output& ro) {
+    virtual bool initialize(::com::diag::desperado::Output& ro, Mask mv) {
         bool rc = false;
         try {
             this->~Logger();
-            new(this) Logger(ro);
+            new(this) Logger(ro, mv);
             rc = true;
         } catch (...) {
             rc = false;
