@@ -22,17 +22,19 @@ namespace hayloft {
 
 class Logger : public ::com::diag::desperado::Logger {
 
+public:
+
+    /**
+     * This mask holds a bit for every possible log level encoded as (1<<level).
+     */
+	typedef uint16_t Mask;
+
 protected:
 
     /**
      * Points to the default instance of this object.
      */
     static Logger * singleton;
-
-    /**
-     * This mask holds a bit for every possible log level encoded as (1<<level).
-     */
-	typedef uint16_t Mask;
 
     /**
      * Encodes the log mask where each bit indicates whether the log level
@@ -65,6 +67,14 @@ public:
 	    return *Logger::singleton;
 	}
 
+    /**
+     * Returns the name of the environmental variable that can be used to
+     * set the mask.
+     */
+    static const char * MASK_ENV_NAME() {
+    	return "COM_DIAG_HAYLOFT_LOGGER_MASK";
+    }
+
 	/**
 	 * Ctor.
 	 */
@@ -79,7 +89,7 @@ public:
      * Any buffered output is flushed.
      */
     virtual ~Logger() {
-    	(output())();
+    	(getOutput())();
     }
 
     /**
@@ -87,9 +97,43 @@ public:
 	 * @param ro refers to an Output functor to which log messages are emitted.
      * @return a reference to this object.
      */
-    Logger & setOutput(::com::diag::desperado::Output& ro) {
+    Logger & setOutput(::com::diag::desperado::Output & ro) {
     	initialize(ro, mask);
     	return *this;
+    }
+
+    /**
+     * Get a reference to the current output functor.
+     * @return the current output functor.
+     */
+    ::com::diag::desperado::Output & getOutput() {
+    	return ::com::diag::desperado::Logger::output();
+    }
+
+    /**
+     * Set the mask which controls which log levels are enabled.
+     * @param vm is the new mask value.
+     * @return a reference to this object.
+     */
+    Logger & setMask(Mask vm) {
+    	mask = vm;
+    	return *this;
+    }
+
+    /**
+     * Set the mask which controls which log levels are enabled from
+     * an environmental variable.
+     * @return a reference to this object.
+     */
+    Logger & setMask();
+
+    /**
+     * Get the current mask. This is mostly useful for saving the current mask
+     * so that it can be restored after temporarily changing it.
+     * @return the current mask;
+     */
+    Mask getMask() {
+    	return mask;
     }
 
     /**
@@ -119,8 +163,6 @@ public:
     virtual bool isEnabled(Level level) {
     	return (mask & ((Mask)1 << level)) != 0;
     }
-
-    using ::com::diag::desperado::Logger::output;
 
     using ::com::diag::desperado::Logger::log;
 
@@ -161,12 +203,12 @@ private:
     /**
      * Copying is disabled.
      */
-    Logger(const Logger& that);
+    Logger(const Logger & that);
 
     /**
      * Assignment is disabled.
      */
-    Logger& operator=(const Logger& that);
+    Logger& operator=(const Logger & that);
 
 	/**
 	 * Ctor.
@@ -174,11 +216,11 @@ private:
      * Desperado base class. It is private because it is really a bad idea
      * and I wish I had never done it. Alas, it permeates Desperado.
 	 * @param ro refers to an Output functor to which log messages are emitted.
-	 * @param mv is the initial value of the enable bitmask.
+	 * @param vm is the initial value of the enable bitmask.
 	 */
-    explicit Logger(::com::diag::desperado::Output& ro, Mask mv)
+    explicit Logger(::com::diag::desperado::Output & ro, Mask vm)
     : ::com::diag::desperado::Logger(ro)
-    , mask(mv)
+    , mask(vm)
     {
     }
 
@@ -188,14 +230,14 @@ private:
      * Desperado base class. It is private because it is really a bad idea
      * and I wish I had never done it. Alas, it permeates Desperado.
 	 * @param ro refers to an Output functor to which log messages are emitted.
-	 * @param mv is the initial value of the enable bitmask.
+	 * @param vm is the initial value of the enable bitmask.
      * @return true if successful, false otherwise.
      */
-    virtual bool initialize(::com::diag::desperado::Output& ro, Mask mv) {
+    virtual bool initialize(::com::diag::desperado::Output & ro, Mask vm) {
         bool rc = false;
         try {
             this->~Logger();
-            new(this) Logger(ro, mv);
+            new(this) Logger(ro, vm);
             rc = true;
         } catch (...) {
             rc = false;
