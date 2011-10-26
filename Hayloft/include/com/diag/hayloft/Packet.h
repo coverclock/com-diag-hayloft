@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include "com/diag/desperado/target.h"
+#include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/desperado/Output.h"
 #include "com/diag/desperado/InputOutput.h"
@@ -32,12 +33,13 @@ public:
 
 	typedef uint8_t Datum;
 
-	explicit PacketData(void * data /* OWNERSHIP NOT TRANSFERRED */, size_t ve)
+	explicit PacketData(void * data /* OWNERSHIP NOT TRANSFERRED */, size_t ve, size_t vf = unsignedintmaxof(size_t))
 	: next(0)
 	, payload(reinterpret_cast<Datum*>(data))
 	, head(payload)
 	, tail(payload + ve)
 	, extent(ve)
+	, fraction(vf)
 	{}
 
 	virtual ~PacketData() {}
@@ -70,6 +72,16 @@ private:
 	 * Never altered after construction.
 	 */
 	const size_t extent;
+
+	/**
+	 * The amount of slack to leave at the beginning of the buffer when the
+	 * first octet is appended or prepended in terms of a fraction of the
+	 * remaining unused space.
+	 * (>remaining): leave no the space at the beginning (default).
+	 * (1): leave all space at the beginning.
+	 * (0): wackiness ensues.
+	 */
+	const size_t fraction;
 
 	/**
 	 * Points to the first used octet in the buffer.
@@ -114,8 +126,8 @@ public:
 
 	using PacketData::Datum;
 
-	explicit PacketBuffer(size_t ve)
-	: PacketData(new Datum[ve + (ve % sizeof(Alignment))], ve + (ve % sizeof(Alignment)))
+	explicit PacketBuffer(size_t ve, size_t vf = unsignedintmaxof(size_t))
+	: PacketData(new Datum[ve + (ve % sizeof(Alignment))], ve + (ve % sizeof(Alignment)), vf)
 	{ empty(); }
 
 	virtual ~PacketBuffer() { delete [] payload; }
