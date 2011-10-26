@@ -12,7 +12,7 @@
  */
 
 #include <new>
-#include <cstdint>
+#include "com/diag/desperado/target.h"
 #include "com/diag/desperado/Logger.h"
 #include "com/diag/desperado/Platform.h"
 
