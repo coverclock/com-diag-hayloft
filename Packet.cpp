@@ -20,7 +20,7 @@ size_t PacketData::append(void * data, size_t length) {
 	if (actual > 0) {
 		Datum * pointer;
 		if (tail == 0) {
-			size_t slack = (available - actual) / 2;
+			size_t slack = (available - actual) / fraction;
 			pointer = payload + slack;
 			head = pointer;
 		} else {
@@ -38,7 +38,7 @@ size_t PacketData::prepend(void * data, size_t length) {
 	if (actual > 0) {
 		Datum * pointer;
 		if (head == 0) {
-			size_t slack = (available - actual) / 2;
+			size_t slack = (available - actual) / fraction;
 			pointer = payload + slack;
 			tail = pointer + actual;
 		} else {
