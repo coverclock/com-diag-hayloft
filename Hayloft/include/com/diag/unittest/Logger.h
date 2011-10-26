@@ -1,3 +1,7 @@
+/* vim: set ts=4 expandtab shiftwidth=4: */
+#ifndef _COM_DIAG_UNITTEST_LOGGER_H_
+#define _COM_DIAG_UNITTEST_LOGGER_H_
+
 /**
  * @file
  *
@@ -15,8 +19,9 @@
 
 namespace com {
 namespace diag {
-namespace hayloft {
 namespace unittest {
+
+using namespace ::com::diag::hayloft;
 
 TEST(LoggerTest, Defaults) {
 	Logger logger;
@@ -360,4 +365,5 @@ TEST(LoggerTest, Logging) {
 }
 }
 }
-}
+
+#endif
