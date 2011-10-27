@@ -98,7 +98,19 @@ public:
      * @return a reference to this object.
      */
     Logger & setOutput(::com::diag::desperado::Output & ro) {
-    	initialize(ro, mask);
+    	::com::diag::desperado::Logger logger(ro);
+    	// Yes, I know this is kinda funky. We just want to reinitialize the
+    	// super class portion of ourselves with the new version to set the
+    	// output functor, and the super class doesn't have an operation with
+    	// which to do that.
+    	// IMO this is legal and should compile, but does not. Worse, the
+    	// diagnostics are completely mysterious.
+    	//  static_cast<::com::diag::desperado::Logger&>(*this) = logger;
+    	// Much to my surprise, this compiles and works.
+    	//  ::com::diag::desperado::Logger::operator=(logger);
+    	// But this is a little less scary looking, and works fine.
+    	::com::diag::desperado::Logger& that = *this;
+    	that = logger;
     	return *this;
     }
 
@@ -197,53 +209,6 @@ public:
     using ::com::diag::desperado::Logger::emergency;
 
     using ::com::diag::desperado::Logger::print;
-
-private:
-
-    /**
-     * Copying is disabled.
-     */
-    Logger(const Logger & that);
-
-    /**
-     * Assignment is disabled.
-     */
-    Logger& operator=(const Logger & that);
-
-	/**
-	 * Ctor.
-     * This only exists so we can leverage the initialize function in the
-     * Desperado base class. It is private because it is really a bad idea
-     * and I wish I had never done it. Alas, it permeates Desperado.
-	 * @param ro refers to an Output functor to which log messages are emitted.
-	 * @param vm is the initial value of the enable bitmask.
-	 */
-    explicit Logger(::com::diag::desperado::Output & ro, Mask vm)
-    : ::com::diag::desperado::Logger(ro)
-    , mask(vm)
-    {
-    }
-
-    /**
-     * Initializes this object, returning it to its just constructed state.
-     * This only exists so we can leverage the initialize function in the
-     * Desperado base class. It is private because it is really a bad idea
-     * and I wish I had never done it. Alas, it permeates Desperado.
-	 * @param ro refers to an Output functor to which log messages are emitted.
-	 * @param vm is the initial value of the enable bitmask.
-     * @return true if successful, false otherwise.
-     */
-    virtual bool initialize(::com::diag::desperado::Output & ro, Mask vm) {
-        bool rc = false;
-        try {
-            this->~Logger();
-            new(this) Logger(ro, vm);
-            rc = true;
-        } catch (...) {
-            rc = false;
-        }
-        return rc;
-    }
 
 };
 
