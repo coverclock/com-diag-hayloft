@@ -77,7 +77,9 @@ private:
 	 * The amount of slack to leave at the beginning of the buffer when the
 	 * first octet is appended or prepended in terms of a fraction of the
 	 * remaining unused space.
+	 * Never altered after construction.
 	 * (>remaining): leave no the space at the beginning (default).
+	 * (2): place the first appended or prepended data smack in the middle.
 	 * (1): leave all space at the beginning.
 	 * (0): wackiness ensues.
 	 */
