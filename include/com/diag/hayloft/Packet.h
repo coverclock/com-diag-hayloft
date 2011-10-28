@@ -14,8 +14,6 @@
 #include <cstring>
 #include "com/diag/desperado/target.h"
 #include "com/diag/desperado/generics.h"
-#include "com/diag/desperado/Input.h"
-#include "com/diag/desperado/Output.h"
 #include "com/diag/desperado/InputOutput.h"
 
 namespace com {
@@ -23,19 +21,23 @@ namespace diag {
 namespace hayloft {
 
 /**
- * A PacketData is like a PacketBuffer except that it is constructed in the
- * completely full state already containing data.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketData {
 
 public:
 
+	static const size_t PREPEND = 1;
+
+	static const size_t EITHER = 2;
+
+	static const size_t APPEND = unsignedintmaxof(size_t);
+
 	typedef uint8_t Datum;
 
-	explicit PacketData(void * data /* UNTAKEN */, size_t ve, size_t vf = unsignedintmaxof(size_t))
+	explicit PacketData(void * data /* UNTAKEN */, size_t ve, size_t vf = EITHER)
 	: next(0)
-	, payload(reinterpret_cast<Datum*>(data))
+	, payload(static_cast<Datum*>(data))
 	, head(payload)
 	, tail(payload + ve)
 	, extent(ve)
@@ -55,7 +57,7 @@ public:
 	/**
 	 * Points to the next PacketData in a linked list.
 	 */
-	PacketData * next; /* UNTAKEN */
+	PacketData * next;
 
 protected:
 
@@ -63,7 +65,7 @@ protected:
 	 * Points to the first octet of the buffer.
 	 * Never altered after construction.
 	 */
-	Datum * const payload; /* UNTAKEN */
+	Datum * const payload;
 
 private:
 
@@ -105,6 +107,8 @@ private:
 
 public:
 
+	size_t length() { return extent; }
+
 	const void * buffer() { return head; }
 
 	size_t size() { return tail - head; }
@@ -132,25 +136,25 @@ private:
 };
 
 /**
- * A PacketBuffer is a buffer in which data can be prepended at the beginning
- * or appended at the end.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class PacketBuffer : public PacketData {
-
-protected:
-
-	typedef uint64_t Alignment;
+class PacketDataDynamic : public PacketData {
 
 public:
 
+	using PacketData::PREPEND;
+
+	using PacketData::EITHER;
+
+	using PacketData::APPEND;
+
 	using PacketData::Datum;
 
-	explicit PacketBuffer(size_t ve, size_t vf = unsignedintmaxof(size_t))
-	: PacketData(new Datum[ve + (ve % sizeof(Alignment))], ve + (ve % sizeof(Alignment)), vf)
-	{ empty(); }
+	explicit PacketDataDynamic(Datum * data /* TAKEN */, size_t ve, size_t vf = EITHER)
+	: PacketData(data, ve, vf)
+	{}
 
-	virtual ~PacketBuffer() { delete [] payload; }
+	virtual ~PacketDataDynamic() { delete [] payload; }
 
 	using PacketData::append;
 
@@ -159,6 +163,61 @@ public:
 	using PacketData::consume;
 
 	using PacketData::next;
+
+	using PacketData::length;
+
+	using PacketData::buffer;
+
+	using PacketData::size;
+
+	using PacketData::empty;
+
+private:
+
+    /**
+     *  Copy constructor.
+     *  @param that refers to an R-value object of this type.
+     */
+	PacketDataDynamic(const PacketDataDynamic & that);
+
+    /**
+     *  Assignment operator.
+     *  @param that refers to an R-value object of this type.
+     */
+	PacketDataDynamic& operator=(const PacketDataDynamic & that);
+
+};
+
+/**
+ * @author coverclock@diag.com (Chip Overclock)
+ */
+class PacketBuffer : public PacketData {
+
+public:
+
+	using PacketData::PREPEND;
+
+	using PacketData::EITHER;
+
+	using PacketData::APPEND;
+
+	using PacketData::Datum;
+
+	explicit PacketBuffer(void * buffer /* UNTAKEN */, size_t ve, size_t vf = EITHER)
+	: PacketData(buffer, ve, vf)
+	{ empty(); }
+
+	virtual ~PacketBuffer() {}
+
+	using PacketData::append;
+
+	using PacketData::prepend;
+
+	using PacketData::consume;
+
+	using PacketData::next;
+
+	using PacketData::length;
 
 	using PacketData::buffer;
 
@@ -179,6 +238,63 @@ private:
      *  @param that refers to an R-value object of this type.
      */
 	PacketBuffer& operator=(const PacketBuffer & that);
+
+};
+
+/**
+ * @author coverclock@diag.com (Chip Overclock)
+ */
+class PacketBufferDynamic : public PacketBuffer {
+
+public:
+
+	using PacketBuffer::PREPEND;
+
+	using PacketBuffer::EITHER;
+
+	using PacketBuffer::APPEND;
+
+	using PacketBuffer::Datum;
+
+	explicit PacketBufferDynamic(Datum * buffer /* TAKEN */, size_t ve, size_t vf = EITHER)
+	: PacketBuffer(buffer, ve, vf)
+	{}
+
+	explicit PacketBufferDynamic(size_t ve, size_t vf = EITHER)
+	: PacketBuffer(new Datum[ve], ve, vf)
+	{}
+
+	virtual ~PacketBufferDynamic() { delete [] payload; }
+
+	using PacketBuffer::append;
+
+	using PacketBuffer::prepend;
+
+	using PacketBuffer::consume;
+
+	using PacketBuffer::next;
+
+	using PacketBuffer::length;
+
+	using PacketBuffer::buffer;
+
+	using PacketBuffer::size;
+
+	using PacketBuffer::empty;
+
+private:
+
+    /**
+     *  Copy constructor.
+     *  @param that refers to an R-value object of this type.
+     */
+	PacketBufferDynamic(const PacketBufferDynamic & that);
+
+    /**
+     *  Assignment operator.
+     *  @param that refers to an R-value object of this type.
+     */
+	PacketBufferDynamic& operator=(const PacketBufferDynamic & that);
 
 };
 
@@ -454,9 +570,9 @@ private:
 
     size_t allocation;
 
-    PacketData * head; /* TAKEN */
+    PacketData * head;
 
-    PacketData * tail; /* TAKEN */
+    PacketData * tail;
 
     /**
      *  This is the Input functor to the Packet.

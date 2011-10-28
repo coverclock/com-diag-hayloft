@@ -17,13 +17,8 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
-static ::com::diag::desperado::Output & stderroutput = ::com::diag::desperado::Platform::instance().error();
-
-static ::com::diag::desperado::LogOutput logoutput(stderroutput);
-
 Logger & Logger::factory() {
     return (*(new Logger))
-    	.setOutput(logoutput)
     	.disable(FINEST)
     	.disable(FINER)
     	.disable(FINE)

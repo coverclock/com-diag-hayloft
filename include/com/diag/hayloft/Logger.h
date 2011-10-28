@@ -84,9 +84,18 @@ public:
     {
     }
 
+	/**
+	 * Ctor.
+	 * @param ro refers to an Output functor to which log messages are emitted.
+	 */
+    explicit Logger(::com::diag::desperado::Output & ro)
+    : ::com::diag::desperado::Logger(ro)
+    , mask(0)
+    {
+    }
+
     /**
-     * Dtor.
-     * Any buffered output is flushed.
+     * Dtor. Any buffered output is flushed.
      */
     virtual ~Logger() {
     	(getOutput())();
@@ -104,9 +113,9 @@ public:
     	// output functor, and the super class doesn't have an operation with
     	// which to do that.
     	// IMO this is legal and should compile, but does not. Worse, the
-    	// diagnostics are completely mysterious.
+    	// diagnostics are completely unhelpful.
     	//  static_cast<::com::diag::desperado::Logger&>(*this) = logger;
-    	// Much to my surprise, this compiles and works.
+    	// Somewhat to my surprise, this compiles and works.
     	//  ::com::diag::desperado::Logger::operator=(logger);
     	// But this is a little less scary looking, and works fine.
     	::com::diag::desperado::Logger& that = *this;

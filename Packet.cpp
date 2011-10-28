@@ -11,6 +11,7 @@
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/Print.h"
+#include "com/diag/desperado/Dump.h"
 
 namespace com {
 namespace diag {
@@ -109,21 +110,22 @@ void Packet::prepend(PacketData & rd) {
 
 size_t Packet::append(const void * data, size_t length) {
 	size_t total = 0;
-	size_t produced;
+	size_t appended;
 	if (tail == 0) {
-		append(*(new PacketBuffer(allocation, 2)));
+		append(*(new PacketBufferDynamic(allocation, PacketBuffer::EITHER)));
 	} else if (tail->suffix() == 0) {
-		append(*(new PacketBuffer(allocation, unsignedintmaxof(size_t))));
+		append(*(new PacketBufferDynamic(allocation, PacketBuffer::APPEND)));
 	}
+	const PacketData::Datum * datap = static_cast<const PacketData::Datum*>(data);
 	while (length > 0) {
-		produced = tail->append(data, length);
-		if (produced > 0) {
-			data += produced;
-			total += produced;
-			length -= produced;
+		appended = tail->append(datap, length);
+		if (appended > 0) {
+			datap += appended;
+			total += appended;
+			length -= appended;
 		}
-		if (produced < length) {
-			append(*(new PacketBuffer(allocation, unsignedintmaxof(size_t))));
+		if (length > 0) {
+			append(*(new PacketBufferDynamic(allocation, PacketBuffer::APPEND)));
 		}
 	}
 	return total;
@@ -131,16 +133,29 @@ size_t Packet::append(const void * data, size_t length) {
 
 size_t Packet::prepend(const void * data, size_t length) {
 	size_t total = 0;
-	size_t produced;
+	size_t prepended;
+	size_t prefix;
+	size_t actual;
 	if (head == 0) {
-		prepend(*(new PacketBuffer(allocation, 2)));
+		prepend(*(new PacketBufferDynamic(allocation, PacketBuffer::EITHER)));
 	} else if (head->prefix() == 0) {
-		prepend(*(new PacketBuffer(allocation, 1)));
+		prepend(*(new PacketBufferDynamic(allocation, PacketBuffer::PREPEND)));
 	}
+	// Complicated by the fact that we have to work backwards.
+	const PacketData::Datum * datap = static_cast<const PacketData::Datum*>(data) + length;
 	while (length > 0) {
-
-		if (produced < length) {
-			prepend(*(new PacketBuffer(allocation, 1)));
+		prefix = head->prefix();
+		actual = (length > prefix) ? prefix : length;
+		prepended = head->prepend(datap - actual, actual);
+		// If prepended doesn't equal actual, we're screwed so badly it's not
+		// really worth keeping separate variables.
+		if (prepended > 0) {
+			datap -= prepended;
+			total += prepended;
+			length -= prepended;
+		}
+		if (length > 0) {
+			prepend(*(new PacketBufferDynamic(allocation, PacketBuffer::PREPEND)));
 		}
 	}
 	return total;
@@ -150,10 +165,11 @@ size_t Packet::consume(void * data, size_t length) {
 	size_t total = 0;
 	size_t consumed;
 	PacketData * here;
+	PacketData::Datum * datap = static_cast<PacketData::Datum*>(data);
 	while ((head != 0) && (length > 0)) {
-		consumed = head->consume(data, length);
+		consumed = head->consume(datap, length);
 		if (consumed > 0) {
-			data += consumed;
+			datap += consumed;
 			total += consumed;
 			length -= consumed;
 		} else {
@@ -168,6 +184,7 @@ size_t Packet::consume(void * data, size_t length) {
 void Packet::show(int level, Output * display, int indent) const {
     ::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
     ::com::diag::desperado::Print printf(display);
+    ::com::diag::desperado::Dump dump(display);
     const char* sp = printf.output().indentation(indent);
     char component[sizeof(__FILE__)];
     printf("%s%s(%p)[%lu]:\n",
@@ -175,8 +192,20 @@ void Packet::show(int level, Output * display, int indent) const {
         this, sizeof(*this));
     InputOutput::show(level, display, indent + 1);
     printf("%s allocation=%zu\n", sp, allocation);
-    printf("%s head=%lu\n", sp, head);
-    printf("%s tail=%lu\n", sp, tail);
+    printf("%s head=%p\n", sp, head);
+    if (0 < level) {
+		for (PacketData * here = head; here != 0; here = here->next) {
+			size_t length = here->length();
+			size_t prefix = here->prefix();
+			size_t size = here->size();
+			size_t suffix = here->suffix();
+			printf("%s  %p: next=%p length=%zu prefix=%zu size=%zu suffix=%zu total=%zu\n", sp, here, here->next, length, prefix, size, suffix, prefix + size + suffix);
+			if (1 < level) {
+			    dump.bytes(here->buffer(), size, false, 0, indent + 3);
+			}
+		}
+    }
+    printf("%s tail=%p\n", sp, tail);
    // in.show(level, display, indent + 1);
    // out.show(level, display, indent + 1);
 

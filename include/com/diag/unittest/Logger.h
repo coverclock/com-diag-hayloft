@@ -15,7 +15,8 @@
 #include <cstdio>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/Output.h"
+#include "com/diag/desperado/FileOutput.h"
+#include "com/diag/desperado/LogOutput.h"
 
 namespace com {
 namespace diag {
@@ -323,7 +324,9 @@ TEST(LoggerTest, SetMaskEnvironment) {
 	} while (false)
 
 TEST(LoggerTest, Logging) {
-	Logger & logger = Logger::instance();
+	::com::diag::desperado::FileOutput errput(stderr);
+	::com::diag::desperado::LogOutput logput(errput);
+	Logger logger(logput);
 	for (int mask = 0; mask <= 0xffff; mask = (mask == 0) ? 1 : (mask << 1)) {
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.FINEST);
 		LOGGER_TEST_ENABLEDISABLE_SET(logger.FINER);
