@@ -507,7 +507,29 @@ TEST(PacketTest, Heap) {
 	delete packet;
 }
 
-TEST(PacketTest, Fill) {
+TEST(PacketTest, PrependAppendConsumeMany) {
+	static const size_t SIZE = 256;
+	static const size_t ZERO = 0;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = SIZE / 8;
+	Packet packet(ALLOC);
+	packet.show(2);
+	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
+		size_t jj = (sizeof(data) / 2) - ii - 1;
+		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
+		size_t kk = (sizeof(data) / 2) + ii;
+		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
+		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
+	}
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	char datum;
+	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
+	packet.show(2);
 }
 
 }
