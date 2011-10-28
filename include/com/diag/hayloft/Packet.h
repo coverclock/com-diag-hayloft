@@ -33,7 +33,7 @@ public:
 
 	typedef uint8_t Datum;
 
-	explicit PacketData(void * data /* OWNERSHIP NOT TRANSFERRED */, size_t ve, size_t vf = unsignedintmaxof(size_t))
+	explicit PacketData(void * data /* UNTAKEN */, size_t ve, size_t vf = unsignedintmaxof(size_t))
 	: next(0)
 	, payload(reinterpret_cast<Datum*>(data))
 	, head(payload)
@@ -44,9 +44,9 @@ public:
 
 	virtual ~PacketData() {}
 
-	size_t append(void * data, size_t length);
+	size_t append(const void * data /* COPIED */, size_t length);
 
-	size_t prepend(void * data, size_t length);
+	size_t prepend(const void * data /* COPIED */, size_t length);
 
 	size_t consume(void * data, size_t length);
 
@@ -55,7 +55,7 @@ public:
 	/**
 	 * Points to the next PacketData in a linked list.
 	 */
-	PacketData * next;
+	PacketData * next; /* UNTAKEN */
 
 protected:
 
@@ -63,7 +63,7 @@ protected:
 	 * Points to the first octet of the buffer.
 	 * Never altered after construction.
 	 */
-	Datum * const payload; /* NOT OWNED */
+	Datum * const payload; /* UNTAKEN */
 
 private:
 
@@ -109,7 +109,25 @@ public:
 
 	size_t size() { return tail - head; }
 
+	size_t prefix() { return (head == 0) ? extent : head - payload; }
+
+	size_t suffix() { return (tail == 0) ? extent : payload + extent - tail; }
+
 	void empty() { head = 0; tail = 0; }
+
+private:
+
+    /**
+     *  Copy constructor.
+     *  @param that refers to an R-value object of this type.
+     */
+    PacketData(const PacketData& that);
+
+    /**
+     *  Assignment operator.
+     *  @param that refers to an R-value object of this type.
+     */
+    PacketData& operator=(const PacketData& that);
 
 };
 
@@ -148,6 +166,20 @@ public:
 
 	using PacketData::empty;
 
+private:
+
+    /**
+     *  Copy constructor.
+     *  @param that refers to an R-value object of this type.
+     */
+	PacketBuffer(const PacketBuffer & that);
+
+    /**
+     *  Assignment operator.
+     *  @param that refers to an R-value object of this type.
+     */
+	PacketBuffer& operator=(const PacketBuffer & that);
+
 };
 
 class Packet;
@@ -164,7 +196,7 @@ public:
      * Constructor.
      * @param rs refers to the Packet for this functor.
      */
-    explicit PacketInput(Packet & rp)
+    explicit PacketInput(Packet & rp /* UNTAKEN */)
     : packet(rp)
     {}
 
@@ -172,23 +204,6 @@ public:
      * Destructor.
      */
     virtual ~PacketInput();
-
-    /**
-     * Initializes this object, returning it to its just constructed state.
-     * This is exactly equivalent to calling the object's destructor
-     * followed by calling its constructor. The use of this method allows
-     * object (re)construction to be virtualized. However, it has the side
-     * effect of also reinitializing the object's virtual pointer. This means
-     * wackiness will ensue when if, for example, a derived class object
-     * deliberately calls its base class initializer. Doing so turns this
-     * object from an instance of the derived class into an instance of its
-     * base class. This implementation requires that every class derived
-     * from a class that implements this method must also implement this
-     * method, otherwise it can never be used against a derived class object.
-     * @param rs refers to the Packet for this functor.
-     * @return true if successful, false otherwise.
-     */
-    virtual bool initialize(Packet & rs);
 
     /**
      * Returns the next character.
@@ -259,7 +274,7 @@ public:
 
 private:
 
-    Packet& packet;
+    Packet& packet; /* UNTAKEN */
 
 };
 
@@ -275,7 +290,7 @@ public:
      * Constructor.
      *@param rs refers to the Packet for this functor.
      */
-    explicit PacketOutput(Packet & rp)
+    explicit PacketOutput(Packet & rp /* UNTAKEN */)
     : packet(rp)
     {}
 
@@ -283,23 +298,6 @@ public:
      * Destructor.
      */
     virtual ~PacketOutput() { (*this)(); }
-
-    /**
-     * Initializes this object, returning it to its just constructed state.
-     * This is exactly equivalent to calling the object's destructor
-     * followed by calling its constructor. The use of this method allows
-     * object (re)construction to be virtualized. However, it has the side
-     * effect of also reinitializing the object's virtual pointer. This means
-     * wackiness will ensue when if, for example, a derived class object
-     * deliberately calls its base class initializer. Doing so turns this
-     * object from an instance of the derived class into an instance of its
-     * base class. This implementation requires that every class derived
-     * from a class that implements this method must also implement this
-     * method, otherwise it can never be used against a derived class object.
-     * @param rs refers to the Packet for this functor.
-     * @return true if successful, false otherwise.
-     */
-    virtual bool initialize(Packet & rs);
 
     /**
      * Outputs a character in integer form.
@@ -316,7 +314,7 @@ public:
      * @return the number of octets output if successful (which may be zero),
      * EOF otherwise.
      */
-    virtual ssize_t operator() (const char * s, size_t size = com::diag::desperado::Output::maximum_string_length);
+    virtual ssize_t operator() (const char * s /* COPIED */, size_t size = com::diag::desperado::Output::maximum_string_length);
 
     /**
      * Format a variable length argument list and output the result.
@@ -341,7 +339,7 @@ public:
      * @return the number of octets output (which may be any number less
      * than maximum including zero) if successful, EOF otherwise.
      */
-    virtual ssize_t operator() (const void * buffer, size_t minimum, size_t maximum);
+    virtual ssize_t operator() (const void * buffer /* COPIED */, size_t minimum, size_t maximum);
 
     /**
      * Flush any buffered data to the file. Specific implementations may do
@@ -365,7 +363,7 @@ public:
      * value is passed from outer to inner objects as this object calls the
      * show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, Output* display = 0, int indent = 0) const;
+    virtual void show(int level = 0, Output * display = 0, int indent = 0) const;
 
 private:
 
@@ -394,8 +392,8 @@ public:
     : allocation(va)
     , head(0)
     , tail(0)
-    , in(*this)
-    , out(*this)
+    //, in(*this)
+    //, out(*this)
     {}
 
     /**
@@ -404,41 +402,26 @@ public:
     virtual ~Packet();
 
     /**
-     *  Initializes this object, returning it to its just constructed state.
-     *  This is exactly equivalent to calling the object's destructor
-     *  followed by calling its constructor. The use of this method allows
-     *  object (re)construction to be virtualized. However, it has the side
-     *  effect of also reinitializing the object's virtual pointer. This means
-     *  wackiness will ensue when if, for example, a derived class object
-     *  deliberately calls its base class initializer. Doing so turns this
-     *  object from an instance of the derived class into an instance of its
-     *  base class. This implementation requires that every class derived
-     *  from a class that implements this method must also implement this
-     *  method, otherwise it can never be used against a derived class object.
-     *
-     *  @param va is the default allocation size in octets.
-     *
-     *  @return true if successful, false otherwise.
-     */
-    virtual bool initialize(size_t va = ALLOCATION);
-
-    /**
      *  Returns a reference to the input functor interface.
      *
      *  @return a reference to the input functor interface.
      */
-    virtual Input& input();
+    //virtual Input& input() { return in; }
 
     /**
      *  Returns a reference to the output functor interface.
      *
      *  @return a reference to the output functor interface.
      */
-    virtual Output& output();
+    //virtual Output& output() { return out; }
 
-	size_t append(void * data, size_t length);
+	void append(PacketData & rd /* TAKEN */);
 
-	size_t prepend(void * data, size_t length);
+	void prepend(PacketData & rd /* TAKEN */);
+
+	size_t append(const void * data /* COPIED */, size_t length);
+
+	size_t prepend(const void * data /* COPIED */, size_t length);
 
 	size_t consume(void * data, size_t length);
 
@@ -465,25 +448,39 @@ public:
      *                  as this object calls the show methods of its
      *                  inherited and composited objects.
      */
-    virtual void show(int level = 0, Output* display = 0, int indent = 0) const;
+    virtual void show(int level = 0, Output * display = 0, int indent = 0) const;
 
 private:
 
     size_t allocation;
 
-    PacketData * head;
+    PacketData * head; /* TAKEN */
 
-    PacketData * tail;
+    PacketData * tail; /* TAKEN */
 
     /**
      *  This is the Input functor to the Packet.
      */
-    PacketInput in;
+    //PacketInput in;
 
     /**
      *  This is the Output functor to the Packet.
      */
-    PacketOutput out;
+    //PacketOutput out;
+
+private:
+
+    /**
+     *  Copy constructor.
+     *  @param that refers to an R-value object of this type.
+     */
+    Packet(const Packet & that);
+
+    /**
+     *  Assignment operator.
+     *  @param that refers to an R-value object of this type.
+     */
+    Packet& operator=(const Packet & that);
 
 };
 
