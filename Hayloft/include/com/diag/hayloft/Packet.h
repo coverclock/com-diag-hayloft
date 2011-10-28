@@ -515,7 +515,7 @@ public:
     /**
      *  Destructor.
      */
-    virtual ~Packet();
+    virtual ~Packet() { clear(); }
 
     /**
      *  Returns a reference to the input functor interface.
@@ -530,6 +530,8 @@ public:
      *  @return a reference to the output functor interface.
      */
     //virtual Output& output() { return out; }
+
+    void clear();
 
 	void append(PacketData & rd /* TAKEN */);
 

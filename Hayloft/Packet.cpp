@@ -78,13 +78,14 @@ size_t PacketData::consume(void * data, size_t length) {
  * Packet
  ******************************************************************************/
 
-Packet::~Packet() {
+void Packet::clear() {
 	PacketData * here;
 	while (head != 0) {
 		here = head;
 		head = here->next;
 		delete here;
 	}
+	tail = 0;
 }
 
 void Packet::append(PacketData & rd) {
@@ -176,6 +177,9 @@ size_t Packet::consume(void * data, size_t length) {
 			here = head;
 			head = here->next;
 			delete here;
+			if (head == 0) {
+				tail = 0;
+			}
 		}
 	}
 	return total;
