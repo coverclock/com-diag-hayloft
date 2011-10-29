@@ -107,6 +107,8 @@ private:
 
 public:
 
+	bool empty() { return (head == 0); }
+
 	size_t length() { return extent; }
 
 	const void * buffer() { return head; }
@@ -117,7 +119,7 @@ public:
 
 	size_t suffix() { return (tail == 0) ? extent : payload + extent - tail; }
 
-	void empty() { head = 0; tail = 0; }
+	void clear() { head = 0; tail = 0; }
 
 private:
 
@@ -164,13 +166,15 @@ public:
 
 	using PacketData::next;
 
+	using PacketData::empty;
+
 	using PacketData::length;
 
 	using PacketData::buffer;
 
 	using PacketData::size;
 
-	using PacketData::empty;
+	using PacketData::clear;
 
 private:
 
@@ -205,7 +209,7 @@ public:
 
 	explicit PacketBuffer(void * buffer /* UNTAKEN */, size_t ve, size_t vf = EITHER)
 	: PacketData(buffer, ve, vf)
-	{ empty(); }
+	{ clear(); }
 
 	virtual ~PacketBuffer() {}
 
@@ -217,13 +221,19 @@ public:
 
 	using PacketData::next;
 
+	using PacketData::empty;
+
 	using PacketData::length;
 
 	using PacketData::buffer;
 
 	using PacketData::size;
 
-	using PacketData::empty;
+	using PacketData::prefix;
+
+	using PacketData::suffix;
+
+	using PacketData::clear;
 
 private:
 
@@ -274,13 +284,19 @@ public:
 
 	using PacketBuffer::next;
 
+	using PacketBuffer::empty;
+
 	using PacketBuffer::length;
 
 	using PacketBuffer::buffer;
 
 	using PacketBuffer::size;
 
-	using PacketBuffer::empty;
+	using PacketBuffer::prefix;
+
+	using PacketBuffer::suffix;
+
+	using PacketBuffer::clear;
 
 private:
 
@@ -530,6 +546,8 @@ public:
      *  @return a reference to the output functor interface.
      */
     //virtual Output& output() { return out; }
+
+    bool empty() { return (head == 0); }
 
     void clear();
 

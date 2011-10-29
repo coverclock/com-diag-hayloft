@@ -173,7 +173,8 @@ size_t Packet::consume(void * data, size_t length) {
 			datap += consumed;
 			total += consumed;
 			length -= consumed;
-		} else {
+		}
+		if ((consumed == 0) || (head->empty())) {
 			here = head;
 			head = here->next;
 			delete here;
