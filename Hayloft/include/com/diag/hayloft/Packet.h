@@ -21,37 +21,93 @@ namespace diag {
 namespace hayloft {
 
 /**
+ * A PacketData is an object that can be appended or prepended to a Packet.
+ * It contains a pointer to a user provided data structure that it does not
+ * take. It is constructed in the full state so that new data cannot be appended
+ * or prepended to it unless existing data is consumed.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketData {
 
 public:
 
+	/**
+	 * When used as a fraction, indicates that the object is to be initialized
+	 * for prepending.
+	 */
 	static const size_t PREPEND = 1;
 
+	/**
+	 * When used as a fraction, indicates that the object is to initialized for
+	 * both appending and prepending.
+	 */
 	static const size_t EITHER = 2;
 
+	/**
+	 * When used as a fraction, indicates that the object is to be initialized
+	 * for appending.
+	 */
 	static const size_t APPEND = unsignedintmaxof(size_t);
 
+	/**
+	 * This specifies the type of user provided data arrays.
+	 */
 	typedef uint8_t Datum;
 
-	explicit PacketData(void * data /* UNTAKEN */, size_t ve, size_t vf = EITHER)
+	/**
+	 * Ctor.
+	 * @param dp points to the user data object.
+	 * @param ve is the size of the user data object in octets.
+	 * @param vf specifies how the user data object is to be initialized:
+	 * for append, prepend, or either.
+	 */
+	explicit PacketData(void * dp /* UNTAKEN */, size_t ve, size_t vf = EITHER)
 	: next(0)
-	, payload(static_cast<Datum*>(data))
+	, payload(static_cast<Datum*>(dp))
 	, head(payload)
 	, tail(payload + ve)
 	, extent(ve)
 	, fraction(vf)
 	{}
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~PacketData() {}
 
+	/**
+	 * Append as much of the user data as the suffix space allows. Octets are
+	 * copied from the user data front to back.
+	 * @param data points to the user data.
+	 * @param length is the length of the data to append in octets.
+	 * @return the actual number of octets appended.
+	 */
 	size_t append(const void * data /* COPIED */, size_t length);
 
+	/**
+	 * Prepend as much of the user data as the preface space allows. Octets are
+	 * copied from the user data back to front.
+	 * @param data points to the user data.
+	 * @param length is the length of the data to prepend in octets.
+	 * @return the actual number of octets prepended.
+	 */
 	size_t prepend(const void * data /* COPIED */, size_t length);
 
-	size_t consume(void * data, size_t length);
+	/**
+	 * Consume no more than the specified length of data if it is available.
+	 * Data is consumed from front to back and copied into the buffer.
+	 * @param buffer points to the user buffer.
+	 * @param length is the length of the data to consume in octets.
+	 * @return the actual number of octets consumed.
+	 */
+	size_t consume(void * buffer, size_t length);
 
+	/**
+	 * Consume no more than the specified length of data if it is available.
+	 * Data is consumed from front to back and discarded
+	 * @param length is the length of the data to consume in octets.
+	 * @return the actual number of octets consumed.
+	 */
 	size_t consume(size_t length) { return consume(0, length); }
 
 	/**
@@ -107,18 +163,47 @@ private:
 
 public:
 
+	/**
+	 * Return true if the object is empty, false otherwise.
+	 * @return true if the object is empty, false otherwise.
+	 */
 	bool empty() const { return (head == 0); }
 
+	/**
+	 * Return the total extent of the object in octets. This is always equal to
+	 * prefix() plus size() plus suffix().
+	 * @return the total length of the data storage in octets.
+	 */
 	size_t length() const { return extent; }
 
+	/**
+	 * Return a pointer to the beginning of user data in the object. NULL is
+	 * returned if the object is empty.
+	 * @return a pointer to the beginning of user data in the object or NULL.
+	 */
 	const void * buffer() const { return head; }
 
+	/**
+	 * Return the number of octets available to be consumed.
+	 * @return the number of octets available to be consumed.
+	 */
 	size_t size() const { return tail - head; }
 
+	/**
+	 * Return the number of octets available to be prepended.
+	 * @return the number of octets available to be prepended.
+	 */
 	size_t prefix() const { return (head == 0) ? extent : head - payload; }
 
+	/*
+	 * Return the number of octets available to be appended.
+	 * @return the number of octets available to be eppended.
+	 */
 	size_t suffix() const { return (tail == 0) ? extent : payload + extent - tail; }
 
+	/**
+	 * Return the object to the empty state.
+	 */
 	void clear() { head = 0; tail = 0; }
 
 private:
@@ -138,6 +223,10 @@ private:
 };
 
 /**
+ * A PacketDataDynamic is an object that can be appended or prepended to a
+ * Packet. It contains a pointer to a user provided data array that it takes and
+ * deletes upon destruction. It is constructed in the full state so that new
+ * data cannot be appended or prepended to it unless existing data is consumed.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketDataDynamic : public PacketData {
@@ -152,10 +241,21 @@ public:
 
 	using PacketData::Datum;
 
-	explicit PacketDataDynamic(Datum * data /* TAKEN */, size_t ve, size_t vf = EITHER)
-	: PacketData(data, ve, vf)
+	/**
+	 * Ctor.
+	 * @param dp points to the dynamically allocated user data array.
+	 * @param ve is the size of the dynamically allocated user data array in
+	 * octets.
+	 * @param vf specifies how the dynamically allocated user data array is to
+	 * be initialized, for append, prepend, or either.
+	 */
+	explicit PacketDataDynamic(Datum * dp /* TAKEN */, size_t ve, size_t vf = EITHER)
+	: PacketData(dp, ve, vf)
 	{}
 
+	/**
+	 * Dtor. The dynamically acquired data array is deleted.
+	 */
 	virtual ~PacketDataDynamic() { delete [] payload; }
 
 	using PacketData::append;
@@ -193,6 +293,11 @@ private:
 };
 
 /**
+ * A PacketBuffer is an object that can be appended or prepended to a Packet.
+ * It contains a pointer to a user provided data structure that it does not
+ * take. It is constructed in the empty state so that new data can be appended
+ * or prepended to it. A PacketBuffer can be used independently of a Packet as
+ * a dual-ended buffer.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketBuffer : public PacketData {
@@ -207,8 +312,15 @@ public:
 
 	using PacketData::Datum;
 
-	explicit PacketBuffer(void * buffer /* UNTAKEN */, size_t ve, size_t vf = EITHER)
-	: PacketData(buffer, ve, vf)
+	/**
+	 * Ctor.
+	 * @param bp points to the user buffer object.
+	 * @param ve is the size of the buffer object in octets.
+	 * @param vf specifies how the user buffer object is to be initialized:
+	 * for append, prepend, or either.
+	 */
+	explicit PacketBuffer(void * bp /* UNTAKEN */, size_t ve, size_t vf = EITHER)
+	: PacketData(bp, ve, vf)
 	{ clear(); }
 
 	virtual ~PacketBuffer() {}
@@ -252,11 +364,22 @@ private:
 };
 
 /**
+ * A PacketBufferDynamic is an object that can be appended or prepended to a
+ * Packet. It contains a pointer to a data array, either user provided that it
+ * takes, or self-allocated, and deletes upon destruction. It is constructed
+ * in the empty state so that new data can be appended or prepended to it.
+ * A PacketBufferDynamic can be used independently of a Packet as a dual-ended
+ * buffer.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketBufferDynamic : public PacketBuffer {
 
 public:
+
+	/**
+	 * Specifies the default allocation size in octets.
+	 */
+	static const size_t ALLOCATION = 1024;
 
 	using PacketBuffer::PREPEND;
 
@@ -266,14 +389,32 @@ public:
 
 	using PacketBuffer::Datum;
 
-	explicit PacketBufferDynamic(Datum * buffer /* TAKEN */, size_t ve, size_t vf = EITHER)
-	: PacketBuffer(buffer, ve, vf)
+	/**
+	 * Ctor.
+	 * @param data points to the dynamically allocated user buffer array.
+	 * @param ve is the size of the dynamically allocated user buffer array in
+	 * octets.
+	 * @param vf specifies how the dynamically allocated user buffer array is
+	 * to be initialized: for append, prepend, or either.
+	 */
+	explicit PacketBufferDynamic(Datum * bp /* TAKEN */, size_t ve, size_t vf = EITHER)
+	: PacketBuffer(bp, ve, vf)
 	{}
 
-	explicit PacketBufferDynamic(size_t ve, size_t vf = EITHER)
+	/**
+	 * Ctor. Dynamically allocates its own buffer array.
+	 * @param ve is the size of the dynamically allocated buffer array in
+	 * octets.
+	 * @param vf specifies how the dynamically allocated buffer array is
+	 * to be initialized: for append, prepend, or either.
+	 */
+	explicit PacketBufferDynamic(size_t ve = ALLOCATION, size_t vf = EITHER)
 	: PacketBuffer(new Datum[ve], ve, vf)
 	{}
 
+	/**
+	 * Dtor. The dynamically acquired buffer array is deleted.
+	 */
 	virtual ~PacketBufferDynamic() { delete [] payload; }
 
 	using PacketBuffer::append;
@@ -335,7 +476,7 @@ public:
     /**
      * Dtor.
      */
-    virtual ~PacketInput();
+    virtual ~PacketInput() {}
 
     /**
      * Returns the next character.
@@ -351,10 +492,10 @@ public:
      * pushed back does not have to be the previous character input,
      * or even any character that was ever input, although at least
      * one character must have been previously input.
-     * @param ch is the character to push back into the input.
+     * @param c is the character to push back into the input.
      * @return the pushed back character is successful, EOF otherwise.
      */
-    virtual int operator() (int ch);
+    virtual int operator() (int c);
 
     /**
      * Inputs a newline or NUL terminated line into the buffer of
@@ -402,11 +543,14 @@ public:
      * value is passed from outer to inner objects as this object calls the
      * show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, com::diag::desperado::Output * display = 0, int indent = 0) const;
 
 private:
 
-    Packet& packet; /* UNTAKEN */
+    /**
+     * This refers to the Packet for which this object is an input functor.
+     */
+    Packet& packet;
 
 };
 
@@ -495,36 +639,68 @@ public:
      * value is passed from outer to inner objects as this object calls the
      * show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, com::diag::desperado::Output * display = 0, int indent = 0) const;
 
 private:
 
+    /**
+     * This refers to the Packet for which this object is an output functor.
+     */
     Packet& packet;
 
 };
 
 /**
- * Implements a linked list of buffers to which data can be prepended and
- * appended. Data can be appended using an Input functor and consumed using
- * an Output functor.
+ * Implements a linked list of PacketData, PacketDataDynamic, PacketBuffer,
+ * and/or PacketBufferDynamic objects to which data can be prepended and
+ * appended. Data can be appended using an Output functor and consumed using
+ * an Input functor. Appropriate use of the various PacketData and PacketBuffer
+ * objects can allow layered communications prototol packets to be built
+ * dynamically without a lot of copying. If you are very clever, you can even
+ * insert data in the middle of a Packet by inserting empty or only partially
+ * filled objects into the packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class Packet : public com::diag::desperado::InputOutput {
 
 public:
 
-	static const size_t ALLOCATION = 1024;
+	/**
+	 * Specifies the default allocation size in octets when allocating
+	 * PacketBufferDynamic objects.
+	 */
+	static const size_t ALLOCATION = PacketBufferDynamic::ALLOCATION;
+
+	/**
+	 * When used as a fraction, indicates that the first allocated PacketBuffer
+	 * is to be optimized for prepending.
+	 */
+	static const size_t PREPEND = PacketBufferDynamic::PREPEND;
+
+	/**
+	 * When used as a fraction, indicates that the first allocated PacketBuffer
+	 * is to allow both appending and prepending.
+	 */
+	static const size_t EITHER = PacketBufferDynamic::EITHER;
+
+	/**
+	 * When used as a fraction, indicates that the first allocated PacketBuffer
+	 * is to be optimized for appending.
+	 */
+	static const size_t APPEND = PacketBufferDynamic::APPEND;
 
     /**
      *  Ctor.
      *  @param va is the default allocation size in octets.
+     *  @param vf is the fraction of the very first allocation.
      */
-    explicit Packet(size_t va = ALLOCATION)
+    explicit Packet(size_t va = ALLOCATION, size_t vf = EITHER)
     : allocation(va)
+    , fraction(vf)
     , head(0)
     , tail(0)
-    //, in(*this)
-    //, out(*this)
+    , in(*this)
+    , out(*this)
     {}
 
     /**
@@ -536,28 +712,72 @@ public:
      *  Returns a reference to the input functor interface.
      *  @return a reference to the input functor interface.
      */
-    //virtual Input& input() { return in; }
+    virtual ::com::diag::desperado::Input& input() { return in; }
 
     /**
      *  Returns a reference to the output functor interface.
      *  @return a reference to the output functor interface.
      */
-    //virtual Output& output() { return out; }
+    virtual ::com::diag::desperado::Output& output() { return out; }
 
+    /**
+     * Returns true if the object is empty, false otherwise. Empty means the
+     * object has nothing on its linked list. It is not empty even if the
+     * items on its linked list are empty.
+     * @return trye if the object is empty, false otherwise.
+     */
     bool empty() const { return (head == 0); }
 
+    /**
+     * Return the object to its empty state.
+     */
     void clear();
 
+    /**
+     * Append the PacketData (or derivative) onto the object.
+     * @param rd refers to a PacketData (or derivative).
+     */
 	void append(PacketData & rd /* TAKEN */);
 
+    /**
+     * Prepend the PacketData (or derivative) onto the object.
+     * @param rd refers to a PacketData (or derivative).
+     */
 	void prepend(PacketData & rd /* TAKEN */);
 
+	/**
+	 * Append the data by copying it, allocating new PacketBufferDynamic objects
+	 * and appended them as needed. Data is copied from front to back.
+	 * @param data points to the data.
+	 * @param length is the length of the data to append in octets.
+	 * @return the number of octets appended.
+	 */
 	size_t append(const void * data /* COPIED */, size_t length);
 
+	/**
+	 * Prepend the data by copying it, allocating new PacketBufferDynamic
+	 * objects and prepending them as needed. Data is copied from back to front.
+	 * @param data points to the data.
+	 * @param length is the length of the data to prepend in octets.
+	 * @return the number of octets appended.
+	 */
 	size_t prepend(const void * data /* COPIED */, size_t length);
 
-	size_t consume(void * data, size_t length);
+	/**
+	 * Consume no more than the specified length of data if it is available.
+	 * Data is consumed front to back and copied into the buffer.
+	 * @param buffer points to the buffer.
+	 * @param length is the length of the data to consume in octets.
+	 * @return the number of octets consumed.
+	 */
+	size_t consume(void * buffer, size_t length);
 
+	/**
+	 * Consume no more than the specified length of data if it is available.
+	 * Data is consumed front to back and discarded.
+	 * @param length is the length of the data to consume in octets.
+	 * @return the number of octets consumed.
+	 */
 	size_t consume(size_t length) { return consume(0, length); }
 
     /**
@@ -579,21 +799,37 @@ public:
 
 private:
 
-    size_t allocation;
+    /**
+     * This is the number of octets allocated for data storage per
+     * PacketBufferDynamic.
+     */
+    const size_t allocation;
 
+    /**
+     * This is the fraction used to initialize the very first
+     * PacketBufferDynamic for appending, prepending, or both.
+     */
+	const size_t fraction;
+
+	/**
+	 * Points to the first object on the linked list or NULL if empty.
+	 */
     PacketData * head;
 
+	/**
+	 * Points to the last object on the linked list or NULL if empty.
+	 */
     PacketData * tail;
 
     /**
      *  This is the Input functor to the Packet.
      */
-    //PacketInput in;
+    PacketInput in;
 
     /**
      *  This is the Output functor to the Packet.
      */
-    //PacketOutput out;
+    PacketOutput out;
 
 private:
 

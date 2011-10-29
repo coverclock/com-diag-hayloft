@@ -8,6 +8,9 @@
  */
 
 #include <new>
+#include <cstdio>
+#include <cstring>
+#include <cerrno>
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/Print.h"
@@ -51,18 +54,19 @@ size_t PacketData::prepend(const void * data, size_t length) {
 		} else {
 			pointer = head - actual;
 		}
-		memcpy(pointer, data, actual);
+		const Datum * here = static_cast<const Datum*>(data);
+		memcpy(pointer, here + length - actual, actual);
 		head = pointer;
 	}
 	return actual;
 }
 
-size_t PacketData::consume(void * data, size_t length) {
+size_t PacketData::consume(void * buffer, size_t length) {
 	size_t available = tail - head;
 	size_t actual = (available > length) ? length : available;
 	if (actual > 0) {
-		if (data != 0) {
-			memcpy(data, head, actual);
+		if (buffer != 0) {
+			memcpy(buffer, head, actual);
 		}
 		if (actual < available) {
 			head += actual;
@@ -113,9 +117,9 @@ size_t Packet::append(const void * data, size_t length) {
 	size_t total = 0;
 	size_t appended;
 	if (tail == 0) {
-		append(*(new PacketBufferDynamic(allocation, PacketBuffer::EITHER)));
+		append(*(new PacketBufferDynamic(allocation, fraction)));
 	} else if (tail->suffix() == 0) {
-		append(*(new PacketBufferDynamic(allocation, PacketBuffer::APPEND)));
+		append(*(new PacketBufferDynamic(allocation, PacketBufferDynamic::APPEND)));
 	}
 	const PacketData::Datum * datap = static_cast<const PacketData::Datum*>(data);
 	while (length > 0) {
@@ -126,7 +130,7 @@ size_t Packet::append(const void * data, size_t length) {
 			length -= appended;
 		}
 		if (length > 0) {
-			append(*(new PacketBufferDynamic(allocation, PacketBuffer::APPEND)));
+			append(*(new PacketBufferDynamic(allocation, PacketBufferDynamic::APPEND)));
 		}
 	}
 	return total;
@@ -138,9 +142,9 @@ size_t Packet::prepend(const void * data, size_t length) {
 	size_t prefix;
 	size_t actual;
 	if (head == 0) {
-		prepend(*(new PacketBufferDynamic(allocation, PacketBuffer::EITHER)));
+		prepend(*(new PacketBufferDynamic(allocation, fraction)));
 	} else if (head->prefix() == 0) {
-		prepend(*(new PacketBufferDynamic(allocation, PacketBuffer::PREPEND)));
+		prepend(*(new PacketBufferDynamic(allocation, PacketBufferDynamic::PREPEND)));
 	}
 	// Complicated by the fact that we have to work backwards.
 	const PacketData::Datum * datap = static_cast<const PacketData::Datum*>(data) + length;
@@ -156,21 +160,21 @@ size_t Packet::prepend(const void * data, size_t length) {
 			length -= prepended;
 		}
 		if (length > 0) {
-			prepend(*(new PacketBufferDynamic(allocation, PacketBuffer::PREPEND)));
+			prepend(*(new PacketBufferDynamic(allocation, PacketBufferDynamic::PREPEND)));
 		}
 	}
 	return total;
 }
 
-size_t Packet::consume(void * data, size_t length) {
+size_t Packet::consume(void * buffer, size_t length) {
 	size_t total = 0;
 	size_t consumed;
 	PacketData * here;
-	PacketData::Datum * datap = static_cast<PacketData::Datum*>(data);
+	PacketData::Datum * bufferp = static_cast<PacketData::Datum*>(buffer);
 	while ((head != 0) && (length > 0)) {
-		consumed = head->consume(datap, length);
+		consumed = head->consume(bufferp, length);
 		if (consumed > 0) {
-			datap += consumed;
+			if (bufferp != 0) { bufferp += consumed; }
 			total += consumed;
 			length -= consumed;
 		}
@@ -195,7 +199,7 @@ void Packet::show(int level, Output * display, int indent) const {
     printf("%s%s(%p)[%lu]:\n",
         sp, pl.component(__FILE__, component, sizeof(component)),
         this, sizeof(*this));
-    InputOutput::show(level, display, indent + 1);
+    com::diag::desperado::InputOutput::show(level, display, indent + 1);
     printf("%s allocation=%zu\n", sp, allocation);
     printf("%s head=%p\n", sp, head);
     if (0 < level) {
@@ -211,9 +215,127 @@ void Packet::show(int level, Output * display, int indent) const {
 		}
     }
     printf("%s tail=%p\n", sp, tail);
-   // in.show(level, display, indent + 1);
-   // out.show(level, display, indent + 1);
+    printf("%s in:\n", sp);
+	in.show(level, display, indent + 2);
+    printf("%s out:\n", sp);
+	out.show(level, display, indent + 2);
+}
 
+/*******************************************************************************
+ * PacketInput
+ ******************************************************************************/
+
+int PacketInput::operator() () {
+	char ch;
+	if (packet.consume(&ch, sizeof(ch)) > 0) {
+		return ch;
+	} else {
+		errno = 0;
+		return EOF;
+	}
+}
+
+int PacketInput::operator() (int c) {
+	char ch = c;
+	packet.prepend(&ch, sizeof(ch));
+	return ch;
+}
+
+ssize_t PacketInput::operator() (char * buffer, size_t size) {
+	ssize_t total = 0;
+	if (buffer == 0) {
+		// Do nothing.
+	} else if (size == 0) {
+		// Do nothing.
+	} else {
+		size_t length;
+		while (size > 1) {
+			length = packet.consume(buffer, sizeof(*buffer));
+			if (length > 0) {
+				size -= length;
+				total += length;
+				buffer += length;
+				if ((*(buffer - 1) == '\n') || (*(buffer - 1) == '\0')) {
+					break;
+				}
+			} else {
+				if (total == 0) {
+					total = EOF;
+					errno = 0;
+				}
+				break;
+			}
+		}
+		if ((total != EOF) && (*(buffer - 1) != '\0')) {
+			*buffer = '\0';
+			++total;
+		}
+	}
+	return total;
+}
+
+ssize_t PacketInput::operator() (void * buffer, size_t /* minimum */, size_t maximum) {
+	size_t length = packet.consume(buffer, maximum);
+	if (length > 0) {
+		return length;
+	} else {
+		errno = 0;
+		return EOF;
+	}
+}
+
+void PacketInput::show(int level, com::diag::desperado::Output * display, int indent) const {
+    ::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
+    Print printf(display);
+    const char* sp = printf.output().indentation(indent);
+    char component[sizeof(__FILE__)];
+    printf("%s%s(%p)[%lu]:\n",
+        sp, pl.component(__FILE__, component, sizeof(component)),
+        this, sizeof(*this));
+    com::diag::desperado::Input::show(level, display, indent + 1);
+    printf("%s packet=%p\n", sp, &packet);
+}
+
+/*******************************************************************************
+ * PacketOutput
+ ******************************************************************************/
+
+int PacketOutput::operator() (int c) {
+	char ch = c;
+	packet.append(&ch, sizeof(ch));
+	return ch;
+}
+
+ssize_t PacketOutput::operator() (const char * s, size_t size) {
+	size_t length = ::strnlen(s, size);
+	return packet.append(s, length);
+}
+
+ssize_t PacketOutput::operator() (const char * format, va_list ap) {
+	char buffer[::com::diag::desperado::Output::minimum_buffer_size + 1];
+    ::vsnprintf(buffer, sizeof(buffer), format, ap);
+    size_t length = ::strnlen(buffer, sizeof(buffer));
+    return packet.append(buffer, length);
+}
+
+ssize_t PacketOutput::operator() (const void * buffer, size_t /* minimum */, size_t maximum) {
+	return packet.append(buffer, maximum);
+}
+
+int PacketOutput::operator() () {
+	return 0;
+}
+
+void PacketOutput::show(int level, com::diag::desperado::Output * display, int indent) const {
+	::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
+    Print printf(display);
+    const char* sp = printf.output().indentation(indent);
+    char component[sizeof(__FILE__)];
+    printf("%s%s(%p)[%lu]:\n",
+        sp, pl.component(__FILE__, component, sizeof(component)),
+        this, sizeof(*this));
+    com::diag::desperado::Output::show(level, display, indent + 1);
+    printf("%s packet=%p\n", sp, &packet);
 }
 
 }
