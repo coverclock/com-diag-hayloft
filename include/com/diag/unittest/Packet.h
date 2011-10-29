@@ -14,7 +14,8 @@
 #include <cstring>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
-#include "com/diag/desperado/FileInput.h"
+#include "com/diag/desperado/PathInput.h"
+#include "com/diag/desperado/PathOutput.h"
 
 namespace com {
 namespace diag {
@@ -609,6 +610,31 @@ TEST(PacketTest, MixedBag) {
 	/**/
 	delete packet;
 }
+
+TEST(PacketTest, OutputInputBlockMany) {
+	static const size_t SIZE = 5 * 11 * 4;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = 7;
+	Packet packet(ALLOC, Packet::APPEND);
+	EXPECT_TRUE(packet.empty());
+	packet.show(2);
+	static const size_t OUTPUT = 5;
+	for (size_t ii = 0; ii < sizeof(data); ii += OUTPUT) {
+		EXPECT_EQ((packet.output())(&(data[ii]), 1, OUTPUT), OUTPUT);
+		EXPECT_FALSE(packet.empty());
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	static const size_t INPUT = 11;
+	for (size_t ii = 0; ii < sizeof(buffer); ii += INPUT) {
+		EXPECT_EQ((packet.input())(&(buffer[ii]), 1, INPUT), INPUT);
+	}
+	EXPECT_TRUE(packet.empty());
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	packet.show(2);
+}
+
 
 }
 }
