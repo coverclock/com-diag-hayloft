@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <string>
+#include <cstring>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/FileInput.h"
@@ -174,20 +174,20 @@ TEST(PacketDataDynamicTest, Heap) {
 TEST(PacketBufferTest, Heap) {
 	static const size_t SIZE = 256;
 	char data[SIZE];
-	PacketBuffer * pbp = new PacketBuffer(data, SIZE);
+	PacketData * pbp = new PacketBuffer(data, SIZE);
 	delete pbp;
 }
 
 TEST(PacketBufferDynamicTest, Heap1) {
 	static const size_t SIZE = 256;
 	PacketBufferDynamic::Datum * data = new PacketBufferDynamic::Datum[SIZE];
-	PacketBufferDynamic * pbdp = new PacketBufferDynamic(data, SIZE);
+	PacketData * pbdp = new PacketBufferDynamic(data, SIZE);
 	delete pbdp;
 }
 
 TEST(PacketBufferDynamicTest, Heap2) {
 	static const size_t SIZE = 256;
-	PacketBufferDynamic * pbdp = new PacketBufferDynamic(SIZE);
+	PacketData * pbdp = new PacketBufferDynamic(SIZE);
 	delete pbdp;
 }
 
@@ -568,6 +568,43 @@ TEST(PacketTest, PrependAppendConsumeMany) {
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
 	packet.show(2);
+}
+
+TEST(PacketTest, MixedBag) {
+	Packet * packet = new Packet;
+	packet->show(2);
+	/**/
+	PacketDataDynamic::Datum * data2 = new PacketDataDynamic::Datum [3];
+	for (int ii = 0; ii < 3; ++ii) { data2[ii] = 'j' + ii; }
+	PacketDataDynamic * pdd = new PacketDataDynamic(data2, 3);
+	packet->append(*pdd);
+	/**/
+	struct Data1 { char data[7]; } data1 = { { 'c', 'd', 'e', 'f', 'g', 'h', 'i' } };
+	PacketData * pd = new PacketData(&data1, sizeof(data1));
+	packet->prepend(*pd);
+	/**/
+	struct Data3 { char data[11]; } data3;
+	PacketBuffer * pb = new PacketBuffer(&data3, sizeof(data3), PacketBuffer::APPEND);
+	packet->append(*pb);
+	EXPECT_EQ(packet->append("mnopqrstuvw", 11), (size_t)11);
+	/**/
+	PacketBufferDynamic::Datum * data4 = new PacketBufferDynamic::Datum [2];
+	PacketBufferDynamic * pbd1 = new PacketBufferDynamic(data4, 2, PacketBufferDynamic::PREPEND);
+	packet->prepend(*pbd1);
+	EXPECT_EQ(packet->prepend("ab", 2), (size_t)2);
+	/**/
+	PacketBufferDynamic * pbd2 = new PacketBufferDynamic(5, PacketBufferDynamic::APPEND);
+	packet->append(*pbd2);
+	EXPECT_EQ(packet->append("xyz!", 5), (size_t)5);
+	/**/
+	packet->show(2);
+	/**/
+	char buffer[28];
+	EXPECT_EQ(packet->consume(buffer, sizeof(buffer)), sizeof(buffer));
+	EXPECT_EQ(std::strncmp(buffer, "abcdefghijklmnopqrstuvwxyz!", sizeof(buffer)), 0);
+	packet->show(2);
+	/**/
+	delete packet;
 }
 
 }

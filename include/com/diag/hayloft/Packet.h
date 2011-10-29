@@ -107,17 +107,17 @@ private:
 
 public:
 
-	bool empty() { return (head == 0); }
+	bool empty() const { return (head == 0); }
 
-	size_t length() { return extent; }
+	size_t length() const { return extent; }
 
-	const void * buffer() { return head; }
+	const void * buffer() const { return head; }
 
-	size_t size() { return tail - head; }
+	size_t size() const { return tail - head; }
 
-	size_t prefix() { return (head == 0) ? extent : head - payload; }
+	size_t prefix() const { return (head == 0) ? extent : head - payload; }
 
-	size_t suffix() { return (tail == 0) ? extent : payload + extent - tail; }
+	size_t suffix() const { return (tail == 0) ? extent : payload + extent - tail; }
 
 	void clear() { head = 0; tail = 0; }
 
@@ -325,7 +325,7 @@ class PacketInput : public com::diag::desperado::Input {
 public:
 
     /**
-     * Constructor.
+     * Ctor.
      * @param rs refers to the Packet for this functor.
      */
     explicit PacketInput(Packet & rp /* UNTAKEN */)
@@ -333,7 +333,7 @@ public:
     {}
 
     /**
-     * Destructor.
+     * Dtor.
      */
     virtual ~PacketInput();
 
@@ -419,7 +419,7 @@ class PacketOutput : public com::diag::desperado::Output {
 public:
 
     /**
-     * Constructor.
+     * Ctor.
      *@param rs refers to the Packet for this functor.
      */
     explicit PacketOutput(Packet & rp /* UNTAKEN */)
@@ -427,7 +427,7 @@ public:
     {}
 
     /**
-     * Destructor.
+     * Dtor.
      */
     virtual ~PacketOutput() { (*this)(); }
 
@@ -516,8 +516,7 @@ public:
 	static const size_t ALLOCATION = 1024;
 
     /**
-     *  Constructor.
-     *
+     *  Ctor.
      *  @param va is the default allocation size in octets.
      */
     explicit Packet(size_t va = ALLOCATION)
@@ -535,19 +534,17 @@ public:
 
     /**
      *  Returns a reference to the input functor interface.
-     *
      *  @return a reference to the input functor interface.
      */
     //virtual Input& input() { return in; }
 
     /**
      *  Returns a reference to the output functor interface.
-     *
      *  @return a reference to the output functor interface.
      */
     //virtual Output& output() { return out; }
 
-    bool empty() { return (head == 0); }
+    bool empty() const { return (head == 0); }
 
     void clear();
 
@@ -564,25 +561,19 @@ public:
 	size_t consume(size_t length) { return consume(0, length); }
 
     /**
-     *  Displays internal information about this object to the specified
-     *  output object. Useful for debugging and troubleshooting.
-     *
-     *  @param  level   sets the verbosity of the output. What this means
-     *                  is object dependent. However, the level is passed
-     *                  from outer to inner objects this object calls the
-     *                  show methods of its inherited or composited objects.
-     *
-     *  @param display  points to the output object to which output is
-     *                  sent. If null (zero), the default platform output
-     *                  object is used as the effective output object. The
-     *                  effective output object is passed from outer to
-     *                  inner objects as this object calls the show methods
-     *                  of its inherited and composited objects.
-     *
-     *  @param  indent  specifies the level of indentation. One more than
-     *                  this value is passed from outer to inner objects
-     *                  as this object calls the show methods of its
-     *                  inherited and composited objects.
+     * Displays internal information about this object to the specified
+     * output object. Useful for debugging and troubleshooting.
+     * @param level sets the verbosity of the output. What this means is object
+     * dependent. However, the level is passed from outer to inner objects this
+     * object calls the show methods of its inherited or composited objects.
+     * @param display points to the output object to which output is sent. If
+     * null (zero), the default platform output object is used as the effective
+     * output object. The effective output object is passed from outer to
+     * inner objects as this object calls the show methods of its inherited and
+     * composited objects.
+     * @param indent specifies the level of indentation. One more than this
+     * value is passed from outer to inner objects as this object calls the
+     * show methods of its inherited and composited objects.
      */
     virtual void show(int level = 0, Output * display = 0, int indent = 0) const;
 
@@ -607,7 +598,7 @@ private:
 private:
 
     /**
-     *  Copy constructor.
+     *  Copy ctor.
      *  @param that refers to an R-value object of this type.
      */
     Packet(const Packet & that);
