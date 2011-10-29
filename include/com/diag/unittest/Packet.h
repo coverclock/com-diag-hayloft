@@ -579,14 +579,13 @@ TEST(PacketTest, MixedBag) {
 	PacketDataDynamic * pdd = new PacketDataDynamic(data2, 3);
 	packet->append(*pdd);
 	/**/
-	struct Data1 { char data[7]; } data1 = { { 'c', 'd', 'e', 'f', 'g', 'h', 'i' } };
+	struct Data1 { char data[7]; } data1 = { { 'c', 'd', 'e', 'F', 'g', 'h', 'i' } };
 	PacketData * pd = new PacketData(&data1, sizeof(data1));
 	packet->prepend(*pd);
 	/**/
 	struct Data3 { char data[11]; } data3;
 	PacketBuffer * pb = new PacketBuffer(&data3, sizeof(data3), PacketBuffer::APPEND);
 	packet->append(*pb);
-	EXPECT_EQ(packet->append("mnopqrstuvw", 11), (size_t)11);
 	/**/
 	PacketBufferDynamic::Datum * data4 = new PacketBufferDynamic::Datum [2];
 	PacketBufferDynamic * pbd1 = new PacketBufferDynamic(data4, 2, PacketBufferDynamic::PREPEND);
@@ -596,6 +595,10 @@ TEST(PacketTest, MixedBag) {
 	PacketBufferDynamic * pbd2 = new PacketBufferDynamic(5, PacketBufferDynamic::APPEND);
 	packet->append(*pbd2);
 	EXPECT_EQ(packet->append("xyz!", 5), (size_t)5);
+	/**/
+	data1.data[3] = 'f'; // Modification!
+	/**/
+	EXPECT_EQ(pb->append("mnopqrstuvw", 11), (size_t)11); // Insertion!
 	/**/
 	packet->show(2);
 	/**/
