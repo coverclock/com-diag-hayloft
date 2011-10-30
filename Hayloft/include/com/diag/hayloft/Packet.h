@@ -32,6 +32,12 @@ class PacketData {
 public:
 
 	/**
+	 * Specifies the default allocation size in octets for those derived classes
+	 * where dynamic memory allocation is used.
+	 */
+	static const size_t ALLOCATION = 1024;
+
+	/**
 	 * When used as a fraction, indicates that the object is to be initialized
 	 * for prepending.
 	 */
@@ -233,6 +239,8 @@ class PacketDataDynamic : public PacketData {
 
 public:
 
+	using PacketData::ALLOCATION;
+
 	using PacketData::PREPEND;
 
 	using PacketData::EITHER;
@@ -303,6 +311,8 @@ private:
 class PacketBuffer : public PacketData {
 
 public:
+
+	using PacketData::ALLOCATION;
 
 	using PacketData::PREPEND;
 
@@ -376,10 +386,7 @@ class PacketBufferDynamic : public PacketBuffer {
 
 public:
 
-	/**
-	 * Specifies the default allocation size in octets.
-	 */
-	static const size_t ALLOCATION = 1024;
+	using PacketBuffer::ALLOCATION;
 
 	using PacketBuffer::PREPEND;
 
@@ -666,10 +673,10 @@ class Packet : public com::diag::desperado::InputOutput {
 public:
 
 	/**
-	 * Specifies the default allocation size in octets when allocating
-	 * PacketBufferDynamic objects.
+	 * Specifies the default allocation size in octets when dynamically
+	 * allocating PacketBufferDynamic buffer space.
 	 */
-	static const size_t ALLOCATION = PacketBufferDynamic::ALLOCATION;
+	static const size_t ALLOCATION = 4096;
 
 	/**
 	 * When used as a fraction, indicates that the first allocated PacketBuffer
@@ -694,7 +701,7 @@ public:
      *  @param va is the default allocation size in octets.
      *  @param vf is the fraction of the very first allocation.
      */
-    explicit Packet(size_t va = ALLOCATION, size_t vf = EITHER)
+    explicit Packet(size_t va = ALLOCATION, size_t vf = APPEND)
     : allocation(va)
     , fraction(vf)
     , head(0)
@@ -779,6 +786,24 @@ public:
 	 * @return the number of octets consumed.
 	 */
 	size_t consume(size_t length) { return consume(0, length); }
+
+	/**
+	 * Tranfers the contents of an input functor into this object using an
+	 * algorithm that minimizes memory to memory copying until the input is
+	 * empty or an error occurs.
+	 * @param from refers to the input functor.
+	 * @return the number of octets transferred.
+	 */
+	size_t source(::com::diag::desperado::Input& from);
+
+	/**
+	 * Tranfers the contents of this object into an output functor using an
+	 * algorithm that minimizes memory to memory copying until the object is
+	 * empty or an error occurs.
+	 * @param from refers to the output functor.
+	 * @return the number of octets transferred.
+	 */
+	size_t sink(::com::diag::desperado::Output& to);
 
     /**
      * Displays internal information about this object to the specified

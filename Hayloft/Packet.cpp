@@ -190,6 +190,64 @@ size_t Packet::consume(void * buffer, size_t length) {
 	return total;
 }
 
+size_t Packet::source(::com::diag::desperado::Input& from) {
+	size_t total = 0;
+	size_t subtotal;
+	ssize_t length;
+	PacketData::Datum * data;
+	PacketDataDynamic * pbd;
+	do {
+		data = new PacketData::Datum [allocation];
+		subtotal = 0;
+		do {
+			length = from(data + subtotal, 1, allocation - subtotal);
+			if (length <= 0) {
+				break;
+			}
+			subtotal += length;
+		} while (subtotal < allocation);
+		if (subtotal > 0) {
+			pbd = new PacketDataDynamic(data, subtotal, PacketDataDynamic::APPEND);
+			append(*pbd);
+			total += subtotal;
+		} else {
+			delete data;
+		}
+	} while (length > 0);
+	return total;
+}
+
+size_t Packet::sink(::com::diag::desperado::Output& to) {
+	size_t total = 0;
+	size_t subtotal;
+	ssize_t length;
+	size_t size;
+	const PacketData::Datum * data;
+	PacketData * here;
+	while (head != 0) {
+		data = static_cast<const PacketData::Datum*>(head->buffer());
+		size = head->size();
+		subtotal = 0;
+		while (size > 0) {
+			length = to(data + subtotal, 1, size - subtotal);
+			if (length <= 0) {
+				break;
+			}
+			subtotal += length;
+		}
+		if ((length == 0) || (head->empty())) {
+			here = head;
+			head = here->next;
+			delete here;
+			if (head == 0) {
+				tail = 0;
+			}
+		}
+		total += subtotal;
+	}
+	return total;
+}
+
 void Packet::show(int level, Output * display, int indent) const {
     ::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
     ::com::diag::desperado::Print printf(display);
