@@ -11,7 +11,12 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <cstring>
+#include <cstdlib>
+#include <string>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/generics.h"
@@ -19,7 +24,7 @@
 #include "com/diag/desperado/BufferInput.h"
 #include "com/diag/desperado/BufferOutput.h"
 #include "com/diag/desperado/PathInput.h"
-#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/desperado/DescriptorOutput.h"
 
 namespace com {
 namespace diag {
@@ -856,12 +861,28 @@ TEST(PacketTest, SourceSinkBuffer) {
 }
 
 TEST(PacketTest, SourceSinkPathFile) {
+	struct ::stat status;
+	EXPECT_EQ(::stat(__FILE__, &status), 0);
 	::com::diag::desperado::PathInput input(__FILE__, "r");
-	::com::diag::desperado::PathOutput output("/dev/null", "w"); // or for example FileOutput output(stderr);
+	char name[] = "/tmp/PacketTest.SourceSinkPathFile.XXXXXX";
+	int fd = ::mkstemp(name);
+	ASSERT_TRUE(fd > 0);
+	::com::diag::desperado::DescriptorOutput output(fd);
 	Packet packet;
+	EXPECT_TRUE(packet.empty());
 	size_t sourced = packet.source(input);
+	EXPECT_FALSE(packet.empty());
+	EXPECT_EQ(sourced, (size_t)status.st_size);
 	size_t sunk = packet.sink(output);
-	EXPECT_EQ(sourced, sunk);
+	EXPECT_TRUE(packet.empty());
+	EXPECT_EQ(sunk, sourced);
+	EXPECT_EQ(::close(fd), 0);
+	std::string command = "diff ";
+	command += __FILE__;
+	command += " ";
+	command += name;
+	EXPECT_EQ(std::system(command.c_str()), 0);
+	EXPECT_EQ(::unlink(name), 0);
 }
 
 }
