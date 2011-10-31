@@ -30,7 +30,7 @@ size_t PacketData::append(const void * data, size_t length) {
 	if (actual > 0) {
 		Datum * pointer;
 		if (tail == 0) {
-			size_t slack = (available - actual) / fraction;
+			size_t slack = (available - actual + fraction - 1) / fraction;
 			pointer = payload + slack;
 			head = pointer;
 		} else {
