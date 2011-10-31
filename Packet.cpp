@@ -143,7 +143,7 @@ size_t Packet::prepend(const void * data, size_t length) {
 	size_t actual;
 	if (head == 0) {
 		prepend(*(new PacketBufferDynamic(allocation, fraction)));
-	} else if (head->prefix() == 0) {
+	} else if (head->prefix() <= 0) {
 		prepend(*(new PacketBufferDynamic(allocation, PacketBufferDynamic::PREPEND)));
 	}
 	// Complicated by the fact that we have to work backwards.
@@ -178,7 +178,7 @@ size_t Packet::consume(void * buffer, size_t length) {
 			total += consumed;
 			length -= consumed;
 		}
-		if ((consumed == 0) || (head->empty())) {
+		if ((consumed <= 0) || head->empty()) {
 			here = head;
 			head = here->next;
 			delete here;
@@ -228,22 +228,20 @@ size_t Packet::sink(::com::diag::desperado::Output& to) {
 		data = static_cast<const PacketData::Datum*>(head->buffer());
 		size = head->size();
 		subtotal = 0;
-		while (size > 0) {
+		while (size > subtotal) {
 			length = to(data + subtotal, 1, size - subtotal);
 			if (length <= 0) {
 				break;
 			}
 			subtotal += length;
 		}
-		if ((length == 0) || (head->empty())) {
-			here = head;
-			head = here->next;
-			delete here;
-			if (head == 0) {
-				tail = 0;
-			}
-		}
 		total += subtotal;
+		here = head;
+		head = here->next;
+		delete here;
+		if (head == 0) {
+			tail = 0;
+		}
 	}
 	return total;
 }
@@ -303,7 +301,7 @@ ssize_t PacketInput::operator() (char * buffer, size_t size) {
 	ssize_t total = 0;
 	if (buffer == 0) {
 		// Do nothing.
-	} else if (size == 0) {
+	} else if (size <= 0) {
 		// Do nothing.
 	} else {
 		size_t length;
@@ -317,7 +315,7 @@ ssize_t PacketInput::operator() (char * buffer, size_t size) {
 					break;
 				}
 			} else {
-				if (total == 0) {
+				if (total <= 0) {
 					total = EOF;
 					errno = 0;
 				}
