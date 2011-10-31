@@ -19,6 +19,7 @@
 #include "com/diag/desperado/BufferInput.h"
 #include "com/diag/desperado/BufferOutput.h"
 #include "com/diag/desperado/PathInput.h"
+#include "com/diag/desperado/PathOutput.h"
 
 namespace com {
 namespace diag {
@@ -766,7 +767,7 @@ TEST(PacketInputOutputTest, Character) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 }
 
-static const char * MILLAY99[] = {
+static const char * SONNET99[] = {
 	"SONNET 99\n",
 	"Love is not all: it is not meat nor drink\n",
 	"Nor slumber nor a roof against the rain;\n",
@@ -789,18 +790,18 @@ TEST(PacketInputOutputTest, String) {
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
-	for (size_t ii = 0; ii < countof(MILLAY99); ++ii) {
-		size_t length = std::strlen(MILLAY99[ii]);
-		EXPECT_LE((packet.output())(MILLAY99[ii]), length);
+	for (size_t ii = 0; ii < countof(SONNET99); ++ii) {
+		size_t length = std::strlen(SONNET99[ii]);
+		EXPECT_LE((packet.output())(SONNET99[ii]), length);
 		EXPECT_FALSE(packet.empty());
 	}
-	char buffer[countof(MILLAY99)][64];
+	char buffer[countof(SONNET99)][64];
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
 		(packet.input())(buffer[ii], sizeof(buffer[ii]));
 	}
 	EXPECT_TRUE(packet.empty());
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
-		EXPECT_EQ(std::strncmp(MILLAY99[ii], buffer[ii], sizeof(buffer[ii])), 0);
+		EXPECT_EQ(std::strncmp(SONNET99[ii], buffer[ii], sizeof(buffer[ii])), 0);
 	}
 }
 
@@ -809,17 +810,17 @@ TEST(PacketInputOutputTest, Formatted) {
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
 	::com::diag::desperado::Print print(packet.output());
-	for (size_t ii = 0; ii < countof(MILLAY99); ++ii) {
-		print("%s", MILLAY99[ii]);
+	for (size_t ii = 0; ii < countof(SONNET99); ++ii) {
+		print("%s", SONNET99[ii]);
 		EXPECT_FALSE(packet.empty());
 	}
-	char buffer[countof(MILLAY99)][64];
+	char buffer[countof(SONNET99)][64];
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
 		(packet.input())(buffer[ii], sizeof(buffer[ii]));
 	}
 	EXPECT_TRUE(packet.empty());
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
-		EXPECT_EQ(std::strncmp(MILLAY99[ii], buffer[ii], sizeof(buffer[ii])), 0);
+		EXPECT_EQ(std::strncmp(SONNET99[ii], buffer[ii], sizeof(buffer[ii])), 0);
 	}
 }
 
@@ -856,7 +857,7 @@ TEST(PacketTest, SourceSinkBuffer) {
 
 TEST(PacketTest, SourceSinkPathFile) {
 	::com::diag::desperado::PathInput input(__FILE__, "r");
-	::com::diag::desperado::Output output; // FileOutput output(stderr);
+	::com::diag::desperado::PathOutput output("/dev/null", "w"); // or for example FileOutput output(stderr);
 	Packet packet;
 	size_t sourced = packet.source(input);
 	size_t sunk = packet.sink(output);

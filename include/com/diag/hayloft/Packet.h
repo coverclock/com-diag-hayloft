@@ -33,7 +33,7 @@ public:
 
 	/**
 	 * Specifies the default allocation size in octets for those derived classes
-	 * where dynamic memory allocation is used.
+	 * where dynamic memory allocation is used for buffers.
 	 */
 	static const size_t ALLOCATION = 1024;
 
@@ -239,16 +239,6 @@ class PacketDataDynamic : public PacketData {
 
 public:
 
-	using PacketData::ALLOCATION;
-
-	using PacketData::PREPEND;
-
-	using PacketData::EITHER;
-
-	using PacketData::APPEND;
-
-	using PacketData::Datum;
-
 	/**
 	 * Ctor.
 	 * @param dp points to the dynamically allocated user data array.
@@ -266,38 +256,6 @@ public:
 	 */
 	virtual ~PacketDataDynamic() { delete [] payload; }
 
-	using PacketData::append;
-
-	using PacketData::prepend;
-
-	using PacketData::consume;
-
-	using PacketData::next;
-
-	using PacketData::empty;
-
-	using PacketData::length;
-
-	using PacketData::buffer;
-
-	using PacketData::size;
-
-	using PacketData::clear;
-
-private:
-
-    /**
-     *  Copy constructor.
-     *  @param that refers to an R-value object of this type.
-     */
-	PacketDataDynamic(const PacketDataDynamic & that);
-
-    /**
-     *  Assignment operator.
-     *  @param that refers to an R-value object of this type.
-     */
-	PacketDataDynamic& operator=(const PacketDataDynamic & that);
-
 };
 
 /**
@@ -312,16 +270,6 @@ class PacketBuffer : public PacketData {
 
 public:
 
-	using PacketData::ALLOCATION;
-
-	using PacketData::PREPEND;
-
-	using PacketData::EITHER;
-
-	using PacketData::APPEND;
-
-	using PacketData::Datum;
-
 	/**
 	 * Ctor.
 	 * @param bp points to the user buffer object.
@@ -333,43 +281,10 @@ public:
 	: PacketData(bp, ve, vf)
 	{ clear(); }
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~PacketBuffer() {}
-
-	using PacketData::append;
-
-	using PacketData::prepend;
-
-	using PacketData::consume;
-
-	using PacketData::next;
-
-	using PacketData::empty;
-
-	using PacketData::length;
-
-	using PacketData::buffer;
-
-	using PacketData::size;
-
-	using PacketData::prefix;
-
-	using PacketData::suffix;
-
-	using PacketData::clear;
-
-private:
-
-    /**
-     *  Copy constructor.
-     *  @param that refers to an R-value object of this type.
-     */
-	PacketBuffer(const PacketBuffer & that);
-
-    /**
-     *  Assignment operator.
-     *  @param that refers to an R-value object of this type.
-     */
-	PacketBuffer& operator=(const PacketBuffer & that);
 
 };
 
@@ -385,16 +300,6 @@ private:
 class PacketBufferDynamic : public PacketBuffer {
 
 public:
-
-	using PacketBuffer::ALLOCATION;
-
-	using PacketBuffer::PREPEND;
-
-	using PacketBuffer::EITHER;
-
-	using PacketBuffer::APPEND;
-
-	using PacketBuffer::Datum;
 
 	/**
 	 * Ctor.
@@ -423,42 +328,6 @@ public:
 	 * Dtor. The dynamically acquired buffer array is deleted.
 	 */
 	virtual ~PacketBufferDynamic() { delete [] payload; }
-
-	using PacketBuffer::append;
-
-	using PacketBuffer::prepend;
-
-	using PacketBuffer::consume;
-
-	using PacketBuffer::next;
-
-	using PacketBuffer::empty;
-
-	using PacketBuffer::length;
-
-	using PacketBuffer::buffer;
-
-	using PacketBuffer::size;
-
-	using PacketBuffer::prefix;
-
-	using PacketBuffer::suffix;
-
-	using PacketBuffer::clear;
-
-private:
-
-    /**
-     *  Copy constructor.
-     *  @param that refers to an R-value object of this type.
-     */
-	PacketBufferDynamic(const PacketBufferDynamic & that);
-
-    /**
-     *  Assignment operator.
-     *  @param that refers to an R-value object of this type.
-     */
-	PacketBufferDynamic& operator=(const PacketBufferDynamic & that);
 
 };
 
@@ -580,7 +449,7 @@ public:
     /**
      * Dtor.
      */
-    virtual ~PacketOutput() { (*this)(); }
+    virtual ~PacketOutput() {}
 
     /**
      * Outputs a character in integer form.
