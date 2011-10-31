@@ -15,9 +15,10 @@
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/generics.h"
-#include "com/diag/desperado/PathInput.h"
-#include "com/diag/desperado/PathOutput.h"
 #include "com/diag/desperado/Print.h"
+#include "com/diag/desperado/BufferInput.h"
+#include "com/diag/desperado/BufferOutput.h"
+#include "com/diag/desperado/PathInput.h"
 
 namespace com {
 namespace diag {
@@ -548,19 +549,144 @@ TEST(PacketTest, Heap) {
 	delete packet;
 }
 
-TEST(PacketTest, PrependAppendConsumeMany) {
+TEST(PacketTest, EitherPrependAppendConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
-	Packet packet(ALLOC);
+	Packet packet(ALLOC, Packet::EITHER);
 	packet.show(2);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
+		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
+	}
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	char datum;
+	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
+	packet.show(2);
+}
+
+TEST(PacketTest, PrependPrependAppendConsumeMany) {
+	static const size_t SIZE = 256;
+	static const size_t ZERO = 0;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = SIZE / 8;
+	Packet packet(ALLOC, Packet::PREPEND);
+	packet.show(2);
+	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
+		size_t jj = (sizeof(data) / 2) - ii - 1;
+		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
+		size_t kk = (sizeof(data) / 2) + ii;
+		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
+		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
+	}
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	char datum;
+	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
+	packet.show(2);
+}
+
+TEST(PacketTest, AppendPrependAppendConsumeMany) {
+	static const size_t SIZE = 256;
+	static const size_t ZERO = 0;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = SIZE / 8;
+	Packet packet(ALLOC, Packet::APPEND);
+	packet.show(2);
+	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
+		size_t jj = (sizeof(data) / 2) - ii - 1;
+		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
+		size_t kk = (sizeof(data) / 2) + ii;
+		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
+		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
+	}
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	char datum;
+	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
+	packet.show(2);
+}
+
+TEST(PacketTest, EitherAppendPrependConsumeMany) {
+	static const size_t SIZE = 256;
+	static const size_t ZERO = 0;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = SIZE / 8;
+	Packet packet(ALLOC, Packet::EITHER);
+	packet.show(2);
+	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
+		size_t kk = (sizeof(data) / 2) + ii;
+		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+		size_t jj = (sizeof(data) / 2) - ii - 1;
+		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
+		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
+	}
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	char datum;
+	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
+	packet.show(2);
+}
+
+TEST(PacketTest, PrependAppendPrependConsumeMany) {
+	static const size_t SIZE = 256;
+	static const size_t ZERO = 0;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = SIZE / 8;
+	Packet packet(ALLOC, Packet::PREPEND);
+	packet.show(2);
+	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
+		size_t kk = (sizeof(data) / 2) + ii;
+		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+		size_t jj = (sizeof(data) / 2) - ii - 1;
+		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
+	}
+	packet.show(2);
+	char buffer[sizeof(data)];
+	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
+		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
+	}
+	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
+	char datum;
+	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
+	packet.show(2);
+}
+
+TEST(PacketTest, AppendAppendPrependConsumeMany) {
+	static const size_t SIZE = 256;
+	static const size_t ZERO = 0;
+	char data[SIZE];
+	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
+	static const size_t ALLOC = SIZE / 8;
+	Packet packet(ALLOC, Packet::APPEND);
+	packet.show(2);
+	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
+		size_t kk = (sizeof(data) / 2) + ii;
+		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
+		size_t jj = (sizeof(data) / 2) - ii - 1;
+		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
 	packet.show(2);
 	char buffer[sizeof(data)];
@@ -682,7 +808,7 @@ TEST(PacketInputOutputTest, Formatted) {
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
-	Print print(packet.output());
+	::com::diag::desperado::Print print(packet.output());
 	for (size_t ii = 0; ii < countof(MILLAY99); ++ii) {
 		print("%s", MILLAY99[ii]);
 		EXPECT_FALSE(packet.empty());
@@ -697,6 +823,45 @@ TEST(PacketInputOutputTest, Formatted) {
 	}
 }
 
+static const char RICHARDII[] = {
+	"This royal throne of kings, this sceptred isle,\n"
+	"This earth of majesty, this seat of Mars,\n"
+	"This other Eden, demi-paradise,\n"
+	"This fortress built by Nature for herself\n"
+	"Against infection and the hand of war,\n"
+	"This happy breed of men, this little world,\n"
+	"This precious stone set in the silver sea,\n"
+	"Which serves it in the office of a wall\n"
+	"Or as a moat defensive to a house,\n"
+	"Against the envy of less happier lands,--\n"
+	"This blessed plot, this earth, this realm, this England.\n"
+	"-- William Shakespeare, KING RICHARD II, Act 2 scene 1\n"
+};
+
+TEST(PacketTest, SourceSinkBuffer) {
+	char data[sizeof(RICHARDII)];
+	std::strncpy(data, RICHARDII, sizeof(data));
+	::com::diag::desperado::BufferInput bufferinput(data);
+	static const size_t ALLOC = 7;
+	Packet packet(ALLOC, Packet::APPEND);
+	EXPECT_TRUE(packet.empty());
+	EXPECT_EQ(packet.source(bufferinput), sizeof(RICHARDII));
+	EXPECT_FALSE(packet.empty());
+	char buffer[sizeof(data)];
+	::com::diag::desperado::BufferOutput bufferoutput(buffer, sizeof(buffer));
+	EXPECT_EQ(packet.sink(bufferoutput), sizeof(RICHARDII));
+	EXPECT_TRUE(packet.empty());
+	EXPECT_EQ(std::strncmp(RICHARDII, buffer, sizeof(buffer)), 0);
+}
+
+TEST(PacketTest, SourceSinkPathFile) {
+	::com::diag::desperado::PathInput input(__FILE__, "r");
+	::com::diag::desperado::Output output; // FileOutput output(stderr);
+	Packet packet;
+	size_t sourced = packet.source(input);
+	size_t sunk = packet.sink(output);
+	EXPECT_EQ(sourced, sunk);
+}
 
 }
 }
