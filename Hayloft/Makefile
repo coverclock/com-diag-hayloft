@@ -142,9 +142,13 @@ TARGETS+=Packet.o
 ARTIFACTS+=Packet.o
 ARCHIVABLE+=Packet.o
 
-TARGETS+=S3.o
-ARTIFACTS+=S3.o
-ARCHIVABLE+=S3.o
+TARGETS+=s3/Session.o
+ARTIFACTS+=s3/Session.o
+ARCHIVABLE+=s3/Session.o
+
+TARGETS+=s3/Credentials.o
+ARTIFACTS+=s3/Credentials.o
+ARCHIVABLE+=s3/Credentials.o
 
 TARGETS+=unittest
 ARTIFACTS+=unittest
@@ -156,9 +160,13 @@ unittest:	unittest.o $(HAYLOFT_LIB) $(LARIAT_LIB) $(GMOCK_LIB) $(GTEST_LIB) $(DE
 # LIBRARIES AND SHARED OBJECTS
 ################################################################################
 
+DELIVERABLES+=lib$(PROJECT).a
+
 lib$(PROJECT).a:	$(ARCHIVABLE)
 	$(AR) $(ARFLAGS) lib$(PROJECT).a $(ARCHIVABLE)
 	$(RANLIB) lib$(PROJECT).a
+
+DELIVERABLES+=lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD)
 
 lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD):	lib$(PROJECT).a
 	HERE="`pwd`"; \
@@ -167,11 +175,17 @@ lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD):	lib$(PROJECT).a
 	$(CC) $(CARCH) -shared -Wl,-soname,lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) -o lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) $$THERE/*.o; \
 	rm -rf $$THERE
 
+DELIVERABLES+=lib$(PROJECT).so.$(MAJOR).$(MINOR)
+
 lib$(PROJECT).so.$(MAJOR).$(MINOR):	lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR).$(MINOR)
 
+DELIVERABLES+=lib$(PROJECT).so.$(MAJOR)
+
 lib$(PROJECT).so.$(MAJOR):	lib$(PROJECT).so.$(MAJOR).$(MINOR)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR)
+
+DELIVERABLES+=lib$(PROJECT).so
 
 lib$(PROJECT).so:	lib$(PROJECT).so.$(MAJOR)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so

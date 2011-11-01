@@ -10,7 +10,8 @@
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
-#include "com/diag/unittest/S3.h"
+#include "com/diag/unittest/s3/Session.h"
+#include "com/diag/unittest/s3/Credentials.h"
 
 int main(int argc, char ** argv, char **envp) {
 	return ::com::diag::lariat::main(argc, argv, envp);
