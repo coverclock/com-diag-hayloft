@@ -142,6 +142,10 @@ TARGETS+=Packet.o
 ARTIFACTS+=Packet.o
 ARCHIVABLE+=Packet.o
 
+TARGETS+=S3.o
+ARTIFACTS+=S3.o
+ARCHIVABLE+=S3.o
+
 TARGETS+=unittest
 ARTIFACTS+=unittest
 

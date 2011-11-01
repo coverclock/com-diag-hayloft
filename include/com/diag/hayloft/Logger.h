@@ -185,40 +185,6 @@ public:
     	return (mask & ((Mask)1 << level)) != 0;
     }
 
-    using ::com::diag::desperado::Logger::log;
-
-    using ::com::diag::desperado::Logger::finest;
-
-    using ::com::diag::desperado::Logger::finer;
-
-    using ::com::diag::desperado::Logger::fine;
-
-    using ::com::diag::desperado::Logger::trace;
-
-    using ::com::diag::desperado::Logger::debug;
-
-    using ::com::diag::desperado::Logger::information;
-
-    using ::com::diag::desperado::Logger::configuration;
-
-    using ::com::diag::desperado::Logger::notice;
-
-    using ::com::diag::desperado::Logger::warning;
-
-    using ::com::diag::desperado::Logger::error;
-
-    using ::com::diag::desperado::Logger::severe;
-
-    using ::com::diag::desperado::Logger::critical;
-
-    using ::com::diag::desperado::Logger::alert;
-
-    using ::com::diag::desperado::Logger::fatal;
-
-    using ::com::diag::desperado::Logger::emergency;
-
-    using ::com::diag::desperado::Logger::print;
-
 };
 
 }
