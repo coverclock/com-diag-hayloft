@@ -19,6 +19,7 @@
 
 #include <string>
 #include "com/diag/desperado/target.h"
+#include "com/diag/desperado/Input.h"
 #include "libs3.h"
 
 namespace com {
