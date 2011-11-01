@@ -39,8 +39,8 @@ public:
 
 	static ::com::diag::desperado::Print printf;
 
-	static const std::string accesskeyidpath;
-	static const std::string secretaccesskeypath;
+	static const std::string ACCESSKEYIDPATH;
+	static const std::string SECRETACCESSKEYPATH;
 
 private:
 
@@ -86,8 +86,8 @@ protected:
 ::com::diag::desperado::LogOutput S3Test::logput(S3Test::errput);
 ::com::diag::desperado::Print S3Test::printf(S3Test::errput);
 
-const std::string S3Test::accesskeyidpath = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-access-key-id.txt";
-const std::string S3Test::secretaccesskeypath = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-secret-access-key.txt";
+const std::string S3Test::ACCESSKEYIDPATH = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-access-key-id.txt";
+const std::string S3Test::SECRETACCESSKEYPATH = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-secret-access-key.txt";
 
 /*******************************************************************************
  * S3 SESSION
@@ -103,25 +103,27 @@ TEST_F(S3Test, SessionDefaults) {
 }
 
 TEST_F(S3Test, SessionEnvironment) {
-	static const char * USER_AGENT_STR = "environment.hayloft.diag.com";
+	static const char * USER_AGENT_STR = "env.hayloft.diag.com";
+	static const char * HOST_NAME_STR = "s4.amazonaws.com";
 	::setenv(Session::USER_AGENT_ENV(), USER_AGENT_STR, !0);
-	::setenv(Session::HOST_NAME_ENV(), Session::HOST_NAME_STR(), !0);
+	::setenv(Session::HOST_NAME_ENV(), HOST_NAME_STR, !0);
 	Session session;
 	EXPECT_TRUE(session.successful());
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_STR), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getHostName(), session.HOST_NAME_STR()), 0);
+	EXPECT_EQ(std::strcmp(session.getHostName(), HOST_NAME_STR), 0);
 }
 
 TEST_F(S3Test, SessionExplicit) {
-	static const char * USER_AGENT_STR = "explicit.hayloft.diag.com";
-	Session session(USER_AGENT_STR, S3_INIT_ALL, Session::HOST_NAME_STR());
+	static const char * USER_AGENT_STR = "exp.hayloft.diag.com";
+	static const char * HOST_NAME_STR = "s5.amazonaws.com";
+	Session session(USER_AGENT_STR, S3_INIT_ALL, HOST_NAME_STR);
 	EXPECT_TRUE(session.successful());
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_STR), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getHostName(), session.HOST_NAME_STR()), 0);
+	EXPECT_EQ(std::strcmp(session.getHostName(), HOST_NAME_STR), 0);
 }
 
 /*******************************************************************************
@@ -129,29 +131,53 @@ TEST_F(S3Test, SessionExplicit) {
  ******************************************************************************/
 
 TEST_F(S3Test, CredentialsEnvironment) {
-	::com::diag::desperado::PathInput accesskeyidpathinput(S3Test::accesskeyidpath.c_str(), "r");
-	char accesskeyid[Credentials::ACCESS_KEY_ID_LEN + 1];
-	EXPECT_EQ(accesskeyidpathinput(accesskeyid, sizeof(accesskeyid)), sizeof(accesskeyid));
-	::setenv(Credentials::ACCESS_KEY_ID_ENV(), accesskeyid, !0);
-	::com::diag::desperado::PathInput secretaccesskeypathinput(S3Test::secretaccesskeypath.c_str(), "r");
-	char secretaccesskey[Credentials::SECRET_ACCESS_KEY_LEN + 1];
-	EXPECT_EQ(secretaccesskeypathinput(secretaccesskey, sizeof(secretaccesskey)), sizeof(secretaccesskey));
-	::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), secretaccesskey, !0);
+	const char * accesskeyidvalue = ::getenv(Credentials::ACCESS_KEY_ID_ENV());
+	if (accesskeyidvalue == 0) {
+		char accesskeyid[Credentials::ACCESS_KEY_ID_LEN + 1];
+		::com::diag::desperado::PathInput accesskeyidinput(S3Test::ACCESSKEYIDPATH.c_str(), "r");
+		EXPECT_EQ(accesskeyidinput(accesskeyid, sizeof(accesskeyid)), sizeof(accesskeyid));
+		EXPECT_EQ(::setenv(Credentials::ACCESS_KEY_ID_ENV(), accesskeyid, !0), 0);
+	}
+	ASSERT_NE(::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
+	const char * secretaccesskeyvalue = ::getenv(Credentials::SECRET_ACCESS_KEY_ENV());
+	if (secretaccesskeyvalue == 0) {
+		char secretaccesskey[Credentials::SECRET_ACCESS_KEY_LEN + 1];
+		::com::diag::desperado::PathInput secretaccesskeyinput(S3Test::SECRETACCESSKEYPATH.c_str(), "r");
+		EXPECT_EQ(secretaccesskeyinput(secretaccesskey, sizeof(secretaccesskey)), sizeof(secretaccesskey));
+		EXPECT_EQ(::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), secretaccesskey, !0), 0);
+	}
+	ASSERT_NE(::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
 	Credentials credentials;
 	EXPECT_TRUE(credentials.successful());
 	ASSERT_NE(credentials.getId(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getId(), accesskeyid), 0);
+	EXPECT_EQ(std::strcmp(credentials.getId(), ::getenv(Credentials::ACCESS_KEY_ID_ENV())), 0);
 	ASSERT_NE(credentials.getSecret(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getSecret(), secretaccesskey), 0);
+	EXPECT_EQ(std::strcmp(credentials.getSecret(), ::getenv(Credentials::SECRET_ACCESS_KEY_ENV())), 0);
+	if (accesskeyidvalue == 0) {
+		EXPECT_EQ(::unsetenv(Credentials::ACCESS_KEY_ID_ENV()), 0);
+	}
+	if (secretaccesskeyvalue == 0) {
+		EXPECT_EQ(::unsetenv(Credentials::SECRET_ACCESS_KEY_ENV()), 0);
+	}
 }
 
 TEST_F(S3Test, CredentialsExplicit) {
-	::com::diag::desperado::PathInput accesskeyidpathinput(S3Test::accesskeyidpath.c_str(), "r");
 	char accesskeyid[Credentials::ACCESS_KEY_ID_LEN + 1];
-	EXPECT_EQ(accesskeyidpathinput(accesskeyid, sizeof(accesskeyid)), sizeof(accesskeyid));
-	::com::diag::desperado::PathInput secretaccesskeypathinput(secretaccesskeypath.c_str(), "r");
+	if (::getenv(Credentials::ACCESS_KEY_ID_ENV()) != 0) {
+		std::strncpy(accesskeyid, ::getenv(Credentials::ACCESS_KEY_ID_ENV()), sizeof(accesskeyid));
+		accesskeyid[sizeof(accesskeyid) - 1] = '\0';
+	} else {
+		::com::diag::desperado::PathInput accesskeyidinput(S3Test::ACCESSKEYIDPATH.c_str(), "r");
+		EXPECT_EQ(accesskeyidinput(accesskeyid, sizeof(accesskeyid)), sizeof(accesskeyid));
+	}
 	char secretaccesskey[Credentials::SECRET_ACCESS_KEY_LEN + 1];
-	EXPECT_EQ(secretaccesskeypathinput(secretaccesskey, sizeof(secretaccesskey)), sizeof(secretaccesskey));
+	if (::getenv(Credentials::SECRET_ACCESS_KEY_ENV()) != 0) {
+		std::strncpy(secretaccesskey, ::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), sizeof(secretaccesskey));
+		secretaccesskey[sizeof(secretaccesskey) - 1] = '\0';
+	} else {
+		::com::diag::desperado::PathInput secretaccesskeyinput(S3Test::SECRETACCESSKEYPATH.c_str(), "r");
+		EXPECT_EQ(secretaccesskeyinput(secretaccesskey, sizeof(secretaccesskey)), sizeof(secretaccesskey));
+	}
 	Credentials credentials(accesskeyid, secretaccesskey);
 	EXPECT_TRUE(credentials.successful());
 	ASSERT_NE(credentials.getId(), (char *)0);
