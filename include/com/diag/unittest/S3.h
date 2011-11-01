@@ -39,6 +39,9 @@ public:
 
 	static ::com::diag::desperado::Print printf;
 
+	static const std::string accesskeyidpath;
+	static const std::string secretaccesskeypath;
+
 private:
 
 	static ::com::diag::desperado::FileOutput errput;
@@ -83,6 +86,9 @@ protected:
 ::com::diag::desperado::LogOutput S3Test::logput(S3Test::errput);
 ::com::diag::desperado::Print S3Test::printf(S3Test::errput);
 
+const std::string S3Test::accesskeyidpath = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-access-key-id.txt";
+const std::string S3Test::secretaccesskeypath = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-secret-access-key.txt";
+
 /*******************************************************************************
  * S3 SESSION
  ******************************************************************************/
@@ -97,21 +103,23 @@ TEST_F(S3Test, SessionDefaults) {
 }
 
 TEST_F(S3Test, SessionEnvironment) {
-	::setenv(Session::USER_AGENT_ENV(), "environment.diag.com", !0);
+	static const char * USER_AGENT_STR = "environment.hayloft.diag.com";
+	::setenv(Session::USER_AGENT_ENV(), USER_AGENT_STR, !0);
 	::setenv(Session::HOST_NAME_ENV(), Session::HOST_NAME_STR(), !0);
 	Session session;
 	EXPECT_TRUE(session.successful());
 	ASSERT_NE(session.getUserAgent(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getUserAgent(), "environment.diag.com"), 0);
+	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_STR), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getHostName(), session.HOST_NAME_STR()), 0);
 }
 
 TEST_F(S3Test, SessionExplicit) {
-	Session session("explicit.diag.com", S3_INIT_ALL, Session::HOST_NAME_STR());
+	static const char * USER_AGENT_STR = "explicit.hayloft.diag.com";
+	Session session(USER_AGENT_STR, S3_INIT_ALL, Session::HOST_NAME_STR());
 	EXPECT_TRUE(session.successful());
 	ASSERT_NE(session.getUserAgent(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getUserAgent(), "explicit.diag.com"), 0);
+	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_STR), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getHostName(), session.HOST_NAME_STR()), 0);
 }
@@ -121,23 +129,13 @@ TEST_F(S3Test, SessionExplicit) {
  ******************************************************************************/
 
 TEST_F(S3Test, CredentialsEnvironment) {
-	const char * home = std::getenv("HOME");
-	ASSERT_NE(home, (char *)0);
-	std::string accesskeyidpath = home;
-	accesskeyidpath += "/projects/hayloft/aws-s3-access-key-id.txt";
-	S3Test::printf("accesskeypath=\"%s\"\n", accesskeyidpath.c_str());
-	::com::diag::desperado::PathInput accesskeyidpathinput(accesskeyidpath.c_str(), "r");
+	::com::diag::desperado::PathInput accesskeyidpathinput(S3Test::accesskeyidpath.c_str(), "r");
 	char accesskeyid[Credentials::ACCESS_KEY_ID_LEN + 1];
 	EXPECT_EQ(accesskeyidpathinput(accesskeyid, sizeof(accesskeyid)), sizeof(accesskeyid));
-	S3Test::printf("accesskeyid=\"%s\"\n", accesskeyid);
 	::setenv(Credentials::ACCESS_KEY_ID_ENV(), accesskeyid, !0);
-	std::string secretaccesskeypath = home;
-	secretaccesskeypath += "/projects/hayloft/aws-s3-secret-access-key.txt";
-	S3Test::printf("secretaccesskeypath=\"%s\"\n", secretaccesskeypath.c_str());
-	::com::diag::desperado::PathInput secretaccesskeypathinput(secretaccesskeypath.c_str(), "r");
+	::com::diag::desperado::PathInput secretaccesskeypathinput(S3Test::secretaccesskeypath.c_str(), "r");
 	char secretaccesskey[Credentials::SECRET_ACCESS_KEY_LEN + 1];
 	EXPECT_EQ(secretaccesskeypathinput(secretaccesskey, sizeof(secretaccesskey)), sizeof(secretaccesskey));
-	S3Test::printf("secretaccesskey=\"%s\"\n", secretaccesskey);
 	::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), secretaccesskey, !0);
 	Credentials credentials;
 	EXPECT_TRUE(credentials.successful());
@@ -148,22 +146,12 @@ TEST_F(S3Test, CredentialsEnvironment) {
 }
 
 TEST_F(S3Test, CredentialsExplicit) {
-	const char * home = std::getenv("HOME");
-	ASSERT_NE(home, (char *)0);
-	std::string accesskeyidpath = home;
-	accesskeyidpath += "/projects/hayloft/aws-s3-access-key-id.txt";
-	S3Test::printf("accesskeypath=\"%s\"\n", accesskeyidpath.c_str());
-	::com::diag::desperado::PathInput accesskeyidpathinput(accesskeyidpath.c_str(), "r");
+	::com::diag::desperado::PathInput accesskeyidpathinput(S3Test::accesskeyidpath.c_str(), "r");
 	char accesskeyid[Credentials::ACCESS_KEY_ID_LEN + 1];
 	EXPECT_EQ(accesskeyidpathinput(accesskeyid, sizeof(accesskeyid)), sizeof(accesskeyid));
-	S3Test::printf("accesskeyid=\"%s\"\n", accesskeyid);
-	std::string secretaccesskeypath = home;
-	secretaccesskeypath += "/projects/hayloft/aws-s3-secret-access-key.txt";
-	S3Test::printf("secretaccesskeypath=\"%s\"\n", secretaccesskeypath.c_str());
 	::com::diag::desperado::PathInput secretaccesskeypathinput(secretaccesskeypath.c_str(), "r");
 	char secretaccesskey[Credentials::SECRET_ACCESS_KEY_LEN + 1];
 	EXPECT_EQ(secretaccesskeypathinput(secretaccesskey, sizeof(secretaccesskey)), sizeof(secretaccesskey));
-	S3Test::printf("secretaccesskey=\"%s\"\n", secretaccesskey);
 	Credentials credentials(accesskeyid, secretaccesskey);
 	EXPECT_TRUE(credentials.successful());
 	ASSERT_NE(credentials.getId(), (char *)0);
@@ -173,7 +161,7 @@ TEST_F(S3Test, CredentialsExplicit) {
 }
 
 /*******************************************************************************
- * S3 CREDENTIALS
+ * S3
  ******************************************************************************/
 
 }
