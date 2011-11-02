@@ -28,7 +28,9 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 		userAgentInfo = USER_AGENT_STR();
 	}
 
-	useragent = userAgentInfo;
+	if (userAgentInfo != 0) {
+		useragent = userAgentInfo;
+	}
 
 	if (defaultS3HostName == 0) {
 		defaultS3HostName = std::getenv(HOST_NAME_ENV());
@@ -38,9 +40,12 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 		defaultS3HostName = HOST_NAME_STR();
 	}
 
-	hostname = defaultS3HostName;
+	if (defaultS3HostName != 0) {
+		hostname = defaultS3HostName;
+	}
 
-	Logger::instance().information("Session@%p: begin useragent=\"%s\" hostname=\"%s\"\n", this, useragent.c_str(), hostname.c_str());
+	Logger::instance().debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
+	Logger::instance().debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
 
 	status = ::S3_initialize(useragent.c_str(), flags, hostname.c_str());
 	if (status != ::S3StatusOK) {
@@ -50,7 +55,6 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 
 Session::~Session() {
 	S3_deinitialize();
-	Logger::instance().information("Session@%p: end\n", this);
 }
 
 }

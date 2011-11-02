@@ -45,9 +45,7 @@
 
 	ABSTRACT
 
-	This file is part of the Digital Aggregates Corporation Hayloft package
-	that implements a mass storage system (MSS) bitfile mover on top of the
-	Amazon Web Services (AWS) Simple Storage Service (S3).
+	This file is part of the Digital Aggregates Corporation Hayloft package.
 
 	This software is an original work of its author(s).
 
@@ -74,6 +72,9 @@
 		Ubuntu 10.04 "Lucid Lynx"
 		Linux 2.6.32
 		GCC 4.4.3
+		libs3 2.0
+		Desperado Zinc
+		AWS S3 API 2006-03-01
 
 	See the Makefile for more information.
 

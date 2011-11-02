@@ -290,7 +290,7 @@ TEST(LoggerTest, SetMaskEnvironment) {
 	for (int mask = 0; mask <= 0xffff; ++mask) {
 		char string[sizeof("0xffff")];
 		std::snprintf(string, sizeof(string), "0x%x", mask);
-		::setenv(logger.MASK_ENV_NAME(), string, !0);
+		::setenv(logger.MASK_ENV(), string, !0);
 		logger.setMask();
 		/**/
 		LOGGER_TEST_ENABLEDISABLE_TEST(logger.FINEST);
