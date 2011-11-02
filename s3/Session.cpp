@@ -40,17 +40,17 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 
 	hostname = defaultS3HostName;
 
-	Logger::instance().information("Session: useragent=\"%s\"\n", useragent.c_str());
-	Logger::instance().information("Session: hostname=\"%s\"\n", hostname.c_str());
+	Logger::instance().information("Session@%p: begin useragent=\"%s\" hostname=\"%s\"\n", this, useragent.c_str(), hostname.c_str());
 
 	status = ::S3_initialize(useragent.c_str(), flags, hostname.c_str());
 	if (status != ::S3StatusOK) {
-		Logger::instance().error("Session: S3_initialize failed! status=%d=\"%s\"\n", status, ::S3_get_status_name(status));
+		Logger::instance().error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 }
 
 Session::~Session() {
 	S3_deinitialize();
+	Logger::instance().information("Session@%p: end\n", this);
 }
 
 }
