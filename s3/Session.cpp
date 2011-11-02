@@ -17,7 +17,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-Session::Session(const char * userAgentInfo, int flags, const char * defaultS3HostName)
+Session::Session(const char * userAgentInfo, const char * bucketSuffix, int flags, const char * defaultS3HostName)
 : status(S3StatusOK)
 {
 	if (userAgentInfo == 0) {
@@ -30,6 +30,18 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 
 	if (userAgentInfo != 0) {
 		useragent = userAgentInfo;
+	}
+
+	if (bucketSuffix == 0) {
+		bucketSuffix = std::getenv(BUCKET_SUFFIX_ENV());
+	}
+
+	if (bucketSuffix == 0) {
+		bucketSuffix = BUCKET_SUFFIX_STR();
+	}
+
+	if (bucketSuffix != 0) {
+		bucketsuffix = bucketSuffix;
 	}
 
 	if (defaultS3HostName == 0) {
@@ -45,6 +57,7 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 	}
 
 	Logger::instance().debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
+	Logger::instance().debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	Logger::instance().debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
 
 	status = ::S3_initialize(useragent.c_str(), flags, hostname.c_str());
