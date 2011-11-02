@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=0
-MINOR=1
+MINOR=2
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -149,6 +149,10 @@ ARCHIVABLE+=s3/Session.o
 TARGETS+=s3/Credentials.o
 ARTIFACTS+=s3/Credentials.o
 ARCHIVABLE+=s3/Credentials.o
+
+TARGETS+=s3/Bucket.o
+ARTIFACTS+=s3/Bucket.o
+ARCHIVABLE+=s3/Bucket.o
 
 TARGETS+=unittest
 ARTIFACTS+=unittest
