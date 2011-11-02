@@ -36,15 +36,14 @@ Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 		secret = secretAccessKey;
 	}
 
-	Logger::instance().information("Credentials: id=[%zu]\n", id.length());
-	Logger::instance().information("Credentials: secret=[%zu]\n", secret.length());
+	Logger::instance().information("Credentials@%p: begin id=[%zu] secret=[%zu]\n", this, id.length(), secret.length());
 
 	if (id.length() != ACCESS_KEY_ID_LEN) {
-		Logger::instance().warning("Credentials: access key id length invalid! (%zu!=%zu)\n", id.length(), ACCESS_KEY_ID_LEN);
+		Logger::instance().warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
 	}
 
 	if (secret.length() != SECRET_ACCESS_KEY_LEN) {
-		Logger::instance().warning("Credentials: secret access key length invalid! (%zu!=%zu)\n", secret.length(), SECRET_ACCESS_KEY_LEN);
+		Logger::instance().warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
 	}
 }
 
