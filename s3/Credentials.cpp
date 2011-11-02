@@ -24,6 +24,8 @@ Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 		accessKeyId = std::getenv(ACCESS_KEY_ID_ENV());
 	}
 
+	// There is no default access key id.
+
 	if (accessKeyId != 0) {
 		id = accessKeyId;
 	}
@@ -32,15 +34,25 @@ Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 		secretAccessKey = std::getenv(SECRET_ACCESS_KEY_ENV());
 	}
 
+	// There is no default secret access key.
+
 	if (secretAccessKey != 0) {
 		secret = secretAccessKey;
 	}
 
-	Logger::instance().information("Credentials@%p: begin id=[%zu] secret=[%zu]\n", this, id.length(), secret.length());
+	// We don't log the actual values of the access key id and most especially
+	// the secret access key since these are considered sensitive and the log
+	// files (particular the system log) might not be. Instead we just log the
+	// length of each. If they weren't set successfully, their length will be
+	// zero.
+
+	Logger::instance().debug("Credentials@%p: id=[%zu]\n", this, id.length());
 
 	if (id.length() != ACCESS_KEY_ID_LEN) {
 		Logger::instance().warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
 	}
+
+	Logger::instance().debug("Credentials@%p: secret=[%zu]\n", this, secret.length());
 
 	if (secret.length() != SECRET_ACCESS_KEY_LEN) {
 		Logger::instance().warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);

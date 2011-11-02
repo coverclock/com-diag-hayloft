@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _COM_DIAG_UNITTEST_S3_CREDENTIALS_H_
-#define _COM_DIAG_UNITTEST_S3_CREDENTIALS_H_
+#ifndef _H_COM_DIAG_UNITTEST_S3_CREDENTIALS
+#define _H_COM_DIAG_UNITTEST_S3_CREDENTIALS
 
 /**
  * @file
@@ -28,6 +28,10 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture CredentialsTest;
 
+// During development, the unit tests read the Digital Aggregates access key id
+// and secret access key from files on disk. But you can also set the
+// appropriate environmental variables. These unit tests will use those values
+// and do the right thing to test the underlying code.
 static const std::string ACCESSKEYIDPATH = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-access-key-id.txt";
 static const std::string SECRETACCESSKEYPATH = std::string(std::getenv("HOME")) + "/projects/hayloft/aws-s3-secret-access-key.txt";
 
@@ -51,7 +55,7 @@ TEST_F(CredentialsTest, Environment) {
 	}
 	ASSERT_NE(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
 	Credentials credentials;
-	EXPECT_TRUE(credentials.successful());
+	EXPECT_TRUE(credentials == true);
 	ASSERT_NE(credentials.getId(), (char *)0);
 	EXPECT_EQ(std::strcmp(credentials.getId(), std::getenv(Credentials::ACCESS_KEY_ID_ENV())), 0);
 	ASSERT_NE(credentials.getSecret(), (char *)0);
@@ -84,7 +88,7 @@ TEST_F(CredentialsTest, Explicit) {
 		if (secretaccesskey[sizeof(secretaccesskey) - 2] == '\n') { secretaccesskey[sizeof(secretaccesskey) - 2] = '\0'; }
 	}
 	Credentials credentials(accesskeyid, secretaccesskey);
-	EXPECT_TRUE(credentials.successful());
+	EXPECT_TRUE(credentials == true);
 	ASSERT_NE(credentials.getId(), (char *)0);
 	EXPECT_EQ(std::strcmp(credentials.getId(), accesskeyid), 0);
 	ASSERT_NE(credentials.getSecret(), (char *)0);

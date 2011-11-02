@@ -12,6 +12,10 @@
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/s3/Session.h"
 #include "com/diag/unittest/s3/Credentials.h"
+#include "com/diag/unittest/s3/Protocol.h"
+#include "com/diag/unittest/s3/UniversalResourceIdentifierStyle.h"
+#include "com/diag/unittest/s3/LocationConstraint.h"
+#include "com/diag/unittest/s3/CannedAccessControlList.h"
 
 int main(int argc, char ** argv, char **envp) {
 	return ::com::diag::lariat::main(argc, argv, envp);

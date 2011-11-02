@@ -71,7 +71,7 @@ public:
      * Returns the name of the environmental variable that can be used to
      * set the mask.
      */
-    static const char * MASK_ENV_NAME() {
+    static const char * MASK_ENV() {
     	return "COM_DIAG_HAYLOFT_LOGGER_MASK";
     }
 

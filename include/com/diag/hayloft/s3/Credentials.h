@@ -9,12 +9,6 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
- * http://libs3.ischo.com.s3.amazonaws.com/index.html<BR>
- * This header file defines a C++ wrapper around Bryan Ischo's C-based
- * libs3 package just to make it easier to incorporate into existing C++
- * code bases and to define defaults and implement details specific to
- * Hayloft. C++ methods are placed in the ::com::diag::hayloft::s3 namespace.
- * The original libs3 C definitions are left in the global :: namespace.<BR>
  */
 
 #include <string>
@@ -49,7 +43,7 @@ protected:
 
 public:
 
-	bool successful() const { return ((id.length() == ACCESS_KEY_ID_LEN) && (secret.length() == SECRET_ACCESS_KEY_LEN)); }
+	operator bool() const { return ((id.length() == ACCESS_KEY_ID_LEN) && (secret.length() == SECRET_ACCESS_KEY_LEN)); }
 
 	const char * getId() const { return id.c_str(); }
 

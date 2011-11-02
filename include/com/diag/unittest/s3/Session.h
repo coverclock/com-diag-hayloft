@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _COM_DIAG_UNITTEST_S3_SESSION_H_
-#define _COM_DIAG_UNITTEST_S3_SESSION_H_
+#ifndef _H_COM_DIAG_UNITTEST_S3_SESSION
+#define _H__COM_DIAG_UNITTEST_S3_SESSION
 
 /**
  * @file
@@ -28,7 +28,7 @@ typedef Fixture SessionTest;
 
 TEST_F(SessionTest, Defaults) {
 	Session session;
-	EXPECT_TRUE(session.successful());
+	EXPECT_TRUE(session == true);
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), session.USER_AGENT_STR()), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
@@ -41,7 +41,7 @@ TEST_F(SessionTest, Environment) {
 	::setenv(Session::USER_AGENT_ENV(), USER_AGENT_STR, !0);
 	::setenv(Session::HOST_NAME_ENV(), HOST_NAME_STR, !0);
 	Session session;
-	EXPECT_TRUE(session.successful());
+	EXPECT_TRUE(session == true);
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_STR), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
@@ -52,7 +52,7 @@ TEST_F(SessionTest, Explicit) {
 	static const char * USER_AGENT_STR = "exp.hayloft.diag.com";
 	static const char * HOST_NAME_STR = "s5.amazonaws.com";
 	Session session(USER_AGENT_STR, S3_INIT_ALL, HOST_NAME_STR);
-	EXPECT_TRUE(session.successful());
+	EXPECT_TRUE(session == true);
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_STR), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);

@@ -42,7 +42,7 @@ static Logger & instant = Logger::factory();
 Logger * Logger::singleton = &instant;
 
 Logger & Logger::setMask() {
-	const char * name = MASK_ENV_NAME();
+	const char * name = MASK_ENV();
 	const char * string = std::getenv(name);
 	if (string != 0) {
 		Mask value;

@@ -266,7 +266,7 @@ void Packet::show(int level, Output * display, int indent) const {
 			size_t suffix = here->suffix();
 			printf("%s  %p: next=%p length=%zu prefix=%zu size=%zu suffix=%zu total=%zu\n", sp, here, here->next, length, prefix, size, suffix, prefix + size + suffix);
 			if (1 < level) {
-			    dump.bytes(here->buffer(), size, false, 0, indent + 3);
+			    dump(here->buffer(), size, false, 0, indent + 3);
 			}
 		}
     }
