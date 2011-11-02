@@ -41,6 +41,14 @@ TEST_F(ProtocolTest, Unsecure) {
 	EXPECT_EQ(protocol.getProtocol(), ::S3ProtocolHTTP);
 }
 
+static int protocolfunction(const Protocol & protocol = Protocol()) {
+	return protocol.getProtocol();
+}
+
+TEST_F(ProtocolTest, DefaultFunctionArgument) {
+	EXPECT_EQ(protocolfunction(), ::S3ProtocolHTTPS);
+}
+
 }
 }
 }

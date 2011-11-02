@@ -41,6 +41,14 @@ TEST_F(UniversalResourceIdentifierStyleTest, Path) {
 	EXPECT_EQ(style.getUniversalResourceIdentifierStyle(), ::S3UriStylePath);
 }
 
+static int universalresourceidentifierstylefunction(const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle()) {
+	return style.getUniversalResourceIdentifierStyle();
+}
+
+TEST_F(UniversalResourceIdentifierStyleTest, DefaultFunctionArgument) {
+	EXPECT_EQ(universalresourceidentifierstylefunction(), ::S3UriStyleVirtualHost);
+}
+
 }
 }
 }

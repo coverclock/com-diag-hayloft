@@ -51,6 +51,14 @@ TEST_F(CannedAccessControlListTest, AuthenticatedRead) {
 	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclAuthenticatedRead);
 }
 
+static int cannedaccesscontrollistfunction(const CannedAccessControlList & acl = CannedAccessControlList()) {
+	return acl.getCannedAccessControlList();
+}
+
+TEST_F(CannedAccessControlListTest, DefaultFunctionArgument) {
+	EXPECT_EQ(cannedaccesscontrollistfunction(), ::S3CannedAclPrivate);
+}
+
 }
 }
 }
