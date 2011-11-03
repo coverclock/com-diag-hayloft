@@ -14,9 +14,9 @@
 #include <cstdlib>
 #include <string>
 #include "gtest/gtest.h"
+#include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/s3/Fixture.h"
 #include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/desperado/PathInput.h"
 
 namespace com {
 namespace diag {

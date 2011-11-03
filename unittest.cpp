@@ -7,7 +7,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstdio>
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
