@@ -9,14 +9,11 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * http://libs3.ischo.com.s3.amazonaws.com/index.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
-#include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
+#include <string>
+#include "com/diag/hayloft/s3/Context.h"
 
 namespace com {
 namespace diag {
@@ -31,34 +28,13 @@ public:
 
 	virtual ~Bucket();
 
-	virtual bool valid(
-		Session & session,
-		const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle()
-	);
+	virtual bool valid(Context & context);
 
-	virtual void test(
-		Session & session,
-		const Credentials & credentials = Credentials(),
-		const Protocol & protocol = Protocol(),
-		const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle()
-	);
+	virtual void test(Context & context);
 
-	virtual void create(
-		Session & session,
-		const Credentials & credentials = Credentials(),
-		const LocationConstraint & constraint = LocationConstraint(),
-		const Protocol & protocol = Protocol(),
-		const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle(),
-		const CannedAccessControlList & acl = CannedAccessControlList()
-	);
+	virtual void create(Context & context);
 
-	virtual void remove(
-		Session & session,
-		const Credentials & credentials = Credentials(),
-		const LocationConstraint & constraint = LocationConstraint(),
-		const Protocol & protocol = Protocol(),
-		const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle()
-	);
+	virtual void remove(Context & context);
 
 private:
 

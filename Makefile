@@ -50,9 +50,9 @@ XML2_LIB=$(XML2_LIBS)/libxml2.so
 XML2_INC=/usr/include#/libxml2
 
 S3_DIR=$(HOME)/src/libs3-2.0#http://libs3.ischo.com.s3.amazonaws.com/libs3-2.0.tar.gz
-S3_LIBS=/usr/local/lib
+S3_LIBS=$(S3_DIR)/build/deb/usr/lib
 S3_LIB=$(S3_LIBS)/libs3.so
-S3_INC=/usr/local/include
+S3_INC=$(S3_DIR)/inc
 
 DESPERADO_DIR=$(HOME)/src/Desperado#http://www.diag.com/ftp/desperado-wildcat.tgz
 DESPERADO_LIBS=$(DESPERADO_DIR)
@@ -149,6 +149,10 @@ ARCHIVABLE+=s3/Session.o
 TARGETS+=s3/Credentials.o
 ARTIFACTS+=s3/Credentials.o
 ARCHIVABLE+=s3/Credentials.o
+
+TARGETS+=s3/Queue.o
+ARTIFACTS+=s3/Queue.o
+ARCHIVABLE+=s3/Queue.o
 
 TARGETS+=s3/Bucket.o
 ARTIFACTS+=s3/Bucket.o

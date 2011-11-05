@@ -14,7 +14,7 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/s3/Fixture.h"
-#include "com/diag/hayloft/s3/Session.h"
+#include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 
 namespace com {
@@ -36,18 +36,9 @@ TEST_F(BucketTest, Name) {
 
 TEST_F(BucketTest, Valid) {
 	static const char NAME[] = "unittest";
-	Session session;
+	Context context;
 	Bucket bucket(NAME);
-	EXPECT_TRUE(bucket.valid(session));
-}
-
-
-
-TEST_F(BucketTest, Test) {
-	static const char NAME[] = "unittest";
-	Session session;
-	Bucket bucket(NAME);
-	EXPECT_TRUE(bucket.valid(session));
+	EXPECT_TRUE(bucket.valid(context));
 }
 
 }

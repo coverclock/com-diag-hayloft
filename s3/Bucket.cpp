@@ -21,32 +21,31 @@ namespace s3 {
 Bucket::Bucket(const char * bucketName)
 : name(bucketName)
 {
-
 }
 
 Bucket::~Bucket() {
 }
 
-bool Bucket::valid(Session & session, const UniversalResourceIdentifierStyle & style) {
+bool Bucket::valid(Context & context) {
 	std::string bucketName = name;
-	bucketName += session.getBucketSuffix();
-	::S3Status status = S3_validate_bucket_name(bucketName.c_str(), style.getUniversalResourceIdentifierStyle());
+	bucketName += context.getSession().getBucketSuffix();
+	::S3Status status = S3_validate_bucket_name(bucketName.c_str(), context.getUniversalResourceIdentifierStyle().getStyle());
 	if (status != ::S3StatusOK) {
 		Logger::instance().debug("Bucket@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, bucketName.c_str(), bucketName.length(), status, ::S3_get_status_name(status));
 	}
 	return (status == ::S3StatusOK);
 }
 
-void Bucket::test(Session & session, const Credentials & credentials, const Protocol & protocol, const UniversalResourceIdentifierStyle & style) {
+void Bucket::test(Context & context) {
 	std::string bucketName = name;
-	bucketName += session.getBucketSuffix();
+	bucketName += context.getSession().getBucketSuffix();
 }
 
-void Bucket::create(Session & session, const Credentials & credentials, const LocationConstraint & constraint, const Protocol & protocol, const UniversalResourceIdentifierStyle & style, const CannedAccessControlList & acl) {
+void Bucket::create(Context & context) {
 
 }
 
-void Bucket::remove(Session & session, const Credentials & credentials, const LocationConstraint & constraint, const Protocol & protocol,const UniversalResourceIdentifierStyle & style) {
+void Bucket::remove(Context & context) {
 
 }
 

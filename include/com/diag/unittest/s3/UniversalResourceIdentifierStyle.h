@@ -28,21 +28,21 @@ typedef Fixture UniversalResourceIdentifierStyleTest;
 
 TEST_F(UniversalResourceIdentifierStyleTest, Default) {
 	UniversalResourceIdentifierStyle style;
-	EXPECT_EQ(style.getUniversalResourceIdentifierStyle(), ::S3UriStyleVirtualHost);
+	EXPECT_EQ(style.getStyle(), ::S3UriStyleVirtualHost);
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, VirtualHost) {
 	UniversalResourceIdentifierStyleVirtualHost style;
-	EXPECT_EQ(style.getUniversalResourceIdentifierStyle(), ::S3UriStyleVirtualHost);
+	EXPECT_EQ(style.getStyle(), ::S3UriStyleVirtualHost);
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, Path) {
 	UniversalResourceIdentifierStylePath style;
-	EXPECT_EQ(style.getUniversalResourceIdentifierStyle(), ::S3UriStylePath);
+	EXPECT_EQ(style.getStyle(), ::S3UriStylePath);
 }
 
 static int universalresourceidentifierstylefunction(const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle()) {
-	return style.getUniversalResourceIdentifierStyle();
+	return style.getStyle();
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, DefaultFunctionArgument) {
