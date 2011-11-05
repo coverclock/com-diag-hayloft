@@ -9,6 +9,7 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * http://libs3.ischo.com.s3.amazonaws.com/index.html<BR>
  */
 
 #include <string>
