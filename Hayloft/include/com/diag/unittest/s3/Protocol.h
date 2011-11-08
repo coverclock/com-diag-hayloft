@@ -26,6 +26,12 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture ProtocolTest;
 
+TEST_F(ProtocolTest, Heap) {
+	Protocol * pointer = new Protocol;
+	EXPECT_NE(pointer, (Protocol*)0);
+	delete pointer;
+}
+
 TEST_F(ProtocolTest, Default) {
 	Protocol protocol;
 	EXPECT_EQ(protocol.getProtocol(), ::S3ProtocolHTTPS);

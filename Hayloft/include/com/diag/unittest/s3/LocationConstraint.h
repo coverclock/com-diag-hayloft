@@ -26,6 +26,12 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture LocationConstraintTest;
 
+TEST_F(LocationConstraintTest, Heap) {
+	LocationConstraint * pointer = new LocationConstraint;
+	EXPECT_NE(pointer, (LocationConstraint*)0);
+	delete pointer;
+}
+
 TEST_F(LocationConstraintTest, Default) {
 	static const char EXPECTED[] = "";
 	LocationConstraint locationconstraint;

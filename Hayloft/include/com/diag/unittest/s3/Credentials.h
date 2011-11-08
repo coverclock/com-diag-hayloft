@@ -29,6 +29,14 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture CredentialsTest;
 
+TEST_F(CredentialsTest, Heap) {
+	static const char ID[] = "AAAAAAAAAABBBBBBBBBB";
+	static const char SECRET[] = "CCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFF";
+	Credentials * pointer = new Credentials(ID, SECRET);
+	EXPECT_NE(pointer, (Credentials*)0);
+	delete pointer;
+}
+
 TEST_F(CredentialsTest, Explicit) {
 	static const char ID[] = "AAAAAAAAAABBBBBBBBBB";
 	static const char SECRET[] = "CCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFF";

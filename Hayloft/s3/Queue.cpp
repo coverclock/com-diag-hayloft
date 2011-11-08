@@ -19,9 +19,9 @@ namespace hayloft {
 namespace s3 {
 
 Queue::Queue()
-: status(::S3_create_request_context(&context))
+: status(::S3_create_request_context(&requests))
 {
-	Logger::instance().debug("Queue@%p: context=%p\n", this, context);
+	Logger::instance().debug("Queue@%p: requests=%p\n", this, requests);
 	if (status != S3StatusOK) {
 		Logger::instance().error("Queue@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
@@ -29,7 +29,7 @@ Queue::Queue()
 
 Queue::~Queue() {
 	if (status == S3StatusOK) {
-		S3_destroy_request_context(context);
+		S3_destroy_request_context(requests);
 	}
 }
 

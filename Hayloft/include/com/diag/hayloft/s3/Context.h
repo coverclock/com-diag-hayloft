@@ -11,7 +11,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/LocationConstraint.h"
 #include "com/diag/hayloft/s3/Protocol.h"
@@ -25,39 +24,43 @@ namespace s3 {
 
 class Context {
 
-public:
-
-	explicit Context(
-		const Session & session = Session(),
-		const Credentials & credentials = Credentials(),
-		const LocationConstraint & constraint = LocationConstraint(),
-		const Protocol & protocol = Protocol(),
-		const UniversalResourceIdentifierStyle & style = UniversalResourceIdentifierStyle()
-	)
-	: sessionp(&session)
-	, credentialsp(&credentials)
-	, constraintp(&constraint)
-	, protocolp(&protocol)
-	, stylep(&style)
-	{}
-
-	virtual ~Context() {}
-
 private:
 
-	const Session * sessionp;
+	static const Credentials credentials;
+	static const LocationConstraint constraint;
+	static const Protocol protocol;
+	static const UniversalResourceIdentifierStyle style;
+	static const CannedAccessControlList list;
+
 	const Credentials * credentialsp;
 	const LocationConstraint * constraintp;
 	const Protocol * protocolp;
 	const UniversalResourceIdentifierStyle * stylep;
+	const CannedAccessControlList * listp;
 
 public:
 
-	const Session & getSession() const { return *sessionp; }
+	explicit Context(
+		const Credentials & rc = credentials,
+		const LocationConstraint & rl = constraint,
+		const Protocol & rp = protocol,
+		const UniversalResourceIdentifierStyle & ru = style,
+		const CannedAccessControlList & ra = list
+	)
+	: credentialsp(&rc)
+	, constraintp(&rl)
+	, protocolp(&rp)
+	, stylep(&ru)
+	, listp(&ra)
+	{}
+
+	virtual ~Context() {}
+
 	const Credentials & getCredentials() const { return *credentialsp; }
 	const LocationConstraint & getLocationConstraint() const { return *constraintp; }
 	const Protocol & getProtocol() const { return *protocolp; }
 	const UniversalResourceIdentifierStyle & getUniversalResourceIdentifierStyle() const { return *stylep; }
+	const CannedAccessControlList & getCannedAccessControlList() const { return *listp; }
 
 };
 

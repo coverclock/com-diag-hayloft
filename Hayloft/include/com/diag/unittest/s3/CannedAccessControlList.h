@@ -26,6 +26,12 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture CannedAccessControlListTest;
 
+TEST_F(CannedAccessControlListTest, Heap) {
+	CannedAccessControlList * pointer = new CannedAccessControlList;
+	EXPECT_NE(pointer, (CannedAccessControlList*)0);
+	delete pointer;
+}
+
 TEST_F(CannedAccessControlListTest, Default) {
 	CannedAccessControlList acl;
 	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclPrivate);

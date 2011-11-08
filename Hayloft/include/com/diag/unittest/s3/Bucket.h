@@ -27,18 +27,14 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture BucketTest;
 
-TEST_F(BucketTest, Name) {
-	static const char NAME[] = "unittest";
-	Bucket bucket(NAME);
-	ASSERT_NE(bucket.getBucketName(), (char *)0);
-	EXPECT_EQ(std::strcmp(bucket.getBucketName(), NAME), 0);
+TEST_F(BucketTest, Heap) {
+	Bucket * pointer = new Bucket("BucketTestHeap");
+	EXPECT_NE(pointer, (Bucket*)0);
+	delete pointer;
 }
 
-TEST_F(BucketTest, Valid) {
-	static const char NAME[] = "unittest";
-	Context context;
-	Bucket bucket(NAME);
-	EXPECT_TRUE(bucket.valid(context));
+TEST_F(BucketTest, Stack) {
+	Bucket bucket("BucketTestStack");
 }
 
 }

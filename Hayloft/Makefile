@@ -150,6 +150,10 @@ TARGETS+=s3/Credentials.o
 ARTIFACTS+=s3/Credentials.o
 ARCHIVABLE+=s3/Credentials.o
 
+TARGETS+=s3/Context.o
+ARTIFACTS+=s3/Context.o
+ARCHIVABLE+=s3/Context.o
+
 TARGETS+=s3/Queue.o
 ARTIFACTS+=s3/Queue.o
 ARCHIVABLE+=s3/Queue.o
