@@ -26,6 +26,12 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture SessionTest;
 
+TEST_F(SessionTest, Heap) {
+	Session * pointer = new Session;
+	EXPECT_NE(pointer, (Session*)0);
+	delete pointer;
+}
+
 TEST_F(SessionTest, Defaults) {
 	Session session;
 	EXPECT_TRUE(session == true);

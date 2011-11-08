@@ -26,6 +26,12 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture UniversalResourceIdentifierStyleTest;
 
+TEST_F(UniversalResourceIdentifierStyleTest, Heap) {
+	UniversalResourceIdentifierStyle * pointer = new UniversalResourceIdentifierStyle;
+	EXPECT_NE(pointer, (UniversalResourceIdentifierStyle*)0);
+	delete pointer;
+}
+
 TEST_F(UniversalResourceIdentifierStyleTest, Default) {
 	UniversalResourceIdentifierStyle style;
 	EXPECT_EQ(style.getStyle(), ::S3UriStyleVirtualHost);

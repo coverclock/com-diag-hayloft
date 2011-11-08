@@ -30,7 +30,7 @@ public:
 
 private:
 
-	::S3RequestContext * context;
+	::S3RequestContext * requests;
 
 	::S3Status status;
 
@@ -38,7 +38,7 @@ public:
 
 	operator bool() { return (status == ::S3StatusOK); }
 
-	::S3RequestContext * getRequestContext() { return context; }
+	::S3RequestContext * getRequestContext() { return requests; }
 
 private:
 

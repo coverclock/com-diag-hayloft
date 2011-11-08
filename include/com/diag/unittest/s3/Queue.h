@@ -26,6 +26,12 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture QueueTest;
 
+TEST_F(QueueTest, Heap) {
+	Queue * pointer = new Queue;
+	EXPECT_NE(pointer, (Queue*)0);
+	delete pointer;
+}
+
 TEST_F(QueueTest, Sanity) {
 	Queue queue;
 	EXPECT_TRUE(queue == true);
