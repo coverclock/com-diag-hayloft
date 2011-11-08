@@ -9,11 +9,18 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
- * http://libs3.ischo.com.s3.amazonaws.com/index.html<BR>
  */
 
 #include <string>
 #include "com/diag/desperado/target.h"
+
+namespace com {
+namespace diag {
+namespace desperado {
+class Input;
+}
+}
+}
 
 namespace com {
 namespace diag {
@@ -33,6 +40,8 @@ public:
 	static const size_t SECRET_ACCESS_KEY_LEN = 40;
 
 	explicit Credentials(const char * accessKeyId = 0, const char * secretAccessKey = 0);
+
+	explicit Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::diag::desperado::Input & secretAccessKeyIn);
 
 	virtual ~Credentials();
 

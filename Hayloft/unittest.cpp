@@ -17,6 +17,7 @@
 #include "com/diag/unittest/s3/UniversalResourceIdentifierStyle.h"
 #include "com/diag/unittest/s3/LocationConstraint.h"
 #include "com/diag/unittest/s3/CannedAccessControlList.h"
+#include "com/diag/unittest/s3/Queue.h"
 #include "com/diag/unittest/s3/Bucket.h"
 
 int main(int argc, char ** argv, char **envp) {

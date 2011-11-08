@@ -246,7 +246,7 @@ size_t Packet::sink(::com::diag::desperado::Output& to) {
 	return total;
 }
 
-void Packet::show(int level, Output * display, int indent) const {
+void Packet::show(int level, ::com::diag::desperado::Output * display, int indent) const {
     ::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
     ::com::diag::desperado::Print printf(display);
     ::com::diag::desperado::Dump dump(display);
@@ -301,7 +301,7 @@ ssize_t PacketInput::operator() (char * buffer, size_t size) {
 	ssize_t total = 0;
 	if (buffer == 0) {
 		// Do nothing.
-	} else if (size <= 0) {
+	} else if (size == 0) {
 		// Do nothing.
 	} else {
 		size_t length;
@@ -311,7 +311,7 @@ ssize_t PacketInput::operator() (char * buffer, size_t size) {
 				size -= length;
 				total += length;
 				buffer += length;
-				if ((*(buffer - 1) == '\n') || (*(buffer - 1) == '\0')) {
+				if (*(buffer - 1) == '\n') {
 					break;
 				}
 			} else {
@@ -322,7 +322,7 @@ ssize_t PacketInput::operator() (char * buffer, size_t size) {
 				break;
 			}
 		}
-		if ((total != EOF) && (*(buffer - 1) != '\0')) {
+		if (total != EOF) {
 			*buffer = '\0';
 			++total;
 		}
@@ -342,7 +342,7 @@ ssize_t PacketInput::operator() (void * buffer, size_t /* minimum */, size_t max
 
 void PacketInput::show(int level, com::diag::desperado::Output * display, int indent) const {
     ::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
-    Print printf(display);
+    ::com::diag::desperado::Print printf(display);
     const char* sp = printf.output().indentation(indent);
     char component[sizeof(__FILE__)];
     printf("%s%s(%p)[%lu]:\n",
@@ -384,7 +384,7 @@ int PacketOutput::operator() () {
 
 void PacketOutput::show(int level, com::diag::desperado::Output * display, int indent) const {
 	::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
-    Print printf(display);
+    ::com::diag::desperado::Print printf(display);
     const char* sp = printf.output().indentation(indent);
     char component[sizeof(__FILE__)];
     printf("%s%s(%p)[%lu]:\n",
