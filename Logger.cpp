@@ -47,11 +47,23 @@ Logger & Logger::setMask() {
 	if (string != 0) {
 		Mask value;
 		size_t length;
-		if (uint16_Number(string, value, length)) {
+		if (::com::diag::desperado::uint16_Number(string, value, length)) {
 			mask = value;
 		}
 	}
 	return *this;
+}
+
+void Logger::show(int level, ::com::diag::desperado::Output* display, int indent) const {
+	::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
+	::com::diag::desperado::Print printf(display);
+    const char* sp = printf.output().indentation(indent);
+    char component[sizeof(__FILE__)];
+    printf("%s%s(%p)[%lu]:\n",
+        sp, pl.component(__FILE__, component, sizeof(component)),
+        this, sizeof(*this));
+    ::com::diag::desperado::Logger::show(level, display, indent + 1);
+    printf("%s mask=0x%x\n", sp, mask);
 }
 
 }

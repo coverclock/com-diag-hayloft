@@ -68,6 +68,13 @@ TEST(LoggerTest, Instance) {
 	EXPECT_EQ((Logger::Mask)0xff80, logger.getMask());
 }
 
+TEST(LoggerTest, HeapAndShow) {
+	Logger * logger = new Logger;
+	ASSERT_NE(logger, (Logger*)0);
+	logger->show();
+	delete logger;
+}
+
 #define LOGGER_TEST_ENABLEDISABLE_SET(_LEVEL_) \
 	do { \
 		if ((mask & (1 << _LEVEL_)) != 0) { \

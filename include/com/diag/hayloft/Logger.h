@@ -185,6 +185,29 @@ public:
     	return (mask & ((Mask)1 << level)) != 0;
     }
 
+    /**
+     *  Displays internal information about this object to the specified
+     *  output object. Useful for debugging and troubleshooting.
+     *
+     *  @param  level   sets the verbosity of the output. What this means
+     *                  is object dependent. However, the level is passed
+     *                  from outer to inner objects this object calls the
+     *                  show methods of its inherited or composited objects.
+     *
+     *  @param display  points to the output object to which output is
+     *                  sent. If null (zero), the default platform output
+     *                  object is used as the effective output object. The
+     *                  effective output object is passed from outer to
+     *                  inner objects as this object calls the show methods
+     *                  of its inherited and composited objects.
+     *
+     *  @param  indent  specifies the level of indentation. One more than
+     *                  this value is passed from outer to inner objects
+     *                  as this object calls the show methods of its
+     *                  inherited and composited objects.
+     */
+    virtual void show(int level = 0, ::com::diag::desperado::Output* display = 0, int indent = 0) const;
+
 };
 
 }

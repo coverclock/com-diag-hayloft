@@ -337,7 +337,7 @@ class Packet;
  * Implements an Input functor for a Packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class PacketInput : public com::diag::desperado::Input {
+class PacketInput : public ::com::diag::desperado::Input {
 
 public:
 
@@ -434,7 +434,7 @@ private:
  * Implements an Output functor for a Packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class PacketOutput : public com::diag::desperado::Output {
+class PacketOutput : public ::com::diag::desperado::Output {
 
 public:
 
@@ -537,7 +537,7 @@ private:
  * filled objects into the packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class Packet : public com::diag::desperado::InputOutput {
+class Packet : public ::com::diag::desperado::InputOutput {
 
 public:
 
@@ -689,7 +689,7 @@ public:
      * value is passed from outer to inner objects as this object calls the
      * show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, ::com::diag::desperado::Output * display = 0, int indent = 0) const;
 
 private:
 

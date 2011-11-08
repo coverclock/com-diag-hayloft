@@ -9,7 +9,6 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
- * http://libs3.ischo.com.s3.amazonaws.com/index.html<BR>
  */
 
 #include "libs3.h"
@@ -31,15 +30,15 @@ public:
 
 private:
 
-	S3RequestContext * context;
+	::S3RequestContext * context;
 
-	S3Status status;
+	::S3Status status;
 
 public:
 
-	operator bool() { return (status == S3StatusOK); }
+	operator bool() { return (status == ::S3StatusOK); }
 
-	S3RequestContext * getRequestContext() { return context; }
+	::S3RequestContext * getRequestContext() { return context; }
 
 private:
 

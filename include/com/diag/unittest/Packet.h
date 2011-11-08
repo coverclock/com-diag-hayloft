@@ -21,7 +21,7 @@
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/Print.h"
-#include "com/diag/desperado/BufferInput.h"
+#include "com/diag/desperado/DataInput.h"
 #include "com/diag/desperado/BufferOutput.h"
 #include "com/diag/desperado/PathInput.h"
 #include "com/diag/desperado/DescriptorOutput.h"
@@ -550,8 +550,10 @@ TEST(PacketBufferDynamicTest, PrependOnceClear) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketTest, Heap) {
+TEST(PacketTest, HeapAndShow) {
 	Packet * packet = new Packet;
+	ASSERT_NE(packet, (Packet*)0);
+	packet->show();
 	delete packet;
 }
 
@@ -765,9 +767,22 @@ TEST(PacketInputOutputTest, Character) {
 		EXPECT_FALSE(packet.empty());
 	}
 	char buffer[sizeof(data)];
+	int ch;
+	int ch2;
 	for (size_t ii = 0; ii < sizeof(buffer);++ii) {
-		buffer[ii] = (packet.input())();
+		EXPECT_FALSE(packet.empty());
+		ch = (packet.input())();
+		EXPECT_NE(ch, EOF);
+		ch2 = (packet.input())(ch);
+		EXPECT_EQ(ch, ch2);
+		EXPECT_FALSE(packet.empty());
+		ch = (packet.input())();
+		EXPECT_NE(ch, EOF);
+		EXPECT_EQ(ch, ch2);
+		buffer[ii] = ch;
 	}
+	ch = (packet.input())();
+	EXPECT_EQ(ch, EOF);
 	EXPECT_TRUE(packet.empty());
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 }
@@ -845,15 +860,13 @@ static const char RICHARDII[] = {
 };
 
 TEST(PacketTest, SourceSinkBuffer) {
-	char data[sizeof(RICHARDII)];
-	std::strncpy(data, RICHARDII, sizeof(data));
-	::com::diag::desperado::BufferInput bufferinput(data);
+	::com::diag::desperado::DataInput datainput(RICHARDII, sizeof(RICHARDII));
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
-	EXPECT_EQ(packet.source(bufferinput), sizeof(RICHARDII));
+	EXPECT_EQ(packet.source(datainput), sizeof(RICHARDII));
 	EXPECT_FALSE(packet.empty());
-	char buffer[sizeof(data)];
+	char buffer[sizeof(RICHARDII)];
 	::com::diag::desperado::BufferOutput bufferoutput(buffer, sizeof(buffer));
 	EXPECT_EQ(packet.sink(bufferoutput), sizeof(RICHARDII));
 	EXPECT_TRUE(packet.empty());
