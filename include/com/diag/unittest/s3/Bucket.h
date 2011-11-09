@@ -16,7 +16,13 @@
 #include "com/diag/unittest/s3/Fixture.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Session.h"
+#include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/hayloft/s3/LocationConstraint.h"
+#include "com/diag/hayloft/s3/Protocol.h"
+#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
+#include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/desperado/Platform.h"
+#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
@@ -30,9 +36,7 @@ typedef Fixture BucketValidTest;
 
 TEST_F(BucketValidTest, Heap) {
 	Session session;
-	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
-	Context context(credentials);
-	BucketValid * valid = new BucketValid(session, "BucketValidTestHeap", context);
+	BucketValid * valid = new BucketValid(session, "BucketValidTestHeap");
 	ASSERT_NE(valid, (BucketValid*)0);
 	EXPECT_TRUE((*valid) == true);
 	delete valid;
@@ -40,9 +44,7 @@ TEST_F(BucketValidTest, Heap) {
 
 TEST_F(BucketValidTest, Stack) {
 	Session session;
-	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
-	Context context(credentials);
-	BucketValid valid(session, "BucketValidTestStack", context);
+	BucketValid valid(session, "BucketValidTestStack");
 	EXPECT_TRUE(valid == true);
 }
 
@@ -51,12 +53,18 @@ typedef Fixture BucketTestTest;
 TEST_F(BucketTestTest, Stack) {
 	Session session;
 	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
-	Context context(credentials);
+	LocationConstraint constraint;
+	ProtocolUnsecure protocol;
+	UniversalResourceIdentifierStylePath style;
+	Context context(credentials, constraint, protocol, style);
 	BucketTest test(session, "BucketTestTestStack", context);
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
-	for (int ii = 0; (ii < 10) && (test == false); ++ii) {
-		platform.yield(platform.frequency());
+	int ii;
+	for (ii = 0; (ii < 10000) && (test == false); ++ii) {
+		platform.yield(platform.frequency() / 1000);
 	}
+	EXPECT_TRUE(test == true);
+	Logger::instance().debug("%d ms elapsed\n", ii);
 }
 
 }
