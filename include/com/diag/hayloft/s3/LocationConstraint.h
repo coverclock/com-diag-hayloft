@@ -13,7 +13,6 @@
 
 #include <string>
 #include "com/diag/desperado/target.h"
-#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
@@ -30,11 +29,7 @@ public:
 
 	static const size_t LOCATION_CONSTRAINT_MAX = 64;
 
-	explicit LocationConstraint(const char * locationconstraint = 0)
-	: constraint((locationconstraint != 0) ? locationconstraint : "")
-	{
-		Logger::instance().debug("LocationConstraint@%p: locationconstraint=\"%s\"\n", this, constraint.c_str());
-	}
+	explicit LocationConstraint(const char * locationconstraint = 0);
 
 	virtual ~LocationConstraint() {}
 

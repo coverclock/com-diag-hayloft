@@ -14,13 +14,14 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/s3/Fixture.h"
-#include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/LocationConstraint.h"
 #include "com/diag/hayloft/s3/Protocol.h"
 #include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
+#include "com/diag/hayloft/s3/CannedAccessControlList.h"
 #include "com/diag/hayloft/s3/Context.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/hayloft/Logger.h"
 
@@ -50,13 +51,36 @@ TEST_F(BucketValidTest, Stack) {
 
 typedef Fixture BucketTestTest;
 
-TEST_F(BucketTestTest, Stack) {
+TEST_F(BucketTestTest, HeapSynchronous) {
 	Session session;
 	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
 	LocationConstraint constraint;
-	ProtocolUnsecure protocol;
-	UniversalResourceIdentifierStylePath style;
-	Context context(credentials, constraint, protocol, style);
+	Protocol protocol;
+	UniversalResourceIdentifierStyle style;
+	CannedAccessControlList list;
+	Context context(credentials, constraint, protocol, style, list);
+	BucketTest * test = new BucketTest(session, "BucketTestTestHeapSynchronous", context);
+	EXPECT_TRUE((*test) == true);
+	delete test;
+}
+
+TEST_F(BucketTestTest, StackSynchronous) {
+	Session session;
+	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
+	LocationConstraint constraint;
+	Protocol protocol;
+	UniversalResourceIdentifierStyle style;
+	CannedAccessControlList list;
+	Context context(credentials, constraint, protocol, style, list);
+	BucketTest test(session, "BucketTestTestStackSynchronous", context);
+	EXPECT_TRUE(test == true);
+}
+
+#if 0
+TEST_F(BucketTestTest, Asynchronous) {
+	Session session;
+	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
+	Context context(credentials);
 	BucketTest test(session, "BucketTestTestStack", context);
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	int ii;
@@ -66,6 +90,7 @@ TEST_F(BucketTestTest, Stack) {
 	EXPECT_TRUE(test == true);
 	Logger::instance().debug("%d ms elapsed\n", ii);
 }
+#endif
 
 }
 }

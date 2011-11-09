@@ -34,7 +34,7 @@ TEST_F(UniversalResourceIdentifierStyleTest, Heap) {
 
 TEST_F(UniversalResourceIdentifierStyleTest, Default) {
 	UniversalResourceIdentifierStyle style;
-	EXPECT_EQ(style.getStyle(), ::S3UriStyleVirtualHost);
+	EXPECT_EQ(style.getStyle(), ::S3UriStylePath);
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, VirtualHost) {
@@ -52,7 +52,7 @@ static int universalresourceidentifierstylefunction(const UniversalResourceIdent
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, DefaultFunctionArgument) {
-	EXPECT_EQ(universalresourceidentifierstylefunction(), ::S3UriStyleVirtualHost);
+	EXPECT_EQ(universalresourceidentifierstylefunction(), ::S3UriStylePath);
 }
 
 }
