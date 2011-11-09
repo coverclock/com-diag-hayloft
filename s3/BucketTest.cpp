@@ -42,10 +42,10 @@ void BucketTest::run(Session & session, const char * name, Queue * queuep, const
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
 	::S3_test_bucket(
-		context.getProtocol().getProtocol(),
-		context.getUniversalResourceIdentifierStyle().getStyle(),
-		context.getCredentials().getId(),
-		context.getCredentials().getSecret(),
+		context.getProtocol(),
+		context.getStyle(),
+		context.getId(),
+		context.getSecret(),
 		session.getHostName(),
 		fullname.c_str(),
 		sizeof(constraint), constraint,

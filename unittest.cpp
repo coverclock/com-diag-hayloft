@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/lariat/lariat.h"
-#if 0
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/s3/Session.h"
@@ -19,7 +18,6 @@
 #include "com/diag/unittest/s3/CannedAccessControlList.h"
 #include "com/diag/unittest/s3/Context.h"
 #include "com/diag/unittest/s3/Queue.h"
-#endif
 #include "com/diag/unittest/s3/Bucket.h"
 
 int main(int argc, char ** argv, char **envp) {

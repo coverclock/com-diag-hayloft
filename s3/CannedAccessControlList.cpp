@@ -15,10 +15,12 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+const ::S3CannedAcl CannedAccessControlList::DEFAULT;
+
 CannedAccessControlList::CannedAccessControlList(::S3CannedAcl acl)
-: canned(acl)
+: list(acl)
 {
-	Logger::instance().debug("CannedAccessControlList@%p: cannedacl=%d\n", this, canned);
+	Logger::instance().debug("CannedAccessControlList@%p: cannedacl=%d\n", this, list);
 }
 
 }

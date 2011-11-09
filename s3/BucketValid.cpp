@@ -23,7 +23,7 @@ BucketValid::BucketValid(Session & session, const char * name, const Context & c
 	std::string fullname = name;
 	fullname += session.getBucketSuffix();
 	Logger::instance().debug("BucketValid@%p: fullname=\"%s\"\n", this, fullname.c_str());
-	status = ::S3_validate_bucket_name(fullname.c_str(), context.getUniversalResourceIdentifierStyle().getStyle());
+	status = ::S3_validate_bucket_name(fullname.c_str(), context.getStyle());
 	if (status != ::S3StatusOK) {
 		Logger::instance().warning("BucketValid@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, fullname.c_str(), fullname.length(), status, ::S3_get_status_name(status));
 	}

@@ -8,24 +8,26 @@
  */
 
 #include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
-#include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-static const Credentials credentials;
-static const LocationConstraint constraint;
-static const Protocol protocol;
-static const UniversalResourceIdentifierStyle style;
-static const CannedAccessControlList list;
-
-const Context Context::context(credentials, constraint, protocol, style, list);
+Context::Context(
+	const Credentials & cr,
+	const LocationConstraint & co,
+	const Protocol & pr,
+	const UniversalResourceIdentifierStyle & st,
+	const CannedAccessControlList & li
+)
+: id(cr.getId())
+, secret(cr.getSecret())
+, constraint(co.getLocationConstraint())
+, protocol(pr.getProtocol())
+, style(st.getStyle())
+, list(li.getCannedAccessControlList())
+{}
 
 }
 }

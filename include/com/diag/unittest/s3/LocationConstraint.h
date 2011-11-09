@@ -32,12 +32,15 @@ TEST_F(LocationConstraintTest, Heap) {
 	delete pointer;
 }
 
+TEST_F(LocationConstraintTest, Stack) {
+	LocationConstraint locationconstraint;
+}
+
 TEST_F(LocationConstraintTest, Default) {
-	static const char EXPECTED[] = "";
 	LocationConstraint locationconstraint;
 	ASSERT_NE(locationconstraint.getLocationConstraint(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), EXPECTED), 0);
-	EXPECT_EQ(locationconstraint.getLength(), sizeof(EXPECTED) - 1);
+	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), LocationConstraint::DEFAULT()), 0);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(LocationConstraint::DEFAULT()));
 }
 
 TEST_F(LocationConstraintTest, EuropeanUnion) {
@@ -45,7 +48,7 @@ TEST_F(LocationConstraintTest, EuropeanUnion) {
 	LocationConstraintEuropeanUnion locationconstraint;
 	ASSERT_NE(locationconstraint.getLocationConstraint(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), EXPECTED), 0);
-	EXPECT_EQ(locationconstraint.getLength(), sizeof(EXPECTED) - 1);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(EXPECTED));
 }
 
 TEST_F(LocationConstraintTest, UnitedStatesWest1) {
@@ -53,7 +56,7 @@ TEST_F(LocationConstraintTest, UnitedStatesWest1) {
 	LocationConstraintUnitedStatesWest1 locationconstraint;
 	ASSERT_NE(locationconstraint.getLocationConstraint(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), EXPECTED), 0);
-	EXPECT_EQ(locationconstraint.getLength(), sizeof(EXPECTED) - 1);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(EXPECTED));
 }
 
 TEST_F(LocationConstraintTest, AsiaPacificSouthEast1) {
@@ -61,7 +64,7 @@ TEST_F(LocationConstraintTest, AsiaPacificSouthEast1) {
 	LocationConstraintAsiaPacificSouthEast1 locationconstraint;
 	ASSERT_NE(locationconstraint.getLocationConstraint(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), EXPECTED), 0);
-	EXPECT_EQ(locationconstraint.getLength(), sizeof(EXPECTED) - 1);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(EXPECTED));
 }
 
 TEST_F(LocationConstraintTest, AsiaPacificNorthEast1) {
@@ -69,7 +72,7 @@ TEST_F(LocationConstraintTest, AsiaPacificNorthEast1) {
 	LocationConstraintAsiaPacificNorthEast1 locationconstraint;
 	ASSERT_NE(locationconstraint.getLocationConstraint(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), EXPECTED), 0);
-	EXPECT_EQ(locationconstraint.getLength(), sizeof(EXPECTED) - 1);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(EXPECTED));
 }
 
 TEST_F(LocationConstraintTest, UnitedStatesClassic) {
@@ -77,7 +80,7 @@ TEST_F(LocationConstraintTest, UnitedStatesClassic) {
 	LocationConstraintUnitedStatesClassic locationconstraint;
 	ASSERT_NE(locationconstraint.getLocationConstraint(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getLocationConstraint(), EXPECTED), 0);
-	EXPECT_EQ(locationconstraint.getLength(), sizeof(EXPECTED) - 1);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(EXPECTED));
 }
 
 static const char * locationconstraintfunction(const LocationConstraint & constraint = LocationConstraint()) {
@@ -85,8 +88,7 @@ static const char * locationconstraintfunction(const LocationConstraint & constr
 }
 
 TEST_F(LocationConstraintTest, DefaultFunctionArgument) {
-	static const char EXPECTED[] = "";
-	EXPECT_EQ(std::strcmp(locationconstraintfunction(), EXPECTED), 0);
+	EXPECT_EQ(std::strcmp(locationconstraintfunction(), LocationConstraint::DEFAULT()), 0);
 }
 
 }

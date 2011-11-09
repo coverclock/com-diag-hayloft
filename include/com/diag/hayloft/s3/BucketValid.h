@@ -29,7 +29,7 @@ private:
 
 public:
 
-	explicit BucketValid(Session & session, const char * name, const Context & context = Context::context);
+	explicit BucketValid(Session & session, const char * name, const Context & context = Context());
 
 	virtual ~BucketValid() {}
 

@@ -61,20 +61,6 @@ protected:
 
 	bool audit();
 
-private:
-
-    /**
-     *  Copy constructor.
-     *  @param that refers to an R-value object of this type.
-     */
-	Credentials(const Credentials& that);
-
-    /**
-     *  Assignment operator.
-     *  @param that refers to an R-value object of this type.
-     */
-	Credentials& operator=(const Credentials& that);
-
 };
 
 }

@@ -12,16 +12,11 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/s3/Fixture.h"
 #include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/desperado/Platform.h"
-#include "com/diag/desperado/Print.h"
 #include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
-#include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
+#include "com/diag/desperado/string.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -36,35 +31,24 @@ typedef Fixture ContextTest;
 TEST_F(ContextTest, Heap) {
 	Context * context = new Context;
 	ASSERT_NE(context, (Context*)0);
-	const Credentials & credentials = context->getCredentials();
-	const LocationConstraint & constraint = context->getLocationConstraint();
-	const Protocol & protocol = context->getProtocol();
-	const UniversalResourceIdentifierStyle & style = context->getUniversalResourceIdentifierStyle();
-	const CannedAccessControlList & list = context->getCannedAccessControlList();
-    ::com::diag::desperado::Print printf(::com::diag::desperado::Platform::instance().error());
-    printf("context=%p\n", context);
-    printf("credentials=%p\n", &credentials);
-    printf("contraint=%p\n", &constraint);
-    printf("protocol=%p\n", &protocol);
-    printf("style=%p\n", &style);
-    printf("list=%p\n", &list);
 	delete context;
 }
 
 TEST_F(ContextTest, Stack) {
 	Context context;
-	const Credentials & credentials = context.getCredentials();
-	const LocationConstraint & constraint = context.getLocationConstraint();
-	const Protocol & protocol = context.getProtocol();
-	const UniversalResourceIdentifierStyle & style = context.getUniversalResourceIdentifierStyle();
-	const CannedAccessControlList & list = context.getCannedAccessControlList();
-    ::com::diag::desperado::Print printf(::com::diag::desperado::Platform::instance().error());
-    printf("context=%p\n", &context);
-    printf("credentials=%p\n", &credentials);
-    printf("contraint=%p\n", &constraint);
-    printf("protocol=%p\n", &protocol);
-    printf("style=%p\n", &style);
-    printf("list=%p\n", &list);
+}
+
+TEST_F(ContextTest, Implicit) {
+	Context context;
+	ASSERT_NE(context.getId(), (char *)0);
+	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
+	ASSERT_NE(context.getSecret(), (char *)0);
+	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
+	ASSERT_NE(context.getLocationConstraint(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getLocationConstraint(), ""), 0);
+	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTPS);
+	context.getStyle();
+	context.getCannedAccessControlList();
 }
 
 }

@@ -17,6 +17,10 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+const size_t Credentials::ACCESS_KEY_ID_LEN;
+
+const size_t Credentials::SECRET_ACCESS_KEY_LEN;
+
 Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 : id(set(accessKeyId, ACCESS_KEY_ID_ENV(), ""))
 , secret(set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""))

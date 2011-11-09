@@ -32,9 +32,14 @@ TEST_F(ProtocolTest, Heap) {
 	delete pointer;
 }
 
+TEST_F(ProtocolTest, Stack) {
+	Protocol protocol;
+}
+
+
 TEST_F(ProtocolTest, Default) {
 	Protocol protocol;
-	EXPECT_EQ(protocol.getProtocol(), ::S3ProtocolHTTPS);
+	EXPECT_EQ(protocol.getProtocol(), Protocol::DEFAULT);
 }
 
 TEST_F(ProtocolTest, Secure) {
@@ -52,7 +57,7 @@ static int protocolfunction(const Protocol & protocol = Protocol()) {
 }
 
 TEST_F(ProtocolTest, DefaultFunctionArgument) {
-	EXPECT_EQ(protocolfunction(), ::S3ProtocolHTTPS);
+	EXPECT_EQ(protocolfunction(), Protocol::DEFAULT);
 }
 
 }

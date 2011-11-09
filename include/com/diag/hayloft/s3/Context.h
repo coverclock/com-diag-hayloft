@@ -11,54 +11,47 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/hayloft/s3/LocationConstraint.h"
+#include "com/diag/hayloft/s3/Protocol.h"
+#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
+#include "com/diag/hayloft/s3/CannedAccessControlList.h"
+#include "libs3.h"
+
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Credentials;
-class LocationConstraint;
-class Protocol;
-class UniversalResourceIdentifierStyle;
-class CannedAccessControlList;
-
 class Context {
-
-public:
-
-	static const Context context;
 
 private:
 
-	const Credentials * credentialsp;
-	const LocationConstraint * constraintp;
-	const Protocol * protocolp;
-	const UniversalResourceIdentifierStyle * stylep;
-	const CannedAccessControlList * listp;
+	std::string id;
+	std::string secret;
+	std::string constraint;
+	::S3Protocol protocol;
+	::S3UriStyle style;
+	::S3CannedAcl list;
 
 public:
 
 	explicit Context(
-		const Credentials & credentials = context.getCredentials(),
-		const LocationConstraint & constraint = context.getLocationConstraint(),
-		const Protocol & protocol = context.getProtocol(),
-		const UniversalResourceIdentifierStyle & style = context.getUniversalResourceIdentifierStyle(),
-		const CannedAccessControlList & list = context.getCannedAccessControlList()
-	)
-	: credentialsp(&credentials)
-	, constraintp(&constraint)
-	, protocolp(&protocol)
-	, stylep(&style)
-	, listp(&list)
-	{}
+		const Credentials & cr = Credentials(),
+		const LocationConstraint & co = LocationConstraint(),
+		const Protocol & pr = Protocol(),
+		const UniversalResourceIdentifierStyle & st = UniversalResourceIdentifierStyle(),
+		const CannedAccessControlList & li = CannedAccessControlList()
+	);
 
 	virtual ~Context() {}
 
-	const Credentials & getCredentials() const { return *credentialsp; }
-	const LocationConstraint & getLocationConstraint() const { return *constraintp; }
-	const Protocol & getProtocol() const { return *protocolp; }
-	const UniversalResourceIdentifierStyle & getUniversalResourceIdentifierStyle() const { return *stylep; }
-	const CannedAccessControlList & getCannedAccessControlList() const { return *listp; }
+	const char * getId() const { return id.c_str(); }
+	const char * getSecret() const { return secret.c_str(); }
+	const char * getLocationConstraint() const { return constraint.c_str(); }
+	::S3Protocol getProtocol() const { return protocol; }
+	::S3UriStyle getStyle() const { return style; }
+	::S3CannedAcl getCannedAccessControlList() const { return list; }
 
 };
 
