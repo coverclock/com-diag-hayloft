@@ -23,19 +23,15 @@ class Protocol {
 
 private:
 
-	::S3Protocol proto;
+	::S3Protocol protocol;
 
 public:
 
-	explicit Protocol(::S3Protocol protocol = ::S3ProtocolHTTPS)
-	: proto(protocol)
-	{
-		Logger::instance().debug("Protocol@%p: protocol=%d\n", this, proto);
-	}
+	explicit Protocol(::S3Protocol proto = ::S3ProtocolHTTPS);
 
 	virtual ~Protocol() {}
 
-	::S3Protocol getProtocol() const { return proto; }
+	::S3Protocol getProtocol() const { return protocol; }
 
 };
 

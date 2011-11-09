@@ -38,12 +38,6 @@ private:
 
 public:
 
-	const Credentials & getCredentials() const { return *credentialsp; }
-	const LocationConstraint & getLocationConstraint() const { return *constraintp; }
-	const Protocol & getProtocol() const { return *protocolp; }
-	const UniversalResourceIdentifierStyle & getUniversalResourceIdentifierStyle() const { return *stylep; }
-	const CannedAccessControlList & getCannedAccessControlList() const { return *listp; }
-
 	explicit Context(
 		const Credentials & credentials = context.getCredentials(),
 		const LocationConstraint & constraint = context.getLocationConstraint(),
@@ -59,6 +53,12 @@ public:
 	{}
 
 	virtual ~Context() {}
+
+	const Credentials & getCredentials() const { return *credentialsp; }
+	const LocationConstraint & getLocationConstraint() const { return *constraintp; }
+	const Protocol & getProtocol() const { return *protocolp; }
+	const UniversalResourceIdentifierStyle & getUniversalResourceIdentifierStyle() const { return *stylep; }
+	const CannedAccessControlList & getCannedAccessControlList() const { return *listp; }
 
 };
 

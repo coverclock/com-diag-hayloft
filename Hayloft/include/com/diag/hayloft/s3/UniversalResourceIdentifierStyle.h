@@ -11,7 +11,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/Logger.h"
 #include "libs3.h"
 
 namespace com {
@@ -27,11 +26,7 @@ private:
 
 public:
 
-	explicit UniversalResourceIdentifierStyle(::S3UriStyle uristyle = ::S3UriStyleVirtualHost)
-	: style(uristyle)
-	{
-		Logger::instance().debug("UniversalResourceIdentifierStyle@%p: uristyle=%d\n", this, style);
-	}
+	explicit UniversalResourceIdentifierStyle(::S3UriStyle uri = ::S3UriStylePath);
 
 	virtual ~UniversalResourceIdentifierStyle() {}
 

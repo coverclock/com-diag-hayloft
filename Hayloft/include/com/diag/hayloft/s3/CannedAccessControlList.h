@@ -11,8 +11,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <string>
-#include "com/diag/hayloft/Logger.h"
 #include "libs3.h"
 
 namespace com {
@@ -28,11 +26,7 @@ private:
 
 public:
 
-	explicit CannedAccessControlList(::S3CannedAcl cannedacl = ::S3CannedAclPrivate)
-	: canned(cannedacl)
-	{
-		Logger::instance().debug("CannedAccessControlList@%p: cannedacl=%d\n", this, canned);
-	}
+	explicit CannedAccessControlList(::S3CannedAcl acl = ::S3CannedAclPrivate);
 
 	virtual ~CannedAccessControlList() {}
 
