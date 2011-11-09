@@ -53,7 +53,7 @@ public:
 	 * When used as a fraction, indicates that the object is to be initialized
 	 * for appending.
 	 */
-	static const size_t APPEND = unsignedintmaxof(size_t);
+	static const size_t APPEND = intmaxof(size_t);
 
 	/**
 	 * This specifies the type of user provided data arrays.
@@ -374,7 +374,7 @@ public:
     virtual int operator() (int c);
 
     /**
-     * Inputs a newline or NUL terminated line into the buffer of
+     * Inputs a newline terminated line into the buffer of
      * the specified size. If a newline is encountered, it is input
      * into the buffer. Guarantees that the buffer is NUL terminated
      * if it is at least one octet in size. Guarantees that no more
@@ -395,6 +395,11 @@ public:
      * are input. Specific implementations may differ. The interface
      * only guarantees that no more than the maximum number of octets
      * a input into the buffer. The functor does not NUL terminate the buffer.
+     *
+     * If minimum is zero, zero is returned instead of EOF if the underlying
+     * data structure is empty. This allows the application to poll for data
+     * and for a Packet to be used as a ring buffer.
+     *
      * @param buffer  points to the buffer.
      * @param minimum is the minimum number of octets to input.
      * @param maximum is the maximum number of octets to input.
@@ -600,7 +605,7 @@ public:
      * Returns true if the object is empty, false otherwise. Empty means the
      * object has nothing on its linked list. It is not empty even if the
      * items on its linked list are empty.
-     * @return trye if the object is empty, false otherwise.
+     * @return true if the object is empty, false otherwise.
      */
     bool empty() const { return (head == 0); }
 

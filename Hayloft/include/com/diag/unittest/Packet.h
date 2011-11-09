@@ -11,11 +11,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <cstring>
-#include <cstdlib>
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
@@ -25,6 +20,8 @@
 #include "com/diag/desperado/BufferOutput.h"
 #include "com/diag/desperado/PathInput.h"
 #include "com/diag/desperado/DescriptorOutput.h"
+#include "com/diag/desperado/stdlib.h"
+#include "com/diag/desperado/string.h"
 
 namespace com {
 namespace diag {

@@ -17,6 +17,11 @@
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/Print.h"
+#include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/hayloft/s3/LocationConstraint.h"
+#include "com/diag/hayloft/s3/Protocol.h"
+#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
+#include "com/diag/hayloft/s3/CannedAccessControlList.h"
 
 namespace com {
 namespace diag {
@@ -29,19 +34,21 @@ using namespace ::com::diag::hayloft::s3;
 typedef Fixture ContextTest;
 
 TEST_F(ContextTest, Heap) {
-	Context * pointer = new Context;
-	ASSERT_NE(pointer, (Context*)0);
-	const Credentials & credentials = pointer->getCredentials();
-	const LocationConstraint & constraint = pointer->getLocationConstraint();
-	const Protocol & protocol = pointer->getProtocol();
-	const UniversalResourceIdentifierStyle & style = pointer->getUniversalResourceIdentifierStyle();
+	Context * context = new Context;
+	ASSERT_NE(context, (Context*)0);
+	const Credentials & credentials = context->getCredentials();
+	const LocationConstraint & constraint = context->getLocationConstraint();
+	const Protocol & protocol = context->getProtocol();
+	const UniversalResourceIdentifierStyle & style = context->getUniversalResourceIdentifierStyle();
+	const CannedAccessControlList & list = context->getCannedAccessControlList();
     ::com::diag::desperado::Print printf(::com::diag::desperado::Platform::instance().error());
-    printf("context=%p\n", pointer);
+    printf("context=%p\n", context);
     printf("credentials=%p\n", &credentials);
     printf("contraint=%p\n", &constraint);
     printf("protocol=%p\n", &protocol);
     printf("style=%p\n", &style);
-	delete pointer;
+    printf("list=%p\n", &list);
+	delete context;
 }
 
 TEST_F(ContextTest, Stack) {
@@ -50,12 +57,14 @@ TEST_F(ContextTest, Stack) {
 	const LocationConstraint & constraint = context.getLocationConstraint();
 	const Protocol & protocol = context.getProtocol();
 	const UniversalResourceIdentifierStyle & style = context.getUniversalResourceIdentifierStyle();
+	const CannedAccessControlList & list = context.getCannedAccessControlList();
     ::com::diag::desperado::Print printf(::com::diag::desperado::Platform::instance().error());
     printf("context=%p\n", &context);
     printf("credentials=%p\n", &credentials);
     printf("contraint=%p\n", &constraint);
     printf("protocol=%p\n", &protocol);
     printf("style=%p\n", &style);
+    printf("list=%p\n", &list);
 }
 
 }

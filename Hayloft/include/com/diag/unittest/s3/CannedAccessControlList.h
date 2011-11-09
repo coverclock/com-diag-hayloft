@@ -11,10 +11,10 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstring>
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Fixture.h"
 #include "com/diag/hayloft/s3/CannedAccessControlList.h"
+#include "com/diag/desperado/string.h"
 
 namespace com {
 namespace diag {

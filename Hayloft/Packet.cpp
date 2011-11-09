@@ -330,14 +330,22 @@ ssize_t PacketInput::operator() (char * buffer, size_t size) {
 	return total;
 }
 
-ssize_t PacketInput::operator() (void * buffer, size_t /* minimum */, size_t maximum) {
-	size_t length = packet.consume(buffer, maximum);
-	if (length > 0) {
-		return length;
+ssize_t PacketInput::operator() (void * buffer, size_t minimum, size_t maximum) {
+	ssize_t total = 0;
+	if (buffer == 0) {
+		// Do nothing.
+	} else if (maximum == 0) {
+		// Do nothing.
+	} else if ((minimum == 0) && packet.empty()) {
+		// Do nothing.
 	} else {
-		errno = 0;
-		return EOF;
+		total = packet.consume(buffer, maximum);
+		if (total <= 0) {
+			total = EOF;
+			errno = 0;
+		}
 	}
+	return total;
 }
 
 void PacketInput::show(int level, com::diag::desperado::Output * display, int indent) const {

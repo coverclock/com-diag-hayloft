@@ -29,6 +29,12 @@ namespace s3 {
 
 class Credentials {
 
+private:
+
+	std::string id;
+
+	std::string secret;
+
 public:
 
 	static const char * ACCESS_KEY_ID_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESS_KEY_ID"; }
@@ -45,19 +51,15 @@ public:
 
 	virtual ~Credentials();
 
-private:
-
-	std::string id;
-
-	std::string secret;
-
-public:
-
 	operator bool() const { return ((id.length() == ACCESS_KEY_ID_LEN) && (secret.length() == SECRET_ACCESS_KEY_LEN)); }
 
 	const char * getId() const { return id.c_str(); }
 
 	const char * getSecret() const { return secret.c_str(); }
+
+protected:
+
+	bool audit();
 
 private:
 

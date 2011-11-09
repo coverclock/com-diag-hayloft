@@ -11,14 +11,13 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstdio>
-#include <cstdlib>
 #include "gtest/gtest.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/desperado/stdio.h"
 #include "com/diag/desperado/FileOutput.h"
 #include "com/diag/desperado/LogOutput.h"
 #include "com/diag/desperado/Print.h"
 #include "com/diag/desperado/Dump.h"
+#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
@@ -27,7 +26,7 @@ namespace s3 {
 
 using namespace ::com::diag::hayloft;
 
-class Fixture : public ::testing::Test {
+class Terse : public ::testing::Test {
 
 public:
 
@@ -37,10 +36,47 @@ public:
 	static ::com::diag::desperado::FileOutput errput;
 	static ::com::diag::desperado::LogOutput logput;
 
-private:
+protected:
 
 	::com::diag::desperado::Output * output;
 	Logger::Mask mask;
+
+	virtual void SetUp() {
+		output = &(Logger::instance().getOutput());
+		mask = Logger::instance().getMask();
+		Logger::instance()
+			.setOutput(logput)
+	    	.disable(Logger::FINEST)
+	    	.disable(Logger::FINER)
+	    	.disable(Logger::FINE)
+	    	.disable(Logger::TRACE)
+	    	.disable(Logger::DEBUG)
+	    	.disable(Logger::INFORMATION)
+	    	.disable(Logger::CONFIGURATION)
+	    	.disable(Logger::NOTICE)
+	    	.disable(Logger::WARNING)
+	    	.enable(Logger::ERROR)
+	    	.enable(Logger::SEVERE)
+	    	.enable(Logger::CRITICAL)
+	    	.enable(Logger::ALERT)
+	    	.enable(Logger::FATAL)
+	    	.enable(Logger::EMERGENCY)
+	    	.enable(Logger::PRINT);
+	}
+
+	virtual void TearDown() {
+		Logger::instance().setMask(mask);
+		Logger::instance().setOutput(*output);
+	}
+
+};
+
+::com::diag::desperado::FileOutput Terse::errput(::stderr);
+::com::diag::desperado::LogOutput Terse::logput(Terse::errput);
+::com::diag::desperado::Print Terse::printf(Terse::errput);
+::com::diag::desperado::Dump Terse::dump(Terse::errput);
+
+class Verbose : public Terse {
 
 protected:
 
@@ -74,10 +110,7 @@ protected:
 
 };
 
-::com::diag::desperado::FileOutput Fixture::errput(::stderr);
-::com::diag::desperado::LogOutput Fixture::logput(Fixture::errput);
-::com::diag::desperado::Print Fixture::printf(Fixture::errput);
-::com::diag::desperado::Dump Fixture::dump(Fixture::errput);
+typedef Verbose Fixture;
 
 }
 }

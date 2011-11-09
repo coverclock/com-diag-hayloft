@@ -11,12 +11,12 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstdlib>
-#include <cstdio>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/FileOutput.h"
 #include "com/diag/desperado/LogOutput.h"
+#include "com/diag/desperado/stdlib.h"
+#include "com/diag/desperado/string.h"
 
 namespace com {
 namespace diag {

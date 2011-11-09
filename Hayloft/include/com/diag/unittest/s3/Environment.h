@@ -11,11 +11,13 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstdlib>
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/desperado/target.h"
 #include "com/diag/desperado/PathInput.h"
+#include "com/diag/desperado/stdlib.h"
+#include "com/diag/desperado/string.h"
+#include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 
 namespace com {

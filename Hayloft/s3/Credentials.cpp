@@ -21,14 +21,7 @@ Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 : id(set(accessKeyId, ACCESS_KEY_ID_ENV(), ""))
 , secret(set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""))
 {
-	Logger::instance().debug("Credentials@%p: id=[%zu]\n", this, id.length());
-	if (id.length() != ACCESS_KEY_ID_LEN) {
-		Logger::instance().warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
-	}
-	Logger::instance().debug("Credentials@%p: secret=[%zu]\n", this, secret.length());
-	if (secret.length() != SECRET_ACCESS_KEY_LEN) {
-		Logger::instance().warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
-	}
+	audit();
 }
 
 Credentials::Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::diag::desperado::Input & secretAccessKeyIn)
@@ -40,10 +33,6 @@ Credentials::Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::d
 			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
 			id = val;
 		}
-		Logger::instance().debug("Credentials@%p: id=[%zu]\n", this, id.length());
-		if (id.length() != ACCESS_KEY_ID_LEN) {
-			Logger::instance().warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
-		}
 	}
 	{
 		char val[SECRET_ACCESS_KEY_LEN + sizeof("\n")];
@@ -52,15 +41,35 @@ Credentials::Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::d
 			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
 			secret = val;
 		}
-		Logger::instance().debug("Credentials@%p: secret=[%zu]\n", this, secret.length());
-		if (secret.length() != SECRET_ACCESS_KEY_LEN) {
-			Logger::instance().warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
-		}
 	}
+	audit();
 }
 
 Credentials::~Credentials()
 {
+}
+
+bool Credentials::audit() {
+	bool result = true;
+#if defined(NDEBUG)
+	Logger::instance().debug("Credentials@%p: id=[%zu]\n", this, id.length());
+#else
+	Logger::instance().debug("Credentials@%p: id=\"%s\"[%zu]\n", this, id.c_str(), id.length());
+#endif
+	if (id.length() != ACCESS_KEY_ID_LEN) {
+		Logger::instance().warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
+		result = false;
+	}
+#if defined(NDEBUG)
+	Logger::instance().debug("Credentials@%p: secret=[%zu]\n", this, secret.length());
+#else
+	Logger::instance().debug("Credentials@%p: secret=\"%s\"[%zu]\n", this, secret.c_str(), secret.length());
+#endif
+	if (secret.length() != SECRET_ACCESS_KEY_LEN) {
+		Logger::instance().warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
+		result = false;
+	}
+	return result;
 }
 
 }
