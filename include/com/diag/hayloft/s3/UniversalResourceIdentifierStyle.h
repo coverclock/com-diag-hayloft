@@ -21,6 +21,10 @@ namespace s3 {
 
 class UniversalResourceIdentifierStyle {
 
+private:
+
+	::S3UriStyle style;
+
 public:
 
 	explicit UniversalResourceIdentifierStyle(::S3UriStyle uristyle = ::S3UriStyleVirtualHost)
@@ -32,10 +36,6 @@ public:
 	virtual ~UniversalResourceIdentifierStyle() {}
 
 	::S3UriStyle getStyle() const { return style; }
-
-private:
-
-	::S3UriStyle style;
 
 };
 

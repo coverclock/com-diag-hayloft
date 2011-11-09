@@ -21,6 +21,10 @@ namespace s3 {
 
 class Protocol {
 
+private:
+
+	::S3Protocol proto;
+
 public:
 
 	explicit Protocol(::S3Protocol protocol = ::S3ProtocolHTTPS)
@@ -32,10 +36,6 @@ public:
 	virtual ~Protocol() {}
 
 	::S3Protocol getProtocol() const { return proto; }
-
-private:
-
-	::S3Protocol proto;
 
 };
 

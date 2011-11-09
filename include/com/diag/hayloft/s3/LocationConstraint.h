@@ -22,7 +22,13 @@ namespace s3 {
 
 class LocationConstraint {
 
+private:
+
+	std::string constraint;
+
 public:
+
+	static const size_t LOCATION_CONSTRAINT_MAX = 64;
 
 	explicit LocationConstraint(const char * locationconstraint = 0)
 	: constraint((locationconstraint != 0) ? locationconstraint : "")
@@ -35,10 +41,6 @@ public:
 	const char * getLocationConstraint() const { return constraint.c_str(); }
 
 	size_t getLength() const { return constraint.length(); }
-
-private:
-
-	std::string constraint;
 
 };
 

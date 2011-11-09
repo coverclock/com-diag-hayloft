@@ -11,26 +11,24 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
-#include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
-
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
+class Credentials;
+class LocationConstraint;
+class Protocol;
+class UniversalResourceIdentifierStyle;
+class CannedAccessControlList;
+
 class Context {
 
-private:
+public:
 
-	static const Credentials credentials;
-	static const LocationConstraint constraint;
-	static const Protocol protocol;
-	static const UniversalResourceIdentifierStyle style;
-	static const CannedAccessControlList list;
+	static const Context context;
+
+private:
 
 	const Credentials * credentialsp;
 	const LocationConstraint * constraintp;
@@ -40,27 +38,27 @@ private:
 
 public:
 
-	explicit Context(
-		const Credentials & rc = credentials,
-		const LocationConstraint & rl = constraint,
-		const Protocol & rp = protocol,
-		const UniversalResourceIdentifierStyle & ru = style,
-		const CannedAccessControlList & ra = list
-	)
-	: credentialsp(&rc)
-	, constraintp(&rl)
-	, protocolp(&rp)
-	, stylep(&ru)
-	, listp(&ra)
-	{}
-
-	virtual ~Context() {}
-
 	const Credentials & getCredentials() const { return *credentialsp; }
 	const LocationConstraint & getLocationConstraint() const { return *constraintp; }
 	const Protocol & getProtocol() const { return *protocolp; }
 	const UniversalResourceIdentifierStyle & getUniversalResourceIdentifierStyle() const { return *stylep; }
 	const CannedAccessControlList & getCannedAccessControlList() const { return *listp; }
+
+	explicit Context(
+		const Credentials & credentials = context.getCredentials(),
+		const LocationConstraint & constraint = context.getLocationConstraint(),
+		const Protocol & protocol = context.getProtocol(),
+		const UniversalResourceIdentifierStyle & style = context.getUniversalResourceIdentifierStyle(),
+		const CannedAccessControlList & list = context.getCannedAccessControlList()
+	)
+	: credentialsp(&credentials)
+	, constraintp(&constraint)
+	, protocolp(&protocol)
+	, stylep(&style)
+	, listp(&list)
+	{}
+
+	virtual ~Context() {}
 
 };
 

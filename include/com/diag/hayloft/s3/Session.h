@@ -21,6 +21,16 @@ namespace s3 {
 
 class Session {
 
+private:
+
+	std::string useragent;
+
+	std::string bucketsuffix;
+
+	std::string hostname;
+
+	::S3Status status;
+
 public:
 
 	static const char * USER_AGENT_STR() { return "s3.hayloft.diag.com"; }
@@ -39,19 +49,7 @@ public:
 
 	virtual ~Session();
 
-protected:
-
-	std::string useragent;
-
-	std::string bucketsuffix;
-
-	std::string hostname;
-
-	::S3Status status;
-
-public:
-
-	operator bool() const { return (status == S3StatusOK); }
+	operator bool() const { return (status == ::S3StatusOK); }
 
 	const char * getUserAgent() const { return useragent.c_str(); }
 

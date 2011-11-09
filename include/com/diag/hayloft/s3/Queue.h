@@ -11,6 +11,8 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include "com/diag/desperado/target.h"
+#include "com/diag/desperado/generics.h"
 #include "libs3.h"
 
 struct S3RequestContext;
@@ -24,9 +26,9 @@ class Queue {
 
 public:
 
-	explicit Queue();
+	typedef int64_t Milliseconds;
 
-	virtual ~Queue();
+	static int pendings;
 
 private:
 
@@ -36,9 +38,19 @@ private:
 
 public:
 
+	explicit Queue();
+
+	virtual ~Queue();
+
 	operator bool() { return (status == ::S3StatusOK); }
 
 	::S3RequestContext * getRequestContext() { return requests; }
+
+	virtual bool all();
+
+	virtual bool once(int & pending = pendings);
+
+	virtual bool ready(Milliseconds timeout = intmaxof(Milliseconds));
 
 private:
 

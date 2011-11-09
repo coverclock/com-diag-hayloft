@@ -11,8 +11,8 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstdlib>
 #include "gtest/gtest.h"
+#include "com/diag/desperado/string.h"
 #include "com/diag/unittest/s3/Fixture.h"
 #include "com/diag/hayloft/s3/Session.h"
 

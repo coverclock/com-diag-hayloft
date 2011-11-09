@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKET
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKET
+#ifndef _H_COM_DIAG_HAYLOFT_S3_STATUS
+#define _H_COM_DIAG_HAYLOFT_S3_STATUS
 
 /**
  * @file
@@ -11,7 +11,19 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/BucketTest.h"
-#include "com/diag/hayloft/s3/BucketValid.h"
+#include "com/diag/desperado/generics.h"
+#include "libs3.h"
+
+namespace com {
+namespace diag {
+namespace hayloft {
+namespace s3 {
+
+static const int BUSY = intmaxof(::S3Status);
+
+}
+}
+}
+}
 
 #endif

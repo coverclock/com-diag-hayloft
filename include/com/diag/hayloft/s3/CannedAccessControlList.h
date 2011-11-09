@@ -22,6 +22,10 @@ namespace s3 {
 
 class CannedAccessControlList {
 
+private:
+
+	::S3CannedAcl canned;
+
 public:
 
 	explicit CannedAccessControlList(::S3CannedAcl cannedacl = ::S3CannedAclPrivate)
@@ -33,10 +37,6 @@ public:
 	virtual ~CannedAccessControlList() {}
 
 	::S3CannedAcl getCannedAccessControlList() const { return canned; }
-
-private:
-
-	::S3CannedAcl canned;
 
 };
 

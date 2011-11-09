@@ -14,8 +14,9 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/s3/Fixture.h"
-#include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Session.h"
+#include "com/diag/desperado/Platform.h"
 
 namespace com {
 namespace diag {
@@ -25,16 +26,37 @@ namespace s3 {
 using namespace ::com::diag::hayloft;
 using namespace ::com::diag::hayloft::s3;
 
-typedef Fixture BucketTest;
+typedef Fixture BucketValidTest;
 
-TEST_F(BucketTest, Heap) {
-	Bucket * pointer = new Bucket("BucketTestHeap");
-	EXPECT_NE(pointer, (Bucket*)0);
-	delete pointer;
+TEST_F(BucketValidTest, Heap) {
+	Session session;
+	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
+	Context context(credentials);
+	BucketValid * valid = new BucketValid(session, "BucketValidTestHeap", context);
+	ASSERT_NE(valid, (BucketValid*)0);
+	EXPECT_TRUE((*valid) == true);
+	delete valid;
 }
 
-TEST_F(BucketTest, Stack) {
-	Bucket bucket("BucketTestStack");
+TEST_F(BucketValidTest, Stack) {
+	Session session;
+	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
+	Context context(credentials);
+	BucketValid valid(session, "BucketValidTestStack", context);
+	EXPECT_TRUE(valid == true);
+}
+
+typedef Fixture BucketTestTest;
+
+TEST_F(BucketTestTest, Stack) {
+	Session session;
+	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
+	Context context(credentials);
+	BucketTest test(session, "BucketTestTestStack", context);
+	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	for (int ii = 0; (ii < 10) && (test == false); ++ii) {
+		platform.yield(platform.frequency());
+	}
 }
 
 }

@@ -27,12 +27,14 @@ using namespace ::com::diag::hayloft::s3;
 typedef Fixture QueueTest;
 
 TEST_F(QueueTest, Heap) {
-	Queue * pointer = new Queue;
-	EXPECT_NE(pointer, (Queue*)0);
-	delete pointer;
+	Queue * queue = new Queue;
+	EXPECT_NE(queue, (Queue*)0);
+	EXPECT_TRUE((*queue) == true);
+	EXPECT_NE(queue->getRequestContext(), (S3RequestContext *)0);
+	delete queue;
 }
 
-TEST_F(QueueTest, Sanity) {
+TEST_F(QueueTest, Stack) {
 	Queue queue;
 	EXPECT_TRUE(queue == true);
 	EXPECT_NE(queue.getRequestContext(), (S3RequestContext *)0);
