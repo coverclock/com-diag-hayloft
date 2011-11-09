@@ -22,15 +22,17 @@ class CannedAccessControlList {
 
 private:
 
-	::S3CannedAcl canned;
+	::S3CannedAcl list;
 
 public:
 
-	explicit CannedAccessControlList(::S3CannedAcl acl = ::S3CannedAclPrivate);
+	static const ::S3CannedAcl DEFAULT = ::S3CannedAclPrivate;
+
+	explicit CannedAccessControlList(::S3CannedAcl acl = DEFAULT);
 
 	virtual ~CannedAccessControlList() {}
 
-	::S3CannedAcl getCannedAccessControlList() const { return canned; }
+	::S3CannedAcl getCannedAccessControlList() const { return list; }
 
 };
 

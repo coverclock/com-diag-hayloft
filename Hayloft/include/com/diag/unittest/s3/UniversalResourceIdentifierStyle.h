@@ -32,9 +32,13 @@ TEST_F(UniversalResourceIdentifierStyleTest, Heap) {
 	delete pointer;
 }
 
+TEST_F(UniversalResourceIdentifierStyleTest, Stack) {
+	UniversalResourceIdentifierStyle style;
+}
+
 TEST_F(UniversalResourceIdentifierStyleTest, Default) {
 	UniversalResourceIdentifierStyle style;
-	EXPECT_EQ(style.getStyle(), ::S3UriStylePath);
+	EXPECT_EQ(style.getStyle(), UniversalResourceIdentifierStyle::DEFAULT);
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, VirtualHost) {
@@ -52,7 +56,7 @@ static int universalresourceidentifierstylefunction(const UniversalResourceIdent
 }
 
 TEST_F(UniversalResourceIdentifierStyleTest, DefaultFunctionArgument) {
-	EXPECT_EQ(universalresourceidentifierstylefunction(), ::S3UriStylePath);
+	EXPECT_EQ(universalresourceidentifierstylefunction(), UniversalResourceIdentifierStyle::DEFAULT);
 }
 
 }

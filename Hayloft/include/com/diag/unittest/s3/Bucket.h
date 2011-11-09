@@ -53,26 +53,14 @@ typedef Fixture BucketTestTest;
 
 TEST_F(BucketTestTest, HeapSynchronous) {
 	Session session;
-	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
-	LocationConstraint constraint;
-	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
-	Context context(credentials, constraint, protocol, style, list);
-	BucketTest * test = new BucketTest(session, "BucketTestTestHeapSynchronous", context);
+	BucketTest * test = new BucketTest(session, "BucketTestTestHeapSynchronous");
 	EXPECT_TRUE((*test) == true);
 	delete test;
 }
 
 TEST_F(BucketTestTest, StackSynchronous) {
 	Session session;
-	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
-	LocationConstraint constraint;
-	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
-	Context context(credentials, constraint, protocol, style, list);
-	BucketTest test(session, "BucketTestTestStackSynchronous", context);
+	BucketTest test(session, "BucketTestTestStackSynchronous");
 	EXPECT_TRUE(test == true);
 }
 

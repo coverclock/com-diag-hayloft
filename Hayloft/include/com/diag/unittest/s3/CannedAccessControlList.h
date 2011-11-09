@@ -32,37 +32,41 @@ TEST_F(CannedAccessControlListTest, Heap) {
 	delete pointer;
 }
 
+TEST_F(CannedAccessControlListTest, Stack) {
+	CannedAccessControlList list;
+}
+
 TEST_F(CannedAccessControlListTest, Default) {
-	CannedAccessControlList acl;
-	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclPrivate);
+	CannedAccessControlList list;
+	EXPECT_EQ(list.getCannedAccessControlList(), CannedAccessControlList::DEFAULT);
 }
 
 TEST_F(CannedAccessControlListTest, Private) {
-	CannedAccessControlListPrivate acl;
-	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclPrivate);
+	CannedAccessControlListPrivate list;
+	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclPrivate);
 }
 
 TEST_F(CannedAccessControlListTest, PublicRead) {
-	CannedAccessControlListPublicRead acl;
-	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclPublicRead);
+	CannedAccessControlListPublicRead list;
+	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclPublicRead);
 }
 
 TEST_F(CannedAccessControlListTest, PublicReadWrite) {
-	CannedAccessControlListPublicReadWrite acl;
-	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclPublicReadWrite);
+	CannedAccessControlListPublicReadWrite list;
+	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclPublicReadWrite);
 }
 
 TEST_F(CannedAccessControlListTest, AuthenticatedRead) {
-	CannedAccessControlListAuthenticatedRead acl;
-	EXPECT_EQ(acl.getCannedAccessControlList(), ::S3CannedAclAuthenticatedRead);
+	CannedAccessControlListAuthenticatedRead list;
+	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclAuthenticatedRead);
 }
 
-static int cannedaccesscontrollistfunction(const CannedAccessControlList & acl = CannedAccessControlList()) {
-	return acl.getCannedAccessControlList();
+static int cannedaccesscontrollistfunction(const CannedAccessControlList & list = CannedAccessControlList()) {
+	return list.getCannedAccessControlList();
 }
 
 TEST_F(CannedAccessControlListTest, DefaultFunctionArgument) {
-	EXPECT_EQ(cannedaccesscontrollistfunction(), ::S3CannedAclPrivate);
+	EXPECT_EQ(cannedaccesscontrollistfunction(), CannedAccessControlList::DEFAULT);
 }
 
 }

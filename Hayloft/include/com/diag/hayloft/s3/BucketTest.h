@@ -36,15 +36,15 @@ private:
 
 	::S3Status status;
 
-	char constraint[LocationConstraint::LOCATION_CONSTRAINT_MAX];
+	char constraint[LocationConstraint::LENGTH];
 
 	::S3ResponseHandler handler;
 
 public:
 
-	explicit BucketTest(Session & session, const char * name, const Context & context = Context::context);
+	explicit BucketTest(Session & session, const char * name, const Context & context = Context());
 
-	explicit BucketTest(Session & session, const char * name, Queue & queue, const Context & context = Context::context);
+	explicit BucketTest(Session & session, const char * name, Queue & queue, const Context & context = Context());
 
 	virtual ~BucketTest() {}
 

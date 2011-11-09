@@ -15,6 +15,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+const size_t LocationConstraint::LENGTH;
+
 LocationConstraint::LocationConstraint(const char * locationconstraint)
 : constraint((locationconstraint != 0) ? locationconstraint : "")
 {

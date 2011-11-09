@@ -27,9 +27,11 @@ private:
 
 public:
 
-	static const size_t LOCATION_CONSTRAINT_MAX = 64;
+	static const char * DEFAULT() { return ""; }
 
-	explicit LocationConstraint(const char * locationconstraint = 0);
+	static const size_t LENGTH = 64;
+
+	explicit LocationConstraint(const char * locationconstraint = DEFAULT());
 
 	virtual ~LocationConstraint() {}
 

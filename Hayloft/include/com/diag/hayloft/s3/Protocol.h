@@ -27,7 +27,9 @@ private:
 
 public:
 
-	explicit Protocol(::S3Protocol proto = ::S3ProtocolHTTPS);
+	static const ::S3Protocol DEFAULT = ::S3ProtocolHTTPS;
+
+	explicit Protocol(::S3Protocol proto = DEFAULT);
 
 	virtual ~Protocol() {}
 

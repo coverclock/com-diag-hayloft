@@ -15,6 +15,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+const ::S3UriStyle UniversalResourceIdentifierStyle::DEFAULT;
+
 UniversalResourceIdentifierStyle::UniversalResourceIdentifierStyle(::S3UriStyle uri)
 : style(uri)
 {

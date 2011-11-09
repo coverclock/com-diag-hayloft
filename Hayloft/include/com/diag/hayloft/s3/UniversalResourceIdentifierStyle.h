@@ -26,7 +26,9 @@ private:
 
 public:
 
-	explicit UniversalResourceIdentifierStyle(::S3UriStyle uri = ::S3UriStylePath);
+	static const ::S3UriStyle DEFAULT = ::S3UriStylePath;
+
+	explicit UniversalResourceIdentifierStyle(::S3UriStyle uri = DEFAULT);
 
 	virtual ~UniversalResourceIdentifierStyle() {}
 

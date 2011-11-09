@@ -4,7 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>Desperado</project>
-		<project>GoogleTest</project>
+		<project>gtest-1.6.0</project>
 		<project>Lariat</project>
 		<project>libs3-2.0</project>
 	</projects>
