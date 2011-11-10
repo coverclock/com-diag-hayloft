@@ -26,13 +26,11 @@ class Queue;
 
 class BucketTest {
 
-protected:
+private:
 
 	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-private:
 
 	::S3Status status;
 
@@ -49,6 +47,8 @@ public:
 	virtual ~BucketTest() {}
 
 	operator bool() { return (status != BUSY); }
+
+	const char * getLocationConstraint() { return constraint; }
 
 protected:
 

@@ -34,13 +34,15 @@ BucketTest::BucketTest(Session & session, const char * name, Queue & queue, cons
 }
 
 void BucketTest::run(Session & session, const char * name, Queue * queuep, const Context & context) {
+	Logger & logger = Logger::instance();
 	status = static_cast<S3Status>(BUSY); // static_cast<::S3Status>(BUSY)?
-	std::string fullname = name;
-	fullname += session.getBucketSuffix();
-	Logger::instance().debug("BucketTest@%p: fullname=\"%s\"\n", this, fullname.c_str());
 	constraint[0] = '\0';
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
+	std::string fullname = name;
+	fullname += session.getBucketSuffix();
+	logger.debug("BucketTest@%p: fullname=\"%s\"\n", this, fullname.c_str());
+	logger.debug("BucketTest@%p: queue=%p\n", this, queuep);
 	::S3_test_bucket(
 		context.getProtocol(),
 		context.getStyle(),
@@ -62,6 +64,9 @@ void BucketTest::run(Session & session, const char * name, Queue * queuep, const
 void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
 	status = s3status;
 	Logger::instance().debug("BucketTest@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+	if (constraint[0] != '\0') {
+		Logger::instance().debug("BucketTest@%p: contraint=\"%s\"\n", this, constraint);
+	}
 	show(errorDetails);
 }
 

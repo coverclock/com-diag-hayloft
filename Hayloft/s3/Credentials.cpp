@@ -8,6 +8,8 @@
  */
 
 #include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/desperado/target.h"
+#include "com/diag/desperado/string.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
@@ -20,6 +22,16 @@ namespace s3 {
 const size_t Credentials::ACCESS_KEY_ID_LEN;
 
 const size_t Credentials::SECRET_ACCESS_KEY_LEN;
+
+static const char EXS[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+
+const char * Credentials::obfuscate(const char * str) {
+#if defined(NDEBUG)
+   return &EXS[sizeof(EXS) - 1 - ::strnlen(str, sizeof(EXS) - 1)];
+#else
+	return str;
+#endif
+}
 
 Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 : id(set(accessKeyId, ACCESS_KEY_ID_ENV(), ""))
@@ -54,23 +66,16 @@ Credentials::~Credentials()
 }
 
 bool Credentials::audit() {
+	Logger & logger = Logger::instance();
 	bool result = true;
-#if defined(NDEBUG)
-	Logger::instance().debug("Credentials@%p: id=[%zu]\n", this, id.length());
-#else
-	Logger::instance().debug("Credentials@%p: id=\"%s\"[%zu]\n", this, id.c_str(), id.length());
-#endif
+	logger.debug("Credentials@%p: id=\"%s\"[%zu]\n", this, obfuscate(id.c_str()), id.length());
 	if (id.length() != ACCESS_KEY_ID_LEN) {
-		Logger::instance().warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
+		logger.warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
 		result = false;
 	}
-#if defined(NDEBUG)
-	Logger::instance().debug("Credentials@%p: secret=[%zu]\n", this, secret.length());
-#else
-	Logger::instance().debug("Credentials@%p: secret=\"%s\"[%zu]\n", this, secret.c_str(), secret.length());
-#endif
+	logger.debug("Credentials@%p: secret=\"%s\"[%zu]\n", this, obfuscate(secret.c_str()), secret.length());
 	if (secret.length() != SECRET_ACCESS_KEY_LEN) {
-		Logger::instance().warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
+		logger.warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
 		result = false;
 	}
 	return result;

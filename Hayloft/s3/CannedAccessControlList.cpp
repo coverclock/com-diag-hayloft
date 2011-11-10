@@ -20,7 +20,7 @@ const ::S3CannedAcl CannedAccessControlList::DEFAULT;
 CannedAccessControlList::CannedAccessControlList(::S3CannedAcl acl)
 : list(acl)
 {
-	Logger::instance().debug("CannedAccessControlList@%p: cannedacl=%d\n", this, list);
+	Logger::instance().debug("CannedAccessControlList@%p: list=%d\n", this, list);
 }
 
 }

@@ -15,18 +15,20 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-void show(const ::S3ErrorDetails * details) {
+void show(const ::S3ErrorDetails * details, Logger::Level level) {
 	if (details != 0) {
 		Logger & logger = Logger::instance();
-		if (details->message != 0) { logger.debug("Error: message=\"%s\"\n", details->message); }
-		if (details->resource != 0) { logger.debug("Error: resource=\"%s\"\n", details->resource); }
-		if (details->furtherDetails != 0) { logger.debug("Error: further=\"%s\"\n", details->furtherDetails); }
-		if (details->extraDetails != 0) {
-			for (int ii = 0; ii < details->extraDetailsCount; ++ii) {
-				if ((details->extraDetails[ii].name != 0) || (details->extraDetails[ii].value != 0)) {
-					logger.debug("Error: \"%s\"=\"%s\"\n",
-							(details->extraDetails[ii].name != 0) ? details->extraDetails[ii].name : "",
-							(details->extraDetails[ii].value != 0) ? details->extraDetails[ii].value : "");
+		if (logger.isEnabled(level)) {
+			if (details->message != 0) { logger.log(level, "Error@%p: message=\"%s\"\n", details, details->message); }
+			if (details->resource != 0) { logger.log(level, "Error@%p: resource=\"%s\"\n", details, details->resource); }
+			if (details->furtherDetails != 0) { logger.log(level, "Error@%p: further=\"%s\"\n", details, details->furtherDetails); }
+			if (details->extraDetails != 0) {
+				for (int ii = 0; ii < details->extraDetailsCount; ++ii) {
+					if ((details->extraDetails[ii].name != 0) || (details->extraDetails[ii].value != 0)) {
+						logger.log(level, "Error@%p: \"%s\"=\"%s\"\n", details,
+								(details->extraDetails[ii].name != 0) ? details->extraDetails[ii].name : "",
+								(details->extraDetails[ii].value != 0) ? details->extraDetails[ii].value : "");
+					}
 				}
 			}
 		}

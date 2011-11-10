@@ -22,11 +22,13 @@ Session::Session(const char * userAgentInfo, const char * bucketSuffix, int flag
 , hostname(set(defaultS3HostName, HOST_NAME_ENV(), HOST_NAME_STR()))
 , status(::S3_initialize(useragent.c_str(), flags, hostname.c_str()))
 {
-	Logger::instance().debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
-	Logger::instance().debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
-	Logger::instance().debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
+	Logger & logger = Logger::instance();
+	logger.setMask();
+	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
+	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
+	logger.debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	if (status != ::S3StatusOK) {
-		Logger::instance().error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 }
 

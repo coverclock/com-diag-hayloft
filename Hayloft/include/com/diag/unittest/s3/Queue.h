@@ -40,6 +40,26 @@ TEST_F(QueueTest, Stack) {
 	EXPECT_NE(queue.getRequestContext(), (S3RequestContext *)0);
 }
 
+TEST_F(QueueTest, All) {
+	Queue queue;
+	EXPECT_TRUE(queue == true);
+	EXPECT_TRUE(queue.all());
+}
+
+TEST_F(QueueTest, Once) {
+	Queue queue;
+	EXPECT_TRUE(queue == true);
+	int pending;
+	EXPECT_TRUE(queue.once(pending));
+	EXPECT_EQ(pending, 0);
+}
+
+TEST_F(QueueTest, Ready) {
+	Queue queue;
+	EXPECT_TRUE(queue == true);
+	EXPECT_EQ(queue.ready(), 0);
+}
+
 }
 }
 }

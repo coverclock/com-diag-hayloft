@@ -22,8 +22,9 @@
 #include "com/diag/hayloft/s3/CannedAccessControlList.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/desperado/Platform.h"
 #include "com/diag/hayloft/Logger.h"
+#include "com/diag/desperado/Platform.h"
+#include "com/diag/desperado/generics.h"
 
 namespace com {
 namespace diag {
@@ -51,34 +52,51 @@ TEST_F(BucketValidTest, Stack) {
 
 typedef Fixture BucketTestTest;
 
-TEST_F(BucketTestTest, HeapSynchronous) {
+TEST_F(BucketTestTest, Heap) {
 	Session session;
-	BucketTest * test = new BucketTest(session, "BucketTestTestHeapSynchronous");
+	BucketTest * test = new BucketTest(session, "BucketTestTestHeap");
 	EXPECT_TRUE((*test) == true);
 	delete test;
 }
 
-TEST_F(BucketTestTest, StackSynchronous) {
+TEST_F(BucketTestTest, Stack) {
 	Session session;
-	BucketTest test(session, "BucketTestTestStackSynchronous");
+	BucketTest test(session, "BucketTestTestStack");
 	EXPECT_TRUE(test == true);
 }
 
-#if 0
-TEST_F(BucketTestTest, Asynchronous) {
+TEST_F(BucketTestTest, Explicit) {
 	Session session;
-	Credentials credentials(Environment::getAccessKeyId(), Environment::getSecretAccessKey());
-	Context context(credentials);
-	BucketTest test(session, "BucketTestTestStack", context);
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
-	int ii;
-	for (ii = 0; (ii < 10000) && (test == false); ++ii) {
-		platform.yield(platform.frequency() / 1000);
-	}
+	Credentials credentials;
+	LocationConstraint constraint;
+	Protocol protocol;
+	UniversalResourceIdentifierStyle style;
+	CannedAccessControlList list;
+	Context context(credentials, constraint, protocol, style, list);
+	BucketTest test(session, "BucketTestTestExplicit", context);
 	EXPECT_TRUE(test == true);
-	Logger::instance().debug("%d ms elapsed\n", ii);
 }
-#endif
+
+TEST_F(BucketTestTest, Asynchronous) {
+	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	static const int LIMIT = 100;
+	static const Queue::Milliseconds TIMEOUT = 1000;
+	int limit;
+	int pending;
+	int ready;
+	Session session;
+	Queue queue;
+	BucketTest test(session, "BucketTestTestAsynchronous", queue);
+	for (limit = 0, pending = 1, ready = 0; (limit < LIMIT) && (test != true) && (ready >= 0) && (pending > 0); ++limit) {
+		ready = queue.ready(TIMEOUT);
+		EXPECT_TRUE(ready >= 0);
+		EXPECT_TRUE(queue.once(pending));
+		platform.yield();
+	}
+	EXPECT_EQ(ready, 0);
+	EXPECT_EQ(pending, 0);
+	EXPECT_TRUE(test == true);
+}
 
 }
 }

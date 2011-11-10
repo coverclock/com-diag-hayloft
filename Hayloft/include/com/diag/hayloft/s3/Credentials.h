@@ -45,6 +45,8 @@ public:
 
 	static const size_t SECRET_ACCESS_KEY_LEN = 40;
 
+	static const char * obfuscate(const char * str);
+
 	explicit Credentials(const char * accessKeyId = 0, const char * secretAccessKey = 0);
 
 	explicit Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::diag::desperado::Input & secretAccessKeyIn);

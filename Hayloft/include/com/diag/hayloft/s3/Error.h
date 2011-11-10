@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/generics.h"
+#include "com/diag/hayloft/Logger.h"
 #include "libs3.h"
 
 namespace com {
@@ -19,7 +19,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-extern void show(const ::S3ErrorDetails * details);
+extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger::DEBUG);
 
 }
 }

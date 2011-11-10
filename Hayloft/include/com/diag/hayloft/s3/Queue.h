@@ -28,6 +28,23 @@ public:
 
 	typedef int64_t Milliseconds;
 
+	/**
+	 * This isn't really the default timeout value in milliseconds, which would
+	 * be a long long time. But whatever timeout value is specified is limited
+	 * in the underlying code to the value dynamically suggested by
+	 * S3_get_request_context_timeout() via curl_multi_timeout() at run time.
+	 * So using this value results in that dynamic maximum value being used.
+	 */
+	static const Milliseconds DEFAULT = intmaxof(Milliseconds);
+
+	/**
+	 * S3_get_request_context_timeout() calls curl_multi_timeout() which can
+	 * return -1 indicating it has no suggested timeout value. The CURL docs
+	 * recommend waiting at most a few seconds. This is this value we use when
+	 * this happens.
+	 */
+	static const Milliseconds TIMEOUT = 1000;
+
 	static int pendings;
 
 private:
@@ -50,7 +67,7 @@ public:
 
 	virtual bool once(int & pending = pendings);
 
-	virtual bool ready(Milliseconds timeout = intmaxof(Milliseconds));
+	virtual int ready(Milliseconds timeout = DEFAULT);
 
 private:
 
