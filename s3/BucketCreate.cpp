@@ -8,7 +8,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/BucketTest.h"
+#include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Queue.h"
 #include "com/diag/hayloft/s3/Credentials.h"
@@ -24,7 +24,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketTest::BucketTest(Session & se, const char * na, const Context & co)
+BucketCreate::BucketCreate(Session & se, const char * na, const Context & co)
 : session(se)
 , name(se.canonicalize(na))
 , requests(0)
@@ -34,7 +34,7 @@ BucketTest::BucketTest(Session & se, const char * na, const Context & co)
 	run();
 }
 
-BucketTest::BucketTest(Session & se, const char * na, Queue & qu, const Context & co)
+BucketCreate::BucketCreate(Session & se, const char * na, Queue & qu, const Context & co)
 : session(se)
 , name(se.canonicalize(na))
 , requests(qu.getRequests())
@@ -44,25 +44,24 @@ BucketTest::BucketTest(Session & se, const char * na, Queue & qu, const Context 
 	run();
 }
 
-BucketTest::~BucketTest() {
+BucketCreate::~BucketCreate() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
 }
 
-void BucketTest::run() {
+void BucketCreate::run() {
 	Logger & logger = Logger::instance();
-	constraint[0] = '\0';
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
-	::S3_test_bucket(
+	::S3_create_bucket(
 		context.getProtocol(),
-		context.getStyle(),
 		context.getId(),
 		context.getSecret(),
 		session.getHostName(),
 		name.c_str(),
-		sizeof(constraint), constraint,
+		context.getList(),
+		context.getConstraint(),
 		requests,
 		&handler,
 		this
@@ -71,28 +70,25 @@ void BucketTest::run() {
 	logger.debug("BucketTest@%p: requests=%p\n", this, requests);
 }
 
-::S3Status BucketTest::properties(const ::S3ResponseProperties * properties) {
+::S3Status BucketCreate::properties(const ::S3ResponseProperties * properties) {
 	show(properties, Logger::DEBUG);
 }
 
-void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
+void BucketCreate::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
 	Logger & logger = Logger::instance();
 	status = s3status;
-	Logger::Level level = (isInaccessible() || isExistent() || isNonexistent()) ? Logger::DEBUG : Logger::ERROR;
-	logger.log(level, "BucketTest@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+	Logger::Level level = isCreated() ? Logger::DEBUG : Logger::ERROR;
+	logger.log(level, "BucketCreate@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	show(errorDetails, level);
-	if (constraint[0] != '\0') {
-		logger.debug("BucketTest@%p: constraint=\"%s\"\n", this, constraint);
-	}
 }
 
-::S3Status BucketTest::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
-	BucketTest * that = static_cast<BucketTest*>(callbackData);
+::S3Status BucketCreate::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
+	BucketCreate * that = static_cast<BucketCreate*>(callbackData);
 	return that->properties(properties);
 }
 
-void BucketTest::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
-	BucketTest * that = static_cast<BucketTest*>(callbackData);
+void BucketCreate::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+	BucketCreate * that = static_cast<BucketCreate*>(callbackData);
 	that->complete(status, errorDetails);
 }
 

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETTEST
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETTEST
+#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETCREATE
+#define _H_COM_DIAG_HAYLOFT_S3_BUCKETCREATE
 
 /**
  * @file
@@ -24,7 +24,7 @@ namespace s3 {
 class Session;
 class Queue;
 
-class BucketTest {
+class BucketCreate {
 
 private:
 
@@ -44,15 +44,13 @@ private:
 
 	::S3ResponseHandler handler;
 
-	char constraint[LocationConstraint::LENGTH];
-
 public:
 
-	explicit BucketTest(Session & se, const char * na, const Context & co = Context());
+	explicit BucketCreate(Session & se, const char * na, const Context & co = Context());
 
-	explicit BucketTest(Session & se, const char * na, Queue & qu, const Context & co = Context());
+	explicit BucketCreate(Session & se, const char * na, Queue & qu, const Context & co = Context());
 
-	virtual ~BucketTest();
+	virtual ~BucketCreate();
 
 	operator bool() { return (status != BUSY); }
 
@@ -60,17 +58,11 @@ public:
 
 	const char * getName() { return name.c_str(); }
 
-	const char * getConstraint() { return (status == BUSY) ? 0 : constraint; }
-
 	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
 
 	bool isBusy() const { return (status == BUSY); }
 
-	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
-
-	bool isExistent() const { return (status == ::S3StatusOK); }
-
-	bool isNonexistent() const { return (status == ::S3StatusErrorNoSuchBucket); }
+	bool isCreated() const { return (status == ::S3StatusOK); }
 
 protected:
 

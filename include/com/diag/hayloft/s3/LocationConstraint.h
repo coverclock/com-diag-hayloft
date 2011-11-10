@@ -43,7 +43,7 @@ public:
 
 	virtual ~LocationConstraint() {}
 
-	const char * getLocationConstraint() const { return constraint.c_str(); }
+	const char * getConstraint() const { return constraint.c_str(); }
 
 	size_t getLength() const { return constraint.length(); }
 

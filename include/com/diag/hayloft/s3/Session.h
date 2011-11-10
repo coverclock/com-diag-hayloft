@@ -25,8 +25,6 @@ private:
 
 	std::string useragent;
 
-	std::string bucketsuffix;
-
 	std::string hostname;
 
 	::S3Status status;
@@ -37,15 +35,11 @@ public:
 
 	static const char * USER_AGENT_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_USER_AGENT"; }
 
-	static const char * BUCKET_SUFFIX_STR() { return ".s3.hayloft.diag.com"; }
-
-	static const char * BUCKET_SUFFIX_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_BUCKET_SUFFIX"; }
-
 	static const char * HOST_NAME_STR() { return S3_DEFAULT_HOSTNAME; }
 
 	static const char * HOST_NAME_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_HOST_NAME"; }
 
-	explicit Session(const char * userAgentInfo = 0, const char * bucketSuffix = 0, int flags = S3_INIT_ALL, const char * defaultS3HostName = 0);
+	explicit Session(const char * userAgentInfo = 0, int flags = S3_INIT_ALL, const char * defaultS3HostName = 0);
 
 	virtual ~Session();
 
@@ -55,9 +49,9 @@ public:
 
 	const char * getUserAgent() const { return useragent.c_str(); }
 
-	const char * getBucketSuffix() const { return bucketsuffix.c_str(); }
-
 	const char * getHostName() const { return hostname.c_str(); }
+
+	virtual const char * canonicalize(std::string name) const;
 
 private:
 

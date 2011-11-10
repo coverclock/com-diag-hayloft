@@ -182,6 +182,10 @@ TARGETS+=s3/BucketTest.o
 ARTIFACTS+=s3/BucketTest.o
 ARCHIVABLE+=s3/BucketTest.o
 
+TARGETS+=s3/BucketCreate.o
+ARTIFACTS+=s3/BucketCreate.o
+ARCHIVABLE+=s3/BucketCreate.o
+
 TARGETS+=s3/Error.o
 ARTIFACTS+=s3/Error.o
 ARCHIVABLE+=s3/Error.o

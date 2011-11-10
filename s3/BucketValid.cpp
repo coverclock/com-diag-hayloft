@@ -18,15 +18,14 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketValid::BucketValid(Session & session, const char * name, const Context & context)
+BucketValid::BucketValid(Session & se, const char * na, const Context & co)
+: name(se.canonicalize(na))
 {
 	Logger & logger = Logger::instance();
-	std::string fullname = name;
-	fullname += session.getBucketSuffix();
-	logger.debug("BucketValid@%p: fullname=\"%s\"\n", this, fullname.c_str());
-	status = ::S3_validate_bucket_name(fullname.c_str(), context.getStyle());
+	status = ::S3_validate_bucket_name(name.c_str(), co.getStyle());
+	logger.debug("BucketValid@%p: name=\"%s\"\n", this, name.c_str());
 	if (status != ::S3StatusOK) {
-		logger.warning("BucketValid@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, fullname.c_str(), fullname.length(), status, ::S3_get_status_name(status));
+		logger.warning("BucketValid@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, name.c_str(), name.length(), status, ::S3_get_status_name(status));
 	}
 }
 

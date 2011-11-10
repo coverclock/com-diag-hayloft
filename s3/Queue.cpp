@@ -24,7 +24,8 @@ namespace s3 {
 int Queue::pendings = 0;
 
 Queue::Queue()
-: status(::S3_create_request_context(&requests))
+: requests(0)
+, status(::S3_create_request_context(&requests))
 {
 	Logger & logger = Logger::instance();
 	logger.debug("Queue@%p: requests=%p\n", this, requests);

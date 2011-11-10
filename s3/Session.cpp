@@ -16,16 +16,14 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-Session::Session(const char * userAgentInfo, const char * bucketSuffix, int flags, const char * defaultS3HostName)
+Session::Session(const char * userAgentInfo, int flags, const char * defaultS3HostName)
 : useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
-, bucketsuffix(set(bucketSuffix, BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_STR()))
 , hostname(set(defaultS3HostName, HOST_NAME_ENV(), HOST_NAME_STR()))
 , status(::S3_initialize(useragent.c_str(), flags, hostname.c_str()))
 {
 	Logger & logger = Logger::instance();
 	logger.setMask();
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
-	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	logger.debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	if (status != ::S3StatusOK) {
 		logger.error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
@@ -34,6 +32,14 @@ Session::Session(const char * userAgentInfo, const char * bucketSuffix, int flag
 
 Session::~Session() {
 	S3_deinitialize();
+}
+
+const char * Session::canonicalize(std::string name) const {
+	name += ".";
+	name += useragent;
+	// name += ".";
+	// name += hostname;
+	return name.c_str();
 }
 
 }

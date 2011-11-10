@@ -23,10 +23,10 @@ Context::Context(
 )
 : id(cr.getId())
 , secret(cr.getSecret())
-, constraint(co.getLocationConstraint())
+, constraint(co.getConstraint())
 , protocol(pr.getProtocol())
 , style(st.getStyle())
-, list(li.getCannedAccessControlList())
+, list(li.getList())
 {
 	Logger & logger = Logger::instance();
 	logger.debug("Context@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());

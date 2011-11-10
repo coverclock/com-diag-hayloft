@@ -25,17 +25,21 @@ class BucketValid {
 
 private:
 
+	std::string name;
+
 	::S3Status status;
 
 public:
 
-	explicit BucketValid(Session & session, const char * name, const Context & context = Context());
+	explicit BucketValid(Session & se, const char * na, const Context & co = Context());
 
 	virtual ~BucketValid() {}
 
 	operator bool() { return (status == ::S3StatusOK); }
 
 	::S3Status getStatus() const { return status; }
+
+	const char * getName() { return name.c_str(); }
 
 };
 
