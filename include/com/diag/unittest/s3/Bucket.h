@@ -22,6 +22,7 @@
 #include "com/diag/hayloft/s3/CannedAccessControlList.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Status.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/generics.h"
@@ -56,6 +57,11 @@ TEST_F(BucketTestTest, Heap) {
 	Session session;
 	BucketTest * test = new BucketTest(session, "BucketTestTestHeap");
 	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isBusy());
+	EXPECT_FALSE(test->isRetryable());
+	EXPECT_FALSE(test->isInaccessible());
+	EXPECT_FALSE(test->isExistent());
+	EXPECT_TRUE(test->isNonexistent());
 	delete test;
 }
 
@@ -63,6 +69,11 @@ TEST_F(BucketTestTest, Stack) {
 	Session session;
 	BucketTest test(session, "BucketTestTestStack");
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
 }
 
 TEST_F(BucketTestTest, Explicit) {
@@ -75,6 +86,11 @@ TEST_F(BucketTestTest, Explicit) {
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test(session, "BucketTestTestExplicit", context);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
 }
 
 TEST_F(BucketTestTest, Asynchronous) {
@@ -96,6 +112,11 @@ TEST_F(BucketTestTest, Asynchronous) {
 	EXPECT_EQ(ready, 0);
 	EXPECT_EQ(pending, 0);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
 }
 
 }

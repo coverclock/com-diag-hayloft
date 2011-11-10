@@ -48,7 +48,19 @@ public:
 
 	operator bool() { return (status != BUSY); }
 
+	::S3Status getStatus() const { return status; }
+
 	const char * getLocationConstraint() { return constraint; }
+
+	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
+
+	bool isBusy() const { return (status == BUSY); }
+
+	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
+
+	bool isExistent() const { return (status == ::S3StatusOK); }
+
+	bool isNonexistent() const { return (status == ::S3StatusErrorNoSuchBucket); }
 
 protected:
 
