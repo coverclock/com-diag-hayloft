@@ -20,7 +20,7 @@ const ::S3UriStyle UniversalResourceIdentifierStyle::DEFAULT;
 UniversalResourceIdentifierStyle::UniversalResourceIdentifierStyle(::S3UriStyle uri)
 : style(uri)
 {
-	Logger::instance().debug("UniversalResourceIdentifierStyle@%p: uristyle=%d\n", this, style);
+	Logger::instance().debug("UniversalResourceIdentifierStyle@%p: style=%d\n", this, style);
 }
 
 }

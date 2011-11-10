@@ -26,9 +26,10 @@ int Queue::pendings = 0;
 Queue::Queue()
 : status(::S3_create_request_context(&requests))
 {
-	Logger::instance().debug("Queue@%p: requests=%p\n", this, requests);
+	Logger & logger = Logger::instance();
+	logger.debug("Queue@%p: requests=%p\n", this, requests);
 	if (status != S3StatusOK) {
-		Logger::instance().error("Queue@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Queue@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 }
 
@@ -44,12 +45,16 @@ bool Queue::all() {
 }
 
 bool Queue::once(int & pending) {
-	status = ::S3_runonce_request_context(requests, &pending);
+	int count;
+	status = ::S3_runonce_request_context(requests, &count);
+	Logger::instance().debug("Queue@%p: pending=%d\n", this, count);
+	pending = count;
 	return (status == ::S3StatusOK);
 }
 
-bool Queue::ready(Milliseconds timeout) {
-	bool result = false;
+int Queue::ready(Milliseconds timeout) {
+	int rc;
+	Logger & logger = Logger::instance();
 	do {
 		fd_set reads;
 		FD_ZERO(&reads);
@@ -60,22 +65,29 @@ bool Queue::ready(Milliseconds timeout) {
 		int maxfd = -1;
 		status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
 		if (status != ::S3StatusOK) {
-			Logger::instance().error("Queue@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+			logger.error("Queue@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+			rc = -1;
 			break;
 		}
-		if (maxfd < 0) { break; }
+		logger.debug("Queue@%p: maxfd=%d\n", this, maxfd);
+		if (maxfd < 0) {
+			rc = 0;
+			break;
+		}
 		Milliseconds maximum = ::S3_get_request_context_timeout(requests);
 		if (timeout > maximum) { timeout = maximum; }
+		if (timeout < 0) { timeout = TIMEOUT; } // curl_multi_timeout() can return -1 indicating no suggested value.
+		logger.debug("Queue@%p: milliseconds=%lld\n", this, timeout);
 		struct timeval timeoutval = { timeout / 1000, (timeout % 1000) * 1000 };
-		int rc = ::select(maxfd, &reads, &writes, &exceptions, &timeoutval);
+		rc = ::select(maxfd, &reads, &writes, &exceptions, &timeoutval);
 		if (rc < 0) {
-			Logger::instance().error("Queue@%p: select failed! error=%d=\"%s\"\n", this, errno, ::strerror(errno));
+			logger.error("Queue@%p: select failed! error=%d=\"%s\"\n", this, errno, ::strerror(errno));
+			rc = -2;
 			break;
 		}
-		if (rc == 0) { break; }
-		result = true;
 	} while (false);
-	return result;
+	logger.debug("Queue@%p: ready=%d\n", this, rc);
+	return rc;
 }
 
 }

@@ -14,7 +14,6 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Fixture.h"
 #include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/desperado/string.h"
 #include "libs3.h"
 
@@ -45,10 +44,30 @@ TEST_F(ContextTest, Implicit) {
 	ASSERT_NE(context.getSecret(), (char *)0);
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
 	ASSERT_NE(context.getLocationConstraint(), (char *)0);
-	EXPECT_EQ(std::strcmp(context.getLocationConstraint(), ""), 0);
-	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTPS);
-	context.getStyle();
-	context.getCannedAccessControlList();
+	EXPECT_EQ(std::strcmp(context.getLocationConstraint(), LocationConstraint::DEFAULT()), 0);
+	EXPECT_EQ(context.getLength(), std::strlen(LocationConstraint::DEFAULT()));
+	EXPECT_EQ(context.getProtocol(), Protocol::DEFAULT);
+	EXPECT_EQ(context.getStyle(), UniversalResourceIdentifierStyle::DEFAULT);
+	EXPECT_EQ(context.getCannedAccessControlList(), CannedAccessControlList::DEFAULT);
+}
+
+TEST_F(ContextTest, Explicit) {
+	Credentials credentials;
+	LocationConstraintTokyo constraint;
+	ProtocolUnsecure protocol;
+	UniversalResourceIdentifierStyleVirtualHost style;
+	CannedAccessControlListPublicRead list;
+	Context context(credentials, constraint, protocol, style, list);
+	ASSERT_NE(context.getId(), (char *)0);
+	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
+	ASSERT_NE(context.getSecret(), (char *)0);
+	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
+	ASSERT_NE(context.getLocationConstraint(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getLocationConstraint(), LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	EXPECT_EQ(context.getLength(), std::strlen(LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()));
+	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTP);
+	EXPECT_EQ(context.getStyle(), ::S3UriStyleVirtualHost);
+	EXPECT_EQ(context.getCannedAccessControlList(), ::S3CannedAclPublicRead);
 }
 
 }

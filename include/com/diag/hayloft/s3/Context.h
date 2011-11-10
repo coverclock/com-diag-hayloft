@@ -49,6 +49,7 @@ public:
 	const char * getId() const { return id.c_str(); }
 	const char * getSecret() const { return secret.c_str(); }
 	const char * getLocationConstraint() const { return constraint.c_str(); }
+	const size_t getLength() const { return constraint.length(); }
 	::S3Protocol getProtocol() const { return protocol; }
 	::S3UriStyle getStyle() const { return style; }
 	::S3CannedAcl getCannedAccessControlList() const { return list; }

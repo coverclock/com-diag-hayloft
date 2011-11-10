@@ -265,6 +265,7 @@ ARTIFACTS+=dependencies.mk
 
 depend:
 	DEPENDS="`find . -type f \( -name '*.c' -o -name '*.cpp' \) -print`"; \
+	echo "DEPENDS=\"$$DEPENDS\""; \
 	$(CXX) $(CPPFLAGS) -M -MG $$DEPENDS > dependencies.mk
 
 -include dependencies.mk

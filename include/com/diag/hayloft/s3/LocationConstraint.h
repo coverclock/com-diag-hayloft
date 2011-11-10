@@ -27,7 +27,15 @@ private:
 
 public:
 
-	static const char * DEFAULT() { return ""; }
+	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "ap-northeast-1"; }
+	static const char * ASIA_PACIFIC_SOUTHEAST_1() { return "ap-southeast-1"; }
+	static const char * EUROPEAN_UNION_WEST_1() { return "eu-west-1"; }
+	static const char * UNITED_STATES_CLASSIC() { return ""; }
+	static const char * UNITED_STATES_EAST_1() { return "us-east-1"; }
+	static const char * UNITED_STATES_WEST_1() { return "us-west-1"; }
+	static const char * UNITED_STATES_WEST_2() { return "us-west-2"; }
+
+	static const char * DEFAULT() { return UNITED_STATES_CLASSIC(); }
 
 	static const size_t LENGTH = 64;
 
@@ -41,63 +49,87 @@ public:
 
 };
 
-class LocationConstraintEuropeanUnion : public LocationConstraint {
+class LocationConstraintIreland : public LocationConstraint {
 
 public:
 
-	explicit LocationConstraintEuropeanUnion()
-	: LocationConstraint("EU")
+	explicit LocationConstraintIreland()
+	: LocationConstraint(EUROPEAN_UNION_WEST_1())
 	{}
 
-	virtual ~LocationConstraintEuropeanUnion() {}
+	virtual ~LocationConstraintIreland() {}
 
 };
 
-class LocationConstraintUnitedStatesWest1 : public LocationConstraint {
+class LocationConstraintNorthernVirginia : public LocationConstraint {
 
 public:
 
-	explicit LocationConstraintUnitedStatesWest1()
-	: LocationConstraint("us-west-1")
+	explicit LocationConstraintNorthernVirginia()
+	: LocationConstraint(UNITED_STATES_EAST_1())
 	{}
 
-	virtual ~LocationConstraintUnitedStatesWest1() {}
+	virtual ~LocationConstraintNorthernVirginia() {}
 
 };
 
-class LocationConstraintAsiaPacificSouthEast1 : public LocationConstraint {
+class LocationConstraintNorthernCalifornia : public LocationConstraint {
 
 public:
 
-	explicit LocationConstraintAsiaPacificSouthEast1()
-	: LocationConstraint("ap-southeast-1")
+	explicit LocationConstraintNorthernCalifornia()
+	: LocationConstraint(UNITED_STATES_WEST_1())
 	{}
 
-	virtual ~LocationConstraintAsiaPacificSouthEast1() {}
+	virtual ~LocationConstraintNorthernCalifornia() {}
 
 };
 
-class LocationConstraintAsiaPacificNorthEast1 : public LocationConstraint {
+class LocationConstraintOregon : public LocationConstraint {
 
 public:
 
-	explicit LocationConstraintAsiaPacificNorthEast1()
-	: LocationConstraint("ap-northeast-1")
+	explicit LocationConstraintOregon()
+	: LocationConstraint(UNITED_STATES_WEST_2())
 	{}
 
-	virtual ~LocationConstraintAsiaPacificNorthEast1() {}
+	virtual ~LocationConstraintOregon() {}
 
 };
 
-class LocationConstraintUnitedStatesClassic : public LocationConstraint {
+class LocationConstraintSingapore : public LocationConstraint {
 
 public:
 
-	explicit LocationConstraintUnitedStatesClassic()
-	: LocationConstraint("")
+	explicit LocationConstraintSingapore()
+	: LocationConstraint(ASIA_PACIFIC_SOUTHEAST_1())
 	{}
 
-	virtual ~LocationConstraintUnitedStatesClassic() {}
+	virtual ~LocationConstraintSingapore() {}
+
+};
+
+class LocationConstraintTokyo : public LocationConstraint {
+
+public:
+
+	explicit LocationConstraintTokyo()
+	: LocationConstraint(ASIA_PACIFIC_NORTHEAST_1())
+	{}
+
+	virtual ~LocationConstraintTokyo() {}
+
+};
+
+class LocationConstraintUnitedStates : public LocationConstraint {
+
+public:
+
+	explicit LocationConstraintUnitedStates()
+	: LocationConstraint(UNITED_STATES_CLASSIC())
+	{}
+
+	virtual ~LocationConstraintUnitedStates() {}
 
 };
 
