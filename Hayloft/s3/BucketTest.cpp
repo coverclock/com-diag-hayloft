@@ -16,6 +16,7 @@
 #include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
 #include "com/diag/hayloft/s3/CannedAccessControlList.h"
 #include "com/diag/hayloft/s3/Error.h"
+#include "com/diag/hayloft/s3/Response.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -58,16 +59,18 @@ void BucketTest::run(Session & session, const char * name, Queue * queuep, const
 }
 
 ::S3Status BucketTest::properties(const ::S3ResponseProperties * properties) {
-	Logger::instance().debug("BucketTest@%p: properties=%p\n", this, properties);
+	show(properties, Logger::DEBUG);
 }
 
 void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
+	Logger & logger = Logger::instance();
 	status = s3status;
-	Logger::instance().debug("BucketTest@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+	Logger::Level level = (isInaccessible() || isExistent() || isNonexistent()) ? Logger::DEBUG : Logger::ERROR;
+	logger.log(level, "BucketTest@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+	show(errorDetails, level);
 	if (constraint[0] != '\0') {
-		Logger::instance().debug("BucketTest@%p: contraint=\"%s\"\n", this, constraint);
+		logger.debug("BucketTest@%p: constraint=\"%s\"\n", this, constraint);
 	}
-	show(errorDetails);
 }
 
 ::S3Status BucketTest::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {

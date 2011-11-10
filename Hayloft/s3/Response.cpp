@@ -16,17 +16,17 @@ namespace hayloft {
 namespace s3 {
 
 void show(const ::S3ResponseProperties * properties, Logger::Level level) {
-	if (details != 0) {
+	if (properties != 0) {
 		Logger & logger = Logger::instance();
 		if (logger.isEnabled(level)) {
-			if (details->requestId != 0) { logger.log(level, "Response@%p: requestId=\"%s\"\n", properties, properties->requestId); }
-			if (details->requestId2 != 0) { logger.log(level, "Response@%p: requestId2=\"%s\"\n", properties, properties->requestId2); }
-			if (details->contentType != 0) { logger.log(level, "Response@%p: contentType=\"%s\"\n", properties, properties->contentType); }
-			if (details->contentLength != 0) { logger.log(level, "Response@%p: contentLength=%llu\n", properties, properties->contentLength); }
-			if (details->server != 0) { logger.log(level, "Response@%p: server=\"%s\"\n", properties, properties->server); }
-			if (details->eTag != 0) { logger.log(level, "Response@%p: eTag=\"%s\"\n", properties, properties->eTag); }
-			if (details->lastModified != 0) { logger.log(level, "Response@%p: lastModified=%lld\n", properties, properties->lastModified); }
-			if (details->metaData != 0) {
+			if (properties->requestId != 0) { logger.log(level, "Response@%p: requestId=\"%s\"\n", properties, properties->requestId); }
+			if (properties->requestId2 != 0) { logger.log(level, "Response@%p: requestId2=\"%s\"\n", properties, properties->requestId2); }
+			if (properties->contentType != 0) { logger.log(level, "Response@%p: contentType=\"%s\"\n", properties, properties->contentType); }
+			if (properties->contentLength != 0) { logger.log(level, "Response@%p: contentLength=%llu\n", properties, properties->contentLength); }
+			if (properties->server != 0) { logger.log(level, "Response@%p: server=\"%s\"\n", properties, properties->server); }
+			if (properties->eTag != 0) { logger.log(level, "Response@%p: eTag=\"%s\"\n", properties, properties->eTag); }
+			if (properties->lastModified != 0) { logger.log(level, "Response@%p: lastModified=%lld\n", properties, properties->lastModified); }
+			if (properties->metaData != 0) {
 				for (int ii = 0; ii < properties->metaDataCount; ++ii) {
 					if ((properties->metaData[ii].name != 0) || (properties->metaData[ii].value != 0)) {
 						logger.log(level, "Response@%p: \"%s\"=\"%s\"\n", properties,

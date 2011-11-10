@@ -186,6 +186,10 @@ TARGETS+=s3/Error.o
 ARTIFACTS+=s3/Error.o
 ARCHIVABLE+=s3/Error.o
 
+TARGETS+=s3/Response.o
+ARTIFACTS+=s3/Response.o
+ARCHIVABLE+=s3/Response.o
+
 TARGETS+=unittest
 ARTIFACTS+=unittest
 

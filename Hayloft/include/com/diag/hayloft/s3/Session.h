@@ -51,6 +51,8 @@ public:
 
 	operator bool() const { return (status == ::S3StatusOK); }
 
+	::S3Status getStatus() const { return status; }
+
 	const char * getUserAgent() const { return useragent.c_str(); }
 
 	const char * getBucketSuffix() const { return bucketsuffix.c_str(); }

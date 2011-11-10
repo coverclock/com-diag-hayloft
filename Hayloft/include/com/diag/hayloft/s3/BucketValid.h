@@ -35,6 +35,8 @@ public:
 
 	operator bool() { return (status == ::S3StatusOK); }
 
+	::S3Status getStatus() const { return status; }
+
 };
 
 
