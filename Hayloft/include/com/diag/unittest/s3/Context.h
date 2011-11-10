@@ -43,12 +43,12 @@ TEST_F(ContextTest, Implicit) {
 	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
 	ASSERT_NE(context.getSecret(), (char *)0);
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
-	ASSERT_NE(context.getLocationConstraint(), (char *)0);
-	EXPECT_EQ(std::strcmp(context.getLocationConstraint(), LocationConstraint::DEFAULT()), 0);
+	ASSERT_NE(context.getConstraint(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getConstraint(), LocationConstraint::DEFAULT()), 0);
 	EXPECT_EQ(context.getLength(), std::strlen(LocationConstraint::DEFAULT()));
 	EXPECT_EQ(context.getProtocol(), Protocol::DEFAULT);
 	EXPECT_EQ(context.getStyle(), UniversalResourceIdentifierStyle::DEFAULT);
-	EXPECT_EQ(context.getCannedAccessControlList(), CannedAccessControlList::DEFAULT);
+	EXPECT_EQ(context.getList(), CannedAccessControlList::DEFAULT);
 }
 
 TEST_F(ContextTest, Explicit) {
@@ -62,12 +62,12 @@ TEST_F(ContextTest, Explicit) {
 	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
 	ASSERT_NE(context.getSecret(), (char *)0);
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
-	ASSERT_NE(context.getLocationConstraint(), (char *)0);
-	EXPECT_EQ(std::strcmp(context.getLocationConstraint(), LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	ASSERT_NE(context.getConstraint(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getConstraint(), LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()), 0);
 	EXPECT_EQ(context.getLength(), std::strlen(LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()));
 	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTP);
 	EXPECT_EQ(context.getStyle(), ::S3UriStyleVirtualHost);
-	EXPECT_EQ(context.getCannedAccessControlList(), ::S3CannedAclPublicRead);
+	EXPECT_EQ(context.getList(), ::S3CannedAclPublicRead);
 }
 
 }

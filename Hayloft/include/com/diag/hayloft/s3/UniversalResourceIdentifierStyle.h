@@ -8,14 +8,9 @@
  * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
- *
- * Using a Virtual Host style URI causes libs3 to construct GET requests
- * that appear to require DNS support for your bucket name. This results in
- * an error return from S3 with the message  "The request signature we
- * calculated does not match the signature you provided. Check your key and
- * signing method."
- *
+ * http://www.diag.com/navigation/downloads/Hayloft.html<BR>z
+ * Virtual Host:	PROTOCOL://BUCKET.s3.amazonaws.com/OBJECT
+ * Path:			PROTOCOL://s3.amazonaws.com/BUCKET/OBJECT
  */
 
 #include "libs3.h"

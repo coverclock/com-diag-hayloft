@@ -38,31 +38,31 @@ TEST_F(CannedAccessControlListTest, Stack) {
 
 TEST_F(CannedAccessControlListTest, Default) {
 	CannedAccessControlList list;
-	EXPECT_EQ(list.getCannedAccessControlList(), CannedAccessControlList::DEFAULT);
+	EXPECT_EQ(list.getList(), CannedAccessControlList::DEFAULT);
 }
 
 TEST_F(CannedAccessControlListTest, Private) {
 	CannedAccessControlListPrivate list;
-	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclPrivate);
+	EXPECT_EQ(list.getList(), ::S3CannedAclPrivate);
 }
 
 TEST_F(CannedAccessControlListTest, PublicRead) {
 	CannedAccessControlListPublicRead list;
-	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclPublicRead);
+	EXPECT_EQ(list.getList(), ::S3CannedAclPublicRead);
 }
 
 TEST_F(CannedAccessControlListTest, PublicReadWrite) {
 	CannedAccessControlListPublicReadWrite list;
-	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclPublicReadWrite);
+	EXPECT_EQ(list.getList(), ::S3CannedAclPublicReadWrite);
 }
 
 TEST_F(CannedAccessControlListTest, AuthenticatedRead) {
 	CannedAccessControlListAuthenticatedRead list;
-	EXPECT_EQ(list.getCannedAccessControlList(), ::S3CannedAclAuthenticatedRead);
+	EXPECT_EQ(list.getList(), ::S3CannedAclAuthenticatedRead);
 }
 
 static int cannedaccesscontrollistfunction(const CannedAccessControlList & list = CannedAccessControlList()) {
-	return list.getCannedAccessControlList();
+	return list.getList();
 }
 
 TEST_F(CannedAccessControlListTest, DefaultFunctionArgument) {

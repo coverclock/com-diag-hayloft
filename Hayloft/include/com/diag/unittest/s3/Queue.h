@@ -30,14 +30,14 @@ TEST_F(QueueTest, Heap) {
 	Queue * queue = new Queue;
 	EXPECT_NE(queue, (Queue*)0);
 	EXPECT_TRUE((*queue) == true);
-	EXPECT_NE(queue->getRequestContext(), (S3RequestContext *)0);
+	EXPECT_NE(queue->getRequests(), (S3RequestContext *)0);
 	delete queue;
 }
 
 TEST_F(QueueTest, Stack) {
 	Queue queue;
 	EXPECT_TRUE(queue == true);
-	EXPECT_NE(queue.getRequestContext(), (S3RequestContext *)0);
+	EXPECT_NE(queue.getRequests(), (S3RequestContext *)0);
 }
 
 TEST_F(QueueTest, All) {

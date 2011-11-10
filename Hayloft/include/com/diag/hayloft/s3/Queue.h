@@ -61,7 +61,7 @@ public:
 
 	operator bool() { return (status == ::S3StatusOK); }
 
-	::S3RequestContext * getRequestContext() { return requests; }
+	::S3RequestContext * getRequests() { return requests; }
 
 	virtual bool all();
 

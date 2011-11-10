@@ -32,7 +32,7 @@ public:
 
 	virtual ~CannedAccessControlList() {}
 
-	::S3CannedAcl getCannedAccessControlList() const { return list; }
+	::S3CannedAcl getList() const { return list; }
 
 };
 
