@@ -13,7 +13,7 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Environment.h"
-#include "com/diag/unittest/s3/Fixture.h"
+#include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/desperado/DataInput.h"
 #include "com/diag/desperado/string.h"

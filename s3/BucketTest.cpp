@@ -36,7 +36,7 @@ BucketTest::~BucketTest() {
 }
 
 void BucketTest::test() {
-	Logger::instance().debug("BucketTest@%p: begin", this);
+	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	::S3_test_bucket(
 		context.getProtocol(),
 		context.getStyle(),
@@ -53,7 +53,7 @@ void BucketTest::test() {
 
 void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
 	Logger & logger = Logger::instance();
-	logger.debug("BucketTest@%p: end", this);
+	logger.debug("BucketTest@%p: end\n", this);
 	Bucket::complete(s3status, errorDetails);
 	if (constraint[0] != '\0') {
 		logger.debug("BucketTest@%p: constraint=\"%s\"\n", this, constraint);

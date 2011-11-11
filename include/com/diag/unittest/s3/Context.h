@@ -12,7 +12,7 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/s3/Fixture.h"
+#include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/desperado/string.h"
 #include "libs3.h"
