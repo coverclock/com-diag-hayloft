@@ -11,6 +11,13 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>z
  * Virtual Host:	PROTOCOL://BUCKET.s3.amazonaws.com/OBJECT
  * Path:			PROTOCOL://s3.amazonaws.com/BUCKET/OBJECT
+ *
+ * Using a VIRTUAL HOST style URI with mixed case bucket names yields an
+ * unhelpful (to me anyway) message about keys not matching when doing a
+ * BucketTest for a bucket that does not exist. Using a mixed case bucket
+ * name with a PATH style URI at least says the bucket does not exist. In
+ * any case, the DevGuide indicates that one should use all lower case bucket
+ * names.
  */
 
 #include "libs3.h"
@@ -28,7 +35,7 @@ private:
 
 public:
 
-	static const ::S3UriStyle DEFAULT = ::S3UriStylePath;
+	static const ::S3UriStyle DEFAULT = ::S3UriStyleVirtualHost;
 
 	explicit UniversalResourceIdentifierStyle(::S3UriStyle st = DEFAULT);
 
