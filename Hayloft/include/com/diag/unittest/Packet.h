@@ -29,14 +29,16 @@ namespace unittest {
 
 using namespace ::com::diag::hayloft;
 
-TEST(PacketDataTest, Heap) {
+typedef Fixture PacketDataTest;
+
+TEST_F(PacketDataTest, Heap) {
 	static const size_t SIZE = 256;
 	char data[SIZE];
 	PacketData * pdp = new PacketData(data, sizeof(data));
 	delete pdp;
 }
 
-TEST(PacketDataTest, InitialDefault) {
+TEST_F(PacketDataTest, InitialDefault) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -53,7 +55,7 @@ TEST(PacketDataTest, InitialDefault) {
 	EXPECT_EQ(packetdata.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataTest, InitialEither) {
+TEST_F(PacketDataTest, InitialEither) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -70,7 +72,7 @@ TEST(PacketDataTest, InitialEither) {
 	EXPECT_EQ(packetdata.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataTest, InitialAppend) {
+TEST_F(PacketDataTest, InitialAppend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -87,7 +89,7 @@ TEST(PacketDataTest, InitialAppend) {
 	EXPECT_EQ(packetdata.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataTest, InitialPrepend) {
+TEST_F(PacketDataTest, InitialPrepend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -104,7 +106,7 @@ TEST(PacketDataTest, InitialPrepend) {
 	EXPECT_EQ(packetdata.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataTest, ConsumeOnce) {
+TEST_F(PacketDataTest, ConsumeOnce) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -126,7 +128,7 @@ TEST(PacketDataTest, ConsumeOnce) {
 	EXPECT_EQ(packetdata.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataTest, ConsumeMany) {
+TEST_F(PacketDataTest, ConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -150,7 +152,7 @@ TEST(PacketDataTest, ConsumeMany) {
 	EXPECT_EQ(packetdata.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataTest, BufferSize) {
+TEST_F(PacketDataTest, BufferSize) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
@@ -171,34 +173,40 @@ TEST(PacketDataTest, BufferSize) {
 	EXPECT_EQ(packetdata.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketDataDynamicTest, Heap) {
+typedef Fixture PacketDataDynamicTest;
+
+TEST_F(PacketDataDynamicTest, Heap) {
 	static const size_t SIZE = 256;
 	PacketDataDynamic::Datum * data = new PacketDataDynamic::Datum [SIZE];
 	PacketDataDynamic * pddp = new PacketDataDynamic(data, sizeof(data));
 	delete pddp;
 }
 
-TEST(PacketBufferTest, Heap) {
+typedef Fixture PacketBufferTest;
+
+TEST_F(PacketBufferTest, Heap) {
 	static const size_t SIZE = 256;
 	char data[SIZE];
 	PacketData * pbp = new PacketBuffer(data, SIZE);
 	delete pbp;
 }
 
-TEST(PacketBufferDynamicTest, Heap1) {
+typedef Fixture PacketBufferDynamicTest;
+
+TEST_F(PacketBufferDynamicTest, Heap1) {
 	static const size_t SIZE = 256;
 	PacketBufferDynamic::Datum * data = new PacketBufferDynamic::Datum[SIZE];
 	PacketData * pbdp = new PacketBufferDynamic(data, SIZE);
 	delete pbdp;
 }
 
-TEST(PacketBufferDynamicTest, Heap2) {
+TEST_F(PacketBufferDynamicTest, Heap2) {
 	static const size_t SIZE = 256;
 	PacketData * pbdp = new PacketBufferDynamic(SIZE);
 	delete pbdp;
 }
 
-TEST(PacketBufferDynamicTest, InitialDefault) {
+TEST_F(PacketBufferDynamicTest, InitialDefault) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE);
@@ -211,7 +219,7 @@ TEST(PacketBufferDynamicTest, InitialDefault) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, InitialEither) {
+TEST_F(PacketBufferDynamicTest, InitialEither) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::EITHER);
@@ -224,7 +232,7 @@ TEST(PacketBufferDynamicTest, InitialEither) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, InitialAppend) {
+TEST_F(PacketBufferDynamicTest, InitialAppend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::APPEND);
@@ -237,7 +245,7 @@ TEST(PacketBufferDynamicTest, InitialAppend) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, InitialPrepend) {
+TEST_F(PacketBufferDynamicTest, InitialPrepend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::PREPEND);
@@ -250,7 +258,7 @@ TEST(PacketBufferDynamicTest, InitialPrepend) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, AppendOnceAppend) {
+TEST_F(PacketBufferDynamicTest, AppendOnceAppend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::APPEND);
@@ -272,7 +280,7 @@ TEST(PacketBufferDynamicTest, AppendOnceAppend) {
 	EXPECT_EQ(packetbuffer.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, AppendOncePrepend) {
+TEST_F(PacketBufferDynamicTest, AppendOncePrepend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::PREPEND);
@@ -294,7 +302,7 @@ TEST(PacketBufferDynamicTest, AppendOncePrepend) {
 	EXPECT_EQ(packetbuffer.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, AppendManyAppend) {
+TEST_F(PacketBufferDynamicTest, AppendManyAppend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::APPEND);
@@ -325,7 +333,7 @@ TEST(PacketBufferDynamicTest, AppendManyAppend) {
 	EXPECT_EQ(packetbuffer.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, PrependOnceAppend) {
+TEST_F(PacketBufferDynamicTest, PrependOnceAppend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::APPEND);
@@ -347,7 +355,7 @@ TEST(PacketBufferDynamicTest, PrependOnceAppend) {
 	EXPECT_EQ(packetbuffer.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, PrependOncePrepend) {
+TEST_F(PacketBufferDynamicTest, PrependOncePrepend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::PREPEND);
@@ -369,7 +377,7 @@ TEST(PacketBufferDynamicTest, PrependOncePrepend) {
 	EXPECT_EQ(packetbuffer.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, PrependManyPrepend) {
+TEST_F(PacketBufferDynamicTest, PrependManyPrepend) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::PREPEND);
@@ -400,7 +408,7 @@ TEST(PacketBufferDynamicTest, PrependManyPrepend) {
 	EXPECT_EQ(packetbuffer.prepend(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, PrependAppendConsumeOnce) {
+TEST_F(PacketBufferDynamicTest, PrependAppendConsumeOnce) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::EITHER);
@@ -445,7 +453,7 @@ TEST(PacketBufferDynamicTest, PrependAppendConsumeOnce) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, PrependAppendConsumeMany) {
+TEST_F(PacketBufferDynamicTest, PrependAppendConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE, PacketBufferDynamic::EITHER);
@@ -497,7 +505,7 @@ TEST(PacketBufferDynamicTest, PrependAppendConsumeMany) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, AppendOnceClear) {
+TEST_F(PacketBufferDynamicTest, AppendOnceClear) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE);
@@ -522,7 +530,7 @@ TEST(PacketBufferDynamicTest, AppendOnceClear) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketBufferDynamicTest, PrependOnceClear) {
+TEST_F(PacketBufferDynamicTest, PrependOnceClear) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	PacketBufferDynamic packetbuffer(SIZE);
@@ -547,28 +555,30 @@ TEST(PacketBufferDynamicTest, PrependOnceClear) {
 	EXPECT_EQ(packetbuffer.consume(&datum, sizeof(datum)), ZERO);
 }
 
-TEST(PacketTest, HeapAndShow) {
+typedef Fixture PacketTest;
+
+TEST_F(PacketTest, HeapAndShow) {
 	Packet * packet = new Packet;
 	ASSERT_NE(packet, (Packet*)0);
-	packet->show();
+	packet->show(0, &PacketTest::errput);
 	delete packet;
 }
 
-TEST(PacketTest, EitherPrependAppendConsumeMany) {
+TEST_F(PacketTest, EitherPrependAppendConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::EITHER);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 	}
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -576,24 +586,24 @@ TEST(PacketTest, EitherPrependAppendConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 }
 
-TEST(PacketTest, PrependPrependAppendConsumeMany) {
+TEST_F(PacketTest, PrependPrependAppendConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::PREPEND);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 	}
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -601,24 +611,24 @@ TEST(PacketTest, PrependPrependAppendConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 }
 
-TEST(PacketTest, AppendPrependAppendConsumeMany) {
+TEST_F(PacketTest, AppendPrependAppendConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::APPEND);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 	}
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -626,24 +636,24 @@ TEST(PacketTest, AppendPrependAppendConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 }
 
-TEST(PacketTest, EitherAppendPrependConsumeMany) {
+TEST_F(PacketTest, EitherAppendPrependConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::EITHER);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -651,24 +661,24 @@ TEST(PacketTest, EitherAppendPrependConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 }
 
-TEST(PacketTest, PrependAppendPrependConsumeMany) {
+TEST_F(PacketTest, PrependAppendPrependConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::PREPEND);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -676,24 +686,24 @@ TEST(PacketTest, PrependAppendPrependConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 }
 
-TEST(PacketTest, AppendAppendPrependConsumeMany) {
+TEST_F(PacketTest, AppendAppendPrependConsumeMany) {
 	static const size_t SIZE = 256;
 	static const size_t ZERO = 0;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::APPEND);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -701,10 +711,10 @@ TEST(PacketTest, AppendAppendPrependConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2);
+	packet.show(2, &PacketTest::errput);
 }
 
-TEST(PacketTest, MixedBag) {
+TEST_F(PacketTest, MixedBag) {
 	Packet * packet = new Packet;
 	PacketDataDynamic::Datum * data2 = new PacketDataDynamic::Datum [3];
 	for (int ii = 0; ii < 3; ++ii) { data2[ii] = 'j' + ii; }
@@ -731,7 +741,9 @@ TEST(PacketTest, MixedBag) {
 	delete packet;
 }
 
-TEST(PacketInputOutputTest, Block) {
+typedef Fixture PacketInputOutputTest;
+
+TEST_F(PacketInputOutputTest, Block) {
 	static const size_t SIZE = 5 * 11 * 4;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
@@ -752,7 +764,7 @@ TEST(PacketInputOutputTest, Block) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 }
 
-TEST(PacketInputOutputTest, Character) {
+TEST_F(PacketInputOutputTest, Character) {
 	static const size_t SIZE = 5 * 11 * 4;
 	char data[SIZE];
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
@@ -803,7 +815,7 @@ static const char * SONNET99[] = {
 	"-- Edna St. Vincent Millay"
 };
 
-TEST(PacketInputOutputTest, String) {
+TEST_F(PacketInputOutputTest, String) {
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
@@ -822,7 +834,7 @@ TEST(PacketInputOutputTest, String) {
 	}
 }
 
-TEST(PacketInputOutputTest, Formatted) {
+TEST_F(PacketInputOutputTest, Formatted) {
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
@@ -856,7 +868,7 @@ static const char RICHARDII[] = {
 	"-- William Shakespeare, KING RICHARD II, Act 2 scene 1\n"
 };
 
-TEST(PacketTest, SourceSinkBuffer) {
+TEST_F(PacketInputOutputTest, SourceSinkBuffer) {
 	::com::diag::desperado::DataInput datainput(RICHARDII, sizeof(RICHARDII));
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
@@ -870,7 +882,7 @@ TEST(PacketTest, SourceSinkBuffer) {
 	EXPECT_EQ(std::strncmp(RICHARDII, buffer, sizeof(buffer)), 0);
 }
 
-TEST(PacketTest, SourceSinkPathFile) {
+TEST_F(PacketInputOutputTest, SourceSinkPathFile) {
 	struct ::stat status;
 	EXPECT_EQ(::stat(__FILE__, &status), 0);
 	::com::diag::desperado::PathInput input(__FILE__, "r");

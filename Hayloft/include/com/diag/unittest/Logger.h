@@ -12,6 +12,7 @@
  */
 
 #include "gtest/gtest.h"
+#include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/FileOutput.h"
 #include "com/diag/desperado/LogOutput.h"
@@ -24,7 +25,9 @@ namespace unittest {
 
 using namespace ::com::diag::hayloft;
 
-TEST(LoggerTest, Defaults) {
+typedef Fixture LoggerTest;
+
+TEST_F(LoggerTest, Defaults) {
 	Logger logger;
 	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
 	EXPECT_FALSE(logger.isEnabled(logger.FINER));
@@ -46,32 +49,10 @@ TEST(LoggerTest, Defaults) {
 	EXPECT_EQ((Logger::Mask)0, logger.getMask());
 }
 
-TEST(LoggerTest, Instance) {
-	Logger & logger = Logger::instance();
-	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
-	EXPECT_FALSE(logger.isEnabled(logger.FINER));
-	EXPECT_FALSE(logger.isEnabled(logger.FINE));
-	EXPECT_FALSE(logger.isEnabled(logger.TRACE));
-	EXPECT_FALSE(logger.isEnabled(logger.DEBUG));
-	EXPECT_FALSE(logger.isEnabled(logger.INFORMATION));
-	EXPECT_FALSE(logger.isEnabled(logger.CONFIGURATION));
-	EXPECT_TRUE(logger.isEnabled(logger.NOTICE));
-	EXPECT_TRUE(logger.isEnabled(logger.WARNING));
-	EXPECT_TRUE(logger.isEnabled(logger.ERROR));
-	EXPECT_TRUE(logger.isEnabled(logger.SEVERE));
-	EXPECT_TRUE(logger.isEnabled(logger.CRITICAL));
-	EXPECT_TRUE(logger.isEnabled(logger.ALERT));
-	EXPECT_TRUE(logger.isEnabled(logger.FATAL));
-	EXPECT_TRUE(logger.isEnabled(logger.EMERGENCY));
-	EXPECT_TRUE(logger.isEnabled(logger.PRINT));
-	/**/
-	EXPECT_EQ((Logger::Mask)0xff80, logger.getMask());
-}
-
-TEST(LoggerTest, HeapAndShow) {
+TEST_F(LoggerTest, HeapAndShow) {
 	Logger * logger = new Logger;
 	ASSERT_NE(logger, (Logger*)0);
-	logger->show();
+	logger->show(0, &LoggerTest::errput);
 	delete logger;
 }
 
@@ -93,7 +74,7 @@ TEST(LoggerTest, HeapAndShow) {
 		} \
 	} while (false)
 
-TEST(LoggerTest, EnableDisable) {
+TEST_F(LoggerTest, EnableDisable) {
 	Logger logger;
 	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
 	EXPECT_FALSE(logger.isEnabled(logger.FINER));
@@ -152,7 +133,7 @@ TEST(LoggerTest, EnableDisable) {
 	}
 }
 
-TEST(LoggerTest, Initialization) {
+TEST_F(LoggerTest, Initialization) {
 	::com::diag::desperado::Output nulloutput;
 	Logger logger;
 	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
@@ -231,7 +212,7 @@ TEST(LoggerTest, Initialization) {
 	}
 }
 
-TEST(LoggerTest, SetMask) {
+TEST_F(LoggerTest, SetMask) {
 	Logger logger;
 	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
 	EXPECT_FALSE(logger.isEnabled(logger.FINER));
@@ -274,7 +255,7 @@ TEST(LoggerTest, SetMask) {
 	}
 }
 
-TEST(LoggerTest, SetMaskEnvironment) {
+TEST_F(LoggerTest, SetMaskEnvironment) {
 	Logger logger;
 	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
 	EXPECT_FALSE(logger.isEnabled(logger.FINER));
@@ -330,7 +311,7 @@ TEST(LoggerTest, SetMaskEnvironment) {
 		} \
 	} while (false)
 
-TEST(LoggerTest, Logging) {
+TEST_F(LoggerTest, Logging) {
 	::com::diag::desperado::FileOutput errput(stderr);
 	::com::diag::desperado::LogOutput logput(errput);
 	Logger logger(logput);

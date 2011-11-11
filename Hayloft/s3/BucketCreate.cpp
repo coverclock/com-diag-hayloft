@@ -34,7 +34,7 @@ BucketCreate::~BucketCreate() {
 }
 
 void BucketCreate::create() {
-	Logger::instance().debug("BucketCreate@%p: begin", this);
+	Logger::instance().debug("BucketCreate@%p: begin\n", this);
 	::S3_create_bucket(
 		context.getProtocol(),
 		context.getId(),
@@ -50,7 +50,7 @@ void BucketCreate::create() {
 }
 
 void BucketCreate::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("BucketCreate@%p: end", this);
+	Logger::instance().debug("BucketCreate@%p: end\n", this);
 	Bucket::complete(s3status, errorDetails);
 }
 

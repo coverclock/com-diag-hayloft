@@ -22,7 +22,6 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
 using namespace ::com::diag::hayloft;
 
@@ -112,7 +111,6 @@ protected:
 
 typedef Verbose Fixture;
 
-}
 }
 }
 }

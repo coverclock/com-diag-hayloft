@@ -34,7 +34,7 @@ BucketDelete::~BucketDelete() {
 }
 
 void BucketDelete::remove() {
-	Logger::instance().debug("BucketDelete@%p: begin", this);
+	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	::S3_delete_bucket(
 		context.getProtocol(),
 		context.getStyle(),
@@ -49,7 +49,7 @@ void BucketDelete::remove() {
 }
 
 void BucketDelete::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("BucketDelete@%p: end", this);
+	Logger::instance().debug("BucketDelete@%p: end\n", this);
 	Bucket::complete(s3status, errorDetails);
 }
 
