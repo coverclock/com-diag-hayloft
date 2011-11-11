@@ -37,8 +37,8 @@ Session::~Session() {
 const char * Session::canonicalize(std::string name) const {
 	name += ".";
 	name += useragent;
-	// name += ".";
-	// name += hostname;
+	name += ".";
+	name += hostname;
 	return name.c_str();
 }
 

@@ -17,8 +17,8 @@ namespace s3 {
 
 const ::S3Protocol Protocol::DEFAULT;
 
-Protocol::Protocol(::S3Protocol proto)
-: protocol(proto)
+Protocol::Protocol(::S3Protocol pr)
+: protocol(pr)
 {
 	Logger::instance().debug("Protocol@%p: protocol=%d\n", this, protocol);
 }

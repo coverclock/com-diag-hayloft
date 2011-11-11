@@ -28,7 +28,7 @@ public:
 
 	static const ::S3CannedAcl DEFAULT = ::S3CannedAclPrivate;
 
-	explicit CannedAccessControlList(::S3CannedAcl acl = DEFAULT);
+	explicit CannedAccessControlList(::S3CannedAcl li = DEFAULT);
 
 	virtual ~CannedAccessControlList() {}
 

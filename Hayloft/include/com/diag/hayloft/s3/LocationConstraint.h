@@ -39,7 +39,7 @@ public:
 
 	static const size_t LENGTH = 64;
 
-	explicit LocationConstraint(const char * locationconstraint = DEFAULT());
+	explicit LocationConstraint(const char * lo = DEFAULT());
 
 	virtual ~LocationConstraint() {}
 

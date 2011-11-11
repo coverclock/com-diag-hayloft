@@ -17,8 +17,8 @@ namespace s3 {
 
 const ::S3UriStyle UniversalResourceIdentifierStyle::DEFAULT;
 
-UniversalResourceIdentifierStyle::UniversalResourceIdentifierStyle(::S3UriStyle uri)
-: style(uri)
+UniversalResourceIdentifierStyle::UniversalResourceIdentifierStyle(::S3UriStyle st)
+: style(st)
 {
 	Logger::instance().debug("UniversalResourceIdentifierStyle@%p: style=%d\n", this, style);
 }

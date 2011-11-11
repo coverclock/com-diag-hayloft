@@ -17,8 +17,8 @@ namespace s3 {
 
 const ::S3CannedAcl CannedAccessControlList::DEFAULT;
 
-CannedAccessControlList::CannedAccessControlList(::S3CannedAcl acl)
-: list(acl)
+CannedAccessControlList::CannedAccessControlList(::S3CannedAcl li)
+: list(li)
 {
 	Logger::instance().debug("CannedAccessControlList@%p: list=%d\n", this, list);
 }
