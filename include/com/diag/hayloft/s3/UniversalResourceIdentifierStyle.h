@@ -30,7 +30,7 @@ public:
 
 	static const ::S3UriStyle DEFAULT = ::S3UriStylePath;
 
-	explicit UniversalResourceIdentifierStyle(::S3UriStyle uri = DEFAULT);
+	explicit UniversalResourceIdentifierStyle(::S3UriStyle st = DEFAULT);
 
 	virtual ~UniversalResourceIdentifierStyle() {}
 

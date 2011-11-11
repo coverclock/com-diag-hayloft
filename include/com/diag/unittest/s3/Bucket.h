@@ -115,20 +115,17 @@ TEST_F(BucketTestTest, Once) {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
-	int limit;
-	int pending;
-	int ready;
 	Session session;
 	Queue queue;
 	BucketTest test(session, "BucketTestTestOnce", queue);
-	for (limit = 0, pending = 1, ready = 0; (limit < LIMIT) && (test != true) && (ready >= 0) && (pending > 0); ++limit) {
-		ready = queue.ready(TIMEOUT);
-		EXPECT_TRUE(ready >= 0);
-		EXPECT_TRUE(queue.once(pending));
-		platform.yield();
+	bool backlogged;
+	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
+		backlogged = queue.service(TIMEOUT, LIMIT);
+		if (!backlogged) {
+			platform.yield();
+		}
 	}
-	EXPECT_EQ(ready, 0);
-	EXPECT_EQ(pending, 0);
+	EXPECT_FALSE(backlogged);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -188,20 +185,17 @@ TEST_F(BucketCreateTest, Once) {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
-	int limit;
-	int pending;
-	int ready;
+	bool backlogged;
 	Session session;
 	Queue queue;
 	BucketCreate test(session, "BucketCreateTestOnce", queue);
-	for (limit = 0, pending = 1, ready = 0; (limit < LIMIT) && (test != true) && (ready >= 0) && (pending > 0); ++limit) {
-		ready = queue.ready(TIMEOUT);
-		EXPECT_TRUE(ready >= 0);
-		EXPECT_TRUE(queue.once(pending));
-		platform.yield();
+	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
+		backlogged = queue.service(TIMEOUT, LIMIT);
+		if (!backlogged) {
+			platform.yield();
+		}
 	}
-	EXPECT_EQ(ready, 0);
-	EXPECT_EQ(pending, 0);
+	EXPECT_FALSE(backlogged);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());

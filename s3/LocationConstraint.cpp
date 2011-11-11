@@ -17,8 +17,8 @@ namespace s3 {
 
 const size_t LocationConstraint::LENGTH;
 
-LocationConstraint::LocationConstraint(const char * locationconstraint)
-: constraint((locationconstraint != 0) ? locationconstraint : "")
+LocationConstraint::LocationConstraint(const char * lo)
+: constraint((lo != 0) ? lo : "")
 {
 	Logger::instance().debug("LocationConstraint@%p: constraint=\"%s\"\n", this, constraint.c_str());
 }

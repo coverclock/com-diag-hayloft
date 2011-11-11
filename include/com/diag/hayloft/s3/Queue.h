@@ -35,7 +35,9 @@ public:
 	 * S3_get_request_context_timeout() via curl_multi_timeout() at run time.
 	 * So using this value results in that dynamic maximum value being used.
 	 */
-	static const Milliseconds DEFAULT = intmaxof(Milliseconds);
+	static const Milliseconds TIMEOUT = intmaxof(Milliseconds);
+
+	static const int LIMIT = intmaxof(int);
 
 	/**
 	 * S3_get_request_context_timeout() calls curl_multi_timeout() which can
@@ -43,9 +45,9 @@ public:
 	 * recommend waiting at most a few seconds. This is this value we use when
 	 * this happens.
 	 */
-	static const Milliseconds TIMEOUT = 1000;
+	static const Milliseconds DEFAULT = 1000;
 
-	static int pendings;
+	static int dontcare;
 
 private:
 
@@ -61,13 +63,17 @@ public:
 
 	operator bool() { return (status == ::S3StatusOK); }
 
-	::S3RequestContext * getRequests() { return requests; }
+	::S3Status getStatus() const { return status; }
+
+	::S3RequestContext * getRequests() const { return requests; }
 
 	virtual bool all();
 
-	virtual bool once(int & pending = pendings);
+	virtual bool once(int & pending = dontcare);
 
-	virtual int ready(Milliseconds timeout = DEFAULT);
+	virtual int ready(Milliseconds timeout = TIMEOUT);
+
+	virtual bool service(Milliseconds timeout = TIMEOUT, int limit = LIMIT);
 
 private:
 

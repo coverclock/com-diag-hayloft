@@ -29,7 +29,7 @@ public:
 
 	static const ::S3Protocol DEFAULT = ::S3ProtocolHTTPS;
 
-	explicit Protocol(::S3Protocol proto = DEFAULT);
+	explicit Protocol(::S3Protocol pr = DEFAULT);
 
 	virtual ~Protocol() {}
 
