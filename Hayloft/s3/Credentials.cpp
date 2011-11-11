@@ -26,10 +26,10 @@ const size_t Credentials::SECRET_ACCESS_KEY_LEN;
 static const char EXS[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 const char * Credentials::obfuscate(const char * str) {
-#if defined(NDEBUG)
-   return &EXS[sizeof(EXS) - 1 - ::strnlen(str, sizeof(EXS) - 1)];
-#else
+#if defined(COM_DIAG_HAYLOFT_DEBUG)
 	return str;
+#else
+	return &EXS[sizeof(EXS) - 1 - ::strnlen(str, sizeof(EXS) - 1)];
 #endif
 }
 

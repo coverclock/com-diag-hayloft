@@ -61,12 +61,11 @@ void BucketCreate::run() {
 		session.getHostName(),
 		name.c_str(),
 		context.getList(),
-		context.getConstraint(),
+		(context.getLength() > 0) ? context.getConstraint() : 0,
 		requests,
 		&handler,
 		this
 	);
-	logger.debug("BucketTest@%p: name=\"%s\"\n", this, name.c_str());
 	logger.debug("BucketTest@%p: requests=%p\n", this, requests);
 }
 
