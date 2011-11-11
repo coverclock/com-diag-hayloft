@@ -75,13 +75,14 @@ TEST_F(SessionTest, Explicit) {
 }
 
 TEST_F(SessionTest, Canonicalization) {
-	static const char * USER_AGENT_VAL = "can.hayloft.diag.com";
-	static const char * HOST_NAME_VAL = "s6.amazonaws.com";
+	static const char * USER_AGENT_VAL = "Can.Hayloft.Diag.Com";
+	static const char * HOST_NAME_VAL = "s6.amazon.com";
 	Session session(USER_AGENT_VAL, S3_INIT_ALL, HOST_NAME_VAL);
 	EXPECT_TRUE(session == true);
-	EXPECT_EQ(std::strcmp(session.getHostName(), HOST_NAME_VAL), 0);
-	std::string name = session.canonicalize("Canonicalization");
-	EXPECT_NE(name, "");
+	std::string name = session.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
+	EXPECT_EQ(name, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq.can.hayloft.diag.com");
+    //               1234567890123456789012345678901234567890123456789012345678901234
+	//                        1         2         3         4         5         6
 }
 
 }

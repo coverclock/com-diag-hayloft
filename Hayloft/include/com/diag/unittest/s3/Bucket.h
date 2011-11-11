@@ -14,15 +14,10 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/s3/Fixture.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
-#include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
-#include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Status.h"
+#include "com/diag/hayloft/s3/BucketValid.h"
+#include "com/diag/hayloft/s3/BucketCreate.h"
+#include "com/diag/hayloft/s3/BucketTest.h"
+#include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/generics.h"
@@ -54,6 +49,74 @@ TEST_F(BucketValidTest, Stack) {
 TEST_F(BucketValidTest, Temporary) {
 	Session session;
 	EXPECT_TRUE(BucketValid(session, "BucketValidTestStack") == true);
+}
+
+typedef Fixture BucketCreateTest;
+
+TEST_F(BucketCreateTest, Heap) {
+	Session session;
+	BucketCreate * test = new BucketCreate(session, "BucketCreateTestHeap");
+	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isBusy());
+	EXPECT_FALSE(test->isRetryable());
+	EXPECT_TRUE(test->isCreated());
+	delete test;
+}
+
+TEST_F(BucketCreateTest, Stack) {
+	Session session;
+	BucketCreate test(session, "BucketCreateTestStack");
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_TRUE(test.isCreated());
+}
+
+TEST_F(BucketCreateTest, Explicit) {
+	Session session;
+	Credentials credentials;
+	LocationConstraint constraint;
+	Protocol protocol;
+	UniversalResourceIdentifierStyle style;
+	CannedAccessControlList list;
+	Context context(credentials, constraint, protocol, style, list);
+	BucketCreate test(session, "BucketCreateTestExplicit", context);
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_TRUE(test.isCreated());
+}
+
+TEST_F(BucketCreateTest, All) {
+	Session session;
+	Queue queue;
+	BucketCreate test(session, "BucketCreateTestAll", queue);
+	EXPECT_TRUE(queue.all());
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_TRUE(test.isCreated());
+}
+
+TEST_F(BucketCreateTest, Once) {
+	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	static const int LIMIT = 100;
+	static const Queue::Milliseconds TIMEOUT = 1000;
+	bool backlogged;
+	Session session;
+	Queue queue;
+	BucketCreate test(session, "BucketCreateTestOnce", queue);
+	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
+		backlogged = queue.service(TIMEOUT, LIMIT);
+		if (!backlogged) {
+			platform.yield();
+		}
+	}
+	EXPECT_FALSE(backlogged);
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_TRUE(test.isCreated());
 }
 
 typedef Fixture BucketTestTest;
@@ -134,11 +197,11 @@ TEST_F(BucketTestTest, Once) {
 	EXPECT_TRUE(test.isNonexistent());
 }
 
-typedef Fixture BucketCreateTest;
+typedef Fixture BucketDeleteTest;
 
-TEST_F(BucketCreateTest, Heap) {
+TEST_F(BucketDeleteTest, Heap) {
 	Session session;
-	BucketCreate * test = new BucketCreate(session, "BucketCreateTestHeap");
+	BucketDelete * test = new BucketDelete(session, "BucketDeleteTestHeap");
 	EXPECT_TRUE((*test) == true);
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
@@ -146,16 +209,16 @@ TEST_F(BucketCreateTest, Heap) {
 	delete test;
 }
 
-TEST_F(BucketCreateTest, Stack) {
+TEST_F(BucketDeleteTest, Stack) {
 	Session session;
-	BucketCreate test(session, "BucketCreateTestStack");
+	BucketDelete test(session, "BucketDeleteTestStack");
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_TRUE(test.isCreated());
 }
 
-TEST_F(BucketCreateTest, Explicit) {
+TEST_F(BucketDeleteTest, Explicit) {
 	Session session;
 	Credentials credentials;
 	LocationConstraint constraint;
@@ -163,17 +226,17 @@ TEST_F(BucketCreateTest, Explicit) {
 	UniversalResourceIdentifierStyle style;
 	CannedAccessControlList list;
 	Context context(credentials, constraint, protocol, style, list);
-	BucketCreate test(session, "BucketCreateTestExplicit", context);
+	BucketDelete test(session, "BucketDeleteTestExplicit", context);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_TRUE(test.isCreated());
 }
 
-TEST_F(BucketCreateTest, All) {
+TEST_F(BucketDeleteTest, All) {
 	Session session;
 	Queue queue;
-	BucketCreate test(session, "BucketCreateTestAll", queue);
+	BucketDelete test(session, "BucketDeleteTestAll", queue);
 	EXPECT_TRUE(queue.all());
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
@@ -181,14 +244,14 @@ TEST_F(BucketCreateTest, All) {
 	EXPECT_TRUE(test.isCreated());
 }
 
-TEST_F(BucketCreateTest, Once) {
+TEST_F(BucketDeleteTest, Once) {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
 	bool backlogged;
 	Session session;
 	Queue queue;
-	BucketCreate test(session, "BucketCreateTestOnce", queue);
+	BucketDelete test(session, "BucketDeleteTestOnce", queue);
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 		backlogged = queue.service(TIMEOUT, LIMIT);
 		if (!backlogged) {

@@ -18,7 +18,7 @@
 #include "com/diag/unittest/s3/CannedAccessControlList.h"
 #include "com/diag/unittest/s3/Context.h"
 #include "com/diag/unittest/s3/Queue.h"
-#include "com/diag/unittest/s3/Bucket.h"
+//#include "com/diag/unittest/s3/Bucket.h"
 
 int main(int argc, char ** argv, char **envp) {
 	return ::com::diag::lariat::main(argc, argv, envp);

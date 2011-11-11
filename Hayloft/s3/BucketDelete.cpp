@@ -8,7 +8,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/BucketCreate.h"
+#include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/Logger.h"
@@ -18,39 +18,38 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketCreate::BucketCreate(const Session & se, const char * na, const Context & co)
+BucketDelete::BucketDelete(const Session & se, const char * na, const Context & co)
 : Bucket(se, na, co)
 {
-	create();
+	remove();
 }
 
-BucketCreate::BucketCreate(const Session & se, const char * na, Queue & qu, const Context & co)
-: Bucket(se, na, qu, co)
+BucketDelete::BucketDelete(const Session & se, const char * na, Queue & qu, const Context & co)
+: Bucket(se, na, co)
 {
-	create();
+	remove();
 }
 
-BucketCreate::~BucketCreate() {
+BucketDelete::~BucketDelete() {
 }
 
-void BucketCreate::create() {
-	Logger::instance().debug("BucketCreate@%p: begin", this);
-	::S3_create_bucket(
+void BucketDelete::remove() {
+	Logger::instance().debug("BucketDelete@%p: begin", this);
+	::S3_delete_bucket(
 		context.getProtocol(),
+		context.getStyle(),
 		context.getId(),
 		context.getSecret(),
 		session.getHostName(),
 		name.c_str(),
-		context.getList(),
-		(context.getLength() > 0) ? context.getConstraint() : 0,
 		requests,
 		&handler,
 		this
 	);
 }
 
-void BucketCreate::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("BucketCreate@%p: end", this);
+void BucketDelete::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
+	Logger::instance().debug("BucketDelete@%p: end", this);
 	Bucket::complete(s3status, errorDetails);
 }
 
