@@ -67,7 +67,6 @@ void BucketTest::run() {
 		&handler,
 		this
 	);
-	logger.debug("BucketTest@%p: name=\"%s\"\n", this, name.c_str());
 	logger.debug("BucketTest@%p: requests=%p\n", this, requests);
 }
 
