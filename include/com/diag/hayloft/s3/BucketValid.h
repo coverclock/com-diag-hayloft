@@ -11,8 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Context.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 
 namespace com {
 namespace diag {
@@ -21,25 +20,19 @@ namespace s3 {
 
 class Session;
 
-class BucketValid {
-
-private:
-
-	std::string name;
-
-	::S3Status status;
+class BucketValid : public Bucket {
 
 public:
 
-	explicit BucketValid(Session & se, const char * na, const Context & co = Context());
+	explicit BucketValid(const Session & se, const char * na, const Context & co = Context());
 
 	virtual ~BucketValid() {}
 
-	operator bool() { return (status == ::S3StatusOK); }
+	operator bool() const { return (status == ::S3StatusOK); }
 
-	::S3Status getStatus() const { return status; }
+protected:
 
-	const char * getName() { return name.c_str(); }
+	void validate();
 
 };
 

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETCREATE
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETCREATE
+#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETDELETE
+#define _H_COM_DIAG_HAYLOFT_S3_BUCKETDELETE
 
 /**
  * @file
@@ -18,22 +18,21 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class BucketCreate : public Bucket {
-
+class BucketDelete : public Bucket {
 
 public:
 
-	explicit BucketCreate(const Session & se, const char * na, const Context & co = Context());
+	explicit BucketDelete(const Session & se, const char * na, const Context & co = Context());
 
-	explicit BucketCreate(const Session & se, const char * na, Queue & qu, const Context & co = Context());
+	explicit BucketDelete(const Session & se, const char * na, Queue & qu, const Context & co = Context());
 
-	virtual ~BucketCreate();
+	virtual ~BucketDelete();
 
-	bool isCreated() const { return (status == ::S3StatusOK); }
+	bool isDeleted() const { return (status == ::S3StatusOK); }
 
 protected:
 
-	void create();
+	void remove();
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 

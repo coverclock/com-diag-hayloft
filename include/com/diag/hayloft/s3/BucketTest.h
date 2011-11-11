@@ -11,60 +11,29 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Context.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/LocationConstraint.h"
-#include "com/diag/hayloft/s3/Status.h"
-#include "libs3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Session;
-class Queue;
-
-class BucketTest {
+class BucketTest : public Bucket {
 
 private:
-
-	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
-
-	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-	Session & session;
-
-	std::string name;
-
-	::S3RequestContext * requests;
-
-	const Context & context;
-
-	::S3Status status;
-
-	::S3ResponseHandler handler;
 
 	char constraint[LocationConstraint::LENGTH];
 
 public:
 
-	explicit BucketTest(Session & se, const char * na, const Context & co = Context());
+	explicit BucketTest(const Session & se, const char * na, const Context & co = Context());
 
-	explicit BucketTest(Session & se, const char * na, Queue & qu, const Context & co = Context());
+	explicit BucketTest(const Session & se, const char * na, Queue & qu, const Context & co = Context());
 
 	virtual ~BucketTest();
 
-	operator bool() { return (status != BUSY); }
-
-	::S3Status getStatus() const { return status; }
-
-	const char * getName() { return name.c_str(); }
-
-	const char * getConstraint() { return (status == BUSY) ? 0 : constraint; }
-
-	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
-
-	bool isBusy() const { return (status == BUSY); }
+	const char * getConstraint() const { return (status == BUSY) ? 0 : constraint; }
 
 	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
 
@@ -74,9 +43,7 @@ public:
 
 protected:
 
-	void run();
-
-	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
+	void test();
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 

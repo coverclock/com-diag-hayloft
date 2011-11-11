@@ -174,6 +174,10 @@ TARGETS+=s3/Queue.o
 ARTIFACTS+=s3/Queue.o
 ARCHIVABLE+=s3/Queue.o
 
+TARGETS+=s3/Bucket.o
+ARTIFACTS+=s3/Bucket.o
+ARCHIVABLE+=s3/Bucket.o
+
 TARGETS+=s3/BucketValid.o
 ARTIFACTS+=s3/BucketValid.o
 ARCHIVABLE+=s3/BucketValid.o
@@ -185,6 +189,10 @@ ARCHIVABLE+=s3/BucketTest.o
 TARGETS+=s3/BucketCreate.o
 ARTIFACTS+=s3/BucketCreate.o
 ARCHIVABLE+=s3/BucketCreate.o
+
+TARGETS+=s3/BucketDelete.o
+ARTIFACTS+=s3/BucketDelete.o
+ARCHIVABLE+=s3/BucketDelete.o
 
 TARGETS+=s3/Error.o
 ARTIFACTS+=s3/Error.o
