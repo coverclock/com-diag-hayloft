@@ -9,6 +9,15 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ *
+ * Canonicalizing the bucket name by appending the USER AGENT string to it
+ * separated by a dot (providing the USER AGENT string is not empty) is simply
+ * my convention for Hayloft. Using a domain name as part of the bucket name
+ * makes it more likely to be unique. I think it's a useful convention. Mapping
+ * the entire bucket name to all lower cases seems necessary (and is recommended
+ * by the DevGuide). Otherwise you get weird messages from BucketTest about keys
+ * not matching when using VIRTUAL HOST style URIs, and BucketCreate will tell
+ * you that the bucket name is invalid.
  */
 
 #include <string>

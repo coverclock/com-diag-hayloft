@@ -9,6 +9,13 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ *
+ * The only way I can see to specify UNITED STATES CLASSIC (a.k.a. UNITED
+ * STATES STANDARD) is to pass NULL to libs3 as a location constraint. This
+ * causes libs3 to indicate UNITED STATES CLASSIC via invoking it as the
+ * default by omitting the location constraint altogether. So although here we
+ * encode UNITED STATES CLASSIC as an empty string, in practice it is mapped to
+ * NULL when we use it in a libs3 call.
  */
 
 #include <string>

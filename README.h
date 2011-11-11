@@ -45,13 +45,20 @@
 
 	ABSTRACT
 
-	This file is part of the Digital Aggregates Corporation Hayloft package.
+	This file is part of the Digital Aggregates Corporation Hayloft package,
+	which, among other things, presents a C++-based abstraction around Bryan
+	Ischo's excellent C-based libs3 interface to Amazon Web Service (AWS)
+	Simple Storage Service (S3).
 
 	This software is an original work of its author(s).
 
 	Information regarding Hayloft can be found here:
 
 		http://www.diag.com/navigation/downloads/Hayloft
+
+	Information regarding libs3 can be found here:
+
+		http://aws.amazon.com/developertools/1648
 
 	Contact:
 
