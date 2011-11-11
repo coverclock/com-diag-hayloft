@@ -51,6 +51,84 @@ TEST_F(BucketValidTest, Temporary) {
 	EXPECT_TRUE(BucketValid(session, "BucketValidTestStack") == true);
 }
 
+typedef Fixture BucketInitialTest;
+
+TEST_F(BucketInitialTest, Heap) {
+	Session session;
+	BucketTest * test = new BucketTest(session, "BucketCreateTestHeap");
+	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isBusy());
+	EXPECT_FALSE(test->isRetryable());
+	EXPECT_FALSE(test->isInaccessible());
+	EXPECT_FALSE(test->isExistent());
+	EXPECT_TRUE(test->isNonexistent());
+	delete test;
+}
+
+TEST_F(BucketInitialTest, Stack) {
+	Session session;
+	BucketTest test(session, "BucketCreateTestStack");
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
+TEST_F(BucketInitialTest, Explicit) {
+	Session session;
+	Credentials credentials;
+	LocationConstraint constraint;
+	Protocol protocol;
+	UniversalResourceIdentifierStyle style;
+	CannedAccessControlList list;
+	Context context(credentials, constraint, protocol, style, list);
+	BucketTest test(session, "BucketCreateTestExplicit", context);
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
+TEST_F(BucketInitialTest, All) {
+	Session session;
+	Queue queue;
+	BucketTest test(session, "BucketCreateTestAll", queue);
+	EXPECT_TRUE(queue.all());
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
+TEST_F(BucketInitialTest, Once) {
+	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	static const int LIMIT = 100;
+	static const Queue::Milliseconds TIMEOUT = 1000;
+	Session session;
+	Queue queue;
+	BucketTest test(session, "BucketCreateTestOnce", queue);
+	bool backlogged;
+	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
+		backlogged = queue.service(TIMEOUT, LIMIT);
+		if (!backlogged) {
+			platform.yield();
+		}
+	}
+	EXPECT_FALSE(backlogged);
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
 typedef Fixture BucketCreateTest;
 
 TEST_F(BucketCreateTest, Heap) {
@@ -123,25 +201,25 @@ typedef Fixture BucketTestTest;
 
 TEST_F(BucketTestTest, Heap) {
 	Session session;
-	BucketTest * test = new BucketTest(session, "BucketTestTestHeap");
+	BucketTest * test = new BucketTest(session, "BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
-	EXPECT_FALSE(test->isExistent());
-	EXPECT_TRUE(test->isNonexistent());
+	EXPECT_TRUE(test->isExistent());
+	EXPECT_FALSE(test->isNonexistent());
 	delete test;
 }
 
 TEST_F(BucketTestTest, Stack) {
 	Session session;
-	BucketTest test(session, "BucketTestTestStack");
+	BucketTest test(session, "BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
-	EXPECT_TRUE(test.isNonexistent());
+	EXPECT_TRUE(test.isExistent());
+	EXPECT_FALSE(test.isNonexistent());
 }
 
 TEST_F(BucketTestTest, Explicit) {
@@ -152,26 +230,26 @@ TEST_F(BucketTestTest, Explicit) {
 	UniversalResourceIdentifierStyle style;
 	CannedAccessControlList list;
 	Context context(credentials, constraint, protocol, style, list);
-	BucketTest test(session, "BucketTestTestExplicit", context);
+	BucketTest test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
-	EXPECT_TRUE(test.isNonexistent());
+	EXPECT_TRUE(test.isExistent());
+	EXPECT_FALSE(test.isNonexistent());
 }
 
 TEST_F(BucketTestTest, All) {
 	Session session;
 	Queue queue;
-	BucketTest test(session, "BucketTestTestAll", queue);
+	BucketTest test(session, "BucketCreateTestAll", queue);
 	EXPECT_TRUE(queue.all());
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
-	EXPECT_TRUE(test.isNonexistent());
+	EXPECT_TRUE(test.isExistent());
+	EXPECT_FALSE(test.isNonexistent());
 }
 
 TEST_F(BucketTestTest, Once) {
@@ -180,7 +258,7 @@ TEST_F(BucketTestTest, Once) {
 	static const Queue::Milliseconds TIMEOUT = 1000;
 	Session session;
 	Queue queue;
-	BucketTest test(session, "BucketTestTestOnce", queue);
+	BucketTest test(session, "BucketCreateTestOnce", queue);
 	bool backlogged;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 		backlogged = queue.service(TIMEOUT, LIMIT);
@@ -193,29 +271,29 @@ TEST_F(BucketTestTest, Once) {
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
-	EXPECT_TRUE(test.isNonexistent());
+	EXPECT_TRUE(test.isExistent());
+	EXPECT_FALSE(test.isNonexistent());
 }
 
 typedef Fixture BucketDeleteTest;
 
 TEST_F(BucketDeleteTest, Heap) {
 	Session session;
-	BucketDelete * test = new BucketDelete(session, "BucketDeleteTestHeap");
+	BucketDelete * test = new BucketDelete(session, "BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
-	EXPECT_TRUE(test->isCreated());
+	EXPECT_TRUE(test->isDeleted());
 	delete test;
 }
 
 TEST_F(BucketDeleteTest, Stack) {
 	Session session;
-	BucketDelete test(session, "BucketDeleteTestStack");
+	BucketDelete test(session, "BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isCreated());
+	EXPECT_TRUE(test.isDeleted());
 }
 
 TEST_F(BucketDeleteTest, Explicit) {
@@ -226,22 +304,22 @@ TEST_F(BucketDeleteTest, Explicit) {
 	UniversalResourceIdentifierStyle style;
 	CannedAccessControlList list;
 	Context context(credentials, constraint, protocol, style, list);
-	BucketDelete test(session, "BucketDeleteTestExplicit", context);
+	BucketDelete test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isCreated());
+	EXPECT_TRUE(test.isDeleted());
 }
 
 TEST_F(BucketDeleteTest, All) {
 	Session session;
 	Queue queue;
-	BucketDelete test(session, "BucketDeleteTestAll", queue);
+	BucketDelete test(session, "BucketCreateTestAll", queue);
 	EXPECT_TRUE(queue.all());
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isCreated());
+	EXPECT_TRUE(test.isDeleted());
 }
 
 TEST_F(BucketDeleteTest, Once) {
@@ -251,7 +329,7 @@ TEST_F(BucketDeleteTest, Once) {
 	bool backlogged;
 	Session session;
 	Queue queue;
-	BucketDelete test(session, "BucketDeleteTestOnce", queue);
+	BucketDelete test(session, "BucketCreateTestOnce", queue);
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 		backlogged = queue.service(TIMEOUT, LIMIT);
 		if (!backlogged) {
@@ -262,7 +340,85 @@ TEST_F(BucketDeleteTest, Once) {
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isCreated());
+	EXPECT_TRUE(test.isDeleted());
+}
+
+typedef Fixture BucketVerifyTest;
+
+TEST_F(BucketVerifyTest, Heap) {
+	Session session;
+	BucketTest * test = new BucketTest(session, "BucketCreateTestHeap");
+	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isBusy());
+	EXPECT_FALSE(test->isRetryable());
+	EXPECT_FALSE(test->isInaccessible());
+	EXPECT_FALSE(test->isExistent());
+	EXPECT_TRUE(test->isNonexistent());
+	delete test;
+}
+
+TEST_F(BucketVerifyTest, Stack) {
+	Session session;
+	BucketTest test(session, "BucketCreateTestStack");
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
+TEST_F(BucketVerifyTest, Explicit) {
+	Session session;
+	Credentials credentials;
+	LocationConstraint constraint;
+	Protocol protocol;
+	UniversalResourceIdentifierStyle style;
+	CannedAccessControlList list;
+	Context context(credentials, constraint, protocol, style, list);
+	BucketTest test(session, "BucketCreateTestExplicit", context);
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
+TEST_F(BucketVerifyTest, All) {
+	Session session;
+	Queue queue;
+	BucketTest test(session, "BucketCreateTestAll", queue);
+	EXPECT_TRUE(queue.all());
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
+}
+
+TEST_F(BucketVerifyTest, Once) {
+	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	static const int LIMIT = 100;
+	static const Queue::Milliseconds TIMEOUT = 1000;
+	Session session;
+	Queue queue;
+	BucketTest test(session, "BucketCreateTestOnce", queue);
+	bool backlogged;
+	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
+		backlogged = queue.service(TIMEOUT, LIMIT);
+		if (!backlogged) {
+			platform.yield();
+		}
+	}
+	EXPECT_FALSE(backlogged);
+	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isBusy());
+	EXPECT_FALSE(test.isRetryable());
+	EXPECT_FALSE(test.isInaccessible());
+	EXPECT_FALSE(test.isExistent());
+	EXPECT_TRUE(test.isNonexistent());
 }
 
 }
