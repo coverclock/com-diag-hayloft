@@ -30,6 +30,8 @@ public:
 
 	operator bool() const { return (status == ::S3StatusOK); }
 
+	bool isValid() const { return (status == ::S3StatusOK); }
+
 protected:
 
 	void validate();

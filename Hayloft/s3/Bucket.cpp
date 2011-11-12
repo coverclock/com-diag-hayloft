@@ -35,7 +35,7 @@ Bucket::Bucket(const Session & se, const char * na, const Context & co)
 , name(se.canonicalize(na))
 , requests(0)
 , context(co)
-, status(static_cast<S3Status>(BUSY)) // Why not static_cast<::S3Status>(BUSY)?
+, status(::S3StatusOK)
 {
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
@@ -46,7 +46,7 @@ Bucket::Bucket(const Session & se, const char * na, Queue & qu, const Context & 
 , name(se.canonicalize(na))
 , requests(qu.getRequests())
 , context(co)
-, status(static_cast<S3Status>(BUSY)) // Why not static_cast<::S3Status>(BUSY)?
+, status(::S3StatusOK)
 {
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;

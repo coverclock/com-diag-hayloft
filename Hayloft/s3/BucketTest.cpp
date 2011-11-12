@@ -37,6 +37,7 @@ BucketTest::~BucketTest() {
 
 void BucketTest::test() {
 	Logger::instance().debug("BucketTest@%p: begin\n", this);
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	::S3_test_bucket(
 		context.getProtocol(),
 		context.getStyle(),

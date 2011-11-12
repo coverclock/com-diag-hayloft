@@ -35,6 +35,7 @@ BucketDelete::~BucketDelete() {
 
 void BucketDelete::remove() {
 	Logger::instance().debug("BucketDelete@%p: begin\n", this);
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	::S3_delete_bucket(
 		context.getProtocol(),
 		context.getStyle(),
