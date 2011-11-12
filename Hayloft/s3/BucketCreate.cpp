@@ -42,8 +42,8 @@ void BucketCreate::create() {
 		context.getSecret(),
 		session.getHostName(),
 		name.c_str(),
-		context.getList(),
-		(context.getLength() > 0) ? context.getConstraint() : 0,
+		context.getAccess(),
+		(context.getLength() > 0) ? context.getRegion() : 0,
 		requests,
 		&handler,
 		this

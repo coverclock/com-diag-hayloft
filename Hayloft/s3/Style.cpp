@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
+#include "com/diag/hayloft/s3/Style.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -15,12 +15,12 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-const ::S3CannedAcl CannedAccessControlList::DEFAULT;
+const ::S3UriStyle Style::DEFAULT;
 
-CannedAccessControlList::CannedAccessControlList(::S3CannedAcl li)
-: list(li)
+Style::Style(::S3UriStyle st)
+: style(st)
 {
-	Logger::instance().debug("CannedAccessControlList@%p: list=%d\n", this, list);
+	Logger::instance().debug("Style@%p: style=%d\n", this, style);
 }
 
 }

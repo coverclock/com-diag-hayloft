@@ -105,10 +105,10 @@ TEST_F(BucketInitialTest, Stack) {
 TEST_F(BucketInitialTest, Explicit) {
 	Session session;
 	Credentials credentials;
-	LocationConstraint constraint;
+	Region constraint;
 	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
+	Style style;
+	Access list;
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);
@@ -179,10 +179,10 @@ TEST_F(BucketCreateTest, Stack) {
 TEST_F(BucketCreateTest, Explicit) {
 	Session session;
 	Credentials credentials;
-	LocationConstraint constraint;
+	Region constraint;
 	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
+	Style style;
+	Access list;
 	Context context(credentials, constraint, protocol, style, list);
 	BucketCreate test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);
@@ -251,10 +251,10 @@ TEST_F(BucketTestTest, Stack) {
 TEST_F(BucketTestTest, Explicit) {
 	Session session;
 	Credentials credentials;
-	LocationConstraint constraint;
+	Region constraint;
 	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
+	Style style;
+	Access list;
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);
@@ -325,10 +325,10 @@ TEST_F(BucketDeleteTest, Stack) {
 TEST_F(BucketDeleteTest, Explicit) {
 	Session session;
 	Credentials credentials;
-	LocationConstraint constraint;
+	Region constraint;
 	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
+	Style style;
+	Access list;
 	Context context(credentials, constraint, protocol, style, list);
 	BucketDelete test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);
@@ -397,10 +397,10 @@ TEST_F(BucketVerifyTest, Stack) {
 TEST_F(BucketVerifyTest, Explicit) {
 	Session session;
 	Credentials credentials;
-	LocationConstraint constraint;
+	Region constraint;
 	Protocol protocol;
-	UniversalResourceIdentifierStyle style;
-	CannedAccessControlList list;
+	Style style;
+	Access list;
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test(session, "BucketCreateTestExplicit", context);
 	EXPECT_TRUE(test == true);

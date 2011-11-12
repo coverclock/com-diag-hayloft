@@ -12,7 +12,7 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
+#include "com/diag/hayloft/s3/Region.h"
 
 namespace com {
 namespace diag {
@@ -23,7 +23,7 @@ class BucketTest : public Bucket {
 
 private:
 
-	char constraint[LocationConstraint::LENGTH];
+	char region[Region::LENGTH];
 
 public:
 
@@ -33,7 +33,7 @@ public:
 
 	virtual ~BucketTest();
 
-	const char * getConstraint() const { return (status == BUSY) ? 0 : constraint; }
+	const char * getRegion() const { return (status == BUSY) ? 0 : region; }
 
 	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
 

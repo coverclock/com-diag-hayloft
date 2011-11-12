@@ -43,31 +43,31 @@ TEST_F(ContextTest, Implicit) {
 	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
 	ASSERT_NE(context.getSecret(), (char *)0);
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
-	ASSERT_NE(context.getConstraint(), (char *)0);
-	EXPECT_EQ(std::strcmp(context.getConstraint(), LocationConstraint::DEFAULT()), 0);
-	EXPECT_EQ(context.getLength(), std::strlen(LocationConstraint::DEFAULT()));
+	ASSERT_NE(context.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getRegion(), Region::DEFAULT()), 0);
+	EXPECT_EQ(context.getLength(), std::strlen(Region::DEFAULT()));
 	EXPECT_EQ(context.getProtocol(), Protocol::DEFAULT);
-	EXPECT_EQ(context.getStyle(), UniversalResourceIdentifierStyle::DEFAULT);
-	EXPECT_EQ(context.getList(), CannedAccessControlList::DEFAULT);
+	EXPECT_EQ(context.getStyle(), Style::DEFAULT);
+	EXPECT_EQ(context.getAccess(), Access::DEFAULT);
 }
 
 TEST_F(ContextTest, Explicit) {
 	Credentials credentials;
-	LocationConstraintTokyo constraint;
+	RegionTokyo constraint;
 	ProtocolUnsecure protocol;
-	UniversalResourceIdentifierStyleVirtualHost style;
-	CannedAccessControlListPublicRead list;
+	StyleVirtualHost style;
+	AccessPublicRead list;
 	Context context(credentials, constraint, protocol, style, list);
 	ASSERT_NE(context.getId(), (char *)0);
 	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
 	ASSERT_NE(context.getSecret(), (char *)0);
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
-	ASSERT_NE(context.getConstraint(), (char *)0);
-	EXPECT_EQ(std::strcmp(context.getConstraint(), LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()), 0);
-	EXPECT_EQ(context.getLength(), std::strlen(LocationConstraint::ASIA_PACIFIC_NORTHEAST_1()));
+	ASSERT_NE(context.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	EXPECT_EQ(context.getLength(), std::strlen(Region::ASIA_PACIFIC_NORTHEAST_1()));
 	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTP);
 	EXPECT_EQ(context.getStyle(), ::S3UriStyleVirtualHost);
-	EXPECT_EQ(context.getList(), ::S3CannedAclPublicRead);
+	EXPECT_EQ(context.getAccess(), ::S3CannedAclPublicRead);
 }
 
 }

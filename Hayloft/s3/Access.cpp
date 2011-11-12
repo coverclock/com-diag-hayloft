@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/LocationConstraint.h"
+#include "com/diag/hayloft/s3/Access.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -15,12 +15,12 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-const size_t LocationConstraint::LENGTH;
+const ::S3CannedAcl Access::DEFAULT;
 
-LocationConstraint::LocationConstraint(const char * lo)
-: constraint((lo != 0) ? lo : "")
+Access::Access(::S3CannedAcl ac)
+: access(ac)
 {
-	Logger::instance().debug("LocationConstraint@%p: constraint=\"%s\"\n", this, constraint.c_str());
+	Logger::instance().debug("Access@%p: access=%d\n", this, ac);
 }
 
 }

@@ -12,10 +12,10 @@
  */
 
 #include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/LocationConstraint.h"
+#include "com/diag/hayloft/s3/Region.h"
 #include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/s3/UniversalResourceIdentifierStyle.h"
-#include "com/diag/hayloft/s3/CannedAccessControlList.h"
+#include "com/diag/hayloft/s3/Style.h"
+#include "com/diag/hayloft/s3/Access.h"
 #include "libs3.h"
 
 namespace com {
@@ -29,30 +29,30 @@ private:
 
 	std::string id;
 	std::string secret;
-	std::string constraint;
+	std::string region;
 	::S3Protocol protocol;
 	::S3UriStyle style;
-	::S3CannedAcl list;
+	::S3CannedAcl access;
 
 public:
 
 	explicit Context(
 		const Credentials & cr = Credentials(),
-		const LocationConstraint & co = LocationConstraint(),
+		const Region & re = Region(),
 		const Protocol & pr = Protocol(),
-		const UniversalResourceIdentifierStyle & st = UniversalResourceIdentifierStyle(),
-		const CannedAccessControlList & li = CannedAccessControlList()
+		const Style & st = Style(),
+		const Access & ac = Access()
 	);
 
 	virtual ~Context() {}
 
 	const char * getId() const { return id.c_str(); }
 	const char * getSecret() const { return secret.c_str(); }
-	const char * getConstraint() const { return constraint.c_str(); }
-	const size_t getLength() const { return constraint.length(); }
+	const char * getRegion() const { return region.c_str(); }
+	const size_t getLength() const { return region.length(); }
 	::S3Protocol getProtocol() const { return protocol; }
 	::S3UriStyle getStyle() const { return style; }
-	::S3CannedAcl getList() const { return list; }
+	::S3CannedAcl getAccess() const { return access; }
 
 };
 
