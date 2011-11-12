@@ -91,11 +91,17 @@ TEST_F(CredentialsTest, Environment) {
 		EXPECT_EQ(::setenv(Credentials::ACCESS_KEY_ID_ENV(), id, !0), 0);
 		ASSERT_NE(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
 		EXPECT_EQ(std::strcmp(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), id), 0);
+	} else {
+		EXPECT_EQ(::unsetenv(Credentials::ACCESS_KEY_ID_ENV()), 0);
+		EXPECT_EQ(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
 	}
 	if (secret != 0) {
 		EXPECT_EQ(::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), secret, !0), 0);
 		ASSERT_NE(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
 		EXPECT_EQ(std::strcmp(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), secret), 0);
+	} else {
+		EXPECT_EQ(::unsetenv(Credentials::SECRET_ACCESS_KEY_ENV()), 0);
+		EXPECT_EQ(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
 	}
 }
 
