@@ -12,15 +12,12 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/BucketValid.h"
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketTest.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/Platform.h"
-#include "com/diag/desperado/generics.h"
 
 namespace com {
 namespace diag {
@@ -133,20 +130,16 @@ TEST_F(BucketInitialTest, All) {
 }
 
 TEST_F(BucketInitialTest, Once) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
 	Session session;
 	Queue queue;
 	BucketTest test(session, "BucketCreateTestOnce", queue);
-	bool backlogged;
+	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
-		backlogged = queue.service(TIMEOUT, LIMIT);
-		if (!backlogged) {
-			platform.yield();
-		}
+		if ((bits = queue.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
-	EXPECT_FALSE(backlogged);
+	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -203,20 +196,16 @@ TEST_F(BucketCreateTest, All) {
 }
 
 TEST_F(BucketCreateTest, Once) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
-	bool backlogged;
 	Session session;
 	Queue queue;
 	BucketCreate test(session, "BucketCreateTestOnce", queue);
+	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
-		backlogged = queue.service(TIMEOUT, LIMIT);
-		if (!backlogged) {
-			platform.yield();
-		}
+		if ((bits = queue.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
-	EXPECT_FALSE(backlogged);
+	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -279,20 +268,16 @@ TEST_F(BucketTestTest, All) {
 }
 
 TEST_F(BucketTestTest, Once) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
 	Session session;
 	Queue queue;
 	BucketTest test(session, "BucketCreateTestOnce", queue);
-	bool backlogged;
+	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
-		backlogged = queue.service(TIMEOUT, LIMIT);
-		if (!backlogged) {
-			platform.yield();
-		}
+		if ((bits = queue.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
-	EXPECT_FALSE(backlogged);
+	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -349,20 +334,16 @@ TEST_F(BucketDeleteTest, All) {
 }
 
 TEST_F(BucketDeleteTest, Once) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
-	bool backlogged;
 	Session session;
 	Queue queue;
 	BucketDelete test(session, "BucketCreateTestOnce", queue);
+	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
-		backlogged = queue.service(TIMEOUT, LIMIT);
-		if (!backlogged) {
-			platform.yield();
-		}
+		if ((bits = queue.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
-	EXPECT_FALSE(backlogged);
+	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -425,20 +406,16 @@ TEST_F(BucketVerifyTest, All) {
 }
 
 TEST_F(BucketVerifyTest, Once) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	static const int LIMIT = 100;
 	static const Queue::Milliseconds TIMEOUT = 1000;
 	Session session;
 	Queue queue;
 	BucketTest test(session, "BucketCreateTestOnce", queue);
-	bool backlogged;
+	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
-		backlogged = queue.service(TIMEOUT, LIMIT);
-		if (!backlogged) {
-			platform.yield();
-		}
+		if ((bits = queue.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
-	EXPECT_FALSE(backlogged);
+	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
