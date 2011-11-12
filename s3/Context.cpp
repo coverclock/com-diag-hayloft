@@ -16,25 +16,25 @@ namespace s3 {
 
 Context::Context(
 	const Credentials & cr,
-	const LocationConstraint & co,
+	const Region & re,
 	const Protocol & pr,
-	const UniversalResourceIdentifierStyle & st,
-	const CannedAccessControlList & li
+	const Style & st,
+	const Access & ac
 )
 : id(cr.getId())
 , secret(cr.getSecret())
-, constraint(co.getConstraint())
+, region(re.getRegion())
 , protocol(pr.getProtocol())
 , style(st.getStyle())
-, list(li.getList())
+, access(ac.getAccess())
 {
 	Logger & logger = Logger::instance();
 	logger.debug("Context@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
 	logger.debug("Context@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
-	logger.debug("Context@%p: constraint=\"%s\"\n", this, constraint.c_str());
+	logger.debug("Context@%p: region=\"%s\"\n", this, region.c_str());
 	logger.debug("Context@%p: protocol=%d\n", this, protocol);
 	logger.debug("Context@%p: style=%d\n", this, style);
-	logger.debug("Context@%p: list=%d\n", this, list);
+	logger.debug("Context@%p: access=%d\n", this, access);
 }
 
 }

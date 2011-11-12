@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_UNIVERSALRESOURCEIDENTIFIERSTYLE
-#define _H_COM_DIAG_HAYLOFT_S3_UNIVERSALRESOURCEIDENTIFIERSTYLE
+#ifndef _H_COM_DIAG_HAYLOFT_S3_STYLE
+#define _H_COM_DIAG_HAYLOFT_S3_STYLE
 
 /**
  * @file
@@ -27,7 +27,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class UniversalResourceIdentifierStyle {
+class Style {
 
 private:
 
@@ -37,35 +37,35 @@ public:
 
 	static const ::S3UriStyle DEFAULT = ::S3UriStyleVirtualHost;
 
-	explicit UniversalResourceIdentifierStyle(::S3UriStyle st = DEFAULT);
+	explicit Style(::S3UriStyle st = DEFAULT);
 
-	virtual ~UniversalResourceIdentifierStyle() {}
+	virtual ~Style() {}
 
 	::S3UriStyle getStyle() const { return style; }
 
 };
 
-class UniversalResourceIdentifierStyleVirtualHost : public UniversalResourceIdentifierStyle {
+class StyleVirtualHost : public Style {
 
 public:
 
-	explicit UniversalResourceIdentifierStyleVirtualHost()
-	: UniversalResourceIdentifierStyle(::S3UriStyleVirtualHost)
+	explicit StyleVirtualHost()
+	: Style(::S3UriStyleVirtualHost)
 	{}
 
-	virtual ~UniversalResourceIdentifierStyleVirtualHost() {}
+	virtual ~StyleVirtualHost() {}
 
 };
 
-class UniversalResourceIdentifierStylePath : public UniversalResourceIdentifierStyle {
+class StylePath : public Style {
 
 public:
 
-	explicit UniversalResourceIdentifierStylePath()
-	: UniversalResourceIdentifierStyle(::S3UriStylePath)
+	explicit StylePath()
+	: Style(::S3UriStylePath)
 	{}
 
-	virtual ~UniversalResourceIdentifierStylePath() {}
+	virtual ~StylePath() {}
 
 };
 

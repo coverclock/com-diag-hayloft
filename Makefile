@@ -150,21 +150,21 @@ TARGETS+=s3/Credentials.o
 ARTIFACTS+=s3/Credentials.o
 ARCHIVABLE+=s3/Credentials.o
 
-TARGETS+=s3/LocationConstraint.o
-ARTIFACTS+=s3/LocationConstraint.o
-ARCHIVABLE+=s3/LocationConstraint.o
+TARGETS+=s3/Region.o
+ARTIFACTS+=s3/Region.o
+ARCHIVABLE+=s3/Region.o
 
 TARGETS+=s3/Protocol.o
 ARTIFACTS+=s3/Protocol.o
 ARCHIVABLE+=s3/Protocol.o
 
-TARGETS+=s3/UniversalResourceIdentifierStyle.o
-ARTIFACTS+=s3/UniversalResourceIdentifierStyle.o
-ARCHIVABLE+=s3/UniversalResourceIdentifierStyle.o
+TARGETS+=s3/Style.o
+ARTIFACTS+=s3/Style.o
+ARCHIVABLE+=s3/Style.o
 
-TARGETS+=s3/CannedAccessControlList.o
-ARTIFACTS+=s3/CannedAccessControlList.o
-ARCHIVABLE+=s3/CannedAccessControlList.o
+TARGETS+=s3/Access.o
+ARTIFACTS+=s3/Access.o
+ARCHIVABLE+=s3/Access.o
 
 TARGETS+=s3/Context.o
 ARTIFACTS+=s3/Context.o
