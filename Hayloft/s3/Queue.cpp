@@ -78,7 +78,10 @@ int Queue::ready(Milliseconds timeout) {
 		status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
 		if (status != ::S3StatusOK) {
 			logger.error("Queue@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
-			rc |= DESPERADO_DESCRIPTOR_READY_ERROR;
+			rc |= ERROR;
+			if (::S3_status_is_retryable(status) != 0) {
+				rc |= RETRY;
+			}
 			break;
 		}
 		logger.debug("Queue@%p: maxfd=%d\n", this, maxfd);
@@ -93,39 +96,57 @@ int Queue::ready(Milliseconds timeout) {
 		rc = ::select(maxfd, &reads, &writes, &exceptions, &timeoutval);
 		if (rc < 0) {
 			logger.error("Queue@%p: select failed! error=%d=\"%s\"\n", this, errno, ::strerror(errno));
-			rc |= DESPERADO_DESCRIPTOR_READY_ERROR;
+			rc |= ERROR;
 			break;
 		}
 		fd_set zeros;
 		FD_ZERO (&zeros);
 		if (std::memcmp(&reads, &zeros, sizeof(fd_set)) == 0) {
-			rc |= DESPERADO_DESCRIPTOR_READY_READ;
+			rc |= READ;
 		}
 		if (std::memcmp(&writes, &zeros, sizeof(fd_set)) == 0) {
-			rc |= DESPERADO_DESCRIPTOR_READY_WRITE;
+			rc |= WRITE;
 		}
 		if (std::memcmp(&exceptions, &zeros, sizeof(fd_set)) == 0) {
-			rc |= DESPERADO_DESCRIPTOR_READY_EXCEPTION;
+			rc |= EXCEPTION;
 		}
 	} while (false);
 	logger.debug("Queue@%p: ready=0x%x\n", this, rc);
 	return rc;
 }
 
-bool Queue::service(Milliseconds timeout, int limit) {
-	bool backlogged;
-	bool successful;
+int Queue::service(Milliseconds timeout, int limit) {
+	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	int rc;
+	int rc2;
 	int pending;
-	int bits;
 	do {
+		rc = 0;
 		pending = 0;
-		successful = once(pending);
-		bits = ready(timeout);
-		backlogged = successful && (pending > 0) && ((bits & DESPERADO_DESCRIPTOR_READY_READ) != 0);
-	} while (backlogged && ((--limit) > 0));
-	return backlogged;
+		if (once(pending)) {
+			// Do nothing.
+		} else if (::S3_status_is_retryable(status) != 0) {
+			rc |= ERROR | RETRY;
+		} else {
+			rc |= ERROR;
+			break;
+		}
+		if (pending > 0) {
+			rc |= PENDING;
+		}
+		rc2 = ready(timeout) & (~(WRITE | EXCEPTION));
+		rc |= rc2;
+		if ((rc2 & ERROR) == 0) {
+			// Do nothing.
+		} else if ((rc2 & RETRY) != 0) {
+			platform.yield();
+		} else {
+			break;
+		}
+	} while ((((rc & ERROR) == 0) || ((rc & RETRY) != 0)) && ((rc & (PENDING | READ)) != 0) && ((--limit) > 0));
+	Logger::instance().debug("Queue@%p: service=0x%x\n", this, rc);
+	return rc;
 }
-
 
 }
 }
