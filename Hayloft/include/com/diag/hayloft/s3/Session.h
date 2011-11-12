@@ -47,7 +47,7 @@ public:
 	 */
 	static const size_t BUCKET_NAME_LEN = 64;
 
-	static const char * USER_AGENT_STR() { return "hayloft.diag.com"; }
+	static const char * USER_AGENT_STR() { return ""; }
 
 	static const char * USER_AGENT_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_USER_AGENT"; }
 

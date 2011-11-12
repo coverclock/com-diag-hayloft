@@ -28,18 +28,21 @@ using namespace ::com::diag::hayloft::s3;
 typedef Fixture SessionTest;
 
 TEST_F(SessionTest, Heap) {
-	Session * pointer = new Session;
-	EXPECT_NE(pointer, (Session*)0);
-	delete pointer;
+	Session * session = new Session;
+	ASSERT_NE(session, (Session*)0);
+	EXPECT_TRUE(*session == true);
+	ASSERT_EQ(session->getStatus(), ::S3StatusOK);
+	ASSERT_NE(session->getUserAgent(), (char *)0);
+	ASSERT_NE(session->getHostName(), (char *)0);
+	delete session;
 }
 
-TEST_F(SessionTest, Defaults) {
+TEST_F(SessionTest, Stack) {
 	Session session;
 	EXPECT_TRUE(session == true);
+	ASSERT_EQ(session.getStatus(), ::S3StatusOK);
 	ASSERT_NE(session.getUserAgent(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getUserAgent(), session.USER_AGENT_STR()), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getHostName(), session.HOST_NAME_STR()), 0);
 }
 
 TEST_F(SessionTest, Environment) {
@@ -55,11 +58,21 @@ TEST_F(SessionTest, Environment) {
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_VAL), 0);
 	ASSERT_NE(session.getHostName(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getHostName(), HOST_NAME_VAL), 0);
-	if (useragent == 0) {
+	if (useragent != 0) {
+		EXPECT_EQ(::setenv(Session::USER_AGENT_ENV(), useragent, !0), 0);
+		ASSERT_NE(std::getenv(Session::USER_AGENT_ENV()), (char *)0);
+		EXPECT_EQ(std::strcmp(std::getenv(Session::USER_AGENT_ENV()), useragent), 0);
+	} else {
 		EXPECT_EQ(::unsetenv(Session::USER_AGENT_ENV()), 0);
+		EXPECT_EQ(std::getenv(Session::USER_AGENT_ENV()), (char *)0);
 	}
-	if (hostname == 0) {
+	if (hostname != 0) {
+		EXPECT_EQ(::setenv(Session::HOST_NAME_ENV(), hostname, !0), 0);
+		ASSERT_NE(std::getenv(Session::HOST_NAME_ENV()), (char *)0);
+		EXPECT_EQ(std::strcmp(std::getenv(Session::HOST_NAME_ENV()), hostname), 0);
+	} else {
 		EXPECT_EQ(::unsetenv(Session::HOST_NAME_ENV()), 0);
+		EXPECT_EQ(std::getenv(Session::HOST_NAME_ENV()), (char *)0);
 	}
 }
 
@@ -76,8 +89,7 @@ TEST_F(SessionTest, Explicit) {
 
 TEST_F(SessionTest, Canonicalization) {
 	static const char * USER_AGENT_VAL = "Can.Hayloft.Diag.Com";
-	static const char * HOST_NAME_VAL = "s6.amazon.com";
-	Session session(USER_AGENT_VAL, S3_INIT_ALL, HOST_NAME_VAL);
+	Session session(USER_AGENT_VAL);
 	EXPECT_TRUE(session == true);
 	std::string name = session.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
 	EXPECT_EQ(name, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq.can.hayloft.diag.com");

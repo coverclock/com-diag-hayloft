@@ -41,7 +41,7 @@ TEST_F(BucketBaseTest, Heap) {
 	EXPECT_FALSE(base->isRetryable());
 	EXPECT_EQ(base->getStatus(), ::S3StatusOK);
 	EXPECT_NE(base->getName(), (char *)0);
-	delete valid;
+	delete base;
 }
 
 TEST_F(BucketBaseTest, Stack) {
@@ -66,7 +66,7 @@ TEST_F(BucketValidTest, Heap) {
 	BucketValid * valid = new BucketValid(session, "BucketValidTestHeap");
 	ASSERT_NE(valid, (BucketValid*)0);
 	EXPECT_TRUE((*valid) == true);
-	EXEPECT_TRUE(valid->isValid());
+	EXPECT_TRUE(valid->isValid());
 	delete valid;
 }
 
@@ -74,7 +74,7 @@ TEST_F(BucketValidTest, Stack) {
 	Session session;
 	BucketValid valid(session, "BucketValidTestStack");
 	EXPECT_TRUE(valid == true);
-	EXEPECT_TRUE(valid.isValid());
+	EXPECT_TRUE(valid.isValid());
 }
 
 typedef Fixture BucketInitialTest;
