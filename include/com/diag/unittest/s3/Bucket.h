@@ -30,6 +30,35 @@ namespace s3 {
 using namespace ::com::diag::hayloft;
 using namespace ::com::diag::hayloft::s3;
 
+typedef Fixture BucketBaseTest;
+
+TEST_F(BucketBaseTest, Heap) {
+	Session session;
+	Bucket * base = new Bucket(session, "BucketBaseTestHeap");
+	ASSERT_NE(base, (Bucket*)0);
+	EXPECT_TRUE((*base) == true);
+	EXPECT_FALSE(base->isBusy());
+	EXPECT_FALSE(base->isRetryable());
+	EXPECT_EQ(base->getStatus(), ::S3StatusOK);
+	EXPECT_NE(base->getName(), (char *)0);
+	delete valid;
+}
+
+TEST_F(BucketBaseTest, Stack) {
+	Session session;
+	Bucket base(session, "BucketBaseTestStack");
+	EXPECT_TRUE(base == true);
+	EXPECT_FALSE(base.isBusy());
+	EXPECT_FALSE(base.isRetryable());
+	EXPECT_EQ(base.getStatus(), ::S3StatusOK);
+	EXPECT_NE(base.getName(), (char *)0);
+}
+
+TEST_F(BucketBaseTest, Temporary) {
+	Session session;
+	EXPECT_TRUE(Bucket(session, "BucketBaseTestTemporary") == true);
+}
+
 typedef Fixture BucketValidTest;
 
 TEST_F(BucketValidTest, Heap) {
@@ -37,6 +66,7 @@ TEST_F(BucketValidTest, Heap) {
 	BucketValid * valid = new BucketValid(session, "BucketValidTestHeap");
 	ASSERT_NE(valid, (BucketValid*)0);
 	EXPECT_TRUE((*valid) == true);
+	EXEPECT_TRUE(valid->isValid());
 	delete valid;
 }
 
@@ -44,11 +74,7 @@ TEST_F(BucketValidTest, Stack) {
 	Session session;
 	BucketValid valid(session, "BucketValidTestStack");
 	EXPECT_TRUE(valid == true);
-}
-
-TEST_F(BucketValidTest, Temporary) {
-	Session session;
-	EXPECT_TRUE(BucketValid(session, "BucketValidTestStack") == true);
+	EXEPECT_TRUE(valid.isValid());
 }
 
 typedef Fixture BucketInitialTest;

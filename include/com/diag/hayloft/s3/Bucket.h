@@ -45,11 +45,11 @@ protected:
 
 	::S3ResponseHandler handler;
 
+public:
+
 	explicit Bucket(const Session & se, const char * na, const Context & co = Context());
 
 	explicit Bucket(const Session & se, const char * na, Queue & qu, const Context & co = Context());
-
-public:
 
 	virtual ~Bucket();
 
