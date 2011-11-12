@@ -61,6 +61,31 @@ Credentials::Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::d
 	audit();
 }
 
+Credentials::Credentials(::com::diag::desperado::Input * accessKeyIdInPtr, ::com::diag::desperado::Input * secretAccessKeyInPtr)
+{
+	if (accessKeyIdInPtr != 0)
+	{
+		char val[ACCESS_KEY_ID_LEN + sizeof("\n")];
+		size_t len = (*accessKeyIdInPtr)(val, sizeof(val));
+		if (len > 0) {
+			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
+			id = val;
+		}
+		delete accessKeyIdInPtr;
+	}
+	if (secretAccessKeyInPtr != 0)
+	{
+		char val[SECRET_ACCESS_KEY_LEN + sizeof("\n")];
+		size_t len = (*secretAccessKeyInPtr)(val, sizeof(val));
+		if (len > 0) {
+			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
+			secret = val;
+		}
+		delete secretAccessKeyInPtr;
+	}
+	audit();
+}
+
 Credentials::~Credentials()
 {
 }
