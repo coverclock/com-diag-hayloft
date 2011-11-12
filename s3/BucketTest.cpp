@@ -21,14 +21,14 @@ namespace s3 {
 BucketTest::BucketTest(const Session & se, const char * na, const Context & co)
 : Bucket(se, na, co)
 {
-	constraint[0] = '\0';
+	region[0] = '\0';
 	test();
 }
 
 BucketTest::BucketTest(const Session & se, const char * na, Queue & qu, const Context & co)
 : Bucket(se, na, qu, co)
 {
-	constraint[0] = '\0';
+	region[0] = '\0';
 	test();
 }
 
@@ -45,7 +45,7 @@ void BucketTest::test() {
 		context.getSecret(),
 		session.getHostName(),
 		name.c_str(),
-		sizeof(constraint), constraint,
+		sizeof(region), region,
 		requests,
 		&handler,
 		this
@@ -56,8 +56,8 @@ void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDet
 	Logger & logger = Logger::instance();
 	logger.debug("BucketTest@%p: end\n", this);
 	Bucket::complete(s3status, errorDetails);
-	if (constraint[0] != '\0') {
-		logger.debug("BucketTest@%p: constraint=\"%s\"\n", this, constraint);
+	if (region[0] != '\0') {
+		logger.debug("BucketTest@%p: region=\"%s\"\n", this, region);
 	}
 }
 
