@@ -207,6 +207,19 @@ TEST_F(CredentialsTest, Input) {
 	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
 }
 
+TEST_F(CredentialsTest, InputTaken) {
+	static const char ID[] = "SSSSSSSSSSTTTTTTTTTT";
+	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
+	::com::diag::desperado::DataInput * idinp = new ::com::diag::desperado::DataInput(ID);
+	::com::diag::desperado::DataInput * secretinp = new ::com::diag::desperado::DataInput(SECRET);
+	Credentials credentials(idinp, secretinp);
+	EXPECT_TRUE(credentials == true);
+	ASSERT_NE(credentials.getId(), (char *)0);
+	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
+	ASSERT_NE(credentials.getSecret(), (char *)0);
+	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
+}
+
 TEST_F(CredentialsTest, InputShort) {
 	static const char ID[] = "SSSSSSSSSSTTTTTTTTT";
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXX";
