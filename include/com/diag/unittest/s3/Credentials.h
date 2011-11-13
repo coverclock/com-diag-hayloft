@@ -14,6 +14,7 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/hayloft/Parameter.h"
 #include "com/diag/desperado/DataInput.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/stdlib.h"
@@ -198,7 +199,9 @@ TEST_F(CredentialsTest, Input) {
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
 	::com::diag::desperado::DataInput idin(ID);
 	::com::diag::desperado::DataInput secretin(SECRET);
-	Credentials credentials(idin, secretin);
+	Parameter idparm(idin);
+	Parameter secretparm(secretin);
+	Credentials credentials(idparm, secretparm);
 	EXPECT_TRUE(credentials == true);
 	ASSERT_NE(credentials.getId(), (char *)0);
 	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
@@ -211,71 +214,14 @@ TEST_F(CredentialsTest, InputTaken) {
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
 	::com::diag::desperado::DataInput * idinp = new ::com::diag::desperado::DataInput(ID);
 	::com::diag::desperado::DataInput * secretinp = new ::com::diag::desperado::DataInput(SECRET);
-	Credentials credentials(idinp, secretinp);
+	Parameter idparm(idinp);
+	Parameter secretparm(secretinp);
+	Credentials credentials(idparm, secretparm);
 	EXPECT_TRUE(credentials == true);
 	ASSERT_NE(credentials.getId(), (char *)0);
 	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
 	ASSERT_NE(credentials.getSecret(), (char *)0);
 	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
-}
-
-TEST_F(CredentialsTest, InputShort) {
-	static const char ID[] = "SSSSSSSSSSTTTTTTTTT";
-	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXX";
-	::com::diag::desperado::DataInput idin(ID);
-	::com::diag::desperado::DataInput secretin(SECRET);
-	Credentials credentials(idin, secretin);
-	EXPECT_TRUE(credentials == false);
-	ASSERT_NE(credentials.getId(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
-	ASSERT_NE(credentials.getSecret(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
-}
-
-TEST_F(CredentialsTest, InputLong) {
-	static const char ID[] = "SSSSSSSSSSTTTTTTTTTTZ";
-	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXXZ";
-	::com::diag::desperado::DataInput idin(ID);
-	::com::diag::desperado::DataInput secretin(SECRET);
-	Credentials credentials(idin, secretin);
-	EXPECT_TRUE(credentials == false);
-	ASSERT_NE(credentials.getId(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
-	ASSERT_NE(credentials.getSecret(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
-}
-
-TEST_F(CredentialsTest, InputOverridesEnvironment) {
-	static const char ID2[] = "gggggggggghhhhhhhhhh";
-	static const char SECRET2[] = "iiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllll";
-	const char * id2 = std::getenv(Credentials::ACCESS_KEY_ID_ENV());
-	EXPECT_EQ(::setenv(Credentials::ACCESS_KEY_ID_ENV(), ID2, !0), 0);
-	ASSERT_NE(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
-	EXPECT_EQ(std::strcmp(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), ID2), 0);
-	const char * secret2 = std::getenv(Credentials::SECRET_ACCESS_KEY_ENV());
-	EXPECT_EQ(::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), SECRET2, !0), 0);
-	ASSERT_NE(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
-	EXPECT_EQ(std::strcmp(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), SECRET2), 0);
-	static const char ID[] = "SSSSSSSSSSTTTTTTTTTT";
-	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
-	::com::diag::desperado::DataInput idin(ID);
-	::com::diag::desperado::DataInput secretin(SECRET);
-	Credentials credentials(idin, secretin);
-	EXPECT_TRUE(credentials == true);
-	ASSERT_NE(credentials.getId(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
-	ASSERT_NE(credentials.getSecret(), (char *)0);
-	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
-	if (id2 != 0) {
-		EXPECT_EQ(::setenv(Credentials::ACCESS_KEY_ID_ENV(), id2, !0), 0);
-		ASSERT_NE(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
-		EXPECT_EQ(std::strcmp(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), id2), 0);
-	}
-	if (secret2 != 0) {
-		EXPECT_EQ(::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), secret2, !0), 0);
-		ASSERT_NE(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
-		EXPECT_EQ(std::strcmp(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), secret2), 0);
-	}
 }
 
 TEST_F(CredentialsTest, Missing) {

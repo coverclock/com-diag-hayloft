@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstdlib>
+#include "com/diag/desperado/stdlib.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/LogOutput.h"
 #include "com/diag/desperado/Platform.h"
