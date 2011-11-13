@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <cstring>
+#include "com/diag/desperado/string.h"
 #include "com/diag/desperado/target.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/InputOutput.h"

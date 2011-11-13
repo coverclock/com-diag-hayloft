@@ -40,52 +40,6 @@ Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 	audit();
 }
 
-Credentials::Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::diag::desperado::Input & secretAccessKeyIn)
-{
-	{
-		char val[ACCESS_KEY_ID_LEN + sizeof("\n")];
-		size_t len = accessKeyIdIn(val, sizeof(val));
-		if (len > 0) {
-			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
-			id = val;
-		}
-	}
-	{
-		char val[SECRET_ACCESS_KEY_LEN + sizeof("\n")];
-		size_t len = secretAccessKeyIn(val, sizeof(val));
-		if (len > 0) {
-			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
-			secret = val;
-		}
-	}
-	audit();
-}
-
-Credentials::Credentials(::com::diag::desperado::Input * accessKeyIdInPtr, ::com::diag::desperado::Input * secretAccessKeyInPtr)
-{
-	if (accessKeyIdInPtr != 0)
-	{
-		char val[ACCESS_KEY_ID_LEN + sizeof("\n")];
-		size_t len = (*accessKeyIdInPtr)(val, sizeof(val));
-		if (len > 0) {
-			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
-			id = val;
-		}
-		delete accessKeyIdInPtr;
-	}
-	if (secretAccessKeyInPtr != 0)
-	{
-		char val[SECRET_ACCESS_KEY_LEN + sizeof("\n")];
-		size_t len = (*secretAccessKeyInPtr)(val, sizeof(val));
-		if (len > 0) {
-			if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
-			secret = val;
-		}
-		delete secretAccessKeyInPtr;
-	}
-	audit();
-}
-
 Credentials::~Credentials()
 {
 }

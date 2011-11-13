@@ -142,6 +142,10 @@ TARGETS+=Packet.o
 ARTIFACTS+=Packet.o
 ARCHIVABLE+=Packet.o
 
+TARGETS+=Parameter.o
+ARTIFACTS+=Parameter.o
+ARCHIVABLE+=Parameter.o
+
 TARGETS+=s3/Session.o
 ARTIFACTS+=s3/Session.o
 ARCHIVABLE+=s3/Session.o

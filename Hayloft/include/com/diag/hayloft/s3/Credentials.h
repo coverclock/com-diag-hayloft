@@ -49,10 +49,6 @@ public:
 
 	explicit Credentials(const char * accessKeyId = 0, const char * secretAccessKey = 0);
 
-	explicit Credentials(::com::diag::desperado::Input & accessKeyIdIn, ::com::diag::desperado::Input & secretAccessKeyIn);
-
-	explicit Credentials(::com::diag::desperado::Input * accessKeyIdInPtr /* TAKEN */, ::com::diag::desperado::Input * secretAccessKeyInPtr /* TAKEN */);
-
 	virtual ~Credentials();
 
 	operator bool() const { return ((id.length() == ACCESS_KEY_ID_LEN) && (secret.length() == SECRET_ACCESS_KEY_LEN)); }
