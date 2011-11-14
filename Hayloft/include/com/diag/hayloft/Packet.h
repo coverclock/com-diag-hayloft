@@ -177,10 +177,10 @@ public:
 
 	/**
 	 * Return the total extent of the object in octets. This is always equal to
-	 * prefix() plus size() plus suffix().
+	 * prefix() plus length() plus suffix().
 	 * @return the total length of the data storage in octets.
 	 */
-	size_t length() const { return extent; }
+	size_t size() const { return extent; }
 
 	/**
 	 * Return a pointer to the beginning of user data in the object. NULL is
@@ -193,7 +193,7 @@ public:
 	 * Return the number of octets available to be consumed.
 	 * @return the number of octets available to be consumed.
 	 */
-	size_t size() const { return tail - head; }
+	size_t length() const { return tail - head; }
 
 	/**
 	 * Return the number of octets available to be prepended.
@@ -678,6 +678,14 @@ public:
 	 * @return the number of octets transferred.
 	 */
 	size_t sink(::com::diag::desperado::Output& to);
+
+	/**
+	 * Return the number of octets available to be consumed. This is done at
+	 * every call by traversing the entire linked list and summing the length
+	 * of each individual PacketData.
+	 * @return the number of octets available to be consumed.
+	 */
+	size_t length() const;
 
     /**
      * Displays internal information about this object to the specified

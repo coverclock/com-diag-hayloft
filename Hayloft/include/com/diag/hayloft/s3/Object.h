@@ -12,6 +12,7 @@
  */
 
 #include "com/diag/hayloft/s3/Status.h"
+#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -30,6 +31,8 @@ public:
 	 * key).
 	 */
 	static const size_t LENGTH = 1024;
+
+	typedef uint64_t Size;
 
 private:
 
