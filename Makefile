@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=0
-MINOR=4
+MINOR=5
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
