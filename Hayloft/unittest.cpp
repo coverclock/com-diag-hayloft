@@ -29,11 +29,12 @@
 #include "com/diag/unittest/s3/Access.h"
 #include "com/diag/unittest/s3/Context.h"
 #include "com/diag/unittest/s3/Queue.h"
+#include "com/diag/unittest/s3/Properties.h"
 #endif
 
 // Unit Tests that also use AWS.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #include "com/diag/unittest/s3/Object.h"
 #endif
