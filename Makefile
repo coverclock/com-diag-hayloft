@@ -186,6 +186,10 @@ TARGETS+=s3/Response.o
 ARTIFACTS+=s3/Response.o
 ARCHIVABLE+=s3/Response.o
 
+TARGETS+=s3/Properties.o
+ARTIFACTS+=s3/Properties.o
+ARCHIVABLE+=s3/Properties.o
+
 TARGETS+=s3/Bucket.o
 ARTIFACTS+=s3/Bucket.o
 ARCHIVABLE+=s3/Bucket.o

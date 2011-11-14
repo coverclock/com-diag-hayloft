@@ -14,7 +14,6 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
-#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {

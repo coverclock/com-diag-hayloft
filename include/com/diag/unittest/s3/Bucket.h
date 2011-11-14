@@ -18,7 +18,6 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketTest.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
