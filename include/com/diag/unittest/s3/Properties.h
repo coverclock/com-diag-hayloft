@@ -29,13 +29,33 @@ typedef Fixture PropertiesTest;
 
 TEST_F(PropertiesTest, Heap) {
 	Properties * properties = new Properties;
-	ASSERT_NE(properties->getProperties(), (::S3PutProperties*)0);
+	const ::S3PutProperties * pp = properties->getProperties();
+	ASSERT_NE(pp, (::S3PutProperties*)0);
+	EXPECT_EQ(pp->contentType, (char *)0);
+	EXPECT_EQ(pp->md5, (char *)0);
+	EXPECT_EQ(pp->cacheControl, (char *)0);
+	EXPECT_EQ(pp->contentDispositionFilename, (char *)0);
+	EXPECT_EQ(pp->contentEncoding, (char *)0);
+	EXPECT_EQ(pp->expires, -1);
+	EXPECT_EQ(pp->cannedAcl, Access::DEFAULT);
+	EXPECT_EQ(pp->metaDataCount, 0);
+	EXPECT_EQ(pp->metaData, (::S3NameValue*)0);
 	delete properties;
 }
 
 TEST_F(PropertiesTest, Stack) {
 	Properties properties;
-	ASSERT_NE(properties.getProperties(), (::S3PutProperties*)0);
+	const ::S3PutProperties * pp = properties.getProperties();
+	ASSERT_NE(pp, (::S3PutProperties*)0);
+	EXPECT_EQ(pp->contentType, (char *)0);
+	EXPECT_EQ(pp->md5, (char *)0);
+	EXPECT_EQ(pp->cacheControl, (char *)0);
+	EXPECT_EQ(pp->contentDispositionFilename, (char *)0);
+	EXPECT_EQ(pp->contentEncoding, (char *)0);
+	EXPECT_EQ(pp->expires, -1);
+	EXPECT_EQ(pp->cannedAcl, Access::DEFAULT);
+	EXPECT_EQ(pp->metaDataCount, 0);
+	EXPECT_EQ(pp->metaData, (::S3NameValue*)0);
 }
 
 TEST_F(PropertiesTest, Explicit) {
@@ -58,7 +78,7 @@ TEST_F(PropertiesTest, Explicit) {
 	ASSERT_NE(pp->contentEncoding, (char *)0);
 	EXPECT_EQ(std::strcmp(pp->contentEncoding, "ContentEncoding"), 0);
 	EXPECT_EQ(pp->expires, 12345);
-	EXPECT_EQ(pp->cannedAcl,S3CannedAclPublicReadWrite);
+	EXPECT_EQ(pp->cannedAcl, S3CannedAclPublicReadWrite);
 	EXPECT_EQ(pp->metaDataCount, 3);
 	ASSERT_NE(pp->metaData, (::S3NameValue*)0);
 	ASSERT_NE(pp->metaData[0].name, (char *)0);
