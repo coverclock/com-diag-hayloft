@@ -79,7 +79,7 @@ public:
 
 protected:
 
-	void object();
+	void initialize();
 
 	virtual ::S3Status get(int bufferSize, const char * buffer);
 

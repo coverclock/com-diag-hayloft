@@ -53,7 +53,7 @@ Object::Object(const Bucket & bu, const char * ke)
 , key(ke)
 , status(::S3StatusOK)
 {
-	object();
+	initialize();
 }
 
 Object::~Object() {
@@ -63,7 +63,7 @@ Object::~Object() {
 }
 
 
-void Object::object() {
+void Object::initialize() {
 	Logger & logger = Logger::instance();
 	logger.debug("Object@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	logger.debug("Object@%p: name=\"%s\"\n", this, name.c_str());

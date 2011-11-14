@@ -37,27 +37,23 @@ Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
 : id(set(accessKeyId, ACCESS_KEY_ID_ENV(), ""))
 , secret(set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""))
 {
-	audit();
+	initialize();
 }
 
 Credentials::~Credentials()
 {
 }
 
-bool Credentials::audit() {
+void Credentials::initialize() {
 	Logger & logger = Logger::instance();
-	bool result = true;
 	logger.debug("Credentials@%p: id=\"%s\"[%zu]\n", this, obfuscate(id.c_str()), id.length());
 	if (id.length() != ACCESS_KEY_ID_LEN) {
 		logger.warning("Credentials@%p: access key id length invalid! (%zu!=%zu)\n", this, id.length(), ACCESS_KEY_ID_LEN);
-		result = false;
 	}
 	logger.debug("Credentials@%p: secret=\"%s\"[%zu]\n", this, obfuscate(secret.c_str()), secret.length());
 	if (secret.length() != SECRET_ACCESS_KEY_LEN) {
 		logger.warning("Credentials@%p: secret access key length invalid! (%zu!=%zu)\n", this, secret.length(), SECRET_ACCESS_KEY_LEN);
-		result = false;
 	}
-	return result;
 }
 
 }

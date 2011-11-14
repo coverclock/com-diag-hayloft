@@ -34,7 +34,7 @@ public:
 
 protected:
 
-	void validate();
+	void initialize();
 
 };
 

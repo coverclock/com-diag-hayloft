@@ -33,7 +33,7 @@ public:
 
 protected:
 
-	void create();
+	void initialize();
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 

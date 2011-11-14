@@ -23,17 +23,17 @@ Parameter::Parameter(const std::string & pa)
 {}
 
 Parameter::Parameter(::com::diag::desperado::Input & input, size_t maximum) {
-	source(input, maximum);
+	initialize(input, maximum);
 }
 
 Parameter::Parameter(::com::diag::desperado::Input * input /* TAKEN */, size_t maximum) {
 	if (input != 0) {
-		source(*input, maximum);
+		initialize(*input, maximum);
 		delete input;
 	}
 }
 
-void Parameter::source(::com::diag::desperado::Input & input, size_t maximum) {
+void Parameter::initialize(::com::diag::desperado::Input & input, size_t maximum) {
 	int ch;
 	while (maximum > 0) {
 		ch = input();

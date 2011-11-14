@@ -21,19 +21,19 @@ namespace s3 {
 BucketTest::BucketTest(const Session & se, const char * na, const Context & co)
 : Bucket(se, na, co)
 {
-	test();
+	initialize();
 }
 
 BucketTest::BucketTest(const Session & se, const char * na, Queue & qu, const Context & co)
 : Bucket(se, na, qu, co)
 {
-	test();
+	initialize();
 }
 
 BucketTest::~BucketTest() {
 }
 
-void BucketTest::test() {
+void BucketTest::initialize() {
 	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	constraint[0] = '\0';

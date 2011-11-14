@@ -51,7 +51,7 @@ public:
 
 private:
 
-	void source(::com::diag::desperado::Input & input, size_t maximum);
+	void initialize(::com::diag::desperado::Input & input, size_t maximum);
 
 };
 
