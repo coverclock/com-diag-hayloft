@@ -246,6 +246,14 @@ size_t Packet::sink(::com::diag::desperado::Output& to) {
 	return total;
 }
 
+size_t Packet::length() const {
+	size_t total = 0;
+	for (PacketData * here = head; here != 0; here = here->next) {
+		total += here->length();
+	}
+	return total;
+}
+
 void Packet::show(int level, ::com::diag::desperado::Output * display, int indent) const {
     ::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
     ::com::diag::desperado::Print printf(display);
