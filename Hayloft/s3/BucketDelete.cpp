@@ -21,19 +21,19 @@ namespace s3 {
 BucketDelete::BucketDelete(const Session & se, const char * na, const Context & co)
 : Bucket(se, na, co)
 {
-	remove();
+	initialize();
 }
 
 BucketDelete::BucketDelete(const Session & se, const char * na, Queue & qu, const Context & co)
 : Bucket(se, na, co)
 {
-	remove();
+	initialize();
 }
 
 BucketDelete::~BucketDelete() {
 }
 
-void BucketDelete::remove() {
+void BucketDelete::initialize() {
 	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	::S3_delete_bucket(

@@ -21,10 +21,10 @@ namespace s3 {
 BucketValid::BucketValid(const Session & se, const char * na, const Context & co)
 : Bucket(se, na, co)
 {
-	validate();
+	initialize();
 }
 
-void BucketValid::validate() {
+void BucketValid::initialize() {
 	Logger & logger = Logger::instance();
 	logger.debug("BucketValid@%p: begin\n", this);
 	status = ::S3_validate_bucket_name(name.c_str(), style);

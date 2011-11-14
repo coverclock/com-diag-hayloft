@@ -42,7 +42,7 @@ Bucket::Bucket(const Session & se, const char * na, const Context & co)
 , access(co.getAccess())
 , status(::S3StatusOK)
 {
-	bucket();
+	initialize();
 }
 
 Bucket::Bucket(const Session & se, const char * na, Queue & qu, const Context & co)
@@ -57,7 +57,7 @@ Bucket::Bucket(const Session & se, const char * na, Queue & qu, const Context & 
 , access(co.getAccess())
 , status(::S3StatusOK)
 {
-	bucket();
+	initialize();
 }
 
 Bucket::~Bucket() {
@@ -66,7 +66,7 @@ Bucket::~Bucket() {
 	}
 }
 
-void Bucket::bucket() {
+void Bucket::initialize() {
 	Logger & logger = Logger::instance();
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;

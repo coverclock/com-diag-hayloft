@@ -102,7 +102,7 @@ public:
 
 protected:
 
-	void bucket();
+	void initialize();
 
 	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
 

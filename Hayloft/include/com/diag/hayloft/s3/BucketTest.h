@@ -41,7 +41,7 @@ public:
 
 protected:
 
-	void test();
+	void initialize();
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 
