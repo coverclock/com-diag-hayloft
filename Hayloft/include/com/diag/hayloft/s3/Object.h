@@ -1,0 +1,99 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
+#ifndef _H_COM_DIAG_HAYLOFT_S3_OBJECT
+#define _H_COM_DIAG_HAYLOFT_S3_OBJECT
+
+/**
+ * @file
+ *
+ * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Licensed under the terms in README.h<BR>
+ * Chip Overclock (coverclock@diag.com)<BR>
+ * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ */
+
+#include "com/diag/hayloft/s3/Status.h"
+#include "libs3.h"
+
+namespace com {
+namespace diag {
+namespace hayloft {
+namespace s3 {
+
+class Bucket;
+
+class Object {
+
+public:
+
+	/**
+	 * AWS S3 places a limit of this many characters on the object name (a.k.a.
+	 * key).
+	 */
+	static const size_t LENGTH = 1024;
+
+private:
+
+	static ::S3Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
+
+	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
+
+	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
+
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
+protected:
+
+	std::string hostname;
+
+	std::string name;
+
+	::S3Protocol protocol;
+
+	::S3UriStyle style;
+
+	std::string id;
+
+	std::string secret;
+
+	::S3RequestContext * requests;
+
+	std::string key;
+
+	::S3Status status;
+
+public:
+
+	explicit Object(const Bucket & bu, const char * ke);
+
+	virtual ~Object();
+
+	operator bool() const { return (status != BUSY); }
+
+	bool isBusy() const { return (status == BUSY); }
+
+	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
+
+	::S3Status getStatus() const { return status; }
+
+	const char * getKey() const { return key.c_str(); }
+
+protected:
+
+	void object();
+
+	virtual ::S3Status get(int bufferSize, const char * buffer);
+
+	virtual int put(int bufferSize, char * buffer);
+
+	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
+
+	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
+
+};
+
+}
+}
+}
+}
+
+#endif
