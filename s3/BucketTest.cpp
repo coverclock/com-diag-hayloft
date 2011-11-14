@@ -21,14 +21,12 @@ namespace s3 {
 BucketTest::BucketTest(const Session & se, const char * na, const Context & co)
 : Bucket(se, na, co)
 {
-	region[0] = '\0';
 	test();
 }
 
 BucketTest::BucketTest(const Session & se, const char * na, Queue & qu, const Context & co)
 : Bucket(se, na, qu, co)
 {
-	region[0] = '\0';
 	test();
 }
 
@@ -38,14 +36,15 @@ BucketTest::~BucketTest() {
 void BucketTest::test() {
 	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	constraint[0] = '\0';
 	::S3_test_bucket(
-		context.getProtocol(),
-		context.getStyle(),
-		context.getId(),
-		context.getSecret(),
-		session.getHostName(),
+		protocol,
+		style,
+		id.c_str(),
+		secret.c_str(),
+		hostname.c_str(),
 		name.c_str(),
-		sizeof(region), region,
+		sizeof(constraint), constraint,
 		requests,
 		&handler,
 		this
@@ -56,9 +55,7 @@ void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDet
 	Logger & logger = Logger::instance();
 	logger.debug("BucketTest@%p: end\n", this);
 	Bucket::complete(s3status, errorDetails);
-	if (region[0] != '\0') {
-		logger.debug("BucketTest@%p: region=\"%s\"\n", this, region);
-	}
+	if (status == ::S3StatusOK) { region = constraint; }
 }
 
 }

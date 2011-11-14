@@ -37,13 +37,13 @@ void BucketCreate::create() {
 	Logger::instance().debug("BucketCreate@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	::S3_create_bucket(
-		context.getProtocol(),
-		context.getId(),
-		context.getSecret(),
-		session.getHostName(),
+		protocol,
+		id.c_str(),
+		secret.c_str(),
+		hostname.c_str(),
 		name.c_str(),
-		context.getAccess(),
-		(context.getLength() > 0) ? context.getRegion() : 0,
+		access,
+		(region.length() > 0) ? region.c_str() : 0,
 		requests,
 		&handler,
 		this

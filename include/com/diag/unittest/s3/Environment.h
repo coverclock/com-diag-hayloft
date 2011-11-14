@@ -31,6 +31,7 @@
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/Session.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 
 namespace com {
 namespace diag {
@@ -101,7 +102,7 @@ public:
 		if ((env = std::getenv(Session::USER_AGENT_ENV())) != 0) {
 			user_agent = env;
 		} else {
-			char val[Session::BUCKET_NAME_LEN + sizeof("\n")];
+			char val[Bucket::LENGTH + sizeof("\n")];
 			::com::diag::desperado::PathInput input(USER_AGENT_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {

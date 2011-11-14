@@ -47,11 +47,17 @@ public:
 	virtual ~Context() {}
 
 	const char * getId() const { return id.c_str(); }
+
 	const char * getSecret() const { return secret.c_str(); }
+
 	const char * getRegion() const { return region.c_str(); }
+
 	const size_t getLength() const { return region.length(); }
+
 	::S3Protocol getProtocol() const { return protocol; }
+
 	::S3UriStyle getStyle() const { return style; }
+
 	::S3CannedAcl getAccess() const { return access; }
 
 };

@@ -41,12 +41,6 @@ private:
 
 public:
 
-	/**
-	 * For virtual host style URIs, AWS S3 places a limit of this many
-	 * characters on the canonicalized bucket name.
-	 */
-	static const size_t BUCKET_NAME_LEN = 64;
-
 	static const char * USER_AGENT_STR() { return ""; }
 
 	static const char * USER_AGENT_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_USER_AGENT"; }

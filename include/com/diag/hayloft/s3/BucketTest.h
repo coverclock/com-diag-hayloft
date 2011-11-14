@@ -23,7 +23,7 @@ class BucketTest : public Bucket {
 
 private:
 
-	char region[Region::LENGTH];
+	char constraint[Region::LENGTH];
 
 public:
 
@@ -32,8 +32,6 @@ public:
 	explicit BucketTest(const Session & se, const char * na, Queue & qu, const Context & co = Context());
 
 	virtual ~BucketTest();
-
-	const char * getRegion() const { return (status == BUSY) ? 0 : region; }
 
 	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
 

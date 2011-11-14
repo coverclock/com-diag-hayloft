@@ -89,12 +89,19 @@ TEST_F(SessionTest, Explicit) {
 
 TEST_F(SessionTest, Canonicalization) {
 	static const char * USER_AGENT_VAL = "Can.Hayloft.Diag.Com";
-	Session session(USER_AGENT_VAL);
-	EXPECT_TRUE(session == true);
-	std::string name = session.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
-	EXPECT_EQ(name, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq.can.hayloft.diag.com");
-    //               1234567890123456789012345678901234567890123456789012345678901234
-	//                        1         2         3         4         5         6
+	Session session1(USER_AGENT_VAL);
+	EXPECT_TRUE(session1 == true);
+	// This will generate a warning.
+	std::string name1 = session1.canonicalize("");
+	EXPECT_EQ(name1, "");
+	// This will generate a warning.
+	std::string name2 = session1.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
+	EXPECT_EQ(name2, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz.can.hayloft.diag.com");
+	Session session2("");
+	EXPECT_TRUE(session2 == true);
+	// This will not generate a warning.
+	std::string name3 = session2.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKl");
+	EXPECT_EQ(name3, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl");
 }
 
 }
