@@ -33,8 +33,9 @@
 
 // Unit Tests that also use AWS.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Bucket.h"
+#include "com/diag/unittest/s3/Object.h"
 #endif
 
 int main(int argc, char ** argv, char **envp) {

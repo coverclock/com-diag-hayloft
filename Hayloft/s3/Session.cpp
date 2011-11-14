@@ -9,6 +9,7 @@
 
 #include <ctype.h>
 #include "com/diag/hayloft/s3/Session.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
 
@@ -36,26 +37,13 @@ Session::~Session() {
 }
 
 const char * Session::canonicalize(std::string name) const {
-	Logger & logger = Logger::instance();
-	size_t namelength = name.length();
-	logger.debug("Session@%p: name=\"%s\"[%zu]\n", this, name.c_str(), namelength);
-	size_t useragentlength = useragent.length();
-	if (useragentlength > 0) { ++useragentlength; /* '.' */ }
-	ssize_t effectivelength = namelength + useragentlength;
-	if (effectivelength > BUCKET_NAME_LEN) {
-		effectivelength -= BUCKET_NAME_LEN;
-		if (effectivelength < namelength)  {
-			name = name.substr(0, namelength - effectivelength);
-		}
-	}
-	if (useragentlength > 0) {
+	if ((name.length() > 0) && (useragent.length() > 0)) {
 		name += '.';
 		name += useragent;
 	}
 	for (int ii = 0; ii < name.length(); ++ii) {
 		name.replace(ii, 1, 1, tolower(name[ii]));
 	}
-	logger.debug("Session@%p: canonical=\"%s\"[%zu]\n", this, name.c_str(), name.length());
 	return name.c_str();
 }
 

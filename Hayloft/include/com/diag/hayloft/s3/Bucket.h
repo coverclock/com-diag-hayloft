@@ -13,6 +13,7 @@
 
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Status.h"
+#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -25,6 +26,14 @@ class Queue;
 
 class Bucket {
 
+public:
+
+	/**
+	 * For virtual host style URIs, AWS S3 places a limit of this many
+	 * characters on the bucket name.
+	 */
+	static const size_t LENGTH = 64;
+
 private:
 
 	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
@@ -33,13 +42,23 @@ private:
 
 protected:
 
-	const Session & session;
+	std::string hostname;
 
 	std::string name;
 
 	::S3RequestContext * requests;
 
-	const Context & context;
+	std::string id;
+
+	std::string secret;
+
+	std::string region;
+
+	::S3Protocol protocol;
+
+	::S3UriStyle style;
+
+	::S3CannedAcl access;
 
 	::S3Status status;
 
@@ -59,11 +78,31 @@ public:
 
 	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
 
-	::S3Status getStatus() const { return status; }
+	const char * getHostName() const { return hostname.c_str(); }
 
 	const char * getName() const { return name.c_str(); }
 
+	::S3RequestContext * getRequests() const { return requests; }
+
+	const char * getId() const { return id.c_str(); }
+
+	const char * getSecret() const { return secret.c_str(); }
+
+	const char * getRegion() const { return region.c_str(); }
+
+	const size_t getLength() const { return region.length(); }
+
+	::S3Protocol getProtocol() const { return protocol; }
+
+	::S3UriStyle getStyle() const { return style; }
+
+	::S3CannedAcl getAccess() const { return access; }
+
+	::S3Status getStatus() const { return status; }
+
 protected:
+
+	void bucket();
 
 	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
 

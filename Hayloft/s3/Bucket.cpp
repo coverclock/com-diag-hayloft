@@ -31,31 +31,61 @@ void Bucket::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 }
 
 Bucket::Bucket(const Session & se, const char * na, const Context & co)
-: session(se)
+: hostname(se.getHostName())
 , name(se.canonicalize(na))
 , requests(0)
-, context(co)
+, id(co.getId())
+, secret(co.getSecret())
+, region(co.getRegion())
+, protocol(co.getProtocol())
+, style(co.getStyle())
+, access(co.getAccess())
 , status(::S3StatusOK)
 {
-	handler.propertiesCallback = &responsePropertiesCallback;
-	handler.completeCallback = &responseCompleteCallback;
+	bucket();
 }
 
 Bucket::Bucket(const Session & se, const char * na, Queue & qu, const Context & co)
-: session(se)
+: hostname(se.getHostName())
 , name(se.canonicalize(na))
 , requests(qu.getRequests())
-, context(co)
+, id(co.getId())
+, secret(co.getSecret())
+, region(co.getRegion())
+, protocol(co.getProtocol())
+, style(co.getStyle())
+, access(co.getAccess())
 , status(::S3StatusOK)
 {
-	handler.propertiesCallback = &responsePropertiesCallback;
-	handler.completeCallback = &responseCompleteCallback;
+	bucket();
 }
 
 Bucket::~Bucket() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
+}
+
+void Bucket::bucket() {
+	Logger & logger = Logger::instance();
+	handler.propertiesCallback = &responsePropertiesCallback;
+	handler.completeCallback = &responseCompleteCallback;
+	logger.debug("Bucket@%p: hostname=\"%s\"\n", this, hostname.c_str());
+	logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
+	if (name.length() == 0) {
+		logger.warning("Bucket@%p: name too short! (%zu<1)\n", this, name.length());
+	} else 	if (name.length() > LENGTH) {
+		logger.warning("Bucket@%p: name too long! (%zu>%zu)\n", this, name.length(), LENGTH);
+	} else {
+		// Do nothing.
+	}
+	logger.debug("Bucket@%p: requests=%p\n", this, requests);
+	logger.debug("Bucket@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
+	logger.debug("Bucket@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
+	logger.debug("Bucket@%p: region=\"%s\"\n", this, region.c_str());
+	logger.debug("Bucket@%p: protocol=%d\n", this, protocol);
+	logger.debug("Bucket@%p: style=%d\n", this, style);
+	logger.debug("Bucket@%p: access=%d\n", this, access);
 }
 
 ::S3Status Bucket::properties(const ::S3ResponseProperties * properties) {

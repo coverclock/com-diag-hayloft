@@ -178,6 +178,14 @@ TARGETS+=s3/Queue.o
 ARTIFACTS+=s3/Queue.o
 ARCHIVABLE+=s3/Queue.o
 
+TARGETS+=s3/Error.o
+ARTIFACTS+=s3/Error.o
+ARCHIVABLE+=s3/Error.o
+
+TARGETS+=s3/Response.o
+ARTIFACTS+=s3/Response.o
+ARCHIVABLE+=s3/Response.o
+
 TARGETS+=s3/Bucket.o
 ARTIFACTS+=s3/Bucket.o
 ARCHIVABLE+=s3/Bucket.o
@@ -198,13 +206,9 @@ TARGETS+=s3/BucketDelete.o
 ARTIFACTS+=s3/BucketDelete.o
 ARCHIVABLE+=s3/BucketDelete.o
 
-TARGETS+=s3/Error.o
-ARTIFACTS+=s3/Error.o
-ARCHIVABLE+=s3/Error.o
-
-TARGETS+=s3/Response.o
-ARTIFACTS+=s3/Response.o
-ARCHIVABLE+=s3/Response.o
+TARGETS+=s3/Object.o
+ARTIFACTS+=s3/Object.o
+ARCHIVABLE+=s3/Object.o
 
 TARGETS+=unittest
 ARTIFACTS+=unittest

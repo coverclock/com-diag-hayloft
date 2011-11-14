@@ -13,6 +13,7 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketValid.h"
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketTest.h"
@@ -31,24 +32,24 @@ typedef Fixture BucketBaseTest;
 
 TEST_F(BucketBaseTest, Heap) {
 	Session session;
-	Bucket * base = new Bucket(session, "BucketBaseTestHeap");
-	ASSERT_NE(base, (Bucket*)0);
-	EXPECT_TRUE((*base) == true);
-	EXPECT_FALSE(base->isBusy());
-	EXPECT_FALSE(base->isRetryable());
-	EXPECT_EQ(base->getStatus(), ::S3StatusOK);
-	EXPECT_NE(base->getName(), (char *)0);
-	delete base;
+	Bucket * bucket = new Bucket(session, "BucketBaseTestHeap");
+	ASSERT_NE(bucket, (Bucket*)0);
+	EXPECT_TRUE((*bucket) == true);
+	EXPECT_FALSE(bucket->isBusy());
+	EXPECT_FALSE(bucket->isRetryable());
+	EXPECT_EQ(bucket->getStatus(), ::S3StatusOK);
+	EXPECT_NE(bucket->getName(), (char *)0);
+	delete bucket;
 }
 
 TEST_F(BucketBaseTest, Stack) {
 	Session session;
-	Bucket base(session, "BucketBaseTestStack");
-	EXPECT_TRUE(base == true);
-	EXPECT_FALSE(base.isBusy());
-	EXPECT_FALSE(base.isRetryable());
-	EXPECT_EQ(base.getStatus(), ::S3StatusOK);
-	EXPECT_NE(base.getName(), (char *)0);
+	Bucket bucket(session, "BucketBaseTestStack");
+	EXPECT_TRUE(bucket == true);
+	EXPECT_FALSE(bucket.isBusy());
+	EXPECT_FALSE(bucket.isRetryable());
+	EXPECT_EQ(bucket.getStatus(), ::S3StatusOK);
+	EXPECT_NE(bucket.getName(), (char *)0);
 }
 
 TEST_F(BucketBaseTest, Temporary) {

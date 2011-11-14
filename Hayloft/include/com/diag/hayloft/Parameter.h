@@ -16,11 +16,11 @@
 #include "com/diag/desperado/generics.h"
 
 namespace com {
-	namespace diag {
-		namespace desperado {
-			class Input;
-		}
-	}
+namespace diag {
+namespace desperado {
+class Input;
+}
+}
 }
 
 namespace com {
