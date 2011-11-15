@@ -50,9 +50,11 @@ public:
 
 protected:
 
-	void initialize();
-
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
+
+private:
+
+	void initialize();
 
 };
 

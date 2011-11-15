@@ -257,6 +257,7 @@ TEST_F(LoggerTest, SetMask) {
 
 TEST_F(LoggerTest, SetMaskEnvironment) {
 	Logger logger;
+	const char * old = std::getenv(logger.MASK_ENV());
 	EXPECT_FALSE(logger.isEnabled(logger.FINEST));
 	EXPECT_FALSE(logger.isEnabled(logger.FINER));
 	EXPECT_FALSE(logger.isEnabled(logger.FINE));
@@ -278,7 +279,7 @@ TEST_F(LoggerTest, SetMaskEnvironment) {
 	for (int mask = 0; mask <= 0xffff; ++mask) {
 		char string[sizeof("0xffff")];
 		std::snprintf(string, sizeof(string), "0x%x", mask);
-		::setenv(logger.MASK_ENV(), string, !0);
+		EXPECT_EQ(::setenv(logger.MASK_ENV(), string, !0), 0);
 		logger.setMask();
 		/**/
 		LOGGER_TEST_ENABLEDISABLE_TEST(logger.FINEST);
@@ -299,6 +300,11 @@ TEST_F(LoggerTest, SetMaskEnvironment) {
 		LOGGER_TEST_ENABLEDISABLE_TEST(logger.PRINT);
 		/**/
 		EXPECT_EQ((Logger::Mask)mask, logger.getMask());
+	}
+	if (old == 0) {
+		EXPECT_EQ(::unsetenv(logger.MASK_ENV()), 0);
+	} else {
+		EXPECT_EQ(::setenv(logger.MASK_ENV(), old, !0), 0);
 	}
 }
 

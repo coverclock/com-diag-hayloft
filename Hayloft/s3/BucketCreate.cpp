@@ -50,9 +50,8 @@ void BucketCreate::initialize() {
 	);
 }
 
-void BucketCreate::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
+void BucketCreate::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	Logger::instance().debug("BucketCreate@%p: end\n", this);
-	Bucket::complete(s3status, errorDetails);
 }
 
 }

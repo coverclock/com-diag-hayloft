@@ -24,7 +24,6 @@ Session::Session(const char * userAgentInfo, int flags, const char * defaultS3Ho
 , status(::S3_initialize(useragent.c_str(), flags, hostname.c_str()))
 {
 	Logger & logger = Logger::instance();
-	logger.setMask();
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
 	logger.debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	if (status != ::S3StatusOK) {

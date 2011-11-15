@@ -36,7 +36,7 @@ public:
 
 	bool isValid() const { return (status == ::S3StatusOK); }
 
-protected:
+private:
 
 	void initialize();
 

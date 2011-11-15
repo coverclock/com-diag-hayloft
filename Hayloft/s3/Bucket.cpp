@@ -21,11 +21,19 @@ namespace s3 {
 
 ::S3Status Bucket::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
 	Bucket * that = static_cast<Bucket*>(callbackData);
-	return that->properties(properties);
+	show(properties, Logger::DEBUG);
+	::S3Status status = that->properties(properties);
+	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
+	Logger::instance().log(level, "Bucket@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	return status;
 }
 
 void Bucket::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Bucket * that = static_cast<Bucket*>(callbackData);
+	that->status = status;
+	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
+	Logger::instance().log(level, "Bucket@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	show(errorDetails, level);
 	that->complete(status, errorDetails);
 }
 
@@ -88,15 +96,11 @@ void Bucket::initialize() {
 }
 
 ::S3Status Bucket::properties(const ::S3ResponseProperties * properties) {
-	show(properties, Logger::DEBUG);
+	return ::S3StatusOK;
 }
 
-void Bucket::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
-	Logger & logger = Logger::instance();
-	status = s3status;
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
-	logger.log(level, "Bucket@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
-	show(errorDetails, level);
+void Bucket::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	return;
 }
 
 }

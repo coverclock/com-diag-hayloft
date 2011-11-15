@@ -20,6 +20,13 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callbackData) {
+	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
+	int rc = that->put(bufferSize, buffer);
+	Logger::Level level = (rc >= 0) ? Logger::DEBUG : Logger::WARNING;
+	Logger::instance().log(level, "ObjectPut@%p: requested=%d delivered=%d\n", that, bufferSize, rc);
+	return rc;
+}
 
 ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size totalsize, ::com::diag::desperado::Input & source, const Properties & props)
 : Object(bucket, keyname)
@@ -29,7 +36,22 @@ ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size totalsize
 , filename(props.getFilename())
 , encoding(props.getEncoding())
 , size(totalsize)
+, inputp(0)
 , input(source)
+{
+	initialize(props);
+}
+
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size totalsize, ::com::diag::desperado::Input * sourcep, const Properties & props)
+: Object(bucket, keyname)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, size(totalsize)
+, inputp(sourcep)
+, input(*sourcep)
 {
 	initialize(props);
 }
@@ -37,6 +59,9 @@ ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size totalsize
 ObjectPut::~ObjectPut() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
+	}
+	if (inputp != 0) {
+		delete inputp;
 	}
 }
 
@@ -77,8 +102,8 @@ void ObjectPut::initialize(const Properties & props) {
 		properties.metaData = 0;
 	}
 	show(&properties, Logger::DEBUG);
-	handler.responseHandler.propertiesCallback = &responsePropertiesCallback;
-	handler.responseHandler.completeCallback = &responseCompleteCallback;
+	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
+	handler.responseHandler.completeCallback = Object::handler.completeCallback;
 	handler.putObjectDataCallback = &putObjectDataCallback;
 	::S3_put_object(
 		&context,
@@ -96,9 +121,8 @@ int ObjectPut::put(int bufferSize, char * buffer) {
 	return (rc == EOF) ? 0 : rc;
 }
 
-void ObjectPut::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
+void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	Logger::instance().debug("ObjectPut@%p: end\n", this);
-	Object::complete(s3status, errorDetails);
 }
 
 }

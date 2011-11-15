@@ -34,15 +34,13 @@ public:
 
 	typedef uint64_t Size;
 
-protected:
-
-	static ::S3Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
-
-	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
+private:
 
 	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
+protected:
 
 	std::string hostname;
 
@@ -61,6 +59,8 @@ protected:
 	std::string key;
 
 	::S3Status status;
+
+	::S3ResponseHandler handler;
 
 public:
 
@@ -83,15 +83,13 @@ public:
 
 protected:
 
-	void initialize();
-
-	virtual ::S3Status get(int bufferSize, const char * buffer);
-
-	virtual int put(int bufferSize, char * buffer);
-
 	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
+
+private:
+
+	void initialize();
 
 };
 

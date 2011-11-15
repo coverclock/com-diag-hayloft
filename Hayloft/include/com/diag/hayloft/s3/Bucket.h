@@ -34,11 +34,13 @@ public:
 	 */
 	static const size_t LENGTH = 64;
 
-protected:
+private:
 
 	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
+protected:
 
 	std::string hostname;
 
@@ -109,11 +111,13 @@ public:
 
 protected:
 
-	void initialize();
-
 	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
+
+private:
+
+	void initialize();
 
 };
 

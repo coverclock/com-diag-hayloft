@@ -54,7 +54,7 @@ Logger & Logger::setMask() {
 	return *this;
 }
 
-void Logger::show(int level, ::com::diag::desperado::Output* display, int indent) const {
+void Logger::show(int level, ::com::diag::desperado::Output * display, int indent) const {
 	::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
 	::com::diag::desperado::Print printf(display);
     const char* sp = printf.output().indentation(indent);

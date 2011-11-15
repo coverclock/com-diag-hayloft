@@ -21,23 +21,21 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-::S3Status Object::getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData) {
-	Object * that = static_cast<Object*>(callbackData);
-	return that->get(bufferSize, buffer);
-}
-
-int Object::putObjectDataCallback(int bufferSize, char * buffer, void * callbackData) {
-	Object * that = static_cast<Object*>(callbackData);
-	return that->put(bufferSize, buffer);
-}
-
 ::S3Status Object::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
-	return that->properties(properties);
+	show(properties, Logger::DEBUG);
+	::S3Status status = that->properties(properties);
+	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
+	Logger::instance().log(level, "Object@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	return status;
 }
 
 void Object::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
+	that->status = status;
+	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
+	Logger::instance().log(level, "Object@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	show(errorDetails, level);
 	that->complete(status, errorDetails);
 }
 
@@ -64,6 +62,8 @@ Object::~Object() {
 
 void Object::initialize() {
 	Logger & logger = Logger::instance();
+	handler.propertiesCallback = &responsePropertiesCallback;
+	handler.completeCallback = &responseCompleteCallback;
 	logger.debug("Object@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	logger.debug("Object@%p: name=\"%s\"\n", this, name.c_str());
 	logger.debug("Object@%p: protocol=%d\n", this, protocol);
@@ -81,25 +81,14 @@ void Object::initialize() {
 	}
 }
 
-::S3Status Object::get(int bufferSize, const char * buffer) {
-	return ::S3StatusAbortedByCallback;
-}
-
-int Object::put(int bufferSize, char * buffer) {
-	return -1;
-}
-
 ::S3Status Object::properties(const ::S3ResponseProperties * properties) {
-	show(properties, Logger::DEBUG);
+	return ::S3StatusOK;
 }
 
-void Object::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
-	Logger & logger = Logger::instance();
-	status = s3status;
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
-	logger.log(level, "Object@%p: status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
-	show(errorDetails, level);
+void Object::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	return;
 }
+
 
 }
 }
