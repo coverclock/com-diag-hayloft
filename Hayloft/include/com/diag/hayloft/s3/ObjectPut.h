@@ -11,6 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
 #include "libs3.h"
@@ -67,7 +68,7 @@ public:
 	explicit ObjectPut(
 		const Bucket & bucket,
 		const char * keyname,
-		Size totalsize,
+		Size octets,
 		::com::diag::desperado::Input & source,
 		 const Properties & props = Properties()
 	);
@@ -75,7 +76,7 @@ public:
 	explicit ObjectPut(
 		const Bucket & bucket,
 		const char * keyname,
-		Size totalsize,
+		Size octets,
 		::com::diag::desperado::Input * sourcep, /* TAKEN */
 		 const Properties & props = Properties()
 	);

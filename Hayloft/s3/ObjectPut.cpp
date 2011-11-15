@@ -7,7 +7,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <string>
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Show.h"
@@ -28,28 +27,28 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	return rc;
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size totalsize, ::com::diag::desperado::Input & source, const Properties & props)
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size octets, ::com::diag::desperado::Input & source, const Properties & props)
 : Object(bucket, keyname)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
 , filename(props.getFilename())
 , encoding(props.getEncoding())
-, size(totalsize)
+, size(octets)
 , inputp(0)
 , input(source)
 {
 	initialize(props);
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size totalsize, ::com::diag::desperado::Input * sourcep, const Properties & props)
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size octets, ::com::diag::desperado::Input * sourcep, const Properties & props)
 : Object(bucket, keyname)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
 , filename(props.getFilename())
 , encoding(props.getEncoding())
-, size(totalsize)
+, size(octets)
 , inputp(sourcep)
 , input(*sourcep)
 {
