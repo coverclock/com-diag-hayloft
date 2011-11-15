@@ -62,15 +62,15 @@ public:
 
 	virtual ~Properties() {}
 
-	const char * getType() const { return (type.empty() ? 0 : type.c_str()); }
+	const char * getType() const { return type.c_str(); }
 
-	const char * getChecksum() const { return (checksum.empty() ? 0 : checksum.c_str()); }
+	const char * getChecksum() const { return checksum.c_str(); }
 
-	const char * getControl() const { return (control.empty() ? 0 : control.c_str()); }
+	const char * getControl() const { return control.c_str(); }
 
-	const char * getFilename() const { return (filename.empty() ? 0 : filename.c_str()); }
+	const char * getFilename() const { return filename.c_str(); }
 
-	const char * getEncoding() const { return (encoding.empty() ? 0 : encoding.c_str()); }
+	const char * getEncoding() const { return encoding.c_str(); }
 
 	int64_t getExpires() const { return expiration; }
 
