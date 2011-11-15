@@ -14,7 +14,7 @@
 #include <map>
 #include <string>
 #include "com/diag/hayloft/s3/Access.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -32,40 +32,59 @@ public:
 
 private:
 
-	::S3PutProperties properties;
+	std::string type;
 
-	std::string contentType;
+	std::string checksum;
 
-	std::string md5;
+	std::string control;
 
-	std::string cacheControl;
+	std::string filename;
 
-	std::string contentDispositionFilename;
+	std::string encoding;
 
-	std::string contentEncoding;
+	int64_t expiration;
+
+	::S3CannedAcl access;
 
 	Metadata metadata;
 
 public:
 
 	explicit Properties(
-		const char * ct = 0,
-		const char * m5 = 0,
-		const char * cc = 0,
-		const char * cd = 0,
-		const char * ce = 0,
-		const int64_t ex = -1,
-		const Access & ac = Access(),
-		const Metadata & md = Metadata()
+		const char * contentType = 0,
+		const char * md5 = 0,
+		const char * cacheControl = 0,
+		const char * contentDispositionFilename = 0,
+		const char * contentEncoding = 0,
+		const int64_t expires = -1,
+		const Access & cannedAcl = Access()
 	);
 
-	virtual ~Properties();
+	virtual ~Properties() {}
 
-	const ::S3PutProperties * getProperties() const { return &properties; }
+	const char * getType() const { return (type.empty() ? 0 : type.c_str()); }
+
+	const char * getChecksum() const { return (checksum.empty() ? 0 : checksum.c_str()); }
+
+	const char * getControl() const { return (control.empty() ? 0 : control.c_str()); }
+
+	const char * getFilename() const { return (filename.empty() ? 0 : filename.c_str()); }
+
+	const char * getEncoding() const { return (encoding.empty() ? 0 : encoding.c_str()); }
+
+	int64_t getExpires() const { return expiration; }
+
+	::S3CannedAcl getAccess() const { return access; }
+
+	const Metadata & getMetadata() const { return metadata; }
+
+	Properties & insert(const char * key, const char * value) { metadata.insert(Pair(key, value)); return *this; }
+
+	Properties & erase(const char * key) { metadata.erase(key); return *this; }
+
+	const char * find(const char * key) const;
 
 };
-
-extern void show(const ::S3PutProperties * properties, Logger::Level level = Logger::DEBUG);
 
 }
 }

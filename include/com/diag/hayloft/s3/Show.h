@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_RESPONSE
-#define _H_COM_DIAG_HAYLOFT_S3_RESPONSE
+#ifndef _H_COM_DIAG_HAYLOFT_S3_SHOW
+#define _H_COM_DIAG_HAYLOFT_S3_SHOW
 
 /**
  * @file
@@ -19,7 +19,15 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger::DEBUG);
+
 extern void show(const ::S3ResponseProperties * properties, Logger::Level level = Logger::DEBUG);
+
+extern void show(const ::S3BucketContext * properties, Logger::Level level = Logger::DEBUG);
+
+extern void show(const ::S3PutProperties * properties, Logger::Level level = Logger::DEBUG);
+
+
 
 }
 }

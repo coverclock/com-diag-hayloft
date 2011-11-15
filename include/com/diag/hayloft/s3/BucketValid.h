@@ -24,7 +24,11 @@ class BucketValid : public Bucket {
 
 public:
 
-	explicit BucketValid(const Session & se, const char * na, const Context & co = Context());
+	explicit BucketValid(
+		const Session & session,
+		const char * bucketname,
+		const Context & context = Context()
+	);
 
 	virtual ~BucketValid() {}
 

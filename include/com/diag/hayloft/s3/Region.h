@@ -35,18 +35,26 @@ private:
 public:
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "ap-northeast-1"; }
+
 	static const char * ASIA_PACIFIC_SOUTHEAST_1() { return "ap-southeast-1"; }
+
 	static const char * EUROPEAN_UNION_WEST_1() { return "eu-west-1"; }
+
 	static const char * UNITED_STATES_CLASSIC() { return ""; }
+
 	static const char * UNITED_STATES_EAST_1() { return "us-east-1"; }
+
 	static const char * UNITED_STATES_WEST_1() { return "us-west-1"; }
+
 	static const char * UNITED_STATES_WEST_2() { return "us-west-2"; }
 
 	static const char * DEFAULT() { return UNITED_STATES_CLASSIC(); }
 
 	static const size_t LENGTH = 64;
 
-	explicit Region(const char * re = DEFAULT());
+	explicit Region(
+		const char * re = DEFAULT()
+	);
 
 	virtual ~Region() {}
 

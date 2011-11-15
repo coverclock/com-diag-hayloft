@@ -49,7 +49,11 @@ public:
 
 	static const char * HOST_NAME_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_HOST_NAME"; }
 
-	explicit Session(const char * userAgentInfo = 0, int flags = S3_INIT_ALL, const char * defaultS3HostName = 0);
+	explicit Session(
+		const char * userAgentInfo = 0,
+		int flags = S3_INIT_ALL,
+		const char * defaultS3HostName = 0
+	);
 
 	virtual ~Session();
 

@@ -18,14 +18,14 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketDelete::BucketDelete(const Session & se, const char * na, const Context & co)
-: Bucket(se, na, co)
+BucketDelete::BucketDelete(const Session & session, const char * bucketname, const Context & context)
+: Bucket(session, bucketname, context)
 {
 	initialize();
 }
 
-BucketDelete::BucketDelete(const Session & se, const char * na, Queue & qu, const Context & co)
-: Bucket(se, na, co)
+BucketDelete::BucketDelete(const Session & session, const char * bucketname, Queue & queue, const Context & context)
+: Bucket(session, bucketname, queue, context)
 {
 	initialize();
 }
