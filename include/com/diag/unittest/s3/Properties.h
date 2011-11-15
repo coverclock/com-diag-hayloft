@@ -29,11 +29,16 @@ typedef Fixture PropertiesTest;
 
 TEST_F(PropertiesTest, Heap) {
 	Properties * properties = new Properties;
-	EXPECT_EQ(properties->getType(), (char *)0);
-	EXPECT_EQ(properties->getChecksum(), (char *)0);
-	EXPECT_EQ(properties->getControl(), (char *)0);
-	EXPECT_EQ(properties->getFilename(), (char *)0);
-	EXPECT_EQ(properties->getEncoding(), (char *)0);
+	ASSERT_NE(properties->getType(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties->getType(), ""), 0);
+	ASSERT_NE(properties->getChecksum(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties->getChecksum(), ""), 0);
+	ASSERT_NE(properties->getControl(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties->getControl(), ""), 0);
+	ASSERT_NE(properties->getFilename(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties->getFilename(), ""), 0);
+	ASSERT_NE(properties->getEncoding(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties->getEncoding(), ""), 0);
 	EXPECT_EQ(properties->getExpires(), -1);
 	EXPECT_EQ(properties->getAccess(), Access::DEFAULT);
 	EXPECT_TRUE((properties->getMetadata()).empty());
@@ -42,11 +47,16 @@ TEST_F(PropertiesTest, Heap) {
 
 TEST_F(PropertiesTest, Stack) {
 	Properties properties;
-	EXPECT_EQ(properties.getType(), (char *)0);
-	EXPECT_EQ(properties.getChecksum(), (char *)0);
-	EXPECT_EQ(properties.getControl(), (char *)0);
-	EXPECT_EQ(properties.getFilename(), (char *)0);
-	EXPECT_EQ(properties.getEncoding(), (char *)0);
+	ASSERT_NE(properties.getType(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getType(), ""), 0);
+	ASSERT_NE(properties.getChecksum(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getChecksum(), ""), 0);
+	ASSERT_NE(properties.getControl(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getControl(), ""), 0);
+	ASSERT_NE(properties.getFilename(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getFilename(), ""), 0);
+	ASSERT_NE(properties.getEncoding(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getEncoding(), ""), 0);
 	EXPECT_EQ(properties.getExpires(), -1);
 	EXPECT_EQ(properties.getAccess(), Access::DEFAULT);
 	EXPECT_TRUE((properties.getMetadata()).empty());

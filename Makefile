@@ -210,6 +210,10 @@ TARGETS+=s3/Object.o
 ARTIFACTS+=s3/Object.o
 ARCHIVABLE+=s3/Object.o
 
+TARGETS+=s3/ObjectPut.o
+ARTIFACTS+=s3/ObjectPut.o
+ARCHIVABLE+=s3/ObjectPut.o
+
 TARGETS+=unittest
 ARTIFACTS+=unittest
 

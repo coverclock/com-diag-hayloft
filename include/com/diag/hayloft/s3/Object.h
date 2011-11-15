@@ -34,7 +34,7 @@ public:
 
 	typedef uint64_t Size;
 
-private:
+protected:
 
 	static ::S3Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
 
@@ -43,8 +43,6 @@ private:
 	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-protected:
 
 	std::string hostname;
 
