@@ -11,8 +11,7 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Queue.h"
-#include "com/diag/hayloft/s3/Error.h"
-#include "com/diag/hayloft/s3/Response.h"
+#include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -30,31 +29,31 @@ void Bucket::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	that->complete(status, errorDetails);
 }
 
-Bucket::Bucket(const Session & se, const char * na, const Context & co)
-: hostname(se.getHostName())
-, name(se.canonicalize(na))
+Bucket::Bucket(const Session & session, const char * bucketname, const Context & context)
+: hostname(session.getHostName())
+, name(session.canonicalize(bucketname))
 , requests(0)
-, id(co.getId())
-, secret(co.getSecret())
-, region(co.getRegion())
-, protocol(co.getProtocol())
-, style(co.getStyle())
-, access(co.getAccess())
+, id(context.getId())
+, secret(context.getSecret())
+, region(context.getRegion())
+, protocol(context.getProtocol())
+, style(context.getStyle())
+, access(context.getAccess())
 , status(::S3StatusOK)
 {
 	initialize();
 }
 
-Bucket::Bucket(const Session & se, const char * na, Queue & qu, const Context & co)
-: hostname(se.getHostName())
-, name(se.canonicalize(na))
-, requests(qu.getRequests())
-, id(co.getId())
-, secret(co.getSecret())
-, region(co.getRegion())
-, protocol(co.getProtocol())
-, style(co.getStyle())
-, access(co.getAccess())
+Bucket::Bucket(const Session & session, const char * bucketname, Queue & queue, const Context & context)
+: hostname(session.getHostName())
+, name(session.canonicalize(bucketname))
+, requests(queue.getRequests())
+, id(context.getId())
+, secret(context.getSecret())
+, region(context.getRegion())
+, protocol(context.getProtocol())
+, style(context.getStyle())
+, access(context.getAccess())
 , status(::S3StatusOK)
 {
 	initialize();

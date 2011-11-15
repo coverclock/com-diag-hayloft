@@ -37,7 +37,9 @@ public:
 
 	static const ::S3UriStyle DEFAULT = ::S3UriStyleVirtualHost;
 
-	explicit Style(::S3UriStyle st = DEFAULT);
+	explicit Style(
+		::S3UriStyle st = DEFAULT
+	);
 
 	virtual ~Style() {}
 

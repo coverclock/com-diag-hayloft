@@ -12,8 +12,7 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Queue.h"
-#include "com/diag/hayloft/s3/Error.h"
-#include "com/diag/hayloft/s3/Response.h"
+#include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
 
@@ -42,15 +41,15 @@ void Object::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	that->complete(status, errorDetails);
 }
 
-Object::Object(const Bucket & bu, const char * ke)
-: hostname(bu.getHostName())
-, name(bu.getName())
-, protocol(bu.getProtocol())
-, style(bu.getStyle())
-, id(bu.getId())
-, secret(bu.getSecret())
-, requests(bu.getRequests())
-, key(ke)
+Object::Object(const Bucket & bucket, const char * keyname)
+: hostname(bucket.getHostName())
+, name(bucket.getName())
+, protocol(bucket.getProtocol())
+, style(bucket.getStyle())
+, id(bucket.getId())
+, secret(bucket.getSecret())
+, requests(bucket.getRequests())
+, key(keyname)
 , status(::S3StatusOK)
 {
 	initialize();

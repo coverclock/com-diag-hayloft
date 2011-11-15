@@ -23,9 +23,18 @@ class BucketCreate : public Bucket {
 
 public:
 
-	explicit BucketCreate(const Session & se, const char * na, const Context & co = Context());
+	explicit BucketCreate(
+		const Session & session,
+		const char * bucketname,
+		const Context & context = Context()
+	);
 
-	explicit BucketCreate(const Session & se, const char * na, Queue & qu, const Context & co = Context());
+	explicit BucketCreate(
+		const Session & session,
+		const char * bucketname,
+		Queue & queue,
+		const Context & context = Context()
+	);
 
 	virtual ~BucketCreate();
 

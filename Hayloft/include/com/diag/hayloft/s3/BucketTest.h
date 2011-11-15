@@ -27,9 +27,18 @@ private:
 
 public:
 
-	explicit BucketTest(const Session & se, const char * na, const Context & co = Context());
+	explicit BucketTest(
+		const Session & session,
+		const char * bucketname,
+		const Context & context = Context()
+	);
 
-	explicit BucketTest(const Session & se, const char * na, Queue & qu, const Context & co = Context());
+	explicit BucketTest(
+		const Session & session,
+		const char * bucketname,
+		Queue & queue,
+		const Context & context = Context()
+	);
 
 	virtual ~BucketTest();
 

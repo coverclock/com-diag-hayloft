@@ -66,7 +66,10 @@ protected:
 
 public:
 
-	explicit Object(const Bucket & bu, const char * ke);
+	explicit Object(
+		const Bucket & bucket,
+		const char * keyname
+	);
 
 	virtual ~Object();
 

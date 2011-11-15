@@ -47,7 +47,10 @@ public:
 
 	static const char * obfuscate(const char * str);
 
-	explicit Credentials(const char * accessKeyId = 0, const char * secretAccessKey = 0);
+	explicit Credentials(
+		const char * accessKeyId = 0,
+		const char * secretAccessKey = 0
+	);
 
 	virtual ~Credentials();
 
