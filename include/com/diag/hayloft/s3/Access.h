@@ -34,6 +34,8 @@ public:
 
 	::S3CannedAcl getAccess() const { return access; }
 
+	Access & setAccess(::S3CannedAcl cannedAcl = DEFAULT) { access = cannedAcl; return *this; }
+
 };
 
 class AccessPrivate : public Access {

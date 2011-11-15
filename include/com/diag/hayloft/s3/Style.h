@@ -45,6 +45,8 @@ public:
 
 	::S3UriStyle getStyle() const { return style; }
 
+	Style & setStyle(::S3UriStyle st = DEFAULT) { style = st; return *this; }
+
 };
 
 class StyleVirtualHost : public Style {

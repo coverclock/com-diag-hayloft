@@ -90,6 +90,8 @@ TEST_F(SizeTest, Size) {
 	EXPECT_EQ(size(stdin), EOF);
 	EXPECT_EQ(size(stdout), EOF);
 	EXPECT_EQ(size(stderr), EOF);
+	::com::diag::desperado::Input input;
+	EXPECT_EQ(size(input), EOF);
 }
 
 }

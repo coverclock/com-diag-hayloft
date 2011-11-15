@@ -59,6 +59,12 @@ TEST_F(StyleTest, DefaultFunctionArgument) {
 	EXPECT_EQ(universalresourceidentifierstylefunction(), Style::DEFAULT);
 }
 
+TEST_F(StyleTest, Settors) {
+	Style style;
+	style.setStyle().setStyle(::S3UriStylePath);
+	EXPECT_EQ(style.getStyle(), ::S3UriStylePath);
+}
+
 }
 }
 }

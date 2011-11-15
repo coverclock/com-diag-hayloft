@@ -21,7 +21,7 @@
 
 // Unit tests that also use libs3, SSL, and CURL.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Session.h"
 #include "com/diag/unittest/s3/Credentials.h"
 #include "com/diag/unittest/s3/Protocol.h"

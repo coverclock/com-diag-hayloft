@@ -100,6 +100,14 @@ TEST_F(RegionTest, DefaultFunctionArgument) {
 	EXPECT_EQ(std::strcmp(locationconstraintfunction(), Region::DEFAULT()), 0);
 }
 
+TEST_F(RegionTest, Settors) {
+	Region locationconstraint;
+	locationconstraint.setRegion().setRegion(Region::ASIA_PACIFIC_NORTHEAST_1());
+	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::ASIA_PACIFIC_NORTHEAST_1()));
+}
+
 }
 }
 }

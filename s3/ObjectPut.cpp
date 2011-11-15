@@ -117,6 +117,10 @@ void ObjectPut::initialize(const Properties & props) {
 
 int ObjectPut::put(int bufferSize, char * buffer) {
 	ssize_t rc = input(buffer, 1, bufferSize);
+	if ((rc == EOF) && (inputp != 0)) {
+		delete inputp;
+		inputp = 0;
+	}
 	return (rc == EOF) ? 0 : rc;
 }
 

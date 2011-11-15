@@ -28,10 +28,15 @@ class Context {
 private:
 
 	std::string id;
+
 	std::string secret;
+
 	std::string region;
+
 	::S3Protocol protocol;
+
 	::S3UriStyle style;
+
 	::S3CannedAcl access;
 
 public:
@@ -59,6 +64,16 @@ public:
 	::S3UriStyle getStyle() const { return style; }
 
 	::S3CannedAcl getAccess() const { return access; }
+
+	Context & setCredentials(const Credentials & cr = Credentials()) { id = cr.getId(); secret = cr.getSecret(); return *this; }
+
+	Context & setRegion(const Region & re = Region()) { region = re.getRegion(); return *this; }
+
+	Context & setProtocol(const Protocol & pr = Protocol()) { protocol = pr.getProtocol(); return *this; }
+
+	Context & setStyle(const Style & st = Style()) { style = st.getStyle(); return *this; }
+
+	Context & setAccess(const Access & ac = Access()) { access = ac.getAccess(); return *this; }
 
 };
 

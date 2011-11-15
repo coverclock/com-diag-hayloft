@@ -19,6 +19,7 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/target.h"
 
 namespace com {
@@ -61,6 +62,8 @@ public:
 	const char * getRegion() const { return region.c_str(); }
 
 	size_t getLength() const { return region.length(); }
+
+	Region & setRegion(const char * re = DEFAULT()) { region = set(re, 0, ""); return *this; }
 
 };
 

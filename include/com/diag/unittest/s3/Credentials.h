@@ -249,6 +249,19 @@ TEST_F(CredentialsTest, Missing) {
 	}
 }
 
+TEST_F(CredentialsTest, Settors) {
+	static const char ID[] = "AAAAAAAAAABBBBBBBBBB";
+	static const char SECRET[] = "CCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFF";
+	Credentials credentials;
+	credentials.setId().setId(ID);
+	credentials.setSecret().setSecret(SECRET);
+	EXPECT_TRUE(credentials == true);
+	ASSERT_NE(credentials.getId(), (char *)0);
+	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
+	ASSERT_NE(credentials.getSecret(), (char *)0);
+	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
+}
+
 }
 }
 }

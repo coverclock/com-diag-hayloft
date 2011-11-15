@@ -60,6 +60,12 @@ TEST_F(ProtocolTest, DefaultFunctionArgument) {
 	EXPECT_EQ(protocolfunction(), Protocol::DEFAULT);
 }
 
+TEST_F(ProtocolTest, Settors) {
+	Protocol protocol;
+	protocol.setProtocol().setProtocol(::S3ProtocolHTTP);
+	EXPECT_EQ(protocol.getProtocol(), ::S3ProtocolHTTP);
+}
+
 }
 }
 }
