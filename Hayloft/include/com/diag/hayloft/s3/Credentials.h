@@ -12,6 +12,7 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/target.h"
 
 namespace com {
@@ -59,6 +60,10 @@ public:
 	const char * getId() const { return id.c_str(); }
 
 	const char * getSecret() const { return secret.c_str(); }
+
+	Credentials & setId(const char * accessKeyId = 0) { id = set(accessKeyId, ACCESS_KEY_ID_ENV(), ""); return *this; }
+
+	Credentials & setSecret(const char * secretAccessKey = 0) { secret = set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""); return *this; }
 
 protected:
 

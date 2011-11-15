@@ -14,20 +14,12 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-Properties::Properties(
-	const char * contentType,
-	const char * md5,
-	const char * cacheControl,
-	const char * contentDispositionFilename,
-	const char * contentEncoding,
-	const int64_t expires,
-	const Access & cannedAcl
-)
-: type((contentType != 0) ? contentType : "")
-, checksum((md5 != 0) ? md5 : "")
-, control((cacheControl != 0) ? cacheControl : "")
-, filename((contentDispositionFilename != 0) ? contentDispositionFilename : "")
-, encoding((contentEncoding != 0) ? contentEncoding : "")
+Properties::Properties(const char * contentType, const char * md5, const char * cacheControl, const char * contentDispositionFilename, const char * contentEncoding, const int64_t expires, const Access & cannedAcl)
+: type(set(contentType, 0, ""))
+, checksum(set(md5, 0, ""))
+, control(set(cacheControl, 0, ""))
+, filename(set(contentDispositionFilename, 0, ""))
+, encoding(set(contentEncoding, 0, ""))
 , expiration(expires)
 , access(cannedAcl.getAccess())
 {

@@ -14,7 +14,15 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
+#include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/desperado/PathInput.h"
+#include "com/diag/hayloft/Size.h"
+#include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/BucketTest.h"
+#include "com/diag/hayloft/s3/BucketCreate.h"
+#include "com/diag/hayloft/s3/BucketDelete.h"
+#include "com/diag/hayloft/s3/Context.h"
+#include "com/diag/hayloft/s3/Access.h"
 
 namespace com {
 namespace diag {
@@ -56,22 +64,44 @@ TEST_F(ObjectBaseTest, Temporary) {
 	EXPECT_TRUE(Object(Bucket(session, "ObjectBaseTestTemporary"), "ObjectBaseTestTemporaryKey") == true);
 }
 
-#if 0
 typedef Verbose ObjectPutTest;
 
 TEST_F(ObjectPutTest, Sanity) {
+	const char BUCKET[] = "ObjectPutTestSanity";
+	const char OBJECT[] = "One";
 	Session session;
+	AccessPublicRead access;
+	Context context;
+	context.setAccess(access);
 	Bucket * bucket;
-	bucket = new BucketTest(session, "ObjectPutTestSanity");
-	if (!bucket) {
-		bucket = new BucketCreate(session, "ObjectPutTestSanity");
-		ASSERT_EQ(*bucket, true);
-	}
-	Input * input = new PathInput(__FILE__);
-	Size size;
-	Object * object = new ObjectPut(*bucket, "FOO", input, size);
+	BucketTest * buckettest;
+	bucket = buckettest = new BucketTest(session, BUCKET, context);
+	ASSERT_NE(bucket, (Bucket*)0);
+	ASSERT_EQ(*bucket, true);
+	ASSERT_FALSE(buckettest->isExistent());
+	ASSERT_FALSE(buckettest->isInaccessible());
+	ASSERT_TRUE(buckettest->isNonexistent());
+	delete bucket;
+	BucketCreate * bucketcreate;
+	bucket = bucketcreate = new BucketCreate(session, BUCKET, context);
+	ASSERT_NE(bucket, (Bucket*)0);
+	ASSERT_EQ(*bucket, true);
+	ASSERT_TRUE(bucketcreate->isCreated());
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	Size octets = size(*input);
+	ASSERT_TRUE(octets > 0);
+	Object * object = new ObjectPut(*bucket, OBJECT, octets, input);
+	ASSERT_EQ(*object, true);
+	delete object;
+	delete bucket;
+	BucketDelete * bucketdelete;
+	bucket = bucketdelete = new BucketDelete(session, BUCKET);
+	ASSERT_NE(bucket, (Bucket*)0);
+	ASSERT_EQ(*bucket, true);
+	ASSERT_TRUE(bucketdelete->isDeleted());
+	delete bucket;
 }
-#endif
 
 }
 }

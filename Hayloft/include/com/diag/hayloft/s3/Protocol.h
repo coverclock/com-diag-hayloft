@@ -37,6 +37,8 @@ public:
 
 	::S3Protocol getProtocol() const { return protocol; }
 
+	Protocol & setProtocol(::S3Protocol pr = DEFAULT) { protocol = pr; return *this; }
+
 };
 
 class ProtocolSecure : public Protocol {

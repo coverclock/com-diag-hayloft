@@ -33,40 +33,46 @@ TEST_F(AccessTest, Heap) {
 }
 
 TEST_F(AccessTest, Stack) {
-	Access list;
+	Access access;
 }
 
 TEST_F(AccessTest, Default) {
-	Access list;
-	EXPECT_EQ(list.getAccess(), Access::DEFAULT);
+	Access access;
+	EXPECT_EQ(access.getAccess(), Access::DEFAULT);
 }
 
 TEST_F(AccessTest, Private) {
-	AccessPrivate list;
-	EXPECT_EQ(list.getAccess(), ::S3CannedAclPrivate);
+	AccessPrivate access;
+	EXPECT_EQ(access.getAccess(), ::S3CannedAclPrivate);
 }
 
 TEST_F(AccessTest, PublicRead) {
-	AccessPublicRead list;
-	EXPECT_EQ(list.getAccess(), ::S3CannedAclPublicRead);
+	AccessPublicRead access;
+	EXPECT_EQ(access.getAccess(), ::S3CannedAclPublicRead);
 }
 
 TEST_F(AccessTest, PublicReadWrite) {
-	AccessPublicReadWrite list;
-	EXPECT_EQ(list.getAccess(), ::S3CannedAclPublicReadWrite);
+	AccessPublicReadWrite access;
+	EXPECT_EQ(access.getAccess(), ::S3CannedAclPublicReadWrite);
 }
 
 TEST_F(AccessTest, AuthenticatedRead) {
-	AccessAuthenticatedRead list;
-	EXPECT_EQ(list.getAccess(), ::S3CannedAclAuthenticatedRead);
+	AccessAuthenticatedRead access;
+	EXPECT_EQ(access.getAccess(), ::S3CannedAclAuthenticatedRead);
 }
 
-static int cannedaccesscontrollistfunction(const Access & list = Access()) {
-	return list.getAccess();
+static int cannedaccesscontrolaccessfunction(const Access & access = Access()) {
+	return access.getAccess();
 }
 
 TEST_F(AccessTest, DefaultFunctionArgument) {
-	EXPECT_EQ(cannedaccesscontrollistfunction(), Access::DEFAULT);
+	EXPECT_EQ(cannedaccesscontrolaccessfunction(), Access::DEFAULT);
+}
+
+TEST_F(AccessTest, Settors) {
+	Access access;
+	access.setAccess().setAccess(::S3CannedAclPublicReadWrite);
+	EXPECT_EQ(access.getAccess(), ::S3CannedAclPublicReadWrite);
 }
 
 }

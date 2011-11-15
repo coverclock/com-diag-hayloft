@@ -13,6 +13,7 @@
 
 #include <map>
 #include <string>
+#include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/s3/Access.h"
 #include "com/diag/desperado/target.h"
 #include "libs3.h"
@@ -75,6 +76,20 @@ public:
 	int64_t getExpires() const { return expiration; }
 
 	::S3CannedAcl getAccess() const { return access; }
+
+	Properties & setType(const char * contentType = 0) { type = set(contentType, 0, ""); return *this; }
+
+	Properties & setChecksum(const char * md5 = 0) { checksum = set(md5, 0, ""); return *this; }
+
+	Properties & setControl(const char * cacheControl = 0) { control = set(cacheControl, 0, ""); return *this; }
+
+	Properties & setFilename(const char * contentDispositionFilename = 0) { filename = set(contentDispositionFilename, 0, ""); return *this; }
+
+	Properties & setEncoding(const char * contentEncoding = 0) { encoding = set(contentEncoding, 0, ""); return *this; }
+
+	Properties & setExpires(const int64_t expires = -1) { expiration = expires; return *this; }
+
+	Properties & setAccess(const Access & cannedAcl = Access()) { access = cannedAcl.getAccess(); return *this; }
 
 	const Metadata & getMetadata() const { return metadata; }
 

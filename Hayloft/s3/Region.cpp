@@ -18,7 +18,7 @@ namespace s3 {
 const size_t Region::LENGTH;
 
 Region::Region(const char * re)
-: region((re != 0) ? re : "")
+: region(set(re, 0, ""))
 {
 	Logger::instance().debug("Region@%p: region=\"%s\"\n", this, region.c_str());
 }

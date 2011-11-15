@@ -104,6 +104,29 @@ TEST_F(PropertiesTest, Explicit) {
 	EXPECT_TRUE((properties.getMetadata()).empty());
 }
 
+TEST_F(PropertiesTest, Settors) {
+	AccessPublicReadWrite access;
+	Properties properties;
+	properties.setType().setType("ContentType");
+	ASSERT_NE(properties.getType(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getType(), "ContentType"), 0);
+	properties.setChecksum().setChecksum("MD5");
+	ASSERT_NE(properties.getChecksum(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getChecksum(), "MD5"), 0);
+	properties.setControl().setControl("CacheControl");
+	ASSERT_NE(properties.getControl(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getControl(), "CacheControl"), 0);
+	properties.setFilename().setFilename("ContentDispositionFilename");
+	ASSERT_NE(properties.getFilename(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getFilename(), "ContentDispositionFilename"), 0);
+	properties.setEncoding().setEncoding("ContentEncoding");
+	ASSERT_NE(properties.getEncoding(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getEncoding(), "ContentEncoding"), 0);
+	properties.setExpires().setExpires(12345);
+	EXPECT_EQ(properties.getExpires(), 12345);
+	properties.setAccess().setAccess(access);
+	EXPECT_EQ(properties.getAccess(), ::S3CannedAclPublicReadWrite);
+}
 }
 }
 }

@@ -12,7 +12,6 @@
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/hayloft/set.h"
 
 namespace com {
 namespace diag {
