@@ -47,7 +47,7 @@ TEST_F(PacketDataTest, InitialDefault) {
 	EXPECT_FALSE(packetdata.empty());
 	EXPECT_EQ(packetdata.size(), SIZE);
 	EXPECT_EQ(packetdata.buffer(), (void *)data);
-	EXPECT_EQ(packetdata.length(), sizeof(data));
+	EXPECT_EQ(packetdata.length(), SIZE);
 	EXPECT_EQ(packetdata.prefix(), ZERO);
 	EXPECT_EQ(packetdata.suffix(), ZERO);
 	char datum = 0;
@@ -64,7 +64,7 @@ TEST_F(PacketDataTest, InitialEither) {
 	EXPECT_FALSE(packetdata.empty());
 	EXPECT_EQ(packetdata.size(), SIZE);
 	EXPECT_EQ(packetdata.buffer(), (void *)data);
-	EXPECT_EQ(packetdata.length(), sizeof(data));
+	EXPECT_EQ(packetdata.length(), SIZE);
 	EXPECT_EQ(packetdata.prefix(), ZERO);
 	EXPECT_EQ(packetdata.suffix(), ZERO);
 	char datum = 0;
@@ -81,7 +81,7 @@ TEST_F(PacketDataTest, InitialAppend) {
 	EXPECT_FALSE(packetdata.empty());
 	EXPECT_EQ(packetdata.size(), SIZE);
 	EXPECT_EQ(packetdata.buffer(), (void *)data);
-	EXPECT_EQ(packetdata.length(), sizeof(data));
+	EXPECT_EQ(packetdata.length(), SIZE);
 	EXPECT_EQ(packetdata.prefix(), ZERO);
 	EXPECT_EQ(packetdata.suffix(), ZERO);
 	char datum = 0;
@@ -98,7 +98,7 @@ TEST_F(PacketDataTest, InitialPrepend) {
 	EXPECT_FALSE(packetdata.empty());
 	EXPECT_EQ(packetdata.size(), SIZE);
 	EXPECT_EQ(packetdata.buffer(), (void *)data);
-	EXPECT_EQ(packetdata.length(), sizeof(data));
+	EXPECT_EQ(packetdata.length(), SIZE);
 	EXPECT_EQ(packetdata.prefix(), ZERO);
 	EXPECT_EQ(packetdata.suffix(), ZERO);
 	char datum = 0;
@@ -114,7 +114,7 @@ TEST_F(PacketDataTest, ConsumeOnce) {
 	PacketData packetdata(data, sizeof(data));
 	EXPECT_FALSE(packetdata.empty());
 	EXPECT_EQ(packetdata.size(), SIZE);
-	EXPECT_EQ(packetdata.length(), sizeof(data));
+	EXPECT_EQ(packetdata.length(), SIZE);
 	EXPECT_EQ(packetdata.prefix(), ZERO);
 	EXPECT_EQ(packetdata.suffix(), ZERO);
 	char buffer[sizeof(data)];
@@ -122,8 +122,8 @@ TEST_F(PacketDataTest, ConsumeOnce) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	EXPECT_TRUE(packetdata.empty());
 	EXPECT_EQ(packetdata.length(), ZERO);
-	EXPECT_EQ(packetdata.prefix(), sizeof(data));
-	EXPECT_EQ(packetdata.suffix(), sizeof(data));
+	EXPECT_EQ(packetdata.prefix(), SIZE);
+	EXPECT_EQ(packetdata.suffix(), SIZE);
 	char datum;
 	EXPECT_EQ(packetdata.consume(&datum, sizeof(datum)), ZERO);
 }
@@ -136,7 +136,7 @@ TEST_F(PacketDataTest, ConsumeMany) {
 	PacketData packetdata(data, sizeof(data));
 	EXPECT_FALSE(packetdata.empty());
 	EXPECT_EQ(packetdata.size(), SIZE);
-	EXPECT_EQ(packetdata.length(), sizeof(data));
+	EXPECT_EQ(packetdata.length(), SIZE);
 	EXPECT_EQ(packetdata.prefix(), ZERO);
 	EXPECT_EQ(packetdata.suffix(), ZERO);
 	char buffer[sizeof(data)];
@@ -146,8 +146,8 @@ TEST_F(PacketDataTest, ConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	EXPECT_TRUE(packetdata.empty());
 	EXPECT_EQ(packetdata.length(), ZERO);
-	EXPECT_EQ(packetdata.prefix(), sizeof(data));
-	EXPECT_EQ(packetdata.suffix(), sizeof(data));
+	EXPECT_EQ(packetdata.prefix(), SIZE);
+	EXPECT_EQ(packetdata.suffix(), SIZE);
 	char datum;
 	EXPECT_EQ(packetdata.consume(&datum, sizeof(datum)), ZERO);
 }
@@ -167,8 +167,8 @@ TEST_F(PacketDataTest, BufferSize) {
 	packetdata.clear();
 	EXPECT_TRUE(packetdata.empty());
 	EXPECT_EQ(packetdata.length(), ZERO);
-	EXPECT_EQ(packetdata.prefix(), sizeof(data));
-	EXPECT_EQ(packetdata.suffix(), sizeof(data));
+	EXPECT_EQ(packetdata.prefix(), SIZE);
+	EXPECT_EQ(packetdata.suffix(), SIZE);
 	char datum;
 	EXPECT_EQ(packetdata.consume(&datum, sizeof(datum)), ZERO);
 }
@@ -271,7 +271,7 @@ TEST_F(PacketBufferDynamicTest, AppendOnceAppend) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	EXPECT_EQ(packetbuffer.append(data, sizeof(data)), sizeof(data));
 	EXPECT_FALSE(packetbuffer.empty());
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	EXPECT_EQ(std::memcmp(data, packetbuffer.buffer(), packetbuffer.length()), 0);
@@ -293,7 +293,7 @@ TEST_F(PacketBufferDynamicTest, AppendOncePrepend) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	EXPECT_EQ(packetbuffer.append(data, sizeof(data)), sizeof(data));
 	EXPECT_FALSE(packetbuffer.empty());
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	EXPECT_EQ(std::memcmp(data, packetbuffer.buffer(), packetbuffer.length()), 0);
@@ -324,7 +324,7 @@ TEST_F(PacketBufferDynamicTest, AppendManyAppend) {
 		EXPECT_EQ(packetbuffer.prefix(), ZERO);
 		EXPECT_EQ(packetbuffer.suffix(), suffix);
 	}
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	EXPECT_EQ(std::memcmp(data, packetbuffer.buffer(), packetbuffer.length()), 0);
@@ -346,7 +346,7 @@ TEST_F(PacketBufferDynamicTest, PrependOnceAppend) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	EXPECT_EQ(packetbuffer.prepend(data, sizeof(data)), sizeof(data));
 	EXPECT_FALSE(packetbuffer.empty());
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	EXPECT_EQ(std::memcmp(data, packetbuffer.buffer(), packetbuffer.length()), 0);
@@ -368,7 +368,7 @@ TEST_F(PacketBufferDynamicTest, PrependOncePrepend) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	EXPECT_EQ(packetbuffer.prepend(data, sizeof(data)), sizeof(data));
 	EXPECT_FALSE(packetbuffer.empty());
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	EXPECT_EQ(std::memcmp(data, packetbuffer.buffer(), packetbuffer.length()), 0);
@@ -399,7 +399,7 @@ TEST_F(PacketBufferDynamicTest, PrependManyPrepend) {
 		EXPECT_EQ(packetbuffer.prefix(), prefix);
 		EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	}
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	EXPECT_EQ(std::memcmp(data, packetbuffer.buffer(), packetbuffer.length()), 0);
@@ -439,7 +439,7 @@ TEST_F(PacketBufferDynamicTest, PrependAppendConsumeOnce) {
 		EXPECT_EQ(packetbuffer.prefix(), prefix);
 		EXPECT_EQ(packetbuffer.suffix(), suffix);
 	}
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	char buffer[sizeof(data)];
@@ -484,7 +484,7 @@ TEST_F(PacketBufferDynamicTest, PrependAppendConsumeMany) {
 		EXPECT_EQ(packetbuffer.prefix(), prefix);
 		EXPECT_EQ(packetbuffer.suffix(), suffix);
 	}
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	char buffer[sizeof(data)];
@@ -518,7 +518,7 @@ TEST_F(PacketBufferDynamicTest, AppendOnceClear) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	EXPECT_EQ(packetbuffer.append(data, sizeof(data)), sizeof(data));
 	EXPECT_FALSE(packetbuffer.empty());
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	packetbuffer.clear();
@@ -543,7 +543,7 @@ TEST_F(PacketBufferDynamicTest, PrependOnceClear) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	EXPECT_EQ(packetbuffer.prepend(data, sizeof(data)), sizeof(data));
 	EXPECT_FALSE(packetbuffer.empty());
-	EXPECT_EQ(packetbuffer.length(), sizeof(data));
+	EXPECT_EQ(packetbuffer.length(), SIZE);
 	EXPECT_EQ(packetbuffer.prefix(), ZERO);
 	EXPECT_EQ(packetbuffer.suffix(), ZERO);
 	packetbuffer.clear();

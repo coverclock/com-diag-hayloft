@@ -17,10 +17,11 @@
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/Parameter.h"
+#include "com/diag/unittest/Size.h"
 
 // Unit tests that also use libs3, SSL, and CURL.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Session.h"
 #include "com/diag/unittest/s3/Credentials.h"
 #include "com/diag/unittest/s3/Protocol.h"

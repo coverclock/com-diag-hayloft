@@ -193,18 +193,18 @@ size_t Packet::consume(void * buffer, size_t length) {
 size_t Packet::source(::com::diag::desperado::Input& from) {
 	size_t total = 0;
 	size_t subtotal;
-	ssize_t length;
+	ssize_t produced;
 	PacketData::Datum * data;
 	PacketDataDynamic * pbd;
 	do {
 		data = new PacketData::Datum [allocation];
 		subtotal = 0;
 		do {
-			length = from(data + subtotal, 1, allocation - subtotal);
-			if (length <= 0) {
+			produced = from(data + subtotal, 1, allocation - subtotal);
+			if (produced <= 0) {
 				break;
 			}
-			subtotal += length;
+			subtotal += produced;
 		} while (subtotal < allocation);
 		if (subtotal > 0) {
 			pbd = new PacketDataDynamic(data, subtotal, PacketDataDynamic::APPEND);
@@ -213,27 +213,27 @@ size_t Packet::source(::com::diag::desperado::Input& from) {
 		} else {
 			delete data;
 		}
-	} while (length > 0);
+	} while (produced > 0);
 	return total;
 }
 
 size_t Packet::sink(::com::diag::desperado::Output& to) {
 	size_t total = 0;
 	size_t subtotal;
-	ssize_t length;
-	size_t size;
+	ssize_t consumed;
+	size_t produced;
 	const PacketData::Datum * data;
 	PacketData * here;
 	while (head != 0) {
 		data = static_cast<const PacketData::Datum*>(head->buffer());
-		size = head->size();
+		produced = head->length();
 		subtotal = 0;
-		while (size > subtotal) {
-			length = to(data + subtotal, 1, size - subtotal);
-			if (length <= 0) {
+		while (produced > subtotal) {
+			consumed = to(data + subtotal, 1, produced - subtotal);
+			if (consumed <= 0) {
 				break;
 			}
-			subtotal += length;
+			subtotal += consumed;
 		}
 		total += subtotal;
 		here = head;
@@ -268,13 +268,13 @@ void Packet::show(int level, ::com::diag::desperado::Output * display, int inden
     printf("%s head=%p\n", sp, head);
     if (0 < level) {
 		for (PacketData * here = head; here != 0; here = here->next) {
-			size_t length = here->length();
-			size_t prefix = here->prefix();
 			size_t size = here->size();
+			size_t prefix = here->prefix();
+			size_t length = here->length();
 			size_t suffix = here->suffix();
-			printf("%s  %p: next=%p length=%zu prefix=%zu size=%zu suffix=%zu total=%zu\n", sp, here, here->next, length, prefix, size, suffix, prefix + size + suffix);
+			printf("%s  %p: next=%p size=%zu prefix=%zu length=%zu suffix=%zu total=%zu\n", sp, here, here->next, size, prefix, length, suffix, prefix + length + suffix);
 			if (1 < level) {
-			    dump(here->buffer(), size, false, 0, indent + 3);
+			    dump(here->buffer(), length, false, 0, indent + 3);
 			}
 		}
     }

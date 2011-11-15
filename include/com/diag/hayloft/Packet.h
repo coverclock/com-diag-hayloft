@@ -354,6 +354,12 @@ public:
      */
     virtual ~PacketInput() {}
 
+	/**
+	 * Return the number of octets available to be consumed.
+	 * @return the number of octets available to be consumed.
+	 */
+	size_t getLength() const;
+
     /**
      * Returns the next character.
      * @return a character in an integer if successful, EOF otherwise.
@@ -593,13 +599,13 @@ public:
      *  Returns a reference to the input functor interface.
      *  @return a reference to the input functor interface.
      */
-    virtual ::com::diag::desperado::Input& input() { return in; }
+    virtual PacketInput & input() { return in; }
 
     /**
      *  Returns a reference to the output functor interface.
      *  @return a reference to the output functor interface.
      */
-    virtual ::com::diag::desperado::Output& output() { return out; }
+    virtual PacketOutput & output() { return out; }
 
     /**
      * Returns true if the object is empty, false otherwise. Empty means the
@@ -753,6 +759,8 @@ private:
     Packet& operator=(const Packet & that);
 
 };
+
+inline size_t PacketInput::getLength() const { return packet.length(); }
 
 }
 }

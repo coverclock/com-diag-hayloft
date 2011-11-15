@@ -14,6 +14,7 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
+#include "com/diag/desperado/PathInput.h"
 
 namespace com {
 namespace diag {
@@ -54,6 +55,23 @@ TEST_F(ObjectBaseTest, Temporary) {
 	Session session;
 	EXPECT_TRUE(Object(Bucket(session, "ObjectBaseTestTemporary"), "ObjectBaseTestTemporaryKey") == true);
 }
+
+#if 0
+typedef Verbose ObjectPutTest;
+
+TEST_F(ObjectPutTest, Sanity) {
+	Session session;
+	Bucket * bucket;
+	bucket = new BucketTest(session, "ObjectPutTestSanity");
+	if (!bucket) {
+		bucket = new BucketCreate(session, "ObjectPutTestSanity");
+		ASSERT_EQ(*bucket, true);
+	}
+	Input * input = new PathInput(__FILE__);
+	Size size;
+	Object * object = new ObjectPut(*bucket, "FOO", input, size);
+}
+#endif
 
 }
 }
