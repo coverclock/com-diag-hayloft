@@ -98,7 +98,7 @@ public:
      * Dtor. Any buffered output is flushed.
      */
     virtual ~Logger() {
-    	(getOutput())();
+    	(output())();
     }
 
     /**
@@ -108,18 +108,24 @@ public:
      */
     Logger & setOutput(::com::diag::desperado::Output & ro) {
     	::com::diag::desperado::Logger logger(ro);
+    	//
     	// Yes, I know this is kinda funky. We just want to reinitialize the
     	// super class portion of ourselves with the new version to set the
     	// output functor, and the super class doesn't have an operation with
-    	// which to do that.
+    	// which to do that, and adding one violates the design of Desperado.
+    	//
     	// IMO this is legal and should compile, but does not. Worse, the
     	// diagnostics are completely unhelpful.
     	//  static_cast<::com::diag::desperado::Logger&>(*this) = logger;
-    	// Somewhat to my surprise, this compiles and works.
+    	//
+    	// Somewhat to my surprise, this compiles and works, invoking the
+    	// default assignment operator in the base class to do the copy.
     	//  ::com::diag::desperado::Logger::operator=(logger);
+    	//
     	// But this is a little less scary looking, and works fine.
-    	::com::diag::desperado::Logger& that = *this;
-    	that = logger;
+    	//
+    	::com::diag::desperado::Logger * that = this;
+    	*that = logger;
     	return *this;
     }
 
@@ -128,7 +134,7 @@ public:
      * @return the current output functor.
      */
     ::com::diag::desperado::Output & getOutput() {
-    	return ::com::diag::desperado::Logger::output();
+    	return output();
     }
 
     /**
@@ -206,7 +212,7 @@ public:
      *                  as this object calls the show methods of its
      *                  inherited and composited objects.
      */
-    virtual void show(int level = 0, ::com::diag::desperado::Output* display = 0, int indent = 0) const;
+    virtual void show(int level = 0, ::com::diag::desperado::Output * display = 0, int indent = 0) const;
 
 };
 

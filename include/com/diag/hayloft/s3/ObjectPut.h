@@ -32,6 +32,10 @@ class Bucket;
 
 class ObjectPut : public Object {
 
+private:
+
+	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
+
 protected:
 
 	std::string type;
@@ -54,6 +58,8 @@ protected:
 
 	::S3PutObjectHandler handler;
 
+	::com::diag::desperado::Input * inputp;
+
 	::com::diag::desperado::Input & input;
 
 public:
@@ -66,16 +72,25 @@ public:
 		 const Properties & props = Properties()
 	);
 
+	explicit ObjectPut(
+		const Bucket & bucket,
+		const char * keyname,
+		Size totalsize,
+		::com::diag::desperado::Input * sourcep, /* TAKEN */
+		 const Properties & props = Properties()
+	);
+
 	virtual ~ObjectPut();
 
-
 protected:
-
-	void initialize(const Properties & props);
 
 	virtual int put(int bufferSize, char * buffer);
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
+
+private:
+
+	void initialize(const Properties & props);
 
 };
 

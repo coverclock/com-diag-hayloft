@@ -49,9 +49,8 @@ void BucketDelete::initialize() {
 	);
 }
 
-void BucketDelete::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
+void BucketDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	Logger::instance().debug("BucketDelete@%p: end\n", this);
-	Bucket::complete(s3status, errorDetails);
 }
 
 }

@@ -41,9 +41,10 @@ protected:
 	Logger::Mask mask;
 
 	virtual void SetUp() {
-		output = &(Logger::instance().getOutput());
-		mask = Logger::instance().getMask();
-		Logger::instance()
+		Logger & logger = Logger::instance();
+		output = &(logger.getOutput());
+		mask = logger.getMask();
+		logger
 			.setOutput(logput)
 	    	.disable(Logger::FINEST)
 	    	.disable(Logger::FINER)
@@ -52,20 +53,22 @@ protected:
 	    	.disable(Logger::DEBUG)
 	    	.disable(Logger::INFORMATION)
 	    	.disable(Logger::CONFIGURATION)
-	    	.disable(Logger::NOTICE)
-	    	.disable(Logger::WARNING)
+	    	.enable(Logger::NOTICE)
+	    	.enable(Logger::WARNING)
 	    	.enable(Logger::ERROR)
 	    	.enable(Logger::SEVERE)
 	    	.enable(Logger::CRITICAL)
 	    	.enable(Logger::ALERT)
 	    	.enable(Logger::FATAL)
 	    	.enable(Logger::EMERGENCY)
-	    	.enable(Logger::PRINT);
+	    	.enable(Logger::PRINT)
+			.setMask();
 	}
 
 	virtual void TearDown() {
-		Logger::instance().setMask(mask);
-		Logger::instance().setOutput(*output);
+		Logger & logger = Logger::instance();
+		logger.setMask(mask);
+		logger.setOutput(*output);
 	}
 
 };
@@ -80,9 +83,10 @@ class Verbose : public Terse {
 protected:
 
 	virtual void SetUp() {
-		output = &(Logger::instance().getOutput());
-		mask = Logger::instance().getMask();
-		Logger::instance()
+		Logger & logger = Logger::instance();
+		output = &(logger.getOutput());
+		mask = logger.getMask();
+		logger
 			.setOutput(logput)
 	    	.enable(Logger::FINEST)
 	    	.enable(Logger::FINER)
@@ -99,17 +103,24 @@ protected:
 	    	.enable(Logger::ALERT)
 	    	.enable(Logger::FATAL)
 	    	.enable(Logger::EMERGENCY)
-	    	.enable(Logger::PRINT);
+	    	.enable(Logger::PRINT)
+			.setMask();
 	}
 
 	virtual void TearDown() {
-		Logger::instance().setMask(mask);
-		Logger::instance().setOutput(*output);
+		Logger & logger = Logger::instance();
+		logger.setMask(mask);
+		logger.setOutput(*output);
 	}
 
 };
 
-typedef Verbose Fixture;
+/**
+ * This type is the default logging strategy. Choose Verbose or Terse. You
+ * can always choose the other on specific test cases, or even create your
+ * own by deriving your own class.
+*/
+typedef Terse Fixture;
 
 }
 }

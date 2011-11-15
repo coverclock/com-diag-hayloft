@@ -51,11 +51,9 @@ void BucketTest::initialize() {
 	);
 }
 
-void BucketTest::complete(::S3Status s3status, const ::S3ErrorDetails * errorDetails) {
-	Logger & logger = Logger::instance();
-	logger.debug("BucketTest@%p: end\n", this);
-	Bucket::complete(s3status, errorDetails);
-	if (status == ::S3StatusOK) { region = constraint; }
+void BucketTest::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Logger::instance().debug("BucketTest@%p: end\n", this);
+	region = constraint;
 }
 
 }
