@@ -16,6 +16,8 @@
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/desperado/PathInput.h"
+#include "com/diag/hayloft/s3/ObjectGet.h"
+#include "com/diag/desperado/PathOutput.h"
 #include "com/diag/hayloft/Size.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketTest.h"
@@ -67,43 +69,48 @@ TEST_F(ObjectBaseTest, Temporary) {
 typedef Verbose ObjectPutTest;
 
 TEST_F(ObjectPutTest, Sanity) {
-	const char BUCKET[] = "ObjectPutTestSanity";
-	const char OBJECT[] = __FILE__;
+	const char BUCKET[] = "ObjectPutTest";
+	const char OBJECT[] = "Sanity.txt";
 	Session session;
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
 	Properties properties;
 	properties.setAccess(access);
-	Bucket * bucket;
-	BucketTest * buckettest;
-	bucket = buckettest = new BucketTest(session, BUCKET, context);
-	ASSERT_NE(bucket, (Bucket*)0);
-	ASSERT_EQ(*bucket, true);
+	BucketTest * buckettest = new BucketTest(session, BUCKET, context);
+	ASSERT_NE(buckettest, (BucketTest*)0);
+	ASSERT_EQ(*buckettest, true);
 	ASSERT_FALSE(buckettest->isExistent());
 	ASSERT_FALSE(buckettest->isInaccessible());
 	ASSERT_TRUE(buckettest->isNonexistent());
-	delete bucket;
-	BucketCreate * bucketcreate;
-	bucket = bucketcreate = new BucketCreate(session, BUCKET, context);
-	ASSERT_NE(bucket, (Bucket*)0);
-	ASSERT_EQ(*bucket, true);
+	delete buckettest;
+	BucketCreate * bucketcreate = new BucketCreate(session, BUCKET, context);
+	ASSERT_NE(bucketcreate, (Bucket*)0);
+	ASSERT_EQ(*bucketcreate, true);
 	ASSERT_TRUE(bucketcreate->isCreated());
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size octets = size(*input);
 	ASSERT_TRUE(octets > 0);
-	Object * object = new ObjectPut(*bucket, OBJECT, octets, input, properties);
-	ASSERT_EQ(*object, true);
-	// http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Object.h
-	delete object;
-	delete bucket;
-	BucketDelete * bucketdelete;
-	bucket = bucketdelete = new BucketDelete(session, BUCKET);
+	ObjectPut * objectput = new ObjectPut(*bucketcreate, OBJECT, input, octets, properties);
+	ASSERT_NE(objectput, (ObjectPut*)0);
+	ASSERT_EQ(*objectput, true);
+	ASSERT_TRUE(objectput->isPut());
+	delete objectput;
+	// http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Sanity.txt
+	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+	ObjectGet * objectget = new ObjectGet(*bucketcreate, OBJECT, output);
+	ASSERT_NE(objectget, (ObjectGet*)0);
+	ASSERT_EQ(*objectget, true);
+	ASSERT_TRUE(objectget->isGet());
+	delete objectget;
+#if 0
+	BucketDelete * bucketdelete = new BucketDelete(session, BUCKET);
 	ASSERT_NE(bucket, (Bucket*)0);
 	ASSERT_EQ(*bucket, true);
 	ASSERT_TRUE(bucketdelete->isDeleted());
-	delete bucket;
+	delete bucketdelete;
+#endif
 }
 
 }

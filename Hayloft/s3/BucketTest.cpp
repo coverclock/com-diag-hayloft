@@ -22,21 +22,26 @@ BucketTest::BucketTest(const Session & session, const char * bucketname, const C
 : Bucket(session, bucketname, context)
 {
 	initialize();
+	begin();
 }
 
 BucketTest::BucketTest(const Session & session, const char * bucketname, Queue & queue, const Context & context)
 : Bucket(session, bucketname, queue, context)
 {
 	initialize();
+	begin();
 }
 
 BucketTest::~BucketTest() {
 }
 
 void BucketTest::initialize() {
-	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	constraint[0] = '\0';
+}
+
+void BucketTest::begin() {
+	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	::S3_test_bucket(
 		protocol,
 		style,
@@ -52,8 +57,8 @@ void BucketTest::initialize() {
 }
 
 void BucketTest::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("BucketTest@%p: end\n", this);
 	region = constraint;
+	Logger::instance().debug("BucketTest@%p: complete\n", this);
 }
 
 }

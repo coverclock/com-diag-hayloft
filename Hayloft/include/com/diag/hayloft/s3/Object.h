@@ -42,21 +42,21 @@ private:
 
 protected:
 
+	std::string id;
+
+	std::string secret;
+
 	std::string hostname;
 
 	std::string name;
+
+	std::string key;
 
 	::S3Protocol protocol;
 
 	::S3UriStyle style;
 
-	std::string id;
-
-	std::string secret;
-
 	::S3RequestContext * requests;
-
-	std::string key;
 
 	::S3Status status;
 
@@ -77,9 +77,23 @@ public:
 
 	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
 
-	::S3Status getStatus() const { return status; }
+	const char * getId() const { return id.c_str(); }
+
+	const char * getSecret() const { return secret.c_str(); }
+
+	const char * getHostName() const { return hostname.c_str(); }
+
+	const char * getName() const { return name.c_str(); }
 
 	const char * getKey() const { return key.c_str(); }
+
+	::S3Protocol getProtocol() const { return protocol; }
+
+	::S3UriStyle getStyle() const { return style; }
+
+	::S3RequestContext * getRequests() const { return requests; }
+
+	::S3Status getStatus() const { return status; }
 
 protected:
 

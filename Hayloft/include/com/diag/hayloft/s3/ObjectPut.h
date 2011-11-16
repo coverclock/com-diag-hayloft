@@ -14,6 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
+#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -49,9 +50,19 @@ protected:
 
 	std::string encoding;
 
-	Properties::Metadata metadata;
+	Properties::Epochalseconds expires;
+
+	::S3CannedAcl access;
+
+	::com::diag::desperado::Input * inputp;
+
+	::com::diag::desperado::Input & input;
 
 	Octets size;
+
+	ssize_t consumed;
+
+	Properties::Metadata metadata;
 
 	::S3BucketContext context;
 
@@ -59,29 +70,27 @@ protected:
 
 	::S3PutObjectHandler handler;
 
-	::com::diag::desperado::Input * inputp;
-
-	::com::diag::desperado::Input & input;
-
 public:
 
 	explicit ObjectPut(
 		const Bucket & bucket,
 		const char * keyname,
-		Octets objectsize,
 		::com::diag::desperado::Input & source,
-		 const Properties & props = Properties()
+		Octets objectsize,
+		const Properties & props = Properties()
 	);
 
 	explicit ObjectPut(
 		const Bucket & bucket,
 		const char * keyname,
-		Octets objectsize,
 		::com::diag::desperado::Input * sourcep, /* TAKEN */
-		 const Properties & props = Properties()
+		Octets objectsize,
+		const Properties & props = Properties()
 	);
 
 	virtual ~ObjectPut();
+
+	bool isPut() const { return (status == ::S3StatusOK); }
 
 protected:
 
@@ -91,7 +100,9 @@ protected:
 
 private:
 
-	void initialize(const Properties & props);
+	void initialize(const Properties::Metadata & settings);
+
+	void begin();
 
 };
 

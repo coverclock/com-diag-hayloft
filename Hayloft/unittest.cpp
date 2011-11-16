@@ -44,7 +44,7 @@
 
 // Unit tests that also use AWS and Objects.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Object.h"
 #endif
 

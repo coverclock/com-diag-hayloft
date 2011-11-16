@@ -22,20 +22,25 @@ BucketCreate::BucketCreate(const Session & session, const char * bucketname, con
 : Bucket(session, bucketname, context)
 {
 	initialize();
+	begin();
 }
 
 BucketCreate::BucketCreate(const Session & session, const char * bucketname, Queue & queue, const Context & context)
 : Bucket(session, bucketname, queue, context)
 {
 	initialize();
+	begin();
 }
 
 BucketCreate::~BucketCreate() {
 }
 
 void BucketCreate::initialize() {
-	Logger::instance().debug("BucketCreate@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+}
+
+void BucketCreate::begin() {
+	Logger::instance().debug("BucketCreate@%p: begin\n", this);
 	::S3_create_bucket(
 		protocol,
 		id.c_str(),
@@ -51,7 +56,7 @@ void BucketCreate::initialize() {
 }
 
 void BucketCreate::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("BucketCreate@%p: end\n", this);
+	Logger::instance().debug("BucketCreate@%p: complete\n", this);
 }
 
 }
