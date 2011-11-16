@@ -60,6 +60,8 @@ protected:
 
 	::S3Status status;
 
+	::S3BucketContext context;
+
 	::S3ResponseHandler handler;
 
 public:

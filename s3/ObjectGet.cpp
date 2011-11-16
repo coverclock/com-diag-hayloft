@@ -72,14 +72,6 @@ ObjectGet::~ObjectGet() {
 
 void ObjectGet::initialize() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
-	std::memset(&context, 0, sizeof(context));
-	context.hostName = hostname.c_str();
-	context.bucketName = name.c_str();
-	context.protocol = protocol;
-	context.uriStyle = style;
-	context.accessKeyId = id.c_str();
-	context.secretAccessKey = secret.c_str();
-	show(&context);
 	std::memset(&conditions, 0, sizeof(conditions));
 	conditions.ifModifiedSince = since;
 	conditions.ifNotModifiedSince = notsince;

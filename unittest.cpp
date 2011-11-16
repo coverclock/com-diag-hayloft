@@ -36,15 +36,10 @@
 #include "com/diag/unittest/s3/Conditions.h"
 #endif
 
-// Unit tests that also use AWS and Buckets.
-
-#if 0
-#include "com/diag/unittest/s3/Bucket.h"
-#endif
-
-// Unit tests that also use AWS and Objects.
+// Unit tests that also use AWS.
 
 #if 1
+#include "com/diag/unittest/s3/Bucket.h"
 #include "com/diag/unittest/s3/Object.h"
 #endif
 

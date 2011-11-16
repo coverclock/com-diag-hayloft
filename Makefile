@@ -226,6 +226,10 @@ TARGETS+=s3/ObjectGet.o
 ARTIFACTS+=s3/ObjectGet.o
 ARCHIVABLE+=s3/ObjectGet.o
 
+TARGETS+=s3/ObjectDelete.o
+ARTIFACTS+=s3/ObjectDelete.o
+ARCHIVABLE+=s3/ObjectDelete.o
+
 TARGETS+=unittest
 ARTIFACTS+=unittest
 

@@ -58,8 +58,6 @@ protected:
 
 	ssize_t produced;
 
-	::S3BucketContext context;
-
 	::S3GetConditions conditions;
 
 	::S3GetObjectHandler handler;
@@ -86,7 +84,7 @@ public:
 
 	virtual ~ObjectGet();
 
-	bool isGet() const { return (status == ::S3StatusOK); }
+	bool isGotten() const { return (status == ::S3StatusOK); }
 
 protected:
 

@@ -62,18 +62,18 @@ Object::~Object() {
 
 
 void Object::initialize() {
-	Logger & logger = Logger::instance();
+	if (requests != 0) { Logger::instance().debug("Object@%p: requests=%p\n", this, requests); }
+	std::memset(&context, 0, sizeof(context));
+	context.hostName = hostname.c_str();
+	context.bucketName = name.c_str();
+	context.protocol = protocol;
+	context.uriStyle = style;
+	context.accessKeyId = id.c_str();
+	context.secretAccessKey = secret.c_str();
+	show(&context);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
- 	logger.debug("Object@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
-	logger.debug("Object@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
-	logger.debug("Object@%p: hostname=\"%s\"\n", this, hostname.c_str());
-	logger.debug("Object@%p: name=\"%s\"\n", this, name.c_str());
-	logger.debug("Object@%p: key=\"%s\"\n", this, key.c_str());
-	logger.debug("Object@%p: protocol=%d\n", this, protocol);
-	logger.debug("Object@%p: style=%d\n", this, style);
-	if (requests != 0) { logger.debug("Object@%p: requests=%p\n", this, requests); }
 }
 
 ::S3Status Object::properties(const ::S3ResponseProperties * properties) {
