@@ -134,21 +134,21 @@ default:	all
 # BUILD
 ################################################################################
 
-TARGETS+=Logger.o
-ARTIFACTS+=Logger.o
-ARCHIVABLE+=Logger.o
+TARGETS+=hayloft/Logger.o
+ARTIFACTS+=hayloft/Logger.o
+ARCHIVABLE+=hayloft/Logger.o
 
-TARGETS+=Packet.o
-ARTIFACTS+=Packet.o
-ARCHIVABLE+=Packet.o
+TARGETS+=hayloft/Packet.o
+ARTIFACTS+=hayloft/Packet.o
+ARCHIVABLE+=hayloft/Packet.o
 
-TARGETS+=Parameter.o
-ARTIFACTS+=Parameter.o
-ARCHIVABLE+=Parameter.o
+TARGETS+=hayloft/Parameter.o
+ARTIFACTS+=hayloft/Parameter.o
+ARCHIVABLE+=hayloft/Parameter.o
 
-TARGETS+=Size.o
-ARTIFACTS+=Size.o
-ARCHIVABLE+=Size.o
+TARGETS+=hayloft/Size.o
+ARTIFACTS+=hayloft/Size.o
+ARCHIVABLE+=hayloft/Size.o
 
 TARGETS+=s3/Session.o
 ARTIFACTS+=s3/Session.o
@@ -311,7 +311,6 @@ PHONY+=all clean clobber pristine
 all:	$(TARGETS)
 
 clean:
-	rm -f *.o
 	rm -f $(ARTIFACTS)
 	
 clobber:	clean
