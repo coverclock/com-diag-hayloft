@@ -14,6 +14,7 @@
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
+#include "com/diag/hayloft/Size.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/Print.h"
 #include "com/diag/desperado/DataInput.h"
@@ -883,9 +884,10 @@ TEST_F(PacketInputOutputTest, SourceSinkBuffer) {
 }
 
 TEST_F(PacketInputOutputTest, SourceSinkPathFile) {
-	struct ::stat status;
-	EXPECT_EQ(::stat(__FILE__, &status), 0);
+
 	::com::diag::desperado::PathInput input(__FILE__, "r");
+	Size inputsize = size(input);
+	EXPECT_TRUE(inputsize > 0);
 	char name[] = "/tmp/PacketTest.SourceSinkPathFile.XXXXXX";
 	int fd = ::mkstemp(name);
 	ASSERT_TRUE(fd > 0);
@@ -894,11 +896,13 @@ TEST_F(PacketInputOutputTest, SourceSinkPathFile) {
 	EXPECT_TRUE(packet.empty());
 	size_t sourced = packet.source(input);
 	EXPECT_FALSE(packet.empty());
-	EXPECT_EQ(sourced, (size_t)status.st_size);
-	EXPECT_EQ(packet.length(), (size_t)status.st_size);
+	EXPECT_EQ(sourced, inputsize);
+	EXPECT_EQ(packet.length(), inputsize);
 	size_t sunk = packet.sink(output);
 	EXPECT_TRUE(packet.empty());
-	EXPECT_EQ(sunk, sourced);
+	EXPECT_EQ(sunk, inputsize);
+	Size outputsize = size(output);
+	EXPECT_EQ(outputsize, inputsize);
 	EXPECT_EQ(::close(fd), 0);
 	std::string command = "diff ";
 	command += __FILE__;

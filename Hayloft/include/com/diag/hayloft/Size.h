@@ -18,10 +18,14 @@ namespace com {
 namespace diag {
 namespace desperado {
 class BufferInput;
+class BufferOutput;
 class DataInput;
 class DescriptorInput;
+class DescriptorOutput;
 class FileInput;
+class FileOutput;
 class Input;
+class Output;
 }
 }
 }
@@ -44,13 +48,21 @@ Size size(const FILE * fp);
 
 Size size(const ::com::diag::desperado::BufferInput & input);
 
+Size size(const ::com::diag::desperado::BufferOutput & output);
+
 Size size(const ::com::diag::desperado::DataInput & input);
 
 Size size(const ::com::diag::desperado::DescriptorInput & input);
 
+Size size(const ::com::diag::desperado::DescriptorOutput & output);
+
 Size size(const ::com::diag::desperado::FileInput & input);
 
+Size size(const ::com::diag::desperado::FileOutput & output);
+
 Size size(const ::com::diag::desperado::Input & input);
+
+Size size(const ::com::diag::desperado::Output & output);
 
 Size size(const PacketInput & input);
 

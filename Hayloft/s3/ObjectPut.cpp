@@ -78,14 +78,6 @@ ObjectPut::~ObjectPut() {
 
 void ObjectPut::initialize(const Properties::Metadata & settings) {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
-	std::memset(&context, 0, sizeof(context));
-	context.hostName = hostname.c_str();
-	context.bucketName = name.c_str();
-	context.protocol = protocol;
-	context.uriStyle = style;
-	context.accessKeyId = id.c_str();
-	context.secretAccessKey = secret.c_str();
-	show(&context);
 	std::memset(&properties, 0, sizeof(properties));
 	properties.contentType = type.empty() ? 0 : type.c_str();
 	properties.md5 = checksum.empty() ? 0 : checksum.c_str();

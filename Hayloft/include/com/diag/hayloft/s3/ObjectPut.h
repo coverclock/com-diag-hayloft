@@ -64,8 +64,6 @@ protected:
 
 	Properties::Metadata metadata;
 
-	::S3BucketContext context;
-
 	::S3PutProperties properties;
 
 	::S3PutObjectHandler handler;

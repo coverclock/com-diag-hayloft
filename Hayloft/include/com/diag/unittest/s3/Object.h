@@ -11,6 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <string>
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
@@ -18,6 +19,7 @@
 #include "com/diag/desperado/PathInput.h"
 #include "com/diag/hayloft/s3/ObjectGet.h"
 #include "com/diag/desperado/PathOutput.h"
+#include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/Size.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketTest.h"
@@ -25,6 +27,7 @@
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Access.h"
+#include "com/diag/desperado/stdlib.h"
 
 namespace com {
 namespace diag {
@@ -66,9 +69,9 @@ TEST_F(ObjectBaseTest, Temporary) {
 	EXPECT_TRUE(Object(Bucket(session, "ObjectBaseTestTemporary"), "ObjectBaseTestTemporaryKey") == true);
 }
 
-typedef Verbose ObjectPutTest;
+typedef Fixture ObjectTest;
 
-TEST_F(ObjectPutTest, Sanity) {
+TEST_F(ObjectTest, Sanity) {
 	const char BUCKET[] = "ObjectPutTest";
 	const char OBJECT[] = "Sanity.txt";
 	Session session;
@@ -90,9 +93,9 @@ TEST_F(ObjectPutTest, Sanity) {
 	ASSERT_TRUE(bucketcreate->isCreated());
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
-	Size octets = size(*input);
-	ASSERT_TRUE(octets > 0);
-	ObjectPut * objectput = new ObjectPut(*bucketcreate, OBJECT, input, octets, properties);
+	Size inputsize = size(*input);
+	ASSERT_TRUE(inputsize > 0);
+	ObjectPut * objectput = new ObjectPut(*bucketcreate, OBJECT, input, inputsize, properties);
 	ASSERT_NE(objectput, (ObjectPut*)0);
 	ASSERT_EQ(*objectput, true);
 	ASSERT_TRUE(objectput->isPut());
@@ -102,15 +105,26 @@ TEST_F(ObjectPutTest, Sanity) {
 	ObjectGet * objectget = new ObjectGet(*bucketcreate, OBJECT, output);
 	ASSERT_NE(objectget, (ObjectGet*)0);
 	ASSERT_EQ(*objectget, true);
-	ASSERT_TRUE(objectget->isGet());
+	ASSERT_TRUE(objectget->isGotten());
 	delete objectget;
-#if 0
+	ObjectDelete * objectdelete = new ObjectDelete(*bucketcreate, OBJECT);
+	ASSERT_NE(objectdelete, (ObjectDelete*)0);
+	ASSERT_EQ(*objectdelete, true);
+	ASSERT_TRUE(objectdelete->isDeleted());
+	delete objectdelete;
 	BucketDelete * bucketdelete = new BucketDelete(session, BUCKET);
-	ASSERT_NE(bucket, (Bucket*)0);
-	ASSERT_EQ(*bucket, true);
+	ASSERT_NE(bucketdelete, (Bucket*)0);
+	ASSERT_EQ(*bucketdelete, true);
 	ASSERT_TRUE(bucketdelete->isDeleted());
 	delete bucketdelete;
-#endif
+	Size outputsize = size(OBJECT);
+	ASSERT_EQ(inputsize, outputsize);
+	std::string command = "diff ";
+	command += __FILE__;
+	command += " ";
+	command += OBJECT;
+	EXPECT_EQ(std::system(command.c_str()), 0);
+	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
 }

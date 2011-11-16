@@ -11,9 +11,12 @@
 #include <unistd.h>
 #include "com/diag/hayloft/Size.h"
 #include "com/diag/desperado/BufferInput.h"
+#include "com/diag/desperado/BufferOutput.h"
 #include "com/diag/desperado/DataInput.h"
 #include "com/diag/desperado/DescriptorInput.h"
+#include "com/diag/desperado/DescriptorOutput.h"
 #include "com/diag/desperado/FileInput.h"
+#include "com/diag/desperado/FileOutput.h"
 #include "com/diag/hayloft/Packet.h"
 
 namespace com {
@@ -67,19 +70,35 @@ Size size(const ::com::diag::desperado::BufferInput & input) {
 	return input.getLength();
 }
 
+Size size(const ::com::diag::desperado::BufferOutput & output) {
+	return output.getLength();
+}
+
 Size size(const ::com::diag::desperado::DataInput & input) {
 	return input.getLength();
 }
 
 Size size(const ::com::diag::desperado::DescriptorInput & input) {
-	return size(input.getDescriptor());
+	return (size(input.getDescriptor()) + input.getPushed());
+}
+
+Size size(const ::com::diag::desperado::DescriptorOutput & output) {
+	return size(output.getDescriptor());
 }
 
 Size size(const ::com::diag::desperado::FileInput & input) {
 	return size(input.getFile());
 }
 
+Size size(const ::com::diag::desperado::FileOutput & output) {
+	return size(output.getFile());
+}
+
 Size size(const ::com::diag::desperado::Input & input) {
+	return EOF;
+}
+
+Size size(const ::com::diag::desperado::Output & output) {
 	return EOF;
 }
 
