@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_OBJECT
-#define _H__COM_DIAG_UNITTEST_S3_OBJECT
+#ifndef _H_COM_DIAG_UNITTEST_S3_OBJECT_
+#define _H__COM_DIAG_UNITTEST_S3_OBJECT_
 
 /**
  * @file

@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_LOCATIONCONSTRAINT
-#define _H_COM_DIAG_UNITTEST_S3_LOCATIONCONSTRAINT
+#ifndef _H_COM_DIAG_UNITTEST_S3_REGION_
+#define _H_COM_DIAG_UNITTEST_S3_REGION_
 
 /**
  * @file
