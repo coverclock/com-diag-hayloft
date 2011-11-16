@@ -51,7 +51,7 @@ protected:
 
 	Properties::Metadata metadata;
 
-	Size size;
+	Octets size;
 
 	::S3BucketContext context;
 
@@ -68,7 +68,7 @@ public:
 	explicit ObjectPut(
 		const Bucket & bucket,
 		const char * keyname,
-		Size octets,
+		Octets objectsize,
 		::com::diag::desperado::Input & source,
 		 const Properties & props = Properties()
 	);
@@ -76,7 +76,7 @@ public:
 	explicit ObjectPut(
 		const Bucket & bucket,
 		const char * keyname,
-		Size octets,
+		Octets objectsize,
 		::com::diag::desperado::Input * sourcep, /* TAKEN */
 		 const Properties & props = Properties()
 	);

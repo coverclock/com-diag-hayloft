@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _COM_DIAG_HAYLOFT_SIZE_H_
-#define _COM_DIAG_HAYLOFT_SIZE_H_
+#ifndef _H_COM_DIAG_HAYLOFT_SIZE_
+#define _H_COM_DIAG_HAYLOFT_SIZE_
 
 /**
  * @file

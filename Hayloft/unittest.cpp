@@ -14,10 +14,12 @@
 
 // Unit Tests that stand alone.
 
+#if 1
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/Parameter.h"
 #include "com/diag/unittest/Size.h"
+#endif
 
 // Unit tests that also use libs3, SSL, and CURL.
 
@@ -31,13 +33,17 @@
 #include "com/diag/unittest/s3/Context.h"
 #include "com/diag/unittest/s3/Queue.h"
 #include "com/diag/unittest/s3/Properties.h"
+#include "com/diag/unittest/s3/Conditions.h"
 #endif
 
-// Unit Tests that also use AWS.
+// Unit tests that also use AWS and Buckets.
 
 #if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
+
+// Unit tests that also use AWS and Objects.
+
 #if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif

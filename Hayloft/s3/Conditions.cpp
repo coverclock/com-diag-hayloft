@@ -7,18 +7,18 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Protocol.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/s3/Conditions.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-const ::S3Protocol Protocol::DEFAULT;
-
-Protocol::Protocol(::S3Protocol pr)
-: protocol(pr)
+Conditions::Conditions(Epochalseconds ifModifiedSince, Epochalseconds ifNotModifiedSince, const char * ifMatchETag, const char * ifNotMatchETag)
+: since(ifModifiedSince)
+, notsince(ifNotModifiedSince)
+, match(set(ifMatchETag, 0, ""))
+, notmatch(set(ifNotMatchETag, 0, ""))
 {}
 
 }

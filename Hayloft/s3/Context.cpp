@@ -27,15 +27,7 @@ Context::Context(
 , protocol(pr.getProtocol())
 , style(st.getStyle())
 , access(ac.getAccess())
-{
-	Logger & logger = Logger::instance();
-	logger.debug("Context@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
-	logger.debug("Context@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
-	logger.debug("Context@%p: region=\"%s\"\n", this, region.c_str());
-	logger.debug("Context@%p: protocol=%d\n", this, protocol);
-	logger.debug("Context@%p: style=%d\n", this, style);
-	logger.debug("Context@%p: access=%d\n", this, access);
-}
+{}
 
 }
 }

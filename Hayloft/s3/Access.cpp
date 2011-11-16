@@ -19,9 +19,7 @@ const ::S3CannedAcl Access::DEFAULT;
 
 Access::Access(::S3CannedAcl cannedAcl)
 : access(cannedAcl)
-{
-	Logger::instance().debug("Access@%p: access=%d\n", this, access);
-}
+{}
 
 }
 }
