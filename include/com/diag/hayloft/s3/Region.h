@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_REGION
-#define _H_COM_DIAG_HAYLOFT_S3_REGION
+#ifndef _H_COM_DIAG_HAYLOFT_S3_REGION_
+#define _H_COM_DIAG_HAYLOFT_S3_REGION_
 
 /**
  * @file

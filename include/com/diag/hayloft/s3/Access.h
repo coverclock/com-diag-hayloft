@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_ACCESS
-#define _H_COM_DIAG_HAYLOFT_S3_ACCESS
+#ifndef _H_COM_DIAG_HAYLOFT_S3_ACCESS_
+#define _H_COM_DIAG_HAYLOFT_S3_ACCESS_
 
 /**
  * @file
