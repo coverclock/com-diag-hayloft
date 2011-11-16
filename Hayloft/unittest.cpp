@@ -37,8 +37,8 @@
 
 #if 0
 #include "com/diag/unittest/s3/Bucket.h"
-#include "com/diag/unittest/s3/Object.h"
 #endif
+#include "com/diag/unittest/s3/Object.h"
 
 int main(int argc, char ** argv, char **envp) {
 	return ::com::diag::lariat::main(argc, argv, envp);
