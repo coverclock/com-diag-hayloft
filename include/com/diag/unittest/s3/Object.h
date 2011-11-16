@@ -68,11 +68,13 @@ typedef Verbose ObjectPutTest;
 
 TEST_F(ObjectPutTest, Sanity) {
 	const char BUCKET[] = "ObjectPutTestSanity";
-	const char OBJECT[] = "One";
+	const char OBJECT[] = __FILE__;
 	Session session;
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
+	Properties properties;
+	properties.setAccess(access);
 	Bucket * bucket;
 	BucketTest * buckettest;
 	bucket = buckettest = new BucketTest(session, BUCKET, context);
@@ -91,8 +93,9 @@ TEST_F(ObjectPutTest, Sanity) {
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size octets = size(*input);
 	ASSERT_TRUE(octets > 0);
-	Object * object = new ObjectPut(*bucket, OBJECT, octets, input);
+	Object * object = new ObjectPut(*bucket, OBJECT, octets, input, properties);
 	ASSERT_EQ(*object, true);
+	// http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Object.h
 	delete object;
 	delete bucket;
 	BucketDelete * bucketdelete;
