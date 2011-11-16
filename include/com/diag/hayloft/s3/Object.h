@@ -32,7 +32,7 @@ public:
 	 */
 	static const size_t LENGTH = 1024;
 
-	typedef uint64_t Size;
+	typedef uint64_t Octets;
 
 private:
 

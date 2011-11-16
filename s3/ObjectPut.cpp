@@ -27,28 +27,28 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	return rc;
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size octets, ::com::diag::desperado::Input & source, const Properties & props)
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Octets objectsize, ::com::diag::desperado::Input & source, const Properties & props)
 : Object(bucket, keyname)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
 , filename(props.getFilename())
 , encoding(props.getEncoding())
-, size(octets)
+, size(objectsize)
 , inputp(0)
 , input(source)
 {
 	initialize(props);
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Size octets, ::com::diag::desperado::Input * sourcep, const Properties & props)
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Octets objectsize, ::com::diag::desperado::Input * sourcep, const Properties & props)
 : Object(bucket, keyname)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
 , filename(props.getFilename())
 , encoding(props.getEncoding())
-, size(octets)
+, size(objectsize)
 , inputp(sourcep)
 , input(*sourcep)
 {

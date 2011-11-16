@@ -15,23 +15,23 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-void show(const ::S3ResponseProperties * properties, Logger::Level level) {
-	if (properties != 0) {
+void show(const ::S3ResponseProperties * response, Logger::Level level) {
+	if (response != 0) {
 		Logger & logger = Logger::instance();
 		if (logger.isEnabled(level)) {
-			if (properties->requestId != 0) { logger.log(level, "S3ResponseProperties@%p: requestId=\"%s\"\n", properties, properties->requestId); }
-			if (properties->requestId2 != 0) { logger.log(level, "S3ResponseProperties@%p: requestId2=\"%s\"\n", properties, properties->requestId2); }
-			if (properties->contentType != 0) { logger.log(level, "S3ResponseProperties@%p: contentType=\"%s\"\n", properties, properties->contentType); }
-			if (properties->contentLength != 0) { logger.log(level, "S3ResponseProperties@%p: contentLength=%llu\n", properties, properties->contentLength); }
-			if (properties->server != 0) { logger.log(level, "S3ResponseProperties@%p: server=\"%s\"\n", properties, properties->server); }
-			if (properties->eTag != 0) { logger.log(level, "S3ResponseProperties@%p: eTag=\"%s\"\n", properties, properties->eTag); }
-			if (properties->lastModified != 0) { logger.log(level, "S3ResponseProperties@%p: lastModified=%lld\n", properties, properties->lastModified); }
-			if (properties->metaData != 0) {
-				for (int ii = 0; ii < properties->metaDataCount; ++ii) {
-					if ((properties->metaData[ii].name != 0) || (properties->metaData[ii].value != 0)) {
-						logger.log(level, "S3ResponseProperties@%p: \"%s\"=\"%s\"\n", properties,
-								(properties->metaData[ii].name != 0) ? properties->metaData[ii].name : "",
-								(properties->metaData[ii].value != 0) ? properties->metaData[ii].value : "");
+			if (response->requestId != 0) { logger.log(level, "S3ResponseProperties@%p: requestId=\"%s\"\n", response, response->requestId); }
+			if (response->requestId2 != 0) { logger.log(level, "S3ResponseProperties@%p: requestId2=\"%s\"\n", response, response->requestId2); }
+			if (response->contentType != 0) { logger.log(level, "S3ResponseProperties@%p: contentType=\"%s\"\n", response, response->contentType); }
+			if (response->contentLength > 0) { logger.log(level, "S3ResponseProperties@%p: contentLength=%llu\n", response, response->contentLength); }
+			if (response->server != 0) { logger.log(level, "S3ResponseProperties@%p: server=\"%s\"\n", response, response->server); }
+			if (response->eTag != 0) { logger.log(level, "S3ResponseProperties@%p: eTag=\"%s\"\n", response, response->eTag); }
+			if (response->lastModified >= 0) { logger.log(level, "S3ResponseProperties@%p: lastModified=%lld\n", response, response->lastModified); }
+			if (response->metaData != 0) {
+				for (int ii = 0; ii < response->metaDataCount; ++ii) {
+					if ((response->metaData[ii].name != 0) || (response->metaData[ii].value != 0)) {
+						logger.log(level, "S3ResponseProperties@%p: \"%s\"=\"%s\"\n", response,
+								(response->metaData[ii].name != 0) ? response->metaData[ii].name : "",
+								(response->metaData[ii].value != 0) ? response->metaData[ii].value : "");
 					}
 				}
 			}
@@ -59,7 +59,6 @@ void show(const ::S3ErrorDetails * details, Logger::Level level) {
 	}
 }
 
-
 void show(const ::S3BucketContext * context, Logger::Level level) {
 	if (context != 0) {
 		Logger & logger = Logger::instance();
@@ -74,7 +73,6 @@ void show(const ::S3BucketContext * context, Logger::Level level) {
 	}
 }
 
-
 void show(const ::S3PutProperties * properties, Logger::Level level) {
 	if (properties != 0) {
 		Logger & logger = Logger::instance();
@@ -84,16 +82,29 @@ void show(const ::S3PutProperties * properties, Logger::Level level) {
 			if (properties->cacheControl != 0) { logger.log(level, "S3PutProperties@%p: cacheControl=\"%s\"\n", properties,  properties->cacheControl); }
 			if (properties->contentDispositionFilename != 0) { logger.log(level, "S3PutProperties@%p: contentDispositionFilename=\"%s\"\n", properties, properties->contentDispositionFilename); }
 			if (properties->contentEncoding != 0) { logger.log(level, "S3PutProperties@%p: contentEncoding=\"%s\"\n", properties, properties->contentEncoding); }
-			logger.log(level, "S3PutProperties@%p: expires=%lld\n", properties, properties->expires);
+			if (properties->expires >= 0) { logger.log(level, "S3PutProperties@%p: expires=%lld\n", properties, properties->expires); }
 			logger.log(level, "S3PutProperties@%p: cannedAcl=%d\n", properties, properties->cannedAcl);
-			logger.log(level, "S3PutProperties@%p: metaDataCount=%d\n", properties, properties->metaDataCount);
-			for (int ii = 0; ii < properties->metaDataCount; ++ii) {
-				if ((properties->metaData[ii].name != 0) || (properties->metaData[ii].value != 0)) {
-					logger.log(level, "S3PutProperties@%p: \"%s\"=\"%s\"\n", properties,
-							(properties->metaData[ii].name != 0) ? properties->metaData[ii].name : "",
-							(properties->metaData[ii].value != 0) ? properties->metaData[ii].value : "");
+			if (properties->metaData != 0) {
+				for (int ii = 0; ii < properties->metaDataCount; ++ii) {
+					if ((properties->metaData[ii].name != 0) || (properties->metaData[ii].value != 0)) {
+						logger.log(level, "S3PutProperties@%p: \"%s\"=\"%s\"\n", properties,
+								(properties->metaData[ii].name != 0) ? properties->metaData[ii].name : "",
+								(properties->metaData[ii].value != 0) ? properties->metaData[ii].value : "");
+					}
 				}
 			}
+		}
+	}
+}
+
+void show(const ::S3GetConditions * conditions, Logger::Level level) {
+	if (conditions != 0) {
+		Logger & logger = Logger::instance();
+		if (logger.isEnabled(level)) {
+			if (conditions->ifModifiedSince >= 0) { logger.log(level, "S3GetConditions@%p: ifModifiedSince=%lld\n", conditions, conditions->ifModifiedSince); }
+			if (conditions->ifNotModifiedSince >= 0) { logger.log(level, "S3GetConditions@%p: ifNotModifiedSince=%lld\n", conditions, conditions->ifNotModifiedSince); }
+			if (conditions->ifMatchETag != 0) { logger.log(level, "S3GetConditions@%p: ifMatchETag=\"%s\"\n", conditions, conditions->ifMatchETag); }
+			if (conditions->ifNotMatchETag != 0) { logger.log(level, "S3GetConditions@%p: ifNotMatchETag=\"%s\"\n", conditions, conditions->ifNotMatchETag); }
 		}
 	}
 }

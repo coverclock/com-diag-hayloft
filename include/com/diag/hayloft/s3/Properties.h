@@ -31,6 +31,8 @@ public:
 
 	typedef std::pair<std::string, std::string> Pair;
 
+	typedef int64_t Epochalseconds;
+
 private:
 
 	std::string type;
@@ -43,7 +45,7 @@ private:
 
 	std::string encoding;
 
-	int64_t expiration;
+	Epochalseconds expiration;
 
 	::S3CannedAcl access;
 
@@ -57,7 +59,7 @@ public:
 		const char * cacheControl = 0,
 		const char * contentDispositionFilename = 0,
 		const char * contentEncoding = 0,
-		const int64_t expires = -1,
+		const Epochalseconds expires = -1,
 		const Access & cannedAcl = Access()
 	);
 
@@ -73,7 +75,7 @@ public:
 
 	const char * getEncoding() const { return encoding.c_str(); }
 
-	int64_t getExpires() const { return expiration; }
+	Epochalseconds getExpires() const { return expiration; }
 
 	::S3CannedAcl getAccess() const { return access; }
 
@@ -87,7 +89,7 @@ public:
 
 	Properties & setEncoding(const char * contentEncoding = 0) { encoding = set(contentEncoding, 0, ""); return *this; }
 
-	Properties & setExpires(const int64_t expires = -1) { expiration = expires; return *this; }
+	Properties & setExpires(const Epochalseconds expires = -1) { expiration = expires; return *this; }
 
 	Properties & setAccess(const Access & cannedAcl = Access()) { access = cannedAcl.getAccess(); return *this; }
 

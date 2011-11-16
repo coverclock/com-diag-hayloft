@@ -19,9 +19,7 @@ const ::S3UriStyle Style::DEFAULT;
 
 Style::Style(::S3UriStyle st)
 : style(st)
-{
-	Logger::instance().debug("Style@%p: style=%d\n", this, style);
-}
+{}
 
 }
 }

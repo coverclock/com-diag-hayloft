@@ -21,13 +21,13 @@ namespace s3 {
 
 extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger::DEBUG);
 
-extern void show(const ::S3ResponseProperties * properties, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3ResponseProperties * response, Logger::Level level = Logger::DEBUG);
 
-extern void show(const ::S3BucketContext * properties, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3BucketContext * context, Logger::Level level = Logger::DEBUG);
 
 extern void show(const ::S3PutProperties * properties, Logger::Level level = Logger::DEBUG);
 
-
+extern void show(const ::S3GetConditions * conditions, Logger::Level level = Logger::DEBUG);
 
 }
 }
