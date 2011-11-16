@@ -64,6 +64,7 @@ TEST_F(ProtocolTest, Settors) {
 	Protocol protocol;
 	protocol.setProtocol().setProtocol(::S3ProtocolHTTP);
 	EXPECT_EQ(protocol.getProtocol(), ::S3ProtocolHTTP);
+	EXPECT_EQ(protocol.setProtocol().getProtocol(), Protocol::DEFAULT);
 }
 
 }

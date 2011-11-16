@@ -63,6 +63,7 @@ TEST_F(StyleTest, Settors) {
 	Style style;
 	style.setStyle().setStyle(::S3UriStylePath);
 	EXPECT_EQ(style.getStyle(), ::S3UriStylePath);
+	EXPECT_EQ(style.setStyle().getStyle(), Style::DEFAULT);
 }
 
 }

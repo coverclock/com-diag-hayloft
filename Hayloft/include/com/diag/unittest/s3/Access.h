@@ -73,6 +73,7 @@ TEST_F(AccessTest, Settors) {
 	Access access;
 	access.setAccess().setAccess(::S3CannedAclPublicReadWrite);
 	EXPECT_EQ(access.getAccess(), ::S3CannedAclPublicReadWrite);
+	EXPECT_EQ(access.setAccess().getAccess(), Access::DEFAULT);
 }
 
 }

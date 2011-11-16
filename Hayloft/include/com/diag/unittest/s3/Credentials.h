@@ -260,6 +260,7 @@ TEST_F(CredentialsTest, Settors) {
 	EXPECT_EQ(std::strcmp(credentials.getId(), ID), 0);
 	ASSERT_NE(credentials.getSecret(), (char *)0);
 	EXPECT_EQ(std::strcmp(credentials.getSecret(), SECRET), 0);
+	credentials.setId().setSecret();
 }
 
 }

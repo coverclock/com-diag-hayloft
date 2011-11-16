@@ -92,6 +92,17 @@ TEST_F(ContextTest, Settors) {
 	EXPECT_EQ(context.getStyle(), ::S3UriStylePath);
 	context.setAccess().setAccess(access);
 	EXPECT_EQ(context.getAccess(), ::S3CannedAclPublicRead);
+	context.setCredentials().setRegion().setProtocol().setStyle().setAccess();
+	ASSERT_NE(context.getId(), (char *)0);
+	EXPECT_EQ(std::strlen(context.getId()), Credentials::ACCESS_KEY_ID_LEN);
+	ASSERT_NE(context.getSecret(), (char *)0);
+	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
+	ASSERT_NE(context.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(context.getRegion(), Region::DEFAULT()), 0);
+	EXPECT_EQ(context.getLength(), std::strlen(Region::DEFAULT()));
+	EXPECT_EQ(context.getProtocol(), Protocol::DEFAULT);
+	EXPECT_EQ(context.getStyle(), Style::DEFAULT);
+	EXPECT_EQ(context.getAccess(), Access::DEFAULT);
 }
 
 }
