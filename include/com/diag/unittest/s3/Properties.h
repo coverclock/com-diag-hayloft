@@ -126,6 +126,19 @@ TEST_F(PropertiesTest, Settors) {
 	EXPECT_EQ(properties.getExpires(), 12345);
 	properties.setAccess().setAccess(access);
 	EXPECT_EQ(properties.getAccess(), ::S3CannedAclPublicReadWrite);
+	properties.setType().setChecksum().setControl().setFilename().setEncoding().setExpires().setAccess();
+	ASSERT_NE(properties.getType(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getType(), ""), 0);
+	ASSERT_NE(properties.getChecksum(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getChecksum(), ""), 0);
+	ASSERT_NE(properties.getControl(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getControl(), ""), 0);
+	ASSERT_NE(properties.getFilename(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getFilename(), ""), 0);
+	ASSERT_NE(properties.getEncoding(), (char *)0);
+	EXPECT_EQ(std::strcmp(properties.getEncoding(), ""), 0);
+	EXPECT_EQ(properties.getExpires(), -1);
+	EXPECT_EQ(properties.getAccess(), Access::DEFAULT);
 }
 }
 }
