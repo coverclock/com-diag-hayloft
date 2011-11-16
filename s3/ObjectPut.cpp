@@ -13,6 +13,7 @@
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/desperado/target.h"
+#include "com/diag/desperado/string.h"
 
 namespace com {
 namespace diag {
@@ -23,36 +24,44 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
 	int rc = that->put(bufferSize, buffer);
 	Logger::Level level = (rc >= 0) ? Logger::DEBUG : Logger::WARNING;
-	Logger::instance().log(level, "ObjectPut@%p: requested=%d delivered=%d\n", that, bufferSize, rc);
-	return rc;
+	Logger::instance().log(level, "ObjectPut@%p: requested=%d actual=%d\n", that, bufferSize, rc);
+	return (rc < 0) ? 0 : rc;
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Octets objectsize, ::com::diag::desperado::Input & source, const Properties & props)
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
 : Object(bucket, keyname)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
 , filename(props.getFilename())
 , encoding(props.getEncoding())
-, size(objectsize)
+, expires(props.getExpires())
+, access(props.getAccess())
 , inputp(0)
 , input(source)
+, size(objectsize)
+, consumed(0)
 {
-	initialize(props);
+	initialize(props.getMetadata());
+	begin();
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, Octets objectsize, ::com::diag::desperado::Input * sourcep, const Properties & props)
+ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
 : Object(bucket, keyname)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
 , filename(props.getFilename())
 , encoding(props.getEncoding())
-, size(objectsize)
+, expires(props.getExpires())
+, access(props.getAccess())
 , inputp(sourcep)
 , input(*sourcep)
+, size(objectsize)
+, consumed(0)
 {
-	initialize(props);
+	initialize(props.getMetadata());
+	begin();
 }
 
 ObjectPut::~ObjectPut() {
@@ -62,33 +71,34 @@ ObjectPut::~ObjectPut() {
 	if (inputp != 0) {
 		delete inputp;
 	}
+	if (properties.metaData != 0) {
+		delete [] properties.metaData;
+	}
 }
 
-
-void ObjectPut::initialize(const Properties & props) {
-	Logger & logger = Logger::instance();
-	logger.debug("ObjectPut@%p: begin\n", this);
+void ObjectPut::initialize(const Properties::Metadata & settings) {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	std::memset(&context, 0, sizeof(context));
 	context.hostName = hostname.c_str();
 	context.bucketName = name.c_str();
 	context.protocol = protocol;
 	context.uriStyle = style;
 	context.accessKeyId = id.c_str();
 	context.secretAccessKey = secret.c_str();
-	show(&context, Logger::DEBUG);
+	show(&context);
+	std::memset(&properties, 0, sizeof(properties));
 	properties.contentType = type.empty() ? 0 : type.c_str();
 	properties.md5 = checksum.empty() ? 0 : checksum.c_str();
 	properties.cacheControl = control.empty() ? 0 : control.c_str();
 	properties.contentDispositionFilename = filename.empty() ? 0 : filename.c_str();
 	properties.contentEncoding = encoding.empty() ? 0 : encoding.c_str();
-	properties.expires = props.getExpires();
-	properties.cannedAcl = props.getAccess();
-	const Properties::Metadata & md = props.getMetadata();
-	properties.metaDataCount = md.size();
+	properties.expires = expires;
+	properties.cannedAcl = access;
+	properties.metaDataCount = settings.size();
 	if (properties.metaDataCount > 0) {
 		Properties::Metadata::const_iterator here;
 		Properties::Metadata::const_iterator end;
-		for (here = md.begin(), end = md.end(); here != end; ++here) {
+		for (here = settings.begin(), end = settings.end(); here != end; ++here) {
 			metadata.insert(Properties::Pair(here->first, here->second));
 		}
 		::S3NameValue * pair = new ::S3NameValue [properties.metaDataCount];
@@ -97,13 +107,16 @@ void ObjectPut::initialize(const Properties & props) {
 			pair->name = (here->first).c_str();
 			pair->value = (here->second).c_str();
 		}
-	} else {
-		properties.metaData = 0;
 	}
-	show(&properties, Logger::DEBUG);
+	show(&properties);
+	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = Object::handler.completeCallback;
 	handler.putObjectDataCallback = &putObjectDataCallback;
+}
+
+void ObjectPut::begin() {
+	Logger::instance().debug("ObjectPut@%p: begin\n", this);
 	::S3_put_object(
 		&context,
 		key.c_str(),
@@ -116,16 +129,18 @@ void ObjectPut::initialize(const Properties & props) {
 }
 
 int ObjectPut::put(int bufferSize, char * buffer) {
-	ssize_t rc = input(buffer, 1, bufferSize);
-	if ((rc == EOF) && (inputp != 0)) {
-		delete inputp;
-		inputp = 0;
+	if (consumed != EOF) {
+		consumed = input(buffer, 1, bufferSize);
+		if ((consumed == EOF) && (inputp != 0)) {
+			delete inputp;
+			inputp = 0;
+		}
 	}
-	return (rc == EOF) ? 0 : rc;
+	return (consumed == EOF) ? 0 : consumed;
 }
 
 void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("ObjectPut@%p: end\n", this);
+	Logger::instance().debug("ObjectPut@%p: complete\n", this);
 }
 
 }

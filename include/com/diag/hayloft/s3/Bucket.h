@@ -42,15 +42,13 @@ private:
 
 protected:
 
-	std::string hostname;
-
-	std::string name;
-
-	::S3RequestContext * requests;
-
 	std::string id;
 
 	std::string secret;
+
+	std::string hostname;
+
+	std::string name;
 
 	std::string region;
 
@@ -59,6 +57,8 @@ protected:
 	::S3UriStyle style;
 
 	::S3CannedAcl access;
+
+	::S3RequestContext * requests;
 
 	::S3Status status;
 
@@ -87,15 +87,13 @@ public:
 
 	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
 
-	const char * getHostName() const { return hostname.c_str(); }
-
-	const char * getName() const { return name.c_str(); }
-
-	::S3RequestContext * getRequests() const { return requests; }
-
 	const char * getId() const { return id.c_str(); }
 
 	const char * getSecret() const { return secret.c_str(); }
+
+	const char * getHostName() const { return hostname.c_str(); }
+
+	const char * getName() const { return name.c_str(); }
 
 	const char * getRegion() const { return region.c_str(); }
 
@@ -106,6 +104,8 @@ public:
 	::S3UriStyle getStyle() const { return style; }
 
 	::S3CannedAcl getAccess() const { return access; }
+
+	::S3RequestContext * getRequests() const { return requests; }
 
 	::S3Status getStatus() const { return status; }
 

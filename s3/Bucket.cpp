@@ -13,6 +13,7 @@
 #include "com/diag/hayloft/s3/Queue.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
+#include "com/diag/desperado/string.h"
 
 namespace com {
 namespace diag {
@@ -21,10 +22,10 @@ namespace s3 {
 
 ::S3Status Bucket::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
 	Bucket * that = static_cast<Bucket*>(callbackData);
-	show(properties, Logger::DEBUG);
 	::S3Status status = that->properties(properties);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
 	Logger::instance().log(level, "Bucket@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	show(properties, level);
 	return status;
 }
 
@@ -38,30 +39,30 @@ void Bucket::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 }
 
 Bucket::Bucket(const Session & session, const char * bucketname, const Context & context)
-: hostname(session.getHostName())
-, name(session.canonicalize(bucketname))
-, requests(0)
-, id(context.getId())
+: id(context.getId())
 , secret(context.getSecret())
+, hostname(session.getHostName())
+, name(session.canonicalize(bucketname))
 , region(context.getRegion())
 , protocol(context.getProtocol())
 , style(context.getStyle())
 , access(context.getAccess())
+, requests(0)
 , status(::S3StatusOK)
 {
 	initialize();
 }
 
 Bucket::Bucket(const Session & session, const char * bucketname, Queue & queue, const Context & context)
-: hostname(session.getHostName())
-, name(session.canonicalize(bucketname))
-, requests(queue.getRequests())
-, id(context.getId())
+: id(context.getId())
 , secret(context.getSecret())
+, hostname(session.getHostName())
+, name(session.canonicalize(bucketname))
 , region(context.getRegion())
 , protocol(context.getProtocol())
 , style(context.getStyle())
 , access(context.getAccess())
+, requests(queue.getRequests())
 , status(::S3StatusOK)
 {
 	initialize();
@@ -75,24 +76,18 @@ Bucket::~Bucket() {
 
 void Bucket::initialize() {
 	Logger & logger = Logger::instance();
+	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
-	logger.debug("Bucket@%p: hostname=\"%s\"\n", this, hostname.c_str());
-	logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
-	if (name.length() == 0) {
-		logger.warning("Bucket@%p: name too short! (%zu<1)\n", this, name.length());
-	} else 	if (name.length() > LENGTH) {
-		logger.warning("Bucket@%p: name too long! (%zu>%zu)\n", this, name.length(), LENGTH);
-	} else {
-		// Do nothing.
-	}
-	logger.debug("Bucket@%p: requests=%p\n", this, requests);
 	logger.debug("Bucket@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
 	logger.debug("Bucket@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
+	logger.debug("Bucket@%p: hostname=\"%s\"\n", this, hostname.c_str());
+	logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
 	logger.debug("Bucket@%p: region=\"%s\"\n", this, region.c_str());
 	logger.debug("Bucket@%p: protocol=%d\n", this, protocol);
 	logger.debug("Bucket@%p: style=%d\n", this, style);
 	logger.debug("Bucket@%p: access=%d\n", this, access);
+	if (requests != 0) { logger.debug("Bucket@%p: requests=%p\n", this, requests); }
 }
 
 ::S3Status Bucket::properties(const ::S3ResponseProperties * properties) {

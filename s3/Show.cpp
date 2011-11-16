@@ -65,8 +65,8 @@ void show(const ::S3BucketContext * context, Logger::Level level) {
 		if (logger.isEnabled(level)) {
 			if (context->hostName != 0) { logger.log(level, "S3BucketContext@%p: hostName=\"%s\"\n", context, context->hostName); }
 			if (context->bucketName != 0) { logger.log(level, "S3BucketContext@%p: bucketName=\"%s\"\n", context, context->bucketName); }
-			logger.log(level, "S3BucketContext@%p: protocol=\"%s\"\n", context, context->protocol);
-			logger.log(level, "S3BucketContext@%p: uriStyle=\"%s\"\n", context, context->uriStyle);
+			logger.log(level, "S3BucketContext@%p: protocol=%d\n", context, context->protocol);
+			logger.log(level, "S3BucketContext@%p: uriStyle=%d\n", context, context->uriStyle);
 			if (context->accessKeyId != 0) { logger.log(level, "S3BucketContext@%p: accessKeyId=\"%s\"\n", context, Credentials::obfuscate(context->accessKeyId)); }
 			if (context->secretAccessKey != 0) { logger.log(level, "S3BucketContext@%p: secretAccessKey=\"%s\"\n", context, Credentials::obfuscate(context->secretAccessKey)); }
 		}

@@ -56,6 +56,8 @@ private:
 
 	void initialize();
 
+	void begin();
+
 };
 
 }

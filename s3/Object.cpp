@@ -15,6 +15,7 @@
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
+#include "com/diag/desperado/string.h"
 
 namespace com {
 namespace diag {
@@ -23,10 +24,10 @@ namespace s3 {
 
 ::S3Status Object::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
-	show(properties, Logger::DEBUG);
 	::S3Status status = that->properties(properties);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
 	Logger::instance().log(level, "Object@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	show(properties, level);
 	return status;
 }
 
@@ -40,14 +41,14 @@ void Object::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 }
 
 Object::Object(const Bucket & bucket, const char * keyname)
-: hostname(bucket.getHostName())
+: id(bucket.getId())
+, secret(bucket.getSecret())
+, hostname(bucket.getHostName())
 , name(bucket.getName())
+, key(keyname)
 , protocol(bucket.getProtocol())
 , style(bucket.getStyle())
-, id(bucket.getId())
-, secret(bucket.getSecret())
 , requests(bucket.getRequests())
-, key(keyname)
 , status(::S3StatusOK)
 {
 	initialize();
@@ -62,23 +63,17 @@ Object::~Object() {
 
 void Object::initialize() {
 	Logger & logger = Logger::instance();
+	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
+ 	logger.debug("Object@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
+	logger.debug("Object@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
 	logger.debug("Object@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	logger.debug("Object@%p: name=\"%s\"\n", this, name.c_str());
+	logger.debug("Object@%p: key=\"%s\"\n", this, key.c_str());
 	logger.debug("Object@%p: protocol=%d\n", this, protocol);
 	logger.debug("Object@%p: style=%d\n", this, style);
-	logger.debug("Object@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
-	logger.debug("Object@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
-	logger.debug("Object@%p: requests=%p\n", this, requests);
-	logger.debug("Object@%p: key=\"%s\"\n", this, key.c_str());
-	if (key.length() == 0) {
-		logger.warning("Object@%p: key too short! (%zu<1)\n", this, key.length());
-	} else 	if (key.length() > LENGTH) {
-		logger.warning("Object@%p: key too long! (%zu>%zu)\n", this, key.length(), LENGTH);
-	} else {
-		// Do nothing.
-	}
+	if (requests != 0) { logger.debug("Object@%p: requests=%p\n", this, requests); }
 }
 
 ::S3Status Object::properties(const ::S3ResponseProperties * properties) {

@@ -222,6 +222,10 @@ TARGETS+=s3/ObjectPut.o
 ARTIFACTS+=s3/ObjectPut.o
 ARCHIVABLE+=s3/ObjectPut.o
 
+TARGETS+=s3/ObjectGet.o
+ARTIFACTS+=s3/ObjectGet.o
+ARCHIVABLE+=s3/ObjectGet.o
+
 TARGETS+=unittest
 ARTIFACTS+=unittest
 

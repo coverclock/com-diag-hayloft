@@ -22,20 +22,25 @@ BucketDelete::BucketDelete(const Session & session, const char * bucketname, con
 : Bucket(session, bucketname, context)
 {
 	initialize();
+	begin();
 }
 
 BucketDelete::BucketDelete(const Session & session, const char * bucketname, Queue & queue, const Context & context)
 : Bucket(session, bucketname, queue, context)
 {
 	initialize();
+	begin();
 }
 
 BucketDelete::~BucketDelete() {
 }
 
 void BucketDelete::initialize() {
-	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+}
+
+void BucketDelete::begin() {
+	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	::S3_delete_bucket(
 		protocol,
 		style,
@@ -50,7 +55,7 @@ void BucketDelete::initialize() {
 }
 
 void BucketDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("BucketDelete@%p: end\n", this);
+	Logger::instance().debug("BucketDelete@%p: complete\n", this);
 }
 
 }
