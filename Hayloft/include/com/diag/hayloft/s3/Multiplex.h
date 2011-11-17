@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_QUEUE_
-#define _H_COM_DIAG_HAYLOFT_S3_QUEUE_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_MULTIPLEX_
+#define _H_COM_DIAG_HAYLOFT_S3_MULTIPLEX_
 
 /**
  * @file
@@ -22,7 +22,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Queue {
+class Multiplex {
 
 public:
 
@@ -68,9 +68,9 @@ private:
 
 public:
 
-	explicit Queue();
+	explicit Multiplex();
 
-	virtual ~Queue();
+	virtual ~Multiplex();
 
 	operator bool() { return (status == ::S3StatusOK); }
 
@@ -92,13 +92,13 @@ private:
      *  Copy constructor.
      *  @param that refers to an R-value object of this type.
      */
-	Queue(const Queue& that);
+	Multiplex(const Multiplex& that);
 
     /**
      *  Assignment operator.
      *  @param that refers to an R-value object of this type.
      */
-	Queue& operator=(const Queue& that);
+	Multiplex& operator=(const Multiplex& that);
 
 };
 

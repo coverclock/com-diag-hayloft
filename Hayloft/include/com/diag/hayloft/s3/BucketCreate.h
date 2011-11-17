@@ -32,7 +32,7 @@ public:
 	explicit BucketCreate(
 		const Session & session,
 		const char * bucketname,
-		Queue & queue,
+		Multiplex & multiplex,
 		const Context & context = Context()
 	);
 

@@ -31,7 +31,7 @@
 #include "com/diag/unittest/s3/Region.h"
 #include "com/diag/unittest/s3/Access.h"
 #include "com/diag/unittest/s3/Context.h"
-#include "com/diag/unittest/s3/Queue.h"
+#include "com/diag/unittest/s3/Multiplex.h"
 #include "com/diag/unittest/s3/Properties.h"
 #include "com/diag/unittest/s3/Conditions.h"
 #endif

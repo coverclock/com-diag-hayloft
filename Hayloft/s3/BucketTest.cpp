@@ -25,8 +25,8 @@ BucketTest::BucketTest(const Session & session, const char * bucketname, const C
 	begin();
 }
 
-BucketTest::BucketTest(const Session & session, const char * bucketname, Queue & queue, const Context & context)
-: Bucket(session, bucketname, queue, context)
+BucketTest::BucketTest(const Session & session, const char * bucketname, Multiplex & multiplex, const Context & context)
+: Bucket(session, bucketname, multiplex, context)
 {
 	initialize();
 	begin();
