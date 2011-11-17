@@ -40,56 +40,48 @@ TEST_F(RegionTest, Default) {
 	Region locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::DEFAULT()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::DEFAULT()));
 }
 
 TEST_F(RegionTest, Ireland) {
 	RegionIreland locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::EUROPEAN_UNION_WEST_1()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::EUROPEAN_UNION_WEST_1()));
 }
 
 TEST_F(RegionTest, NorthernCalifornia) {
 	RegionNorthernCalifornia locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_WEST_1()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::UNITED_STATES_WEST_1()));
 }
 
 TEST_F(RegionTest, Singapore) {
 	RegionSingapore locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_SOUTHEAST_1()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::ASIA_PACIFIC_SOUTHEAST_1()));
 }
 
 TEST_F(RegionTest, Tokyo) {
 	RegionTokyo locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::ASIA_PACIFIC_NORTHEAST_1()));
 }
 
 TEST_F(RegionTest, UnitedStates) {
 	RegionUnitedStates locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_CLASSIC()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::UNITED_STATES_CLASSIC()));
 }
 
 TEST_F(RegionTest, NorthernVirginia) {
 	RegionNorthernVirginia locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_EAST_1()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::UNITED_STATES_EAST_1()));
 }
 
 TEST_F(RegionTest, Oregon) {
 	RegionOregon locationconstraint;
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_WEST_2()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::UNITED_STATES_WEST_2()));
 }
 
 static const char * locationconstraintfunction(const Region & constraint = Region()) {
@@ -105,11 +97,9 @@ TEST_F(RegionTest, Settors) {
 	locationconstraint.setRegion().setRegion(Region::ASIA_PACIFIC_NORTHEAST_1());
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::ASIA_PACIFIC_NORTHEAST_1()));
 	locationconstraint.setRegion();
 	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::DEFAULT()), 0);
-	EXPECT_EQ(locationconstraint.getLength(), std::strlen(Region::DEFAULT()));
 }
 
 }

@@ -90,6 +90,11 @@ void Bucket::initialize() {
 	if (requests != 0) { logger.debug("Bucket@%p: requests=%p\n", this, requests); }
 }
 
+::S3Status Bucket::getStatus(const char ** description) const {
+	if (description != 0) { *description = ::S3_get_status_name(status); }
+	return status;
+}
+
 ::S3Status Bucket::properties(const ::S3ResponseProperties * properties) {
 	return ::S3StatusOK;
 }

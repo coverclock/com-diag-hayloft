@@ -61,8 +61,6 @@ public:
 
 	const char * getRegion() const { return region.c_str(); }
 
-	size_t getLength() const { return region.length(); }
-
 	Region & setRegion(const char * re = DEFAULT()) { region = set(re, 0, ""); return *this; }
 
 };

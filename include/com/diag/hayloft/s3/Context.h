@@ -57,8 +57,6 @@ public:
 
 	const char * getRegion() const { return region.c_str(); }
 
-	const size_t getLength() const { return region.length(); }
-
 	::S3Protocol getProtocol() const { return protocol; }
 
 	::S3UriStyle getStyle() const { return style; }

@@ -97,8 +97,6 @@ public:
 
 	const char * getRegion() const { return region.c_str(); }
 
-	const size_t getLength() const { return region.length(); }
-
 	::S3Protocol getProtocol() const { return protocol; }
 
 	::S3UriStyle getStyle() const { return style; }
@@ -107,7 +105,7 @@ public:
 
 	::S3RequestContext * getRequests() const { return requests; }
 
-	::S3Status getStatus() const { return status; }
+	::S3Status getStatus(const char ** description = 0) const;
 
 protected:
 

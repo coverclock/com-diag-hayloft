@@ -95,7 +95,7 @@ public:
 
 	::S3RequestContext * getRequests() const { return requests; }
 
-	::S3Status getStatus() const { return status; }
+	::S3Status getStatus(const char ** description = 0) const;
 
 protected:
 

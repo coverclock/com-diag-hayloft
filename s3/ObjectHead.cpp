@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/ObjectDelete.h"
+#include "com/diag/hayloft/s3/ObjectHead.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
@@ -19,26 +19,26 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-ObjectDelete::ObjectDelete(const Bucket & bucket, const char * keyname)
+ObjectHead::ObjectHead(const Bucket & bucket, const char * keyname)
 : Object(bucket, keyname)
 {
 	initialize();
 	begin();
 }
 
-ObjectDelete::~ObjectDelete() {
+ObjectHead::~ObjectHead() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
 }
 
-void ObjectDelete::initialize() {
+void ObjectHead::initialize() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 }
 
-void ObjectDelete::begin() {
-	Logger::instance().debug("ObjectDelete@%p: begin\n", this);
-	::S3_delete_object(
+void ObjectHead::begin() {
+	Logger::instance().debug("ObjectHead@%p: begin\n", this);
+	::S3_head_object(
 		&context,
 		key.c_str(),
 		requests,
@@ -47,8 +47,8 @@ void ObjectDelete::begin() {
 	);
 }
 
-void ObjectDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("ObjectDelete@%p: complete\n", this);
+void ObjectHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Logger::instance().debug("ObjectHead@%p: complete\n", this);
 }
 
 }

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_OBJECTDELETE_
-#define _H_COM_DIAG_HAYLOFT_S3_OBJECTDELETE_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_OBJECTHEAD_
+#define _H_COM_DIAG_HAYLOFT_S3_OBJECTHEAD_
 
 /**
  * @file
@@ -31,18 +31,22 @@ namespace s3 {
 
 class Bucket;
 
-class ObjectDelete : public Object {
+class ObjectHead : public Object {
 
 public:
 
-	explicit ObjectDelete(
+	explicit ObjectHead(
 		const Bucket & bucket,
 		const char * keyname
 	);
 
-	virtual ~ObjectDelete();
+	virtual ~ObjectHead();
 
-	bool isDeleted() const { return (status == ::S3StatusOK); }
+	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
+
+	bool isExistent() const { return (status == ::S3StatusOK); }
+
+	bool isNonexistent() const { return (status == ::S3StatusHttpErrorNotFound); }
 
 protected:
 

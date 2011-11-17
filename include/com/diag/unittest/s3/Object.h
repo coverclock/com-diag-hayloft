@@ -20,6 +20,7 @@
 #include "com/diag/hayloft/s3/ObjectGet.h"
 #include "com/diag/desperado/PathOutput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
+#include "com/diag/hayloft/s3/ObjectHead.h"
 #include "com/diag/hayloft/Size.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketTest.h"
@@ -72,7 +73,7 @@ TEST_F(ObjectBaseTest, Temporary) {
 typedef Fixture ObjectTest;
 
 TEST_F(ObjectTest, Sanity) {
-	const char BUCKET[] = "ObjectPutTest";
+	const char BUCKET[] = "ObjectTest";
 	const char OBJECT[] = "Sanity.txt";
 	Session session;
 	AccessPublicRead access;
@@ -80,6 +81,7 @@ TEST_F(ObjectTest, Sanity) {
 	context.setAccess(access);
 	Properties properties;
 	properties.setAccess(access);
+	/**/
 	BucketTest * buckettest = new BucketTest(session, BUCKET, context);
 	ASSERT_NE(buckettest, (BucketTest*)0);
 	ASSERT_EQ(*buckettest, true);
@@ -87,10 +89,19 @@ TEST_F(ObjectTest, Sanity) {
 	ASSERT_FALSE(buckettest->isInaccessible());
 	ASSERT_TRUE(buckettest->isNonexistent());
 	delete buckettest;
+	/**/
 	BucketCreate * bucketcreate = new BucketCreate(session, BUCKET, context);
 	ASSERT_NE(bucketcreate, (Bucket*)0);
 	ASSERT_EQ(*bucketcreate, true);
 	ASSERT_TRUE(bucketcreate->isCreated());
+	/**/
+	ObjectHead * objecthead = new ObjectHead(*bucketcreate, OBJECT);
+	ASSERT_NE(objecthead, (ObjectHead*)0);
+	ASSERT_EQ(*objecthead, true);
+	ASSERT_FALSE(objecthead->isExistent());
+	ASSERT_TRUE(objecthead->isNonexistent());
+	delete objecthead;
+	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
@@ -100,23 +111,42 @@ TEST_F(ObjectTest, Sanity) {
 	ASSERT_EQ(*objectput, true);
 	ASSERT_TRUE(objectput->isPut());
 	delete objectput;
+	/**/
+	objecthead = new ObjectHead(*bucketcreate, OBJECT);
+	ASSERT_NE(objecthead, (ObjectHead*)0);
+	ASSERT_EQ(*objecthead, true);
+	ASSERT_TRUE(objecthead->isExistent());
+	ASSERT_FALSE(objecthead->isNonexistent());
+	delete objecthead;
+	/**/
 	// http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Sanity.txt
+	/**/
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet * objectget = new ObjectGet(*bucketcreate, OBJECT, output);
 	ASSERT_NE(objectget, (ObjectGet*)0);
 	ASSERT_EQ(*objectget, true);
 	ASSERT_TRUE(objectget->isGotten());
 	delete objectget;
+	/**/
 	ObjectDelete * objectdelete = new ObjectDelete(*bucketcreate, OBJECT);
 	ASSERT_NE(objectdelete, (ObjectDelete*)0);
 	ASSERT_EQ(*objectdelete, true);
 	ASSERT_TRUE(objectdelete->isDeleted());
 	delete objectdelete;
+	/**/
+	objecthead = new ObjectHead(*bucketcreate, OBJECT);
+	ASSERT_NE(objecthead, (ObjectHead*)0);
+	ASSERT_EQ(*objecthead, true);
+	ASSERT_FALSE(objecthead->isExistent());
+	ASSERT_TRUE(objecthead->isNonexistent());
+	delete objecthead;
+	/**/
 	BucketDelete * bucketdelete = new BucketDelete(session, BUCKET);
 	ASSERT_NE(bucketdelete, (Bucket*)0);
 	ASSERT_EQ(*bucketdelete, true);
 	ASSERT_TRUE(bucketdelete->isDeleted());
 	delete bucketdelete;
+	/**/
 	Size outputsize = size(OBJECT);
 	ASSERT_EQ(inputsize, outputsize);
 	std::string command = "diff ";
@@ -124,6 +154,7 @@ TEST_F(ObjectTest, Sanity) {
 	command += " ";
 	command += OBJECT;
 	EXPECT_EQ(std::system(command.c_str()), 0);
+	/**/
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
