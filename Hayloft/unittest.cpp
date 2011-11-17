@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-// Infrastructure
+// Infrastructure.
 
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/unittest/s3/Environment.h"
@@ -36,10 +36,13 @@
 #include "com/diag/unittest/s3/Conditions.h"
 #endif
 
-// Unit tests that also use AWS.
+// Unit tests that also use S3.
 
 #if 1
 #include "com/diag/unittest/s3/Bucket.h"
+#endif
+
+#if 1
 #include "com/diag/unittest/s3/Object.h"
 #endif
 

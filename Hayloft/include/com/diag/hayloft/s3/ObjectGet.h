@@ -86,6 +86,10 @@ public:
 
 	bool isGotten() const { return (status == ::S3StatusOK); }
 
+	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
+
+	bool isNonexistent() const { return (status == ::S3StatusHttpErrorNotFound); }
+
 protected:
 
 	virtual ::S3Status get(int bufferSize, const char * buffer);

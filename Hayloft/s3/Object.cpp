@@ -76,6 +76,11 @@ void Object::initialize() {
 	handler.completeCallback = &responseCompleteCallback;
 }
 
+::S3Status Object::getStatus(const char ** description) const {
+	if (description != 0) { *description = ::S3_get_status_name(status); }
+	return status;
+}
+
 ::S3Status Object::properties(const ::S3ResponseProperties * properties) {
 	return ::S3StatusOK;
 }

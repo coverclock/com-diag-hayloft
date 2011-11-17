@@ -45,7 +45,6 @@ TEST_F(ContextTest, Implicit) {
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
 	ASSERT_NE(context.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(context.getRegion(), Region::DEFAULT()), 0);
-	EXPECT_EQ(context.getLength(), std::strlen(Region::DEFAULT()));
 	EXPECT_EQ(context.getProtocol(), Protocol::DEFAULT);
 	EXPECT_EQ(context.getStyle(), Style::DEFAULT);
 	EXPECT_EQ(context.getAccess(), Access::DEFAULT);
@@ -64,7 +63,6 @@ TEST_F(ContextTest, Explicit) {
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
 	ASSERT_NE(context.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(context.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
-	EXPECT_EQ(context.getLength(), std::strlen(Region::ASIA_PACIFIC_NORTHEAST_1()));
 	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTP);
 	EXPECT_EQ(context.getStyle(), ::S3UriStyleVirtualHost);
 	EXPECT_EQ(context.getAccess(), ::S3CannedAclPublicRead);
@@ -85,7 +83,6 @@ TEST_F(ContextTest, Settors) {
 	context.setRegion().setRegion(constraint);
 	ASSERT_NE(context.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(context.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
-	EXPECT_EQ(context.getLength(), std::strlen(Region::ASIA_PACIFIC_NORTHEAST_1()));
 	context.setProtocol().setProtocol(protocol);
 	EXPECT_EQ(context.getProtocol(), ::S3ProtocolHTTP);
 	context.setStyle().setStyle(style);
@@ -99,7 +96,6 @@ TEST_F(ContextTest, Settors) {
 	EXPECT_EQ(std::strlen(context.getSecret()), Credentials::SECRET_ACCESS_KEY_LEN);
 	ASSERT_NE(context.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(context.getRegion(), Region::DEFAULT()), 0);
-	EXPECT_EQ(context.getLength(), std::strlen(Region::DEFAULT()));
 	EXPECT_EQ(context.getProtocol(), Protocol::DEFAULT);
 	EXPECT_EQ(context.getStyle(), Style::DEFAULT);
 	EXPECT_EQ(context.getAccess(), Access::DEFAULT);

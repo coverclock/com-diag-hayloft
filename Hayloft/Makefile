@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=0
-MINOR=6
+MINOR=7
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -229,6 +229,10 @@ ARCHIVABLE+=s3/ObjectGet.o
 TARGETS+=s3/ObjectDelete.o
 ARTIFACTS+=s3/ObjectDelete.o
 ARCHIVABLE+=s3/ObjectDelete.o
+
+TARGETS+=s3/ObjectHead.o
+ARTIFACTS+=s3/ObjectHead.o
+ARCHIVABLE+=s3/ObjectHead.o
 
 TARGETS+=unittest
 ARTIFACTS+=unittest

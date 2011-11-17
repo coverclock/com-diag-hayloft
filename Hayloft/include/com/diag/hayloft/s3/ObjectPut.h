@@ -90,6 +90,8 @@ public:
 
 	bool isPut() const { return (status == ::S3StatusOK); }
 
+	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
+
 protected:
 
 	virtual int put(int bufferSize, char * buffer);
