@@ -178,9 +178,9 @@ TARGETS+=s3/Context.o
 ARTIFACTS+=s3/Context.o
 ARCHIVABLE+=s3/Context.o
 
-TARGETS+=s3/Queue.o
-ARTIFACTS+=s3/Queue.o
-ARCHIVABLE+=s3/Queue.o
+TARGETS+=s3/Multiplex.o
+ARTIFACTS+=s3/Multiplex.o
+ARCHIVABLE+=s3/Multiplex.o
 
 TARGETS+=s3/Show.o
 ARTIFACTS+=s3/Show.o

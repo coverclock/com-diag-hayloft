@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Queue.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
@@ -23,48 +23,48 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-int Queue::dontcare = 0;
+int Multiplex::dontcare = 0;
 
-Queue::Queue()
+Multiplex::Multiplex()
 : requests(0)
 , status(::S3_create_request_context(&requests))
 {
 	Logger & logger = Logger::instance();
-	logger.debug("Queue@%p: requests=%p\n", this, requests);
+	logger.debug("Multiplex@%p: requests=%p\n", this, requests);
 	if (status != S3StatusOK) {
-		logger.error("Queue@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 }
 
-Queue::~Queue() {
+Multiplex::~Multiplex() {
 	if (status == S3StatusOK) {
 		S3_destroy_request_context(requests);
 	}
 }
 
-bool Queue::all() {
+bool Multiplex::all() {
 	status = ::S3_runall_request_context(requests);
 	if (status != S3StatusOK) {
-		Logger::instance().error("Queue@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 	return (status == ::S3StatusOK);
 }
 
-bool Queue::once(int & pending) {
+bool Multiplex::once(int & pending) {
 	Logger & logger = Logger::instance();
 	int count = 0;
 	status = ::S3_runonce_request_context(requests, &count);
 	if (status != S3StatusOK) {
-		logger.error("Queue@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Multiplex@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 	if (count > 0) {
-		logger.debug("Queue@%p: pending=%d\n", this, count);
+		logger.debug("Multiplex@%p: pending=%d\n", this, count);
 	}
 	pending = count;
 	return (status == ::S3StatusOK);
 }
 
-int Queue::ready(Milliseconds timeout) {
+int Multiplex::ready(Milliseconds timeout) {
 	Logger & logger = Logger::instance();
 	int rc = 0;
 	do {
@@ -77,25 +77,25 @@ int Queue::ready(Milliseconds timeout) {
 		int maxfd = -1;
 		status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
 		if (status != ::S3StatusOK) {
-			logger.error("Queue@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+			logger.error("Multiplex@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 			rc |= ERROR;
 			if (::S3_status_is_retryable(status) != 0) {
 				rc |= RETRY;
 			}
 			break;
 		}
-		logger.debug("Queue@%p: maxfd=%d\n", this, maxfd);
+		logger.debug("Multiplex@%p: maxfd=%d\n", this, maxfd);
 		if (maxfd < 0) {
 			break;
 		}
 		Milliseconds maximum = ::S3_get_request_context_timeout(requests);
 		if (timeout > maximum) { timeout = maximum; }
 		if (timeout < 0) { timeout = DEFAULT; } // curl_multi_timeout() can return -1 indicating no suggested value.
-		logger.debug("Queue@%p: milliseconds=%lld\n", this, timeout);
+		logger.debug("Multiplex@%p: milliseconds=%lld\n", this, timeout);
 		struct timeval timeoutval = { timeout / 1000, (timeout % 1000) * 1000 };
 		rc = ::select(maxfd, &reads, &writes, &exceptions, &timeoutval);
 		if (rc < 0) {
-			logger.error("Queue@%p: select failed! error=%d=\"%s\"\n", this, errno, ::strerror(errno));
+			logger.error("Multiplex@%p: select failed! error=%d=\"%s\"\n", this, errno, ::strerror(errno));
 			rc |= ERROR;
 			break;
 		}
@@ -111,11 +111,11 @@ int Queue::ready(Milliseconds timeout) {
 			rc |= EXCEPTION;
 		}
 	} while (false);
-	logger.debug("Queue@%p: ready=0x%x\n", this, rc);
+	logger.debug("Multiplex@%p: ready=0x%x\n", this, rc);
 	return rc;
 }
 
-int Queue::service(Milliseconds timeout, int limit) {
+int Multiplex::service(Milliseconds timeout, int limit) {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	int rc;
 	int rc2;
@@ -144,7 +144,7 @@ int Queue::service(Milliseconds timeout, int limit) {
 			break;
 		}
 	} while ((((rc & ERROR) == 0) || ((rc & RETRY) != 0)) && ((rc & (PENDING | READ)) != 0) && ((--limit) > 0));
-	Logger::instance().debug("Queue@%p: service=0x%x\n", this, rc);
+	Logger::instance().debug("Multiplex@%p: service=0x%x\n", this, rc);
 	return rc;
 }
 

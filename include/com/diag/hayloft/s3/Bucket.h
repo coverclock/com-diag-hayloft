@@ -22,7 +22,7 @@ namespace hayloft {
 namespace s3 {
 
 class Session;
-class Queue;
+class Multiplex;
 
 class Bucket {
 
@@ -75,7 +75,7 @@ public:
 	explicit Bucket(
 		const Session & session,
 		const char * bucketname,
-		Queue & queue,
+		Multiplex & multiplex,
 		const Context & context = Context()
 	);
 

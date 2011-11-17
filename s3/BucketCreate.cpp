@@ -25,8 +25,8 @@ BucketCreate::BucketCreate(const Session & session, const char * bucketname, con
 	begin();
 }
 
-BucketCreate::BucketCreate(const Session & session, const char * bucketname, Queue & queue, const Context & context)
-: Bucket(session, bucketname, queue, context)
+BucketCreate::BucketCreate(const Session & session, const char * bucketname, Multiplex & multiplex, const Context & context)
+: Bucket(session, bucketname, multiplex, context)
 {
 	initialize();
 	begin();

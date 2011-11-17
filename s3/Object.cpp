@@ -10,8 +10,6 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Queue.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"

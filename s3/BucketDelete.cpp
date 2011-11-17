@@ -25,8 +25,8 @@ BucketDelete::BucketDelete(const Session & session, const char * bucketname, con
 	begin();
 }
 
-BucketDelete::BucketDelete(const Session & session, const char * bucketname, Queue & queue, const Context & context)
-: Bucket(session, bucketname, queue, context)
+BucketDelete::BucketDelete(const Session & session, const char * bucketname, Multiplex & multiplex, const Context & context)
+: Bucket(session, bucketname, multiplex, context)
 {
 	initialize();
 	begin();

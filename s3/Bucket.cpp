@@ -10,7 +10,7 @@
 #include <string>
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Queue.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
@@ -53,7 +53,7 @@ Bucket::Bucket(const Session & session, const char * bucketname, const Context &
 	initialize();
 }
 
-Bucket::Bucket(const Session & session, const char * bucketname, Queue & queue, const Context & context)
+Bucket::Bucket(const Session & session, const char * bucketname, Multiplex & multiplex, const Context & context)
 : id(context.getId())
 , secret(context.getSecret())
 , hostname(session.getHostName())
@@ -62,7 +62,7 @@ Bucket::Bucket(const Session & session, const char * bucketname, Queue & queue, 
 , protocol(context.getProtocol())
 , style(context.getStyle())
 , access(context.getAccess())
-, requests(queue.getRequests())
+, requests(multiplex.getRequests())
 , status(::S3StatusOK)
 {
 	initialize();

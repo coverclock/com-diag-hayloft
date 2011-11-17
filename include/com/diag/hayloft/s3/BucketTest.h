@@ -36,7 +36,7 @@ public:
 	explicit BucketTest(
 		const Session & session,
 		const char * bucketname,
-		Queue & queue,
+		Multiplex & multiplex,
 		const Context & context = Context()
 	);
 
