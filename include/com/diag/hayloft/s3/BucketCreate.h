@@ -12,6 +12,7 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Session.h"
 
 namespace com {
 namespace diag {
@@ -24,16 +25,16 @@ class BucketCreate : public Bucket {
 public:
 
 	explicit BucketCreate(
-		const Session & session,
 		const char * bucketname,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	explicit BucketCreate(
-		const Session & session,
 		const char * bucketname,
 		Multiplex & multiplex,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	virtual ~BucketCreate();

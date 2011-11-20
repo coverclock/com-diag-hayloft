@@ -31,6 +31,13 @@ namespace s3 {
 
 class Session {
 
+protected:
+
+    /**
+     * Points to the default instance of this object.
+     */
+    static Session * singleton;
+
 private:
 
 	std::string useragent;
@@ -48,6 +55,27 @@ public:
 	static const char * HOST_NAME_STR() { return S3_DEFAULT_HOSTNAME; }
 
 	static const char * HOST_NAME_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_HOST_NAME"; }
+
+	/**
+	 * Allocates a reference to a new object of this type suitably initialized
+	 * with default parameters.
+	 * @return a reference to a new object of this type.
+	 */
+	static Session & factory();
+
+	/**
+	 * Establishes a new default instance of an object of this type.
+	 * @param that refers to an object of this type.
+	 */
+	static void instance(Session & that) {
+		Session::singleton = &that;
+	}
+
+    /**
+     * Returns a reference to the default instance of an object of this type.
+     * @return a reference to the default instance of an object of this type.
+     */
+	static Session & instance();
 
 	explicit Session(
 		const char * userAgentInfo = 0,

@@ -12,10 +12,17 @@
 #include "com/diag/desperado/LogOutput.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/uint16_Number.h"
+#include "com/diag/desperado/CriticalSection.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
+
+static ::com::diag::desperado::Mutex mutex;
+
+static Logger * instant = 0;
+
+Logger * Logger::singleton = 0;
 
 Logger & Logger::factory() {
     return (*(new Logger))
@@ -37,9 +44,14 @@ Logger & Logger::factory() {
     	.enable(PRINT);
 }
 
-static Logger & instant = Logger::factory();
-
-Logger * Logger::singleton = &instant;
+Logger & Logger::instance() {
+	::com::diag::desperado::CriticalSection section(mutex);
+	if (singleton == 0) {
+		delete instant;
+		instant = singleton = &(factory());
+	}
+    return *singleton;
+}
 
 Logger & Logger::setMask() {
 	const char * name = MASK_ENV();
