@@ -54,13 +54,13 @@ S3_LIBS=$(S3_DIR)/build/deb/usr/lib
 S3_LIB=$(S3_LIBS)/libs3.so
 S3_INC=$(S3_DIR)/inc
 
-DESPERADO_DIR=$(HOME)/src/Desperado#http://www.diag.com/ftp/desperado-wildcat.tgz
+DESPERADO_DIR=$(HOME)/src/Desperadito#http://www.diag.com/ftp/desperadito-6.4.0.tgz
 DESPERADO_LIBS=$(DESPERADO_DIR)
-DESPERADO_LIB=$(DESPERADO_LIBS)/libdesperado.so
+DESPERADO_LIB=$(DESPERADO_LIBS)/libdesperadito.so
 DESPERADO_INC=$(DESPERADO_DIR)/include#/desperado
 
 APPLICATION_CPPFLAGS=-I$(DESPERADO_INC) -I$(S3_INC)
-APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperado -L$(S3_LIBS) -ls3 -L$(LIBXML2_LIBS) -lxml2 -L$(CURL_LIBS) -lcurl -L$(OPENSSL_LIBS) -lssl -lcrypto
+APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperadito -L$(S3_LIBS) -ls3 -L$(LIBXML2_LIBS) -lxml2 -L$(CURL_LIBS) -lcurl -L$(OPENSSL_LIBS) -lssl -lcrypto
 
 ################################################################################
 # UNIT TEST PREREQUISITES

@@ -11,6 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Status.h"
 #include "com/diag/desperado/target.h"
@@ -67,16 +68,16 @@ protected:
 public:
 
 	explicit Bucket(
-		const Session & session,
 		const char * bucketname,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	explicit Bucket(
-		const Session & session,
 		const char * bucketname,
 		Multiplex & multiplex,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	virtual ~Bucket();

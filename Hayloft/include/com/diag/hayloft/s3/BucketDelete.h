@@ -12,6 +12,7 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Session.h"
 
 namespace com {
 namespace diag {
@@ -23,16 +24,16 @@ class BucketDelete : public Bucket {
 public:
 
 	explicit BucketDelete(
-		const Session & session,
 		const char * bucketname,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	explicit BucketDelete(
-		const Session & session,
 		const char * bucketname,
 		Multiplex & multiplex,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	virtual ~BucketDelete();

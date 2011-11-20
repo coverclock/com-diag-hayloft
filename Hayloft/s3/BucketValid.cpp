@@ -18,8 +18,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketValid::BucketValid(const Session & session, const char * bucketname, const Context & context)
-: Bucket(session, bucketname, context)
+BucketValid::BucketValid(const char * bucketname, const Context & context, const Session & session)
+: Bucket(bucketname, context, session)
 {
 	initialize();
 	begin();

@@ -12,11 +12,31 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
+#include "com/diag/desperado/CriticalSection.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
+
+static ::com::diag::desperado::Mutex mutex;
+
+static Session * instant = 0;
+
+Session * Session::singleton = 0;
+
+Session & Session::factory() {
+    return (*(new Session));
+}
+
+Session & Session::instance() {
+	::com::diag::desperado::CriticalSection section(mutex);
+	if (singleton == 0) {
+		delete instant;
+		instant = singleton = &(factory());
+	}
+    return *singleton;
+}
 
 Session::Session(const char * userAgentInfo, int flags, const char * defaultS3HostName)
 : useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))

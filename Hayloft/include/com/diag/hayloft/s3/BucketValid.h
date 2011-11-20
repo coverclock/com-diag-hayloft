@@ -12,22 +12,21 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Session.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Session;
-
 class BucketValid : public Bucket {
 
 public:
 
 	explicit BucketValid(
-		const Session & session,
 		const char * bucketname,
-		const Context & context = Context()
+		const Context & context = Context(),
+		const Session & session = Session::instance()
 	);
 
 	virtual ~BucketValid() {}

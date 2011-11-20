@@ -41,8 +41,7 @@ using namespace ::com::diag::hayloft::s3;
 typedef Fixture ObjectBaseTest;
 
 TEST_F(ObjectBaseTest, Heap) {
-	Session session;
-	Bucket * bucket = new Bucket(session, "ObjectBaseTestHeap");
+	Bucket * bucket = new Bucket("ObjectBaseTestHeap");
 	Object * object = new Object(*bucket, "ObjectBaseTestHeapKey");
 	ASSERT_NE(object, (Object*)0);
 	EXPECT_TRUE((*object) == true);
@@ -55,8 +54,7 @@ TEST_F(ObjectBaseTest, Heap) {
 }
 
 TEST_F(ObjectBaseTest, Stack) {
-	Session session;
-	Bucket bucket(session, "ObjectBaseTestStack");
+	Bucket bucket("ObjectBaseTestStack");
 	Object object(bucket, "ObjectBaseTestStackKey");
 	EXPECT_TRUE(object == true);
 	EXPECT_FALSE(object.isBusy());
@@ -66,8 +64,7 @@ TEST_F(ObjectBaseTest, Stack) {
 }
 
 TEST_F(ObjectBaseTest, Temporary) {
-	Session session;
-	EXPECT_TRUE(Object(Bucket(session, "ObjectBaseTestTemporary"), "ObjectBaseTestTemporaryKey") == true);
+	EXPECT_TRUE(Object(Bucket("ObjectBaseTestTemporary"), "ObjectBaseTestTemporaryKey") == true);
 }
 
 typedef Fixture ObjectTest;
@@ -75,48 +72,47 @@ typedef Fixture ObjectTest;
 TEST_F(ObjectTest, Sanity) {
 	const char BUCKET[] = "ObjectTest";
 	const char OBJECT[] = "Sanity.txt";
-	Session session;
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
 	Properties properties;
 	properties.setAccess(access);
 	/**/
-	BucketTest * buckettest = new BucketTest(session, BUCKET, context);
+	BucketTest * buckettest = new BucketTest(BUCKET, context);
 	ASSERT_NE(buckettest, (BucketTest*)0);
-	ASSERT_EQ(*buckettest, true);
-	ASSERT_FALSE(buckettest->isExistent());
-	ASSERT_FALSE(buckettest->isInaccessible());
-	ASSERT_TRUE(buckettest->isNonexistent());
+	EXPECT_EQ(*buckettest, true);
+	EXPECT_FALSE(buckettest->isExistent());
+	EXPECT_FALSE(buckettest->isInaccessible());
+	EXPECT_TRUE(buckettest->isNonexistent());
 	delete buckettest;
 	/**/
-	BucketCreate * bucketcreate = new BucketCreate(session, BUCKET, context);
+	BucketCreate * bucketcreate = new BucketCreate(BUCKET, context);
 	ASSERT_NE(bucketcreate, (Bucket*)0);
-	ASSERT_EQ(*bucketcreate, true);
-	ASSERT_TRUE(bucketcreate->isCreated());
+	EXPECT_EQ(*bucketcreate, true);
+	EXPECT_TRUE(bucketcreate->isCreated());
 	/**/
 	ObjectHead * objecthead = new ObjectHead(*bucketcreate, OBJECT);
 	ASSERT_NE(objecthead, (ObjectHead*)0);
-	ASSERT_EQ(*objecthead, true);
-	ASSERT_FALSE(objecthead->isExistent());
-	ASSERT_TRUE(objecthead->isNonexistent());
+	EXPECT_EQ(*objecthead, true);
+	EXPECT_FALSE(objecthead->isExistent());
+	EXPECT_TRUE(objecthead->isNonexistent());
 	delete objecthead;
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
-	ASSERT_TRUE(inputsize > 0);
+	EXPECT_TRUE(inputsize > 0);
 	ObjectPut * objectput = new ObjectPut(*bucketcreate, OBJECT, input, inputsize, properties);
-	ASSERT_NE(objectput, (ObjectPut*)0);
-	ASSERT_EQ(*objectput, true);
-	ASSERT_TRUE(objectput->isPut());
+	EXPECT_NE(objectput, (ObjectPut*)0);
+	EXPECT_EQ(*objectput, true);
+	EXPECT_TRUE(objectput->isPut());
 	delete objectput;
 	/**/
 	objecthead = new ObjectHead(*bucketcreate, OBJECT);
 	ASSERT_NE(objecthead, (ObjectHead*)0);
-	ASSERT_EQ(*objecthead, true);
-	ASSERT_TRUE(objecthead->isExistent());
-	ASSERT_FALSE(objecthead->isNonexistent());
+	EXPECT_EQ(*objecthead, true);
+	EXPECT_TRUE(objecthead->isExistent());
+	EXPECT_FALSE(objecthead->isNonexistent());
 	delete objecthead;
 	/**/
 	// http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Sanity.txt
@@ -124,31 +120,31 @@ TEST_F(ObjectTest, Sanity) {
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet * objectget = new ObjectGet(*bucketcreate, OBJECT, output);
 	ASSERT_NE(objectget, (ObjectGet*)0);
-	ASSERT_EQ(*objectget, true);
-	ASSERT_TRUE(objectget->isGotten());
+	EXPECT_EQ(*objectget, true);
+	EXPECT_TRUE(objectget->isGotten());
 	delete objectget;
 	/**/
 	ObjectDelete * objectdelete = new ObjectDelete(*bucketcreate, OBJECT);
 	ASSERT_NE(objectdelete, (ObjectDelete*)0);
-	ASSERT_EQ(*objectdelete, true);
-	ASSERT_TRUE(objectdelete->isDeleted());
+	EXPECT_EQ(*objectdelete, true);
+	EXPECT_TRUE(objectdelete->isDeleted());
 	delete objectdelete;
 	/**/
 	objecthead = new ObjectHead(*bucketcreate, OBJECT);
 	ASSERT_NE(objecthead, (ObjectHead*)0);
-	ASSERT_EQ(*objecthead, true);
-	ASSERT_FALSE(objecthead->isExistent());
-	ASSERT_TRUE(objecthead->isNonexistent());
+	EXPECT_EQ(*objecthead, true);
+	EXPECT_FALSE(objecthead->isExistent());
+	EXPECT_TRUE(objecthead->isNonexistent());
 	delete objecthead;
 	/**/
-	BucketDelete * bucketdelete = new BucketDelete(session, BUCKET);
+	BucketDelete * bucketdelete = new BucketDelete(BUCKET);
 	ASSERT_NE(bucketdelete, (Bucket*)0);
-	ASSERT_EQ(*bucketdelete, true);
-	ASSERT_TRUE(bucketdelete->isDeleted());
+	EXPECT_EQ(*bucketdelete, true);
+	EXPECT_TRUE(bucketdelete->isDeleted());
 	delete bucketdelete;
 	/**/
 	Size outputsize = size(OBJECT);
-	ASSERT_EQ(inputsize, outputsize);
+	EXPECT_EQ(inputsize, outputsize);
 	std::string command = "diff ";
 	command += __FILE__;
 	command += " ";

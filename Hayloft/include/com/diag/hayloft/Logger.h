@@ -63,9 +63,7 @@ public:
      * Returns a reference to the default instance of an object of this type.
      * @return a reference to the default instance of an object of this type.
      */
-	static Logger & instance() {
-	    return *Logger::singleton;
-	}
+	static Logger & instance();
 
     /**
      * Returns the name of the environmental variable that can be used to

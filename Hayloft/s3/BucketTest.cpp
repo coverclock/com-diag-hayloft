@@ -18,15 +18,15 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketTest::BucketTest(const Session & session, const char * bucketname, const Context & context)
-: Bucket(session, bucketname, context)
+BucketTest::BucketTest(const char * bucketname, const Context & context, const Session & session)
+: Bucket(bucketname, context, session)
 {
 	initialize();
 	begin();
 }
 
-BucketTest::BucketTest(const Session & session, const char * bucketname, Multiplex & multiplex, const Context & context)
-: Bucket(session, bucketname, multiplex, context)
+BucketTest::BucketTest(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+: Bucket(bucketname, multiplex, context, session)
 {
 	initialize();
 	begin();

@@ -38,7 +38,7 @@ void Bucket::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	that->complete(status, errorDetails);
 }
 
-Bucket::Bucket(const Session & session, const char * bucketname, const Context & context)
+Bucket::Bucket(const char * bucketname, const Context & context, const Session & session)
 : id(context.getId())
 , secret(context.getSecret())
 , hostname(session.getHostName())
@@ -53,7 +53,7 @@ Bucket::Bucket(const Session & session, const char * bucketname, const Context &
 	initialize();
 }
 
-Bucket::Bucket(const Session & session, const char * bucketname, Multiplex & multiplex, const Context & context)
+Bucket::Bucket(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
 : id(context.getId())
 , secret(context.getSecret())
 , hostname(session.getHostName())
