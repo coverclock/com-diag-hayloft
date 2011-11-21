@@ -42,7 +42,7 @@ Multiplex::~Multiplex() {
 	}
 }
 
-bool Multiplex::all() {
+bool Multiplex::complete() {
 	status = ::S3_runall_request_context(requests);
 	if (status != S3StatusOK) {
 		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
@@ -50,7 +50,7 @@ bool Multiplex::all() {
 	return (status == ::S3StatusOK);
 }
 
-bool Multiplex::once(int & pending) {
+bool Multiplex::iterate(int & pending) {
 	Logger & logger = Logger::instance();
 	int count = 0;
 	status = ::S3_runonce_request_context(requests, &count);
@@ -123,7 +123,7 @@ int Multiplex::service(Milliseconds timeout, int limit) {
 	do {
 		rc = 0;
 		pending = 0;
-		if (once(pending)) {
+		if (iterate(pending)) {
 			// Do nothing.
 		} else if (::S3_status_is_retryable(status) != 0) {
 			rc |= ERROR | RETRY;

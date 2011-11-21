@@ -109,11 +109,11 @@ TEST_F(BucketInitialTest, Explicit) {
 	EXPECT_TRUE(test.isNonexistent());
 }
 
-TEST_F(BucketInitialTest, All) {
+TEST_F(BucketInitialTest, Complete) {
 	Multiplex multiplex;
-	BucketTest test("BucketCreateTestAll", multiplex);
+	BucketTest test("BucketCreateTestComplete", multiplex);
 	test.start();
-	EXPECT_TRUE(multiplex.all());
+	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -122,11 +122,11 @@ TEST_F(BucketInitialTest, All) {
 	EXPECT_TRUE(test.isNonexistent());
 }
 
-TEST_F(BucketInitialTest, Once) {
+TEST_F(BucketInitialTest, Service) {
 	static const int LIMIT = 100;
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
-	BucketTest test("BucketCreateTestOnce", multiplex);
+	BucketTest test("BucketCreateTestService", multiplex);
 	test.start();
 	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
@@ -175,22 +175,22 @@ TEST_F(BucketCreateTest, Explicit) {
 	EXPECT_TRUE(test.isCreated());
 }
 
-TEST_F(BucketCreateTest, All) {
+TEST_F(BucketCreateTest, Complete) {
 	Multiplex multiplex;
-	BucketCreate create("BucketCreateTestAll", multiplex);
+	BucketCreate create("BucketCreateTestComplete", multiplex);
 	create.start();
-	EXPECT_TRUE(multiplex.all());
+	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(create == true);
 	EXPECT_FALSE(create.isBusy());
 	EXPECT_FALSE(create.isRetryable());
 	EXPECT_TRUE(create.isCreated());
 }
 
-TEST_F(BucketCreateTest, Once) {
+TEST_F(BucketCreateTest, Service) {
 	static const int LIMIT = 100;
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
-	BucketCreate create("BucketCreateTestOnce", multiplex);
+	BucketCreate create("BucketCreateTestService", multiplex);
 	create.start();
 	int bits = 0;
 	for (int limit = LIMIT; (create != true) && (limit > 0); --limit) {
@@ -243,11 +243,11 @@ TEST_F(BucketTestTest, Explicit) {
 	EXPECT_FALSE(test.isNonexistent());
 }
 
-TEST_F(BucketTestTest, All) {
+TEST_F(BucketTestTest, Complete) {
 	Multiplex multiplex;
-	BucketTest test("BucketCreateTestAll", multiplex);
+	BucketTest test("BucketCreateTestComplete", multiplex);
 	test.start();
-	EXPECT_TRUE(multiplex.all());
+	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -256,11 +256,11 @@ TEST_F(BucketTestTest, All) {
 	EXPECT_FALSE(test.isNonexistent());
 }
 
-TEST_F(BucketTestTest, Once) {
+TEST_F(BucketTestTest, Service) {
 	static const int LIMIT = 100;
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
-	BucketTest test("BucketCreateTestOnce", multiplex);
+	BucketTest test("BucketCreateTestService", multiplex);
 	test.start();
 	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
@@ -309,22 +309,22 @@ TEST_F(BucketDeleteTest, Explicit) {
 	EXPECT_TRUE(test.isDeleted());
 }
 
-TEST_F(BucketDeleteTest, All) {
+TEST_F(BucketDeleteTest, Complete) {
 	Multiplex multiplex;
-	BucketDelete remove("BucketCreateTestAll", multiplex);
+	BucketDelete remove("BucketCreateTestComplete", multiplex);
 	remove.start();
-	EXPECT_TRUE(multiplex.all());
+	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(remove == true);
 	EXPECT_FALSE(remove.isBusy());
 	EXPECT_FALSE(remove.isRetryable());
 	EXPECT_TRUE(remove.isDeleted());
 }
 
-TEST_F(BucketDeleteTest, Once) {
+TEST_F(BucketDeleteTest, Service) {
 	static const int LIMIT = 100;
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
-	BucketDelete remove("BucketCreateTestOnce", multiplex);
+	BucketDelete remove("BucketCreateTestService", multiplex);
 	remove.start();
 	int bits = 0;
 	for (int limit = LIMIT; (remove != true) && (limit > 0); --limit) {
@@ -377,11 +377,11 @@ TEST_F(BucketVerifyTest, Explicit) {
 	EXPECT_TRUE(test.isNonexistent());
 }
 
-TEST_F(BucketVerifyTest, All) {
+TEST_F(BucketVerifyTest, Complete) {
 	Multiplex multiplex;
-	BucketTest test("BucketCreateTestAll", multiplex);
+	BucketTest test("BucketCreateTestComplete", multiplex);
 	test.start();
-	EXPECT_TRUE(multiplex.all());
+	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
@@ -390,11 +390,11 @@ TEST_F(BucketVerifyTest, All) {
 	EXPECT_TRUE(test.isNonexistent());
 }
 
-TEST_F(BucketVerifyTest, Once) {
+TEST_F(BucketVerifyTest, Service) {
 	static const int LIMIT = 100;
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
-	BucketTest test("BucketCreateTestOnce", multiplex);
+	BucketTest test("BucketCreateTestService", multiplex);
 	test.start();
 	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {

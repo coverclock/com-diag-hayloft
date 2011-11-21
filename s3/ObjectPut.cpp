@@ -43,7 +43,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::d
 , consumed(0)
 {
 	initialize(props.getMetadata());
-	begin();
+	execute();
 }
 
 ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
@@ -61,7 +61,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::d
 , consumed(0)
 {
 	initialize(props.getMetadata());
-	begin();
+	execute();
 }
 ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
 : Object(keyname, bucket, multiplex)
@@ -140,7 +140,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 	handler.putObjectDataCallback = &putObjectDataCallback;
 }
 
-void ObjectPut::begin() {
+void ObjectPut::execute() {
 	Logger::instance().debug("ObjectPut@%p: begin\n", this);
 	::S3_put_object(
 		&context,
@@ -165,7 +165,7 @@ int ObjectPut::put(int bufferSize, char * buffer) {
 }
 
 void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("ObjectPut@%p: complete\n", this);
+	Logger::instance().debug("ObjectPut@%p: end\n", this);
 }
 
 }

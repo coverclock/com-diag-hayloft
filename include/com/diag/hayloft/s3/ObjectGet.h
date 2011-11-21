@@ -103,7 +103,7 @@ public:
 
 	virtual ~ObjectGet();
 
-	virtual void start() { if (requests != 0) { begin(); } }
+	virtual void start() { if (requests != 0) { execute(); } }
 
 	bool isGotten() const { return (status == ::S3StatusOK); }
 
@@ -121,7 +121,7 @@ private:
 
 	void initialize();
 
-	void begin();
+	void execute();
 
 };
 

@@ -23,7 +23,7 @@ ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket)
 : Object(keyname, bucket)
 {
 	initialize();
-	begin();
+	execute();
 }
 
 ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
@@ -42,7 +42,7 @@ void ObjectHead::initialize() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 }
 
-void ObjectHead::begin() {
+void ObjectHead::execute() {
 	Logger::instance().debug("ObjectHead@%p: begin\n", this);
 	::S3_head_object(
 		&context,
@@ -54,7 +54,7 @@ void ObjectHead::begin() {
 }
 
 void ObjectHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("ObjectHead@%p: complete\n", this);
+	Logger::instance().debug("ObjectHead@%p: end\n", this);
 }
 
 }

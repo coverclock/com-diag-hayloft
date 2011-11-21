@@ -42,7 +42,7 @@ public:
 
 	virtual ~BucketTest();
 
-	virtual void start() { if (requests != 0) { begin(); } }
+	virtual void start() { if (requests != 0) { execute(); } }
 
 	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
 
@@ -58,7 +58,7 @@ private:
 
 	void initialize();
 
-	void begin();
+	void execute();
 
 };
 
