@@ -50,15 +50,18 @@ private:
 	static const char * ACCESS_KEY_ID_PATH() { return "/projects/hayloft/aws-s3-access-key-id.txt"; }
 	static const char * SECRET_ACCESS_KEY_PATH() { return "/projects/hayloft/aws-s3-secret-access-key.txt"; }
 	static const char * USER_AGENT_PATH() { return "/projects/hayloft/aws-s3-user-agent.txt"; }
+	static const char * BUCKET_SUFFIX_PATH() { return "/projects/hayloft/aws-s3-bucket-suffix.txt"; }
 
 	static const std::string HOME;
 	static const std::string ACCESS_KEY_ID_FILE;
 	static const std::string SECRET_ACCESS_KEY_FILE;
 	static const std::string USER_AGENT_FILE;
+	static const std::string BUCKET_SUFFIX_FILE;
 
 	std::string access_key_id;
 	std::string secret_access_key;
 	std::string user_agent;
+	std::string bucket_suffix;
 
 public:
 
@@ -114,6 +117,21 @@ public:
 			}
 		}
 
+		if ((env = std::getenv(Session::BUCKET_SUFFIX_ENV())) != 0) {
+			bucket_suffix = env;
+		} else {
+			char val[Bucket::LENGTH + sizeof("\n")];
+			::com::diag::desperado::PathInput input(BUCKET_SUFFIX_FILE.c_str(), "r");
+			size_t len = input(val, sizeof(val));
+			if (len > 0) {
+				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
+				bucket_suffix = val;
+				::setenv(Session::BUCKET_SUFFIX_ENV(), bucket_suffix.c_str(), !0);
+			} else {
+				// Do nothing.
+			}
+		}
+
 	}
 
 	virtual void TearDown() {
@@ -126,6 +144,7 @@ const std::string Environment::HOME((std::getenv("HOME") != 0) ? std::getenv("HO
 const std::string Environment::ACCESS_KEY_ID_FILE(Environment::HOME + Environment::ACCESS_KEY_ID_PATH());
 const std::string Environment::SECRET_ACCESS_KEY_FILE(Environment::HOME + Environment::SECRET_ACCESS_KEY_PATH());
 const std::string Environment::USER_AGENT_FILE(Environment::HOME + Environment::USER_AGENT_PATH());
+const std::string Environment::BUCKET_SUFFIX_FILE(Environment::HOME + Environment::BUCKET_SUFFIX_PATH());
 
 ::testing::Environment * const Environment::environment = ::testing::AddGlobalTestEnvironment(new Environment);
 
