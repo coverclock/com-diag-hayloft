@@ -67,9 +67,7 @@ public:
 	 * Establishes a new default instance of an object of this type.
 	 * @param that refers to an object of this type.
 	 */
-	static void instance(Session & that) {
-		Session::singleton = &that;
-	}
+	static void instance(Session & that);
 
     /**
      * Returns a reference to the default instance of an object of this type.

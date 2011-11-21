@@ -11,7 +11,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <new>
 #include "com/diag/desperado/target.h"
 #include "com/diag/desperado/Logger.h"
 #include "com/diag/desperado/Platform.h"
@@ -55,9 +54,7 @@ public:
 	 * Establishes a new default instance of an object of this type.
 	 * @param that refers to an object of this type.
 	 */
-	static void instance(Logger & that) {
-		Logger::singleton = &that;
-	}
+	static void instance(Logger & that);
 
     /**
      * Returns a reference to the default instance of an object of this type.

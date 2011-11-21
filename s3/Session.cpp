@@ -29,8 +29,13 @@ Session & Session::factory() {
     return (*(new Session));
 }
 
+void Session::instance(Session & that) {
+	::com::diag::desperado::CriticalSection guard(mutex);
+	Session::singleton = &that;
+}
+
 Session & Session::instance() {
-	::com::diag::desperado::CriticalSection section(mutex);
+	::com::diag::desperado::CriticalSection guard(mutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());

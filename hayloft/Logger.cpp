@@ -44,8 +44,13 @@ Logger & Logger::factory() {
     	.enable(PRINT);
 }
 
+void Logger::instance(Logger & that) {
+	::com::diag::desperado::CriticalSection guard(mutex);
+	Logger::singleton = &that;
+}
+
 Logger & Logger::instance() {
-	::com::diag::desperado::CriticalSection section(mutex);
+	::com::diag::desperado::CriticalSection guard(mutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());
