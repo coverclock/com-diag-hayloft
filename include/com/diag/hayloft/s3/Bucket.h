@@ -22,7 +22,6 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Session;
 class Multiplex;
 
 class Bucket {
@@ -81,6 +80,8 @@ public:
 	);
 
 	virtual ~Bucket();
+
+	virtual void start() {}
 
 	operator bool() const { return (status != BUSY); }
 

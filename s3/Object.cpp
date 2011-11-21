@@ -10,6 +10,7 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
@@ -38,15 +39,29 @@ void Object::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	that->complete(status, errorDetails);
 }
 
-Object::Object(const Bucket & bucket, const char * keyname)
-: id(bucket.getId())
+Object::Object(const char * keyname, const Bucket & bucket)
+: key(keyname)
+, id(bucket.getId())
 , secret(bucket.getSecret())
 , hostname(bucket.getHostName())
 , name(bucket.getName())
-, key(keyname)
 , protocol(bucket.getProtocol())
 , style(bucket.getStyle())
-, requests(bucket.getRequests())
+, requests(0)
+, status(::S3StatusOK)
+{
+	initialize();
+}
+
+Object::Object(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
+: key(keyname)
+, id(bucket.getId())
+, secret(bucket.getSecret())
+, hostname(bucket.getHostName())
+, name(bucket.getName())
+, protocol(bucket.getProtocol())
+, style(bucket.getStyle())
+, requests(multiplex.getRequests())
 , status(::S3StatusOK)
 {
 	initialize();

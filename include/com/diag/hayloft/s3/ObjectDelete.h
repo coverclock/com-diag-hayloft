@@ -13,7 +13,6 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
-#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -30,17 +29,26 @@ namespace hayloft {
 namespace s3 {
 
 class Bucket;
+class Multiplex;
 
 class ObjectDelete : public Object {
 
 public:
 
 	explicit ObjectDelete(
+		const char * keyname,
+		const Bucket & bucket
+	);
+
+	explicit ObjectDelete(
+		const char * keyname,
 		const Bucket & bucket,
-		const char * keyname
+		Multiplex & multiplex
 	);
 
 	virtual ~ObjectDelete();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isDeleted() const { return (status == ::S3StatusOK); }
 

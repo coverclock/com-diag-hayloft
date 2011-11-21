@@ -13,7 +13,6 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
-#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -36,11 +35,19 @@ class ObjectHead : public Object {
 public:
 
 	explicit ObjectHead(
+		const char * keyname,
+		const Bucket & bucket
+	);
+
+	explicit ObjectHead(
+		const char * keyname,
 		const Bucket & bucket,
-		const char * keyname
+		Multiplex & multiplex
 	);
 
 	virtual ~ObjectHead();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
 

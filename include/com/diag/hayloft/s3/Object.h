@@ -21,6 +21,7 @@ namespace hayloft {
 namespace s3 {
 
 class Bucket;
+class Multiplex;
 
 class Object {
 
@@ -42,6 +43,8 @@ private:
 
 protected:
 
+	std::string key;
+
 	std::string id;
 
 	std::string secret;
@@ -49,8 +52,6 @@ protected:
 	std::string hostname;
 
 	std::string name;
-
-	std::string key;
 
 	::S3Protocol protocol;
 
@@ -67,11 +68,19 @@ protected:
 public:
 
 	explicit Object(
+		const char * keyname,
+		const Bucket & bucket
+	);
+
+	explicit Object(
+		const char * keyname,
 		const Bucket & bucket,
-		const char * keyname
+ 		Multiplex & multiplex
 	);
 
 	virtual ~Object();
+
+	virtual void start() {}
 
 	operator bool() const { return (status != BUSY); }
 

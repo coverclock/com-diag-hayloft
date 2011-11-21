@@ -9,7 +9,6 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"

@@ -14,7 +14,6 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
-#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -71,22 +70,42 @@ protected:
 public:
 
 	explicit ObjectPut(
-		const Bucket & bucket,
 		const char * keyname,
+		const Bucket & bucket,
 		::com::diag::desperado::Input & source,
 		Octets objectsize,
 		const Properties & props = Properties()
 	);
 
 	explicit ObjectPut(
-		const Bucket & bucket,
 		const char * keyname,
+		const Bucket & bucket,
+		::com::diag::desperado::Input * sourcep, /* TAKEN */
+		Octets objectsize,
+		const Properties & props = Properties()
+	);
+
+	explicit ObjectPut(
+		const char * keyname,
+		const Bucket & bucket,
+		Multiplex & multiplex,
+		::com::diag::desperado::Input & source,
+		Octets objectsize,
+		const Properties & props = Properties()
+	);
+
+	explicit ObjectPut(
+		const char * keyname,
+		const Bucket & bucket,
+		Multiplex & multiplex,
 		::com::diag::desperado::Input * sourcep, /* TAKEN */
 		Octets objectsize,
 		const Properties & props = Properties()
 	);
 
 	virtual ~ObjectPut();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isPut() const { return (status == ::S3StatusOK); }
 

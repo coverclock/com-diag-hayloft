@@ -42,7 +42,7 @@ typedef Fixture ObjectBaseTest;
 
 TEST_F(ObjectBaseTest, Heap) {
 	Bucket * bucket = new Bucket("ObjectBaseTestHeap");
-	Object * object = new Object(*bucket, "ObjectBaseTestHeapKey");
+	Object * object = new Object("ObjectBaseTestHeapKey", *bucket);
 	ASSERT_NE(object, (Object*)0);
 	EXPECT_TRUE((*object) == true);
 	EXPECT_FALSE(object->isBusy());
@@ -55,7 +55,7 @@ TEST_F(ObjectBaseTest, Heap) {
 
 TEST_F(ObjectBaseTest, Stack) {
 	Bucket bucket("ObjectBaseTestStack");
-	Object object(bucket, "ObjectBaseTestStackKey");
+	Object object("ObjectBaseTestStackKey", bucket);
 	EXPECT_TRUE(object == true);
 	EXPECT_FALSE(object.isBusy());
 	EXPECT_FALSE(object.isRetryable());
@@ -64,7 +64,7 @@ TEST_F(ObjectBaseTest, Stack) {
 }
 
 TEST_F(ObjectBaseTest, Temporary) {
-	EXPECT_TRUE(Object(Bucket("ObjectBaseTestTemporary"), "ObjectBaseTestTemporaryKey") == true);
+	EXPECT_TRUE(Object("ObjectBaseTestTemporaryKey", Bucket("ObjectBaseTestTemporary")) == true);
 }
 
 typedef Fixture ObjectTest;
@@ -91,7 +91,7 @@ TEST_F(ObjectTest, Sanity) {
 	EXPECT_EQ(*bucketcreate, true);
 	EXPECT_TRUE(bucketcreate->isCreated());
 	/**/
-	ObjectHead * objecthead = new ObjectHead(*bucketcreate, OBJECT);
+	ObjectHead * objecthead = new ObjectHead(OBJECT, *bucketcreate);
 	ASSERT_NE(objecthead, (ObjectHead*)0);
 	EXPECT_EQ(*objecthead, true);
 	EXPECT_FALSE(objecthead->isExistent());
@@ -102,13 +102,13 @@ TEST_F(ObjectTest, Sanity) {
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
-	ObjectPut * objectput = new ObjectPut(*bucketcreate, OBJECT, input, inputsize, properties);
+	ObjectPut * objectput = new ObjectPut(OBJECT, *bucketcreate, input, inputsize, properties);
 	EXPECT_NE(objectput, (ObjectPut*)0);
 	EXPECT_EQ(*objectput, true);
 	EXPECT_TRUE(objectput->isPut());
 	delete objectput;
 	/**/
-	objecthead = new ObjectHead(*bucketcreate, OBJECT);
+	objecthead = new ObjectHead(OBJECT, *bucketcreate);
 	ASSERT_NE(objecthead, (ObjectHead*)0);
 	EXPECT_EQ(*objecthead, true);
 	EXPECT_TRUE(objecthead->isExistent());
@@ -118,19 +118,19 @@ TEST_F(ObjectTest, Sanity) {
 	// http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Sanity.txt
 	/**/
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
-	ObjectGet * objectget = new ObjectGet(*bucketcreate, OBJECT, output);
+	ObjectGet * objectget = new ObjectGet(OBJECT, *bucketcreate, output);
 	ASSERT_NE(objectget, (ObjectGet*)0);
 	EXPECT_EQ(*objectget, true);
 	EXPECT_TRUE(objectget->isGotten());
 	delete objectget;
 	/**/
-	ObjectDelete * objectdelete = new ObjectDelete(*bucketcreate, OBJECT);
+	ObjectDelete * objectdelete = new ObjectDelete(OBJECT, *bucketcreate);
 	ASSERT_NE(objectdelete, (ObjectDelete*)0);
 	EXPECT_EQ(*objectdelete, true);
 	EXPECT_TRUE(objectdelete->isDeleted());
 	delete objectdelete;
 	/**/
-	objecthead = new ObjectHead(*bucketcreate, OBJECT);
+	objecthead = new ObjectHead(OBJECT, *bucketcreate);
 	ASSERT_NE(objecthead, (ObjectHead*)0);
 	EXPECT_EQ(*objecthead, true);
 	EXPECT_FALSE(objecthead->isExistent());

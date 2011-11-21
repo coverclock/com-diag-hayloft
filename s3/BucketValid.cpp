@@ -9,8 +9,6 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/BucketValid.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {

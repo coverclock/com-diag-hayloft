@@ -9,8 +9,7 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Context.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -29,7 +28,6 @@ BucketDelete::BucketDelete(const char * bucketname, Multiplex & multiplex, const
 : Bucket(bucketname, multiplex, context, session)
 {
 	initialize();
-	begin();
 }
 
 BucketDelete::~BucketDelete() {

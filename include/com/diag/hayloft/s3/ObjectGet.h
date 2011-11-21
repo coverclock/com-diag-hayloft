@@ -14,7 +14,6 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Conditions.h"
-#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -65,8 +64,8 @@ protected:
 public:
 
 	explicit ObjectGet(
-		const Bucket & bucket,
 		const char * keyname,
+		const Bucket & bucket,
 		::com::diag::desperado::Output & sink,
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
@@ -74,8 +73,28 @@ public:
 	);
 
 	explicit ObjectGet(
-		const Bucket & bucket,
 		const char * keyname,
+		const Bucket & bucket,
+		::com::diag::desperado::Output * sinkp, /* TAKEN */
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	explicit ObjectGet(
+		const char * keyname,
+		const Bucket & bucket,
+		Multiplex & multiplex,
+		::com::diag::desperado::Output & sink,
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	explicit ObjectGet(
+		const char * keyname,
+		const Bucket & bucket,
+		Multiplex & multiplex,
 		::com::diag::desperado::Output * sinkp, /* TAKEN */
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
@@ -83,6 +102,8 @@ public:
 	);
 
 	virtual ~ObjectGet();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isGotten() const { return (status == ::S3StatusOK); }
 
