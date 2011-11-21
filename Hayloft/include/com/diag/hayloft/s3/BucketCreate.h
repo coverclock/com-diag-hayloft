@@ -12,7 +12,6 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Session.h"
 
 namespace com {
 namespace diag {
@@ -38,6 +37,8 @@ public:
 	);
 
 	virtual ~BucketCreate();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isCreated() const { return (status == ::S3StatusOK); }
 

@@ -9,10 +9,10 @@
 
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
-#include "com/diag/desperado/target.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -28,8 +28,8 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	return (rc < 0) ? 0 : rc;
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
-: Object(bucket, keyname)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
+: Object(keyname, bucket)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
@@ -46,8 +46,8 @@ ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, ::com::diag::d
 	begin();
 }
 
-ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
-: Object(bucket, keyname)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
+: Object(keyname, bucket)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
@@ -62,6 +62,39 @@ ObjectPut::ObjectPut(const Bucket & bucket, const char * keyname, ::com::diag::d
 {
 	initialize(props.getMetadata());
 	begin();
+}
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
+: Object(keyname, bucket, multiplex)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+, inputp(0)
+, input(source)
+, size(objectsize)
+, consumed(0)
+{
+	initialize(props.getMetadata());
+}
+
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
+: Object(keyname, bucket, multiplex)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+, inputp(sourcep)
+, input(*sourcep)
+, size(objectsize)
+, consumed(0)
+{
+	initialize(props.getMetadata());
 }
 
 ObjectPut::~ObjectPut() {

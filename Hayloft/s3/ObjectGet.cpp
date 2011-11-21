@@ -9,10 +9,10 @@
 
 #include "com/diag/hayloft/s3/ObjectGet.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
-#include "com/diag/desperado/target.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -28,8 +28,8 @@ namespace s3 {
 	return status;
 }
 
-ObjectGet::ObjectGet(const Bucket & bucket, const char * keyname, ::com::diag::desperado::Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
-: Object(bucket, keyname)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(keyname, bucket)
 , since(conds.getSince())
 , notsince(conds.getNotSince())
 , match(conds.getMatch())
@@ -44,8 +44,8 @@ ObjectGet::ObjectGet(const Bucket & bucket, const char * keyname, ::com::diag::d
 	begin();
 }
 
-ObjectGet::ObjectGet(const Bucket & bucket, const char * keyname, ::com::diag::desperado::Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
-: Object(bucket, keyname)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(keyname, bucket)
 , since(conds.getSince())
 , notsince(conds.getNotSince())
 , match(conds.getMatch())
@@ -58,6 +58,36 @@ ObjectGet::ObjectGet(const Bucket & bucket, const char * keyname, ::com::diag::d
 {
 	initialize();
 	begin();
+}
+
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(keyname, bucket, multiplex)
+, since(conds.getSince())
+, notsince(conds.getNotSince())
+, match(conds.getMatch())
+, notmatch(conds.getNotMatch())
+, outputp(0)
+, output(sink)
+, offset(objectoffset)
+, size(objectsize)
+, produced(0)
+{
+	initialize();
+}
+
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(keyname, bucket, multiplex)
+, since(conds.getSince())
+, notsince(conds.getNotSince())
+, match(conds.getMatch())
+, notmatch(conds.getNotMatch())
+, outputp(sinkp)
+, output(*sinkp)
+, offset(objectoffset)
+, size(objectsize)
+, produced(0)
+{
+	initialize();
 }
 
 ObjectGet::~ObjectGet() {

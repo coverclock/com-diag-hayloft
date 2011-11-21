@@ -9,9 +9,9 @@
 
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/target.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -19,11 +19,17 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-ObjectDelete::ObjectDelete(const Bucket & bucket, const char * keyname)
-: Object(bucket, keyname)
+ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket)
+: Object(keyname, bucket)
 {
 	initialize();
 	begin();
+}
+
+ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
+: Object(keyname, bucket, multiplex)
+{
+	initialize();
 }
 
 ObjectDelete::~ObjectDelete() {

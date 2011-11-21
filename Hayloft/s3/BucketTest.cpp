@@ -9,8 +9,7 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/BucketTest.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Context.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -29,7 +28,6 @@ BucketTest::BucketTest(const char * bucketname, Multiplex & multiplex, const Con
 : Bucket(bucketname, multiplex, context, session)
 {
 	initialize();
-	begin();
 }
 
 BucketTest::~BucketTest() {

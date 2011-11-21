@@ -12,7 +12,6 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Session.h"
 
 namespace com {
 namespace diag {
@@ -37,6 +36,8 @@ public:
 	);
 
 	virtual ~BucketDelete();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isDeleted() const { return (status == ::S3StatusOK); }
 

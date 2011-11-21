@@ -13,7 +13,6 @@
 
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Region.h"
-#include "com/diag/hayloft/s3/Session.h"
 
 namespace com {
 namespace diag {
@@ -42,6 +41,8 @@ public:
 	);
 
 	virtual ~BucketTest();
+
+	virtual void start() { if (requests != 0) { begin(); } }
 
 	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
 
