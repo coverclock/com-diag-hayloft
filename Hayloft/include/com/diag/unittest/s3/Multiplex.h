@@ -40,17 +40,17 @@ TEST_F(MultiplexTest, Stack) {
 	EXPECT_NE(multiplex.getRequests(), (S3RequestContext *)0);
 }
 
-TEST_F(MultiplexTest, All) {
+TEST_F(MultiplexTest, Complete) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_TRUE(multiplex.all());
+	EXPECT_TRUE(multiplex.complete());
 }
 
-TEST_F(MultiplexTest, Once) {
+TEST_F(MultiplexTest, Iterate) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
 	int pending;
-	EXPECT_TRUE(multiplex.once(pending));
+	EXPECT_TRUE(multiplex.iterate(pending));
 	EXPECT_EQ(pending, 0);
 }
 

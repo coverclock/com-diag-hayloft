@@ -78,9 +78,9 @@ public:
 
 	::S3RequestContext * getRequests() const { return requests; }
 
-	virtual bool all();
+	virtual bool complete();
 
-	virtual bool once(int & pending = dontcare);
+	virtual bool iterate(int & pending = dontcare);
 
 	virtual Bits ready(Milliseconds timeout = TIMEOUT);
 

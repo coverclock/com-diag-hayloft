@@ -47,7 +47,7 @@ public:
 
 	virtual ~ObjectHead();
 
-	virtual void start() { if (requests != 0) { begin(); } }
+	virtual void start() { if (requests != 0) { execute(); } }
 
 	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
 
@@ -63,7 +63,7 @@ private:
 
 	void initialize();
 
-	void begin();
+	void execute();
 
 };
 

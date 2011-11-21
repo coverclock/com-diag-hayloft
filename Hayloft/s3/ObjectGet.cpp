@@ -41,7 +41,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::d
 , produced(0)
 {
 	initialize();
-	begin();
+	execute();
 }
 
 ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
@@ -57,7 +57,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::d
 , produced(0)
 {
 	initialize();
-	begin();
+	execute();
 }
 
 ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
@@ -114,7 +114,7 @@ void ObjectGet::initialize() {
 	handler.getObjectDataCallback = &getObjectDataCallback;
 }
 
-void ObjectGet::begin() {
+void ObjectGet::execute() {
 	Logger::instance().debug("ObjectGet@%p: begin\n", this);
 	::S3_get_object(
 		&context,
@@ -141,7 +141,7 @@ void ObjectGet::begin() {
 }
 
 void ObjectGet::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("ObjectGet@%p: complete\n", this);
+	Logger::instance().debug("ObjectGet@%p: end\n", this);
 }
 
 }

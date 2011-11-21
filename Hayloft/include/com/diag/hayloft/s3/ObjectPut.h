@@ -105,7 +105,7 @@ public:
 
 	virtual ~ObjectPut();
 
-	virtual void start() { if (requests != 0) { begin(); } }
+	virtual void start() { if (requests != 0) { execute(); } }
 
 	bool isPut() const { return (status == ::S3StatusOK); }
 
@@ -121,7 +121,7 @@ private:
 
 	void initialize(const Properties::Metadata & settings);
 
-	void begin();
+	void execute();
 
 };
 

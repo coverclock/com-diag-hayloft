@@ -20,21 +20,21 @@ BucketValid::BucketValid(const char * bucketname, const Context & context, const
 : Bucket(bucketname, context, session)
 {
 	initialize();
-	begin();
+	execute();
 }
 
 void BucketValid::initialize() {
 }
 
 
-void BucketValid::begin() {
+void BucketValid::execute() {
 	Logger & logger = Logger::instance();
 	logger.debug("BucketValid@%p: begin\n", this);
 	status = ::S3_validate_bucket_name(name.c_str(), style);
 	if (status != ::S3StatusOK) {
 		logger.warning("BucketValid@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, name.c_str(), name.length(), status, ::S3_get_status_name(status));
 	}
-	logger.debug("BucketValid@%p: complete\n", this);
+	logger.debug("BucketValid@%p: end\n", this);
 }
 
 }

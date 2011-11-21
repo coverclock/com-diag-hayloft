@@ -37,7 +37,7 @@ public:
 
 	virtual ~BucketDelete();
 
-	virtual void start() { if (requests != 0) { begin(); } }
+	virtual void start() { if (requests != 0) { execute(); } }
 
 	bool isDeleted() const { return (status == ::S3StatusOK); }
 
@@ -49,7 +49,7 @@ private:
 
 	void initialize();
 
-	void begin();
+	void execute();
 
 };
 

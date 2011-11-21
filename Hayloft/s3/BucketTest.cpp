@@ -21,7 +21,7 @@ BucketTest::BucketTest(const char * bucketname, const Context & context, const S
 : Bucket(bucketname, context, session)
 {
 	initialize();
-	begin();
+	execute();
 }
 
 BucketTest::BucketTest(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
@@ -38,7 +38,7 @@ void BucketTest::initialize() {
 	constraint[0] = '\0';
 }
 
-void BucketTest::begin() {
+void BucketTest::execute() {
 	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	::S3_test_bucket(
 		protocol,
@@ -56,7 +56,7 @@ void BucketTest::begin() {
 
 void BucketTest::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	region = constraint;
-	Logger::instance().debug("BucketTest@%p: complete\n", this);
+	Logger::instance().debug("BucketTest@%p: end\n", this);
 }
 
 }

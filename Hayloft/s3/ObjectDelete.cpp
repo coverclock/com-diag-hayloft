@@ -23,7 +23,7 @@ ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket)
 : Object(keyname, bucket)
 {
 	initialize();
-	begin();
+	execute();
 }
 
 ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
@@ -42,7 +42,7 @@ void ObjectDelete::initialize() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 }
 
-void ObjectDelete::begin() {
+void ObjectDelete::execute() {
 	Logger::instance().debug("ObjectDelete@%p: begin\n", this);
 	::S3_delete_object(
 		&context,
@@ -54,7 +54,7 @@ void ObjectDelete::begin() {
 }
 
 void ObjectDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("ObjectDelete@%p: complete\n", this);
+	Logger::instance().debug("ObjectDelete@%p: end\n", this);
 }
 
 }
