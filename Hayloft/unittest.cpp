@@ -36,11 +36,13 @@
 #include "com/diag/unittest/s3/Conditions.h"
 #endif
 
-// Unit tests that also use S3.
+// Unit tests that also use S3 and buckets.
 
 #if 1
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
+
+// Unit tests that also use objects.
 
 #if 1
 #include "com/diag/unittest/s3/Object.h"

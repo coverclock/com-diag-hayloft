@@ -43,12 +43,14 @@ Session & Session::instance() {
     return *singleton;
 }
 
-Session::Session(const char * userAgentInfo, int flags, const char * defaultS3HostName)
-: useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
+Session::Session(const char * bucketSuffix, const char * userAgentInfo, int flags, const char * defaultS3HostName)
+: bucketsuffix(set(bucketSuffix, BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_STR()))
+, useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
 , hostname(set(defaultS3HostName, HOST_NAME_ENV(), HOST_NAME_STR()))
 , status(::S3_initialize(useragent.c_str(), flags, hostname.c_str()))
 {
 	Logger & logger = Logger::instance();
+	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
 	logger.debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
 	if (status != ::S3StatusOK) {
@@ -61,12 +63,15 @@ Session::~Session() {
 }
 
 const char * Session::canonicalize(std::string name) const {
-	if ((name.length() > 0) && (useragent.length() > 0)) {
-		name += '.';
-		name += useragent;
+	if ((!name.empty()) && (!bucketsuffix.empty())) {
+		name += bucketsuffix;
 	}
+	// Ref: Amazon Web Services, AMAZON SIMPLE STORAGE SERVICE DEVELOPER GUIDE,
+	// API Version 2006-03-01, "Bucket Restrictions and Limitations", p. 83
 	for (int ii = 0; ii < name.length(); ++ii) {
-		name.replace(ii, 1, 1, tolower(name[ii]));
+		if (isupper(name[ii])) {
+			name.replace(ii, 1, 1, tolower(name[ii]));
+		}
 	}
 	return name.c_str();
 }

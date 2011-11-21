@@ -40,6 +40,8 @@ protected:
 
 private:
 
+	std::string bucketsuffix;
+
 	std::string useragent;
 
 	std::string hostname;
@@ -47,6 +49,10 @@ private:
 	::S3Status status;
 
 public:
+
+	static const char * BUCKET_SUFFIX_STR() { return ""; }
+
+	static const char * BUCKET_SUFFIX_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_BUCKET_SUFFIX"; }
 
 	static const char * USER_AGENT_STR() { return ""; }
 
@@ -76,6 +82,7 @@ public:
 	static Session & instance();
 
 	explicit Session(
+		const char * bucketSuffix = 0,
 		const char * userAgentInfo = 0,
 		int flags = S3_INIT_ALL,
 		const char * defaultS3HostName = 0
@@ -86,6 +93,8 @@ public:
 	operator bool() const { return (status == ::S3StatusOK); }
 
 	::S3Status getStatus() const { return status; }
+
+	const char * getBucketSuffix() const { return bucketsuffix.c_str(); }
 
 	const char * getUserAgent() const { return useragent.c_str(); }
 
