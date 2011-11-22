@@ -55,6 +55,12 @@ void BucketTest::execute() {
 	);
 }
 
+void BucketTest::start() {
+	if (state() != BUSY) {
+		execute();
+	}
+}
+
 void BucketTest::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	constraint[sizeof(constraint) - 1] = '\0';
 	region = constraint;

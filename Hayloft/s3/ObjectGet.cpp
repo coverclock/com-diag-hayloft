@@ -90,11 +90,8 @@ ObjectGet::~ObjectGet() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
-	if (taken != 0) {
-		delete taken;
-	}
+	finalize();
 }
-
 
 void ObjectGet::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
@@ -126,22 +123,57 @@ void ObjectGet::execute() {
 
 }
 
+void ObjectGet::finalize() {
+	if (output != 0) {
+		(*output)();
+		output = 0;
+	}
+	if (taken != 0) {
+		delete taken;
+		taken = 0;
+	}
+}
+
+void ObjectGet::start() {
+	if (state() != BUSY) {
+		execute();
+	}
+}
+
+void ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
+	if ((state() != BUSY)) {
+		finalize();
+		output = &sink;
+		taken = 0;
+		offset = objectoffset;
+		size = objectsize;
+	}
+}
+
+void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets objectsize) {
+	if ((state() != BUSY)) {
+		finalize();
+		output = sinkp;
+		taken = sinkp;
+		offset = objectoffset;
+		size = objectsize;
+	}
+}
+
 ::S3Status ObjectGet::get(int bufferSize, const char * buffer) {
 	ssize_t produced = 0;
 	if (output != 0) {
 		produced = (*output)(buffer, bufferSize, bufferSize);
 		if (produced == EOF) {
+			finalize();
 			produced = 0;
-			output = 0;
 		}
 	}
 	return (produced > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
 }
 
 void ObjectGet::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	if (output != 0) {
-		(*output)();
-	}
+	finalize();
 	Logger::instance().debug("ObjectGet@%p: end\n", this);
 }
 

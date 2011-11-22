@@ -54,6 +54,12 @@ void ObjectHead::execute() {
 	);
 }
 
+void ObjectHead::start() {
+	if (state() != BUSY) {
+		execute();
+	}
+}
+
 void ObjectHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	Logger::instance().debug("ObjectHead@%p: end\n", this);
 }

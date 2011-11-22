@@ -42,7 +42,7 @@ public:
 
 	virtual ~BucketTest();
 
-	void start() { if (state() != BUSY) { execute(); } }
+	void start();
 
 	bool isExistent() const { return (state() == ::S3StatusOK); }
 
