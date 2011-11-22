@@ -37,10 +37,9 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::d
 , encoding(props.getEncoding())
 , expires(props.getExpires())
 , access(props.getAccess())
-, inputp(0)
-, input(source)
+, input(&source)
+, taken(0)
 , size(objectsize)
-, consumed(0)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -55,10 +54,9 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::d
 , encoding(props.getEncoding())
 , expires(props.getExpires())
 , access(props.getAccess())
-, inputp(sourcep)
-, input(*sourcep)
+, input(sourcep)
+, taken(sourcep)
 , size(objectsize)
-, consumed(0)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -72,10 +70,9 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & mu
 , encoding(props.getEncoding())
 , expires(props.getExpires())
 , access(props.getAccess())
-, inputp(0)
-, input(source)
+, input(&source)
+, taken(0)
 , size(objectsize)
-, consumed(0)
 {
 	initialize(props.getMetadata());
 }
@@ -89,10 +86,9 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & mu
 , encoding(props.getEncoding())
 , expires(props.getExpires())
 , access(props.getAccess())
-, inputp(sourcep)
-, input(*sourcep)
+, input(sourcep)
+, taken(sourcep)
 , size(objectsize)
-, consumed(0)
 {
 	initialize(props.getMetadata());
 }
@@ -101,8 +97,8 @@ ObjectPut::~ObjectPut() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
-	if (inputp != 0) {
-		delete inputp;
+	if (taken != 0) {
+		delete taken;
 	}
 	if (properties.metaData != 0) {
 		delete [] properties.metaData;
@@ -155,14 +151,15 @@ void ObjectPut::execute() {
 }
 
 int ObjectPut::put(int bufferSize, char * buffer) {
-	if (consumed != EOF) {
-		consumed = input(buffer, 1, bufferSize);
-		if ((consumed == EOF) && (inputp != 0)) {
-			delete inputp;
-			inputp = 0;
+	ssize_t consumed = 0;
+	if (input != 0) {
+		consumed = (*input)(buffer, 1, bufferSize);
+		if (consumed == EOF) {
+			consumed = 0;
+			input = 0;
 		}
 	}
-	return (consumed == EOF) ? 0 : consumed;
+	return consumed;
 }
 
 void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {

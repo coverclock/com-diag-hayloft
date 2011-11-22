@@ -29,11 +29,21 @@ class Terse : public ::testing::Test {
 
 public:
 
-	static ::com::diag::desperado::Print printf;
-	static ::com::diag::desperado::Dump dump;
+	::com::diag::desperado::Platform & platform;
+	::com::diag::desperado::FileOutput errput;
+	::com::diag::desperado::LogOutput logput;
+	::com::diag::desperado::Print printf;
+	::com::diag::desperado::Dump dump;
+	Logger & logger;
 
-	static ::com::diag::desperado::FileOutput errput;
-	static ::com::diag::desperado::LogOutput logput;
+	explicit Terse()
+	: platform(::com::diag::desperado::Platform::instance())
+	, errput(::stderr)
+	, logput(errput)
+	, printf(errput)
+	, dump(errput)
+	, logger(Logger::instance())
+	{}
 
 protected:
 
@@ -41,7 +51,6 @@ protected:
 	Logger::Mask mask;
 
 	virtual void SetUp() {
-		Logger & logger = Logger::instance();
 		output = &(logger.getOutput());
 		mask = logger.getMask();
 		logger
@@ -66,24 +75,17 @@ protected:
 	}
 
 	virtual void TearDown() {
-		Logger & logger = Logger::instance();
 		logger.setMask(mask);
 		logger.setOutput(*output);
 	}
 
 };
 
-::com::diag::desperado::FileOutput Terse::errput(::stderr);
-::com::diag::desperado::LogOutput Terse::logput(Terse::errput);
-::com::diag::desperado::Print Terse::printf(Terse::errput);
-::com::diag::desperado::Dump Terse::dump(Terse::errput);
-
 class Verbose : public Terse {
 
 protected:
 
 	virtual void SetUp() {
-		Logger & logger = Logger::instance();
 		output = &(logger.getOutput());
 		mask = logger.getMask();
 		logger
@@ -108,7 +110,6 @@ protected:
 	}
 
 	virtual void TearDown() {
-		Logger & logger = Logger::instance();
 		logger.setMask(mask);
 		logger.setOutput(*output);
 	}

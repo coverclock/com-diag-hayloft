@@ -53,13 +53,11 @@ protected:
 
 	::S3CannedAcl access;
 
-	::com::diag::desperado::Input * inputp;
+	::com::diag::desperado::Input * input;
 
-	::com::diag::desperado::Input & input;
+	::com::diag::desperado::Input * taken;
 
 	Octets size;
-
-	ssize_t consumed;
 
 	Properties::Metadata metadata;
 

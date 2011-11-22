@@ -47,15 +47,13 @@ protected:
 
 	std::string notmatch;
 
-	::com::diag::desperado::Output * outputp;
+	::com::diag::desperado::Output * output;
 
-	::com::diag::desperado::Output & output;
+	::com::diag::desperado::Output * taken;
 
 	Octets offset;
 
 	Octets size;
-
-	ssize_t produced;
 
 	::S3GetConditions conditions;
 

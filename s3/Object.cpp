@@ -33,7 +33,11 @@ namespace s3 {
 void Object::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
 	that->status = status;
-	Logger::Level level = ((status == ::S3StatusOK) || (status == ::S3StatusHttpErrorNotFound)) ? Logger::DEBUG : Logger::WARNING;
+	// I've never seen ::S3StatusErrorNoSuchKey in response to a GET or a HEAD
+	// so I'm not sure under what circumstances it occurs. A missing OBJECT
+	// seems to result in the typical HTTP error NOT FOUND a.k.a. the dreaded
+	// "404".
+	Logger::Level level = ((status == ::S3StatusOK) || (status == ::S3StatusErrorNoSuchKey) || (status == ::S3StatusHttpErrorNotFound)) ? Logger::DEBUG : Logger::WARNING;
 	Logger::instance().log(level, "Object@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	show(errorDetails, level);
 	that->complete(status, errorDetails);
