@@ -33,6 +33,7 @@ TEST_F(BucketBaseTest, Heap) {
 	Bucket * bucket = new Bucket("BucketBaseTestHeap");
 	ASSERT_NE(bucket, (Bucket*)0);
 	EXPECT_TRUE((*bucket) == true);
+	EXPECT_FALSE(bucket->isIdle());
 	EXPECT_FALSE(bucket->isBusy());
 	EXPECT_FALSE(bucket->isRetryable());
 	EXPECT_EQ(bucket->getStatus(), ::S3StatusOK);
@@ -43,6 +44,7 @@ TEST_F(BucketBaseTest, Heap) {
 TEST_F(BucketBaseTest, Stack) {
 	Bucket bucket("BucketBaseTestStack");
 	EXPECT_TRUE(bucket == true);
+	EXPECT_FALSE(bucket.isIdle());
 	EXPECT_FALSE(bucket.isBusy());
 	EXPECT_FALSE(bucket.isRetryable());
 	EXPECT_EQ(bucket.getStatus(), ::S3StatusOK);
@@ -69,11 +71,23 @@ TEST_F(BucketValidTest, Stack) {
 	EXPECT_TRUE(valid.isValid());
 }
 
+// These aren't actually very good unit tests. First of all, we're using the
+// actual AWS, which can fail legitimately either due to a temporary albeit
+// recoverable failure, or because Eventual Consistency hasn't quite gotten
+// new bucket and object states distributed throughout the system yet. I've
+// seen both happen (rarely) during my own development, and the unit test runs
+// just fine if just run again. Also, on a multi-core or even hyper-threaded
+// single core system, depending on how your POSIX thread library schedules new
+// threads, the BUSY state can be a transitional state that completes as soon
+// as the test calls start() and before it has a chance to see BUSY. I have
+// never seen this, but it is certainly possible.
+
 typedef Fixture BucketInitialTest;
 
 TEST_F(BucketInitialTest, Heap) {
 	BucketTest * test = new BucketTest("BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
@@ -85,6 +99,7 @@ TEST_F(BucketInitialTest, Heap) {
 TEST_F(BucketInitialTest, Stack) {
 	BucketTest test("BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -102,6 +117,7 @@ TEST_F(BucketInitialTest, Explicit) {
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test("BucketCreateTestExplicit", context, session);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -112,9 +128,16 @@ TEST_F(BucketInitialTest, Explicit) {
 TEST_F(BucketInitialTest, Complete) {
 	Multiplex multiplex;
 	BucketTest test("BucketCreateTestComplete", multiplex);
+	EXPECT_FALSE(test == true);
+	EXPECT_TRUE(test.isIdle());
+	EXPECT_FALSE(test.isBusy());
 	test.start();
+	EXPECT_FALSE(test == true);
+	EXPECT_FALSE(test.isIdle());
+	EXPECT_TRUE(test.isBusy());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -127,13 +150,20 @@ TEST_F(BucketInitialTest, Service) {
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	BucketTest test("BucketCreateTestService", multiplex);
+	EXPECT_FALSE(test == true);
+	EXPECT_TRUE(test.isIdle());
+	EXPECT_FALSE(test.isBusy());
 	test.start();
+	EXPECT_FALSE(test == true);
+	EXPECT_FALSE(test.isIdle());
+	EXPECT_TRUE(test.isBusy());
 	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 		if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
 	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -147,6 +177,7 @@ TEST_F(BucketCreateTest, Heap) {
 	BucketCreate * test = new BucketCreate("BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
 	EXPECT_FALSE(test->isBusy());
+	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_TRUE(test->isCreated());
 	delete test;
@@ -155,6 +186,7 @@ TEST_F(BucketCreateTest, Heap) {
 TEST_F(BucketCreateTest, Stack) {
 	BucketCreate test("BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_TRUE(test.isCreated());
@@ -170,6 +202,7 @@ TEST_F(BucketCreateTest, Explicit) {
 	Context context(credentials, constraint, protocol, style, list);
 	BucketCreate test("BucketCreateTestExplicit", context, session);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_TRUE(test.isCreated());
@@ -181,6 +214,7 @@ TEST_F(BucketCreateTest, Complete) {
 	create.start();
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(create == true);
+	EXPECT_FALSE(create.isIdle());
 	EXPECT_FALSE(create.isBusy());
 	EXPECT_FALSE(create.isRetryable());
 	EXPECT_TRUE(create.isCreated());
@@ -191,13 +225,20 @@ TEST_F(BucketCreateTest, Service) {
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	BucketCreate create("BucketCreateTestService", multiplex);
+	EXPECT_FALSE(create == true);
+	EXPECT_TRUE(create.isIdle());
+	EXPECT_FALSE(create.isBusy());
 	create.start();
+	EXPECT_FALSE(create == true);
+	EXPECT_FALSE(create.isIdle());
+	EXPECT_TRUE(create.isBusy());
 	int bits = 0;
 	for (int limit = LIMIT; (create != true) && (limit > 0); --limit) {
 		if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
 	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(create == true);
+	EXPECT_FALSE(create.isIdle());
 	EXPECT_FALSE(create.isBusy());
 	EXPECT_FALSE(create.isRetryable());
 	EXPECT_TRUE(create.isCreated());
@@ -208,6 +249,7 @@ typedef Fixture BucketTestTest;
 TEST_F(BucketTestTest, Heap) {
 	BucketTest * test = new BucketTest("BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
@@ -219,6 +261,7 @@ TEST_F(BucketTestTest, Heap) {
 TEST_F(BucketTestTest, Stack) {
 	BucketTest test("BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -236,6 +279,7 @@ TEST_F(BucketTestTest, Explicit) {
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test("BucketCreateTestExplicit", context, session);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -246,9 +290,16 @@ TEST_F(BucketTestTest, Explicit) {
 TEST_F(BucketTestTest, Complete) {
 	Multiplex multiplex;
 	BucketTest test("BucketCreateTestComplete", multiplex);
+	EXPECT_FALSE(test == true);
+	EXPECT_TRUE(test.isIdle());
+	EXPECT_FALSE(test.isBusy());
 	test.start();
+	EXPECT_FALSE(test == true);
+	EXPECT_FALSE(test.isIdle());
+	EXPECT_TRUE(test.isBusy());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -261,13 +312,20 @@ TEST_F(BucketTestTest, Service) {
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	BucketTest test("BucketCreateTestService", multiplex);
+	EXPECT_FALSE(test == true);
+	EXPECT_TRUE(test.isIdle());
+	EXPECT_FALSE(test.isBusy());
 	test.start();
+	EXPECT_FALSE(test == true);
+	EXPECT_FALSE(test.isIdle());
+	EXPECT_TRUE(test.isBusy());
 	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 		if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
 	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -280,6 +338,7 @@ typedef Fixture BucketDeleteTest;
 TEST_F(BucketDeleteTest, Heap) {
 	BucketDelete * test = new BucketDelete("BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_TRUE(test->isDeleted());
@@ -289,6 +348,7 @@ TEST_F(BucketDeleteTest, Heap) {
 TEST_F(BucketDeleteTest, Stack) {
 	BucketDelete test("BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_TRUE(test.isDeleted());
@@ -304,6 +364,7 @@ TEST_F(BucketDeleteTest, Explicit) {
 	Context context(credentials, constraint, protocol, style, list);
 	BucketDelete test("BucketCreateTestExplicit", context, session);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_TRUE(test.isDeleted());
@@ -312,9 +373,16 @@ TEST_F(BucketDeleteTest, Explicit) {
 TEST_F(BucketDeleteTest, Complete) {
 	Multiplex multiplex;
 	BucketDelete remove("BucketCreateTestComplete", multiplex);
+	EXPECT_FALSE(remove == true);
+	EXPECT_TRUE(remove.isIdle());
+	EXPECT_FALSE(remove.isBusy());
 	remove.start();
+	EXPECT_FALSE(remove == true);
+	EXPECT_FALSE(remove.isIdle());
+	EXPECT_TRUE(remove.isBusy());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(remove == true);
+	EXPECT_FALSE(remove.isIdle());
 	EXPECT_FALSE(remove.isBusy());
 	EXPECT_FALSE(remove.isRetryable());
 	EXPECT_TRUE(remove.isDeleted());
@@ -325,13 +393,20 @@ TEST_F(BucketDeleteTest, Service) {
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	BucketDelete remove("BucketCreateTestService", multiplex);
+	EXPECT_FALSE(remove == true);
+	EXPECT_TRUE(remove.isIdle());
+	EXPECT_FALSE(remove.isBusy());
 	remove.start();
+	EXPECT_FALSE(remove == true);
+	EXPECT_FALSE(remove.isIdle());
+	EXPECT_TRUE(remove.isBusy());
 	int bits = 0;
 	for (int limit = LIMIT; (remove != true) && (limit > 0); --limit) {
 		if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
 	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(remove == true);
+	EXPECT_FALSE(remove.isIdle());
 	EXPECT_FALSE(remove.isBusy());
 	EXPECT_FALSE(remove.isRetryable());
 	EXPECT_TRUE(remove.isDeleted());
@@ -342,6 +417,7 @@ typedef Fixture BucketVerifyTest;
 TEST_F(BucketVerifyTest, Heap) {
 	BucketTest * test = new BucketTest("BucketCreateTestHeap");
 	EXPECT_TRUE((*test) == true);
+	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
@@ -353,6 +429,7 @@ TEST_F(BucketVerifyTest, Heap) {
 TEST_F(BucketVerifyTest, Stack) {
 	BucketTest test("BucketCreateTestStack");
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -370,6 +447,7 @@ TEST_F(BucketVerifyTest, Explicit) {
 	Context context(credentials, constraint, protocol, style, list);
 	BucketTest test("BucketCreateTestExplicit", context, session);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -380,9 +458,16 @@ TEST_F(BucketVerifyTest, Explicit) {
 TEST_F(BucketVerifyTest, Complete) {
 	Multiplex multiplex;
 	BucketTest test("BucketCreateTestComplete", multiplex);
+	EXPECT_FALSE(test == true);
+	EXPECT_TRUE(test.isIdle());
+	EXPECT_FALSE(test.isBusy());
 	test.start();
+	EXPECT_FALSE(test == true);
+	EXPECT_FALSE(test.isIdle());
+	EXPECT_TRUE(test.isBusy());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
@@ -395,13 +480,20 @@ TEST_F(BucketVerifyTest, Service) {
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	BucketTest test("BucketCreateTestService", multiplex);
+	EXPECT_FALSE(test == true);
+	EXPECT_TRUE(test.isIdle());
+	EXPECT_FALSE(test.isBusy());
 	test.start();
+	EXPECT_FALSE(test == true);
+	EXPECT_FALSE(test.isIdle());
+	EXPECT_TRUE(test.isBusy());
 	int bits = 0;
 	for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 		if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
 	}
 	EXPECT_EQ(bits, 0);
 	EXPECT_TRUE(test == true);
+	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());

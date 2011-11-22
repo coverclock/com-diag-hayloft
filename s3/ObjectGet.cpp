@@ -23,8 +23,8 @@ namespace s3 {
 ::S3Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData) {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
 	::S3Status status = that->get(bufferSize, buffer);
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
-	Logger::instance().log(level, "ObjectGet@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
+	Logger::instance().log(level, "ObjectGet@%p: requested=%d status=%d=\"%s\"\n", that, bufferSize, status, ::S3_get_status_name(status));
 	return status;
 }
 
@@ -101,7 +101,7 @@ ObjectGet::~ObjectGet() {
 
 
 void ObjectGet::initialize() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&conditions, 0, sizeof(conditions));
 	conditions.ifModifiedSince = since;
 	conditions.ifNotModifiedSince = notsince;
@@ -115,6 +115,7 @@ void ObjectGet::initialize() {
 }
 
 void ObjectGet::execute() {
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectGet@%p: begin\n", this);
 	::S3_get_object(
 		&context,

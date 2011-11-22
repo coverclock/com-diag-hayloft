@@ -22,7 +22,7 @@ namespace s3 {
 ::S3Status Bucket::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
 	Bucket * that = static_cast<Bucket*>(callbackData);
 	::S3Status status = that->properties(properties);
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
+	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "Bucket@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	show(properties, level);
 	return status;
@@ -31,7 +31,7 @@ namespace s3 {
 void Bucket::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Bucket * that = static_cast<Bucket*>(callbackData);
 	that->status = status;
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::WARNING;
+	Logger::Level level = ((status == ::S3StatusOK) || (status == ::S3StatusErrorNoSuchBucket)) ? Logger::DEBUG : Logger::WARNING;
 	Logger::instance().log(level, "Bucket@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	show(errorDetails, level);
 	that->complete(status, errorDetails);
@@ -75,18 +75,20 @@ Bucket::~Bucket() {
 
 void Bucket::initialize() {
 	Logger & logger = Logger::instance();
+	if (logger.isEnabled(Logger::DEBUG)) {
+		logger.debug("Bucket@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
+		logger.debug("Bucket@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
+		logger.debug("Bucket@%p: hostname=\"%s\"\n", this, hostname.c_str());
+		logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
+		logger.debug("Bucket@%p: region=\"%s\"\n", this, region.c_str());
+		logger.debug("Bucket@%p: protocol=%d\n", this, protocol);
+		logger.debug("Bucket@%p: style=%d\n", this, style);
+		logger.debug("Bucket@%p: access=%d\n", this, access);
+		if (requests != 0) { logger.debug("Bucket@%p: requests=%p\n", this, requests); }
+	}
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
-	logger.debug("Bucket@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
-	logger.debug("Bucket@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
-	logger.debug("Bucket@%p: hostname=\"%s\"\n", this, hostname.c_str());
-	logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
-	logger.debug("Bucket@%p: region=\"%s\"\n", this, region.c_str());
-	logger.debug("Bucket@%p: protocol=%d\n", this, protocol);
-	logger.debug("Bucket@%p: style=%d\n", this, style);
-	logger.debug("Bucket@%p: access=%d\n", this, access);
-	if (requests != 0) { logger.debug("Bucket@%p: requests=%p\n", this, requests); }
 }
 
 ::S3Status Bucket::getStatus(const char ** description) const {

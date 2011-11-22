@@ -105,11 +105,9 @@ public:
 
 	virtual ~ObjectPut();
 
-	virtual void start() { if (requests != 0) { execute(); } }
+	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
 
-	bool isPut() const { return (status == ::S3StatusOK); }
-
-	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
+	bool isPut() const { return (state() == ::S3StatusOK); }
 
 protected:
 

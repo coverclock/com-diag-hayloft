@@ -103,13 +103,9 @@ public:
 
 	virtual ~ObjectGet();
 
-	virtual void start() { if (requests != 0) { execute(); } }
+	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
 
-	bool isGotten() const { return (status == ::S3StatusOK); }
-
-	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
-
-	bool isNonexistent() const { return (status == ::S3StatusHttpErrorNotFound); }
+	bool isGotten() const { return (state() == ::S3StatusOK); }
 
 protected:
 

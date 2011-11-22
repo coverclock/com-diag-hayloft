@@ -47,13 +47,9 @@ public:
 
 	virtual ~ObjectHead();
 
-	virtual void start() { if (requests != 0) { execute(); } }
+	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
 
-	bool isInaccessible() const { return (status == ::S3StatusHttpErrorForbidden); }
-
-	bool isExistent() const { return (status == ::S3StatusOK); }
-
-	bool isNonexistent() const { return (status == ::S3StatusHttpErrorNotFound); }
+	bool isExistent() const { return (state() == ::S3StatusOK); }
 
 protected:
 

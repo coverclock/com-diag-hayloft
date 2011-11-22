@@ -23,7 +23,7 @@ class BucketTest : public Bucket {
 
 private:
 
-	char constraint[Region::LENGTH];
+	char constraint[Region::LENGTH + 1];
 
 public:
 
@@ -42,13 +42,9 @@ public:
 
 	virtual ~BucketTest();
 
-	virtual void start() { if (requests != 0) { execute(); } }
+	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
 
-	bool isInaccessible() const { return (status == ::S3StatusErrorAccessDenied); }
-
-	bool isExistent() const { return (status == ::S3StatusOK); }
-
-	bool isNonexistent() const { return (status == ::S3StatusErrorNoSuchBucket); }
+	bool isExistent() const { return (state() == ::S3StatusOK); }
 
 protected:
 

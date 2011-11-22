@@ -21,6 +21,8 @@ namespace s3 {
 
 static const int BUSY = intmaxof(::S3Status);
 
+static const int IDLE = intmaxof(::S3Status) - 1;
+
 }
 }
 }

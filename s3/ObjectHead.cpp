@@ -39,10 +39,11 @@ ObjectHead::~ObjectHead() {
 }
 
 void ObjectHead::initialize() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 }
 
 void ObjectHead::execute() {
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectHead@%p: begin\n", this);
 	::S3_head_object(
 		&context,

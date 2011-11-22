@@ -34,10 +34,11 @@ BucketDelete::~BucketDelete() {
 }
 
 void BucketDelete::initialize() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 }
 
 void BucketDelete::execute() {
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	::S3_delete_bucket(
 		protocol,
