@@ -88,6 +88,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(buckettest, (BucketTest*)0);
 		EXPECT_EQ(*buckettest, true);
 		if (!buckettest->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest->isIdle());
 	EXPECT_FALSE(buckettest->isBusy());
@@ -104,6 +105,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(bucketcreate, (Bucket*)0);
 		EXPECT_EQ(*bucketcreate, true);
 		if (!bucketcreate->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate->isIdle());
 	EXPECT_FALSE(bucketcreate->isBusy());
@@ -113,12 +115,17 @@ TEST_F(ObjectTest, Synchronous) {
 	ASSERT_TRUE(bucketcreate->isCreated());
 	/**/
 	buckettest = 0;
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		delete buckettest;
-		buckettest = new BucketTest(BUCKET, context);
-		ASSERT_NE(buckettest, (BucketTest*)0);
-		EXPECT_EQ(*buckettest, true);
-		if (!buckettest->isRetryable()) { break; }
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			delete buckettest;
+			buckettest = new BucketTest(BUCKET, context);
+			ASSERT_NE(buckettest, (BucketTest*)0);
+			EXPECT_EQ(*buckettest, true);
+			if (!buckettest->isRetryable()) { break; }
+			platform.yield(platform.frequency());
+		}
+		if (buckettest->isExistent()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest->isIdle());
 	EXPECT_FALSE(buckettest->isBusy());
@@ -135,6 +142,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(objecthead, (ObjectHead*)0);
 		EXPECT_EQ(*objecthead, true);
 		if (!objecthead->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
 	EXPECT_FALSE(objecthead->isBusy());
@@ -156,6 +164,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(objectput, (ObjectPut*)0);
 		EXPECT_EQ(*objectput, true);
 		if (!objectput->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectput->isIdle());
 	EXPECT_FALSE(objectput->isBusy());
@@ -166,12 +175,17 @@ TEST_F(ObjectTest, Synchronous) {
 	delete objectput;
 	/**/
 	objecthead = 0;
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		delete objecthead;
-		objecthead = new ObjectHead(OBJECT, *bucketcreate);
-		ASSERT_NE(objecthead, (ObjectHead*)0);
-		EXPECT_EQ(*objecthead, true);
-		if (!objecthead->isRetryable()) { break; }
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			delete objecthead;
+			objecthead = new ObjectHead(OBJECT, *bucketcreate);
+			ASSERT_NE(objecthead, (ObjectHead*)0);
+			EXPECT_EQ(*objecthead, true);
+			if (!objecthead->isRetryable()) { break; }
+			platform.yield(platform.frequency());
+		}
+		if (objecthead->isExistent()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
 	EXPECT_FALSE(objecthead->isBusy());
@@ -191,6 +205,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(objectget, (ObjectGet*)0);
 		EXPECT_EQ(*objectget, true);
 		if (!objectget->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget->isIdle());
 	EXPECT_FALSE(objectget->isBusy());
@@ -207,6 +222,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(objectdelete, (ObjectDelete*)0);
 		EXPECT_EQ(*objectdelete, true);
 		if (!objectdelete->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete->isIdle());
 	EXPECT_FALSE(objectdelete->isBusy());
@@ -217,12 +233,17 @@ TEST_F(ObjectTest, Synchronous) {
 	delete objectdelete;
 	/**/
 	objecthead = 0;
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		delete objecthead;
-		objecthead = new ObjectHead(OBJECT, *bucketcreate);
-		ASSERT_NE(objecthead, (ObjectHead*)0);
-		EXPECT_EQ(*objecthead, true);
-		if (!objecthead->isRetryable()) { break; }
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			delete objecthead;
+			objecthead = new ObjectHead(OBJECT, *bucketcreate);
+			ASSERT_NE(objecthead, (ObjectHead*)0);
+			EXPECT_EQ(*objecthead, true);
+			if (!objecthead->isRetryable()) { break; }
+			platform.yield(platform.frequency());
+		}
+		if (objecthead->isNonexistent()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
 	EXPECT_FALSE(objecthead->isBusy());
@@ -238,6 +259,7 @@ TEST_F(ObjectTest, Synchronous) {
 		ASSERT_NE(bucketdelete, (Bucket*)0);
 		EXPECT_EQ(*bucketdelete, true);
 		if (!bucketdelete->isRetryable()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete->isIdle());
 	EXPECT_FALSE(bucketdelete->isBusy());
@@ -248,12 +270,17 @@ TEST_F(ObjectTest, Synchronous) {
 	delete bucketdelete;
 	/**/
 	buckettest = 0;
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		delete buckettest;
-		buckettest = new BucketTest(BUCKET, context);
-		ASSERT_NE(buckettest, (BucketTest*)0);
-		EXPECT_EQ(*buckettest, true);
-		if (!buckettest->isRetryable()) { break; }
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			delete buckettest;
+			buckettest = new BucketTest(BUCKET, context);
+			ASSERT_NE(buckettest, (BucketTest*)0);
+			EXPECT_EQ(*buckettest, true);
+			if (!buckettest->isRetryable()) { break; }
+			platform.yield(platform.frequency());
+		}
+		if (buckettest->isNonexistent()) { break; }
+		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest->isIdle());
 	EXPECT_FALSE(buckettest->isBusy());
@@ -269,7 +296,7 @@ TEST_F(ObjectTest, Synchronous) {
 	command += __FILE__;
 	command += " ";
 	command += OBJECT;
-	EXPECT_EQ(std::system(command.c_str()), 0);
+	ASSERT_EQ(std::system(command.c_str()), 0);
 	/**/
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
@@ -284,196 +311,171 @@ TEST_F(ObjectTest, Asynchronous) {
 	properties.setAccess(access);
 	Multiplex multiplex;
 	/**/
-	BucketTest * buckettest = new BucketTest(BUCKET, multiplex, context);
-	ASSERT_NE(buckettest, (BucketTest*)0);
-	EXPECT_EQ(*buckettest, false);
-	EXPECT_TRUE(buckettest->isIdle());
-	EXPECT_FALSE(buckettest->isBusy());
-	buckettest->start();
-	EXPECT_EQ(*buckettest, false);
-	EXPECT_FALSE(buckettest->isIdle());
-	EXPECT_TRUE(buckettest->isBusy());
+	BucketTest buckettest(BUCKET, multiplex, context);
+	EXPECT_EQ(buckettest, false);
+	EXPECT_TRUE(buckettest.isIdle());
+	EXPECT_FALSE(buckettest.isBusy());
+	buckettest.start();
+	EXPECT_EQ(buckettest, false);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_TRUE(buckettest.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*buckettest, true);
-	EXPECT_FALSE(buckettest->isIdle());
-	EXPECT_FALSE(buckettest->isBusy());
-	EXPECT_FALSE(buckettest->isExistent());
-	EXPECT_FALSE(buckettest->isInaccessible());
-	EXPECT_TRUE(buckettest->isNonexistent());
-	delete buckettest;
+	EXPECT_EQ(buckettest, true);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_FALSE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_TRUE(buckettest.isNonexistent());
 	/**/
-	BucketCreate * bucketcreate = new BucketCreate(BUCKET, multiplex, context);
-	ASSERT_NE(bucketcreate, (Bucket*)0);
-	EXPECT_EQ(*bucketcreate, false);
-	EXPECT_TRUE(bucketcreate->isIdle());
-	EXPECT_FALSE(bucketcreate->isBusy());
-	bucketcreate->start();
-	EXPECT_EQ(*bucketcreate, false);
-	EXPECT_FALSE(bucketcreate->isIdle());
-	EXPECT_TRUE(bucketcreate->isBusy());
+	BucketCreate bucketcreate(BUCKET, multiplex, context);
+	EXPECT_EQ(bucketcreate, false);
+	EXPECT_TRUE(bucketcreate.isIdle());
+	EXPECT_FALSE(bucketcreate.isBusy());
+	bucketcreate.start();
+	EXPECT_EQ(bucketcreate, false);
+	EXPECT_FALSE(bucketcreate.isIdle());
+	EXPECT_TRUE(bucketcreate.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*bucketcreate, true);
-	EXPECT_FALSE(bucketcreate->isIdle());
-	EXPECT_FALSE(bucketcreate->isBusy());
-	EXPECT_TRUE(bucketcreate->isCreated());
+	EXPECT_EQ(bucketcreate, true);
+	EXPECT_FALSE(bucketcreate.isIdle());
+	EXPECT_FALSE(bucketcreate.isBusy());
+	EXPECT_TRUE(bucketcreate.isCreated());
 	/**/
-	buckettest = new BucketTest(BUCKET, multiplex, context);
-	ASSERT_NE(buckettest, (BucketTest*)0);
-	EXPECT_EQ(*buckettest, false);
-	EXPECT_TRUE(buckettest->isIdle());
-	EXPECT_FALSE(buckettest->isBusy());
-	buckettest->start();
-	EXPECT_EQ(*buckettest, false);
-	EXPECT_FALSE(buckettest->isIdle());
-	EXPECT_TRUE(buckettest->isBusy());
+	EXPECT_EQ(buckettest, true);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_FALSE(buckettest.isBusy());
+	buckettest.start();
+	EXPECT_EQ(buckettest, false);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_TRUE(buckettest.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*buckettest, true);
-	EXPECT_FALSE(buckettest->isIdle());
-	EXPECT_FALSE(buckettest->isBusy());
-	EXPECT_TRUE(buckettest->isExistent());
-	EXPECT_FALSE(buckettest->isInaccessible());
-	EXPECT_FALSE(buckettest->isNonexistent());
-	delete buckettest;
+	EXPECT_EQ(buckettest, true);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_FALSE(buckettest.isBusy());
+	EXPECT_TRUE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_FALSE(buckettest.isNonexistent());
 	/**/
-	ObjectHead * objecthead = new ObjectHead(OBJECT, *bucketcreate, multiplex);
-	ASSERT_NE(objecthead, (ObjectHead*)0);
-	EXPECT_EQ(*objecthead, false);
-	EXPECT_TRUE(objecthead->isIdle());
-	EXPECT_FALSE(objecthead->isBusy());
-	objecthead->start();
-	EXPECT_EQ(*objecthead, false);
-	EXPECT_FALSE(objecthead->isIdle());
-	EXPECT_TRUE(objecthead->isBusy());
+	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
+	EXPECT_EQ(objecthead, false);
+	EXPECT_TRUE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	objecthead.start();
+	EXPECT_EQ(objecthead, false);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_TRUE(objecthead.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_FALSE(objecthead->isBusy());
-	EXPECT_FALSE(objecthead->isBusy());
-	EXPECT_EQ(*objecthead, true);
-	EXPECT_FALSE(objecthead->isExistent());
-	EXPECT_TRUE(objecthead->isNonexistent());
-	delete objecthead;
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_TRUE(objecthead.isNonexistent());
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	/**/
-	ObjectPut * objectput = new ObjectPut(OBJECT, *bucketcreate, multiplex, input, inputsize, properties);
-	EXPECT_NE(objectput, (ObjectPut*)0);
-	EXPECT_EQ(*objectput, false);
-	EXPECT_TRUE(objectput->isIdle());
-	EXPECT_FALSE(objectput->isBusy());
-	objectput->start();
-	EXPECT_EQ(*objectput, false);
-	EXPECT_FALSE(objectput->isIdle());
-	EXPECT_TRUE(objectput->isBusy());
+	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize, properties);
+	EXPECT_EQ(objectput, false);
+	EXPECT_TRUE(objectput.isIdle());
+	EXPECT_FALSE(objectput.isBusy());
+	objectput.start();
+	EXPECT_EQ(objectput, false);
+	EXPECT_FALSE(objectput.isIdle());
+	EXPECT_TRUE(objectput.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*objectput, true);
-	EXPECT_FALSE(objectput->isIdle());
-	EXPECT_FALSE(objectput->isBusy());
-	EXPECT_TRUE(objectput->isPut());
-	delete objectput;
+	EXPECT_EQ(objectput, true);
+	EXPECT_FALSE(objectput.isIdle());
+	EXPECT_FALSE(objectput.isBusy());
+	EXPECT_TRUE(objectput.isPut());
 	/**/
-	objecthead = new ObjectHead(OBJECT, *bucketcreate, multiplex);
-	ASSERT_NE(objecthead, (ObjectHead*)0);
-	EXPECT_EQ(*objecthead, false);
-	EXPECT_TRUE(objecthead->isIdle());
-	EXPECT_FALSE(objecthead->isBusy());
-	objecthead->start();
-	EXPECT_EQ(*objecthead, false);
-	EXPECT_FALSE(objecthead->isIdle());
-	EXPECT_TRUE(objecthead->isBusy());
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	objecthead.start();
+	EXPECT_EQ(objecthead, false);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_TRUE(objecthead.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*objecthead, true);
-	EXPECT_FALSE(objecthead->isIdle());
-	EXPECT_FALSE(objecthead->isBusy());
-	EXPECT_TRUE(objecthead->isExistent());
-	EXPECT_FALSE(objecthead->isNonexistent());
-	delete objecthead;
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_TRUE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isNonexistent());
 	/* http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Asynchronous.txt exists. */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	/**/
-	ObjectGet * objectget = new ObjectGet(OBJECT, *bucketcreate, multiplex, output);
-	ASSERT_NE(objectget, (ObjectGet*)0);
-	EXPECT_EQ(*objectget, false);
-	EXPECT_TRUE(objectget->isIdle());
-	EXPECT_FALSE(objectget->isBusy());
-	objectget->start();
-	EXPECT_EQ(*objectget, false);
-	EXPECT_FALSE(objectget->isIdle());
-	EXPECT_TRUE(objectget->isBusy());
+	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
+	EXPECT_EQ(objectget, false);
+	EXPECT_TRUE(objectget.isIdle());
+	EXPECT_FALSE(objectget.isBusy());
+	objectget.start();
+	EXPECT_EQ(objectget, false);
+	EXPECT_FALSE(objectget.isIdle());
+	EXPECT_TRUE(objectget.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*objectget, true);
-	EXPECT_FALSE(objectget->isIdle());
-	EXPECT_FALSE(objectget->isBusy());
-	EXPECT_TRUE(objectget->isGotten());
-	delete objectget;
+	EXPECT_EQ(objectget, true);
+	EXPECT_FALSE(objectget.isIdle());
+	EXPECT_FALSE(objectget.isBusy());
+	EXPECT_TRUE(objectget.isGotten());
 	/**/
-	ObjectDelete * objectdelete = new ObjectDelete(OBJECT, *bucketcreate, multiplex);
-	ASSERT_NE(objectdelete, (ObjectDelete*)0);
-	EXPECT_EQ(*objectdelete, false);
-	EXPECT_TRUE(objectdelete->isIdle());
-	EXPECT_FALSE(objectdelete->isBusy());
-	objectdelete->start();
-	EXPECT_EQ(*objectdelete, false);
-	EXPECT_FALSE(objectdelete->isIdle());
-	EXPECT_TRUE(objectdelete->isBusy());
+	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
+	EXPECT_EQ(objectdelete, false);
+	EXPECT_TRUE(objectdelete.isIdle());
+	EXPECT_FALSE(objectdelete.isBusy());
+	objectdelete.start();
+	EXPECT_EQ(objectdelete, false);
+	EXPECT_FALSE(objectdelete.isIdle());
+	EXPECT_TRUE(objectdelete.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*objectdelete, true);
-	EXPECT_FALSE(objectdelete->isIdle());
-	EXPECT_FALSE(objectdelete->isBusy());
-	EXPECT_TRUE(objectdelete->isDeleted());
-	delete objectdelete;
+	EXPECT_EQ(objectdelete, true);
+	EXPECT_FALSE(objectdelete.isIdle());
+	EXPECT_FALSE(objectdelete.isBusy());
+	EXPECT_TRUE(objectdelete.isDeleted());
 	/**/
-	objecthead = new ObjectHead(OBJECT, *bucketcreate, multiplex);
-	ASSERT_NE(objecthead, (ObjectHead*)0);
-	EXPECT_EQ(*objecthead, false);
-	EXPECT_TRUE(objecthead->isIdle());
-	EXPECT_FALSE(objecthead->isBusy());
-	objecthead->start();
-	EXPECT_EQ(*objecthead, false);
-	EXPECT_FALSE(objecthead->isIdle());
-	EXPECT_TRUE(objecthead->isBusy());
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	objecthead.start();
+	EXPECT_EQ(objecthead, false);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_TRUE(objecthead.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*objecthead, true);
-	EXPECT_FALSE(objecthead->isIdle());
-	EXPECT_FALSE(objecthead->isBusy());
-	EXPECT_FALSE(objecthead->isExistent());
-	EXPECT_TRUE(objecthead->isNonexistent());
-	delete objecthead;
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_TRUE(objecthead.isNonexistent());
 	/**/
-	BucketDelete * bucketdelete = new BucketDelete(BUCKET, multiplex);
-	ASSERT_NE(bucketdelete, (Bucket*)0);
-	EXPECT_EQ(*bucketdelete, false);
-	EXPECT_TRUE(bucketdelete->isIdle());
-	EXPECT_FALSE(bucketdelete->isBusy());
-	bucketdelete->start();
-	EXPECT_EQ(*bucketdelete, false);
-	EXPECT_FALSE(bucketdelete->isIdle());
-	EXPECT_TRUE(bucketdelete->isBusy());
+	BucketDelete bucketdelete(BUCKET, multiplex);
+	EXPECT_EQ(bucketdelete, false);
+	EXPECT_TRUE(bucketdelete.isIdle());
+	EXPECT_FALSE(bucketdelete.isBusy());
+	bucketdelete.start();
+	EXPECT_EQ(bucketdelete, false);
+	EXPECT_FALSE(bucketdelete.isIdle());
+	EXPECT_TRUE(bucketdelete.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*bucketdelete, true);
-	EXPECT_FALSE(bucketdelete->isIdle());
-	EXPECT_FALSE(bucketdelete->isBusy());
-	EXPECT_TRUE(bucketdelete->isDeleted());
-	delete bucketdelete;
+	EXPECT_EQ(bucketdelete, true);
+	EXPECT_FALSE(bucketdelete.isIdle());
+	EXPECT_FALSE(bucketdelete.isBusy());
+	EXPECT_TRUE(bucketdelete.isDeleted());
 	/**/
-	buckettest = new BucketTest(BUCKET, multiplex, context);
-	ASSERT_NE(buckettest, (BucketTest*)0);
-	EXPECT_EQ(*buckettest, false);
-	EXPECT_TRUE(buckettest->isIdle());
-	EXPECT_FALSE(buckettest->isBusy());
-	buckettest->start();
-	EXPECT_EQ(*buckettest, false);
-	EXPECT_FALSE(buckettest->isIdle());
-	EXPECT_TRUE(buckettest->isBusy());
+	EXPECT_EQ(buckettest, true);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_FALSE(buckettest.isBusy());
+	buckettest.start();
+	EXPECT_EQ(buckettest, false);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_TRUE(buckettest.isBusy());
 	EXPECT_TRUE(multiplex.complete());
-	EXPECT_EQ(*buckettest, true);
-	EXPECT_FALSE(buckettest->isIdle());
-	EXPECT_FALSE(buckettest->isBusy());
-	EXPECT_FALSE(buckettest->isExistent());
-	EXPECT_FALSE(buckettest->isInaccessible());
-	EXPECT_TRUE(buckettest->isNonexistent());
-	delete buckettest;
+	EXPECT_EQ(buckettest, true);
+	EXPECT_FALSE(buckettest.isIdle());
+	EXPECT_FALSE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_TRUE(buckettest.isNonexistent());
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -481,7 +483,7 @@ TEST_F(ObjectTest, Asynchronous) {
 	command += __FILE__;
 	command += " ";
 	command += OBJECT;
-	EXPECT_EQ(std::system(command.c_str()), 0);
+	ASSERT_EQ(std::system(command.c_str()), 0);
 	/**/
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }

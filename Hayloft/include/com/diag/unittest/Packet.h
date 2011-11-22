@@ -561,7 +561,7 @@ typedef Fixture PacketTest;
 TEST_F(PacketTest, HeapAndShow) {
 	Packet * packet = new Packet;
 	ASSERT_NE(packet, (Packet*)0);
-	packet->show(0, &PacketTest::errput);
+	packet->show(0, &errput);
 	delete packet;
 }
 
@@ -572,14 +572,14 @@ TEST_F(PacketTest, EitherPrependAppendConsumeMany) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::EITHER);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 	}
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -587,7 +587,7 @@ TEST_F(PacketTest, EitherPrependAppendConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 }
 
 TEST_F(PacketTest, PrependPrependAppendConsumeMany) {
@@ -597,14 +597,14 @@ TEST_F(PacketTest, PrependPrependAppendConsumeMany) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::PREPEND);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 	}
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -612,7 +612,7 @@ TEST_F(PacketTest, PrependPrependAppendConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 }
 
 TEST_F(PacketTest, AppendPrependAppendConsumeMany) {
@@ -622,14 +622,14 @@ TEST_F(PacketTest, AppendPrependAppendConsumeMany) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::APPEND);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 	}
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -637,7 +637,7 @@ TEST_F(PacketTest, AppendPrependAppendConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 }
 
 TEST_F(PacketTest, EitherAppendPrependConsumeMany) {
@@ -647,14 +647,14 @@ TEST_F(PacketTest, EitherAppendPrependConsumeMany) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::EITHER);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -662,7 +662,7 @@ TEST_F(PacketTest, EitherAppendPrependConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 }
 
 TEST_F(PacketTest, PrependAppendPrependConsumeMany) {
@@ -672,14 +672,14 @@ TEST_F(PacketTest, PrependAppendPrependConsumeMany) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::PREPEND);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -687,7 +687,7 @@ TEST_F(PacketTest, PrependAppendPrependConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 }
 
 TEST_F(PacketTest, AppendAppendPrependConsumeMany) {
@@ -697,14 +697,14 @@ TEST_F(PacketTest, AppendAppendPrependConsumeMany) {
 	for (size_t ii = 0; ii < sizeof(data); ++ii) { data[ii] = ii; }
 	static const size_t ALLOC = SIZE / 8;
 	Packet packet(ALLOC, Packet::APPEND);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	for (size_t ii = 0; ii < (sizeof(data) / 2); ++ii) {
 		size_t kk = (sizeof(data) / 2) + ii;
 		EXPECT_EQ(packet.append(&data[kk], sizeof(data[kk])), sizeof(data[kk]));
 		size_t jj = (sizeof(data) / 2) - ii - 1;
 		EXPECT_EQ(packet.prepend(&data[jj], sizeof(data[jj])), sizeof(data[jj]));
 	}
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 	char buffer[sizeof(data)];
 	for (size_t ii = 0; ii < sizeof(buffer); ++ii) {
 		EXPECT_EQ(packet.consume(&buffer[ii], sizeof(buffer[ii])), sizeof(buffer[ii]));
@@ -712,7 +712,7 @@ TEST_F(PacketTest, AppendAppendPrependConsumeMany) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 	char datum;
 	EXPECT_EQ(packet.consume(&datum, sizeof(datum)), ZERO);
-	packet.show(2, &PacketTest::errput);
+	packet.show(2, &errput);
 }
 
 TEST_F(PacketTest, MixedBag) {

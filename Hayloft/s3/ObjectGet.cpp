@@ -34,11 +34,10 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::d
 , notsince(conds.getNotSince())
 , match(conds.getMatch())
 , notmatch(conds.getNotMatch())
-, outputp(0)
-, output(sink)
+, output(&sink)
+, taken(0)
 , offset(objectoffset)
 , size(objectsize)
-, produced(0)
 {
 	initialize();
 	execute();
@@ -50,11 +49,10 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::d
 , notsince(conds.getNotSince())
 , match(conds.getMatch())
 , notmatch(conds.getNotMatch())
-, outputp(sinkp)
-, output(*sinkp)
+, output(sinkp)
+, taken(sinkp)
 , offset(objectoffset)
 , size(objectsize)
-, produced(0)
 {
 	initialize();
 	execute();
@@ -66,11 +64,10 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & mu
 , notsince(conds.getNotSince())
 , match(conds.getMatch())
 , notmatch(conds.getNotMatch())
-, outputp(0)
-, output(sink)
+, output(&sink)
+, taken(0)
 , offset(objectoffset)
 , size(objectsize)
-, produced(0)
 {
 	initialize();
 }
@@ -81,11 +78,10 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & mu
 , notsince(conds.getNotSince())
 , match(conds.getMatch())
 , notmatch(conds.getNotMatch())
-, outputp(sinkp)
-, output(*sinkp)
+, output(sinkp)
+, taken(sinkp)
 , offset(objectoffset)
 , size(objectsize)
-, produced(0)
 {
 	initialize();
 }
@@ -94,8 +90,8 @@ ObjectGet::~ObjectGet() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
-	if (outputp != 0) {
-		delete outputp;
+	if (taken != 0) {
+		delete taken;
 	}
 }
 
@@ -131,17 +127,21 @@ void ObjectGet::execute() {
 }
 
 ::S3Status ObjectGet::get(int bufferSize, const char * buffer) {
-	if (produced != EOF) {
-		produced = output(buffer, bufferSize, bufferSize);
-		if ((produced == EOF) && (outputp != 0)) {
-			delete outputp;
-			outputp = 0;
+	ssize_t produced = 0;
+	if (output != 0) {
+		produced = (*output)(buffer, bufferSize, bufferSize);
+		if (produced == EOF) {
+			produced = 0;
+			output = 0;
 		}
 	}
-	return (produced != EOF) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
+	return (produced > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
 }
 
 void ObjectGet::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	if (output != 0) {
+		(*output)();
+	}
 	Logger::instance().debug("ObjectGet@%p: end\n", this);
 }
 
