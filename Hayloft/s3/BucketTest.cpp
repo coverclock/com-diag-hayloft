@@ -34,11 +34,12 @@ BucketTest::~BucketTest() {
 }
 
 void BucketTest::initialize() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	constraint[0] = '\0';
 }
 
 void BucketTest::execute() {
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketTest@%p: begin\n", this);
 	::S3_test_bucket(
 		protocol,
@@ -47,7 +48,7 @@ void BucketTest::execute() {
 		secret.c_str(),
 		hostname.c_str(),
 		name.c_str(),
-		sizeof(constraint), constraint,
+		sizeof(constraint) - 1, constraint,
 		requests,
 		&handler,
 		this
@@ -55,6 +56,7 @@ void BucketTest::execute() {
 }
 
 void BucketTest::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	constraint[sizeof(constraint) - 1] = '\0';
 	region = constraint;
 	Logger::instance().debug("BucketTest@%p: end\n", this);
 }

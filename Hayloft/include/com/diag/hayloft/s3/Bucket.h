@@ -15,6 +15,7 @@
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Status.h"
 #include "com/diag/desperado/target.h"
+#include "com/diag/desperado/MemoryBarrier.h"
 #include "libs3.h"
 
 namespace com {
@@ -64,6 +65,8 @@ protected:
 
 	::S3ResponseHandler handler;
 
+	::S3Status state() const { ::com::diag::desperado::MemoryBarrier barrier; return status; }
+
 public:
 
 	explicit Bucket(
@@ -83,11 +86,17 @@ public:
 
 	virtual void start() {}
 
-	operator bool() const { return (status != BUSY); }
+	operator bool() const { ::S3Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY)); }
 
-	bool isBusy() const { return (status == BUSY); }
+	bool isIdle() const { return (state() == IDLE); }
 
-	bool isRetryable() const { return (::S3_status_is_retryable(status) != 0); }
+	bool isBusy() const { return (state() == BUSY); }
+
+	bool isInaccessible() const { return (state() == ::S3StatusErrorAccessDenied); }
+
+	bool isNonexistent() const { return (state() == ::S3StatusErrorNoSuchBucket); }
+
+	bool isRetryable() const { return (::S3_status_is_retryable(state()) != 0); }
 
 	const char * getId() const { return id.c_str(); }
 

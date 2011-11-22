@@ -54,7 +54,7 @@ protected:
 	    	.disable(Logger::INFORMATION)
 	    	.disable(Logger::CONFIGURATION)
 	    	.disable(Logger::NOTICE)
-	    	.disable(Logger::WARNING)
+	    	.enable(Logger::WARNING)
 	    	.enable(Logger::ERROR)
 	    	.enable(Logger::SEVERE)
 	    	.enable(Logger::CRITICAL)

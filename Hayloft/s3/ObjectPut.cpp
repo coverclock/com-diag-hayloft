@@ -23,8 +23,8 @@ namespace s3 {
 int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callbackData) {
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
 	int rc = that->put(bufferSize, buffer);
-	Logger::Level level = (rc >= 0) ? Logger::DEBUG : Logger::WARNING;
-	Logger::instance().log(level, "ObjectPut@%p: requested=%d actual=%d\n", that, bufferSize, rc);
+	Logger::Level level = (rc >= 0) ? Logger::DEBUG : Logger::NOTICE;
+	Logger::instance().log(level, "ObjectPut@%p: requested=%d returned=%d\n", that, bufferSize, rc);
 	return (rc < 0) ? 0 : rc;
 }
 
@@ -110,7 +110,7 @@ ObjectPut::~ObjectPut() {
 }
 
 void ObjectPut::initialize(const Properties::Metadata & settings) {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&properties, 0, sizeof(properties));
 	properties.contentType = type.empty() ? 0 : type.c_str();
 	properties.md5 = checksum.empty() ? 0 : checksum.c_str();
@@ -141,6 +141,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 }
 
 void ObjectPut::execute() {
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectPut@%p: begin\n", this);
 	::S3_put_object(
 		&context,
