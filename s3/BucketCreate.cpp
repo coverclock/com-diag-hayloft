@@ -54,6 +54,12 @@ void BucketCreate::execute() {
 	);
 }
 
+void BucketCreate::start() {
+	if (state() != BUSY) {
+		execute();
+	}
+}
+
 void BucketCreate::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	Logger::instance().debug("BucketCreate@%p: end\n", this);
 }

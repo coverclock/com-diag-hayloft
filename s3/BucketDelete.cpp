@@ -53,6 +53,12 @@ void BucketDelete::execute() {
 	);
 }
 
+void BucketDelete::start() {
+	if (state() != BUSY) {
+		execute();
+	}
+}
+
 void BucketDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	Logger::instance().debug("BucketDelete@%p: end\n", this);
 }

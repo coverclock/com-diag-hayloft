@@ -97,12 +97,10 @@ ObjectPut::~ObjectPut() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
-	if (taken != 0) {
-		delete taken;
-	}
 	if (properties.metaData != 0) {
 		delete [] properties.metaData;
 	}
+	finalize();
 }
 
 void ObjectPut::initialize(const Properties::Metadata & settings) {
@@ -150,19 +148,54 @@ void ObjectPut::execute() {
 	);
 }
 
+void ObjectPut::finalize() {
+	if (input != 0) {
+		input = 0;
+	}
+	if (taken != 0) {
+		delete taken;
+		taken = 0;
+	}
+}
+
+void ObjectPut::start() {
+	if (state() != BUSY) {
+		execute();
+	}
+}
+
+void ObjectPut::reset(Input & source, Octets objectsize) {
+	if ((state() != BUSY)) {
+		finalize();
+		input = &source;
+		taken = 0;
+		size = objectsize;
+	}
+}
+
+void ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
+	if ((state() != BUSY)) {
+		finalize();
+		input = sourcep;
+		taken = sourcep;
+		size = objectsize;
+	}
+}
+
 int ObjectPut::put(int bufferSize, char * buffer) {
 	ssize_t consumed = 0;
 	if (input != 0) {
 		consumed = (*input)(buffer, 1, bufferSize);
 		if (consumed == EOF) {
+			finalize();
 			consumed = 0;
-			input = 0;
 		}
 	}
 	return consumed;
 }
 
 void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	finalize();
 	Logger::instance().debug("ObjectPut@%p: end\n", this);
 }
 

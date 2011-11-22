@@ -107,11 +107,11 @@ public:
 
 	virtual ~ObjectPut();
 
-	void start() { if (state() != BUSY) { execute(); } }
+	void start();
 
-	void reset(Input & source, Octets objectsize) { if ((state() != BUSY)) { input = &source; taken = 0; size = objectsize; }}
+	void reset(Input & source, Octets objectsize);
 
-	void reset(Input * sourcep /* TAKEN */, Octets objectsize) { if ((state() != BUSY)) { input = sourcep; taken = sourcep; size = objectsize; } }
+	void reset(Input * sourcep /* TAKEN */, Octets objectsize);
 
 	bool isPut() const { return (state() == ::S3StatusOK); }
 
@@ -126,6 +126,8 @@ private:
 	void initialize(const Properties::Metadata & settings);
 
 	void execute();
+
+	void finalize();
 
 };
 

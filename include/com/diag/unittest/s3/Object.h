@@ -194,8 +194,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objecthead->isNonexistent());
 	ASSERT_TRUE(objecthead->isExistent());
 	delete objecthead;
-	/* http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Synchronous.txt exists. */
-	/**/
+	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/SynchronousHeap.txt */
 	ObjectGet * objectget = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objectget;
@@ -482,7 +481,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isExistent());
-	/* http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Asynchronous.txt exists. */
+	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
 	EXPECT_EQ(objectget, false);

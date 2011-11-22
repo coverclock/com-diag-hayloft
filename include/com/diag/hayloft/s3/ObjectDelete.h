@@ -48,7 +48,7 @@ public:
 
 	virtual ~ObjectDelete();
 
-	void start() { if (state() != BUSY) { execute(); } }
+	virtual void start();
 
 	bool isDeleted() const { return (state() == ::S3StatusOK); }
 

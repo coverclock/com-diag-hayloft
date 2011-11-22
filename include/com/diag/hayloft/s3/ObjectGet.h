@@ -105,11 +105,11 @@ public:
 
 	virtual ~ObjectGet();
 
-	void start() { if (state() != BUSY) { execute(); } }
+	void start();
 
-	void reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0) { if ((state() != BUSY)) { output = &sink; taken = 0; offset = objectoffset; size = objectsize; }}
+	void reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
 
-	void reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0) { if ((state() != BUSY)) { output = sinkp; taken = sinkp; offset = objectoffset; size = objectsize; } }
+	void reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
 
 	bool isGotten() const { return (state() == ::S3StatusOK); }
 
@@ -124,6 +124,8 @@ private:
 	void initialize();
 
 	void execute();
+
+	virtual void finalize();
 
 };
 
