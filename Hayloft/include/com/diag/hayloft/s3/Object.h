@@ -83,7 +83,7 @@ public:
 
 	virtual ~Object();
 
-	virtual void start() {}
+	void start() {}
 
 	operator bool() const { ::S3Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY)); }
 

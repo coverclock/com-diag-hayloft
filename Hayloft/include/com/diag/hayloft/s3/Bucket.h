@@ -84,8 +84,6 @@ public:
 
 	virtual ~Bucket();
 
-	virtual void start() {}
-
 	operator bool() const { ::S3Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY)); }
 
 	bool isIdle() const { return (state() == IDLE); }

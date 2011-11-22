@@ -47,7 +47,7 @@ public:
 
 	virtual ~ObjectHead();
 
-	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
+	void start() { if (state() != BUSY) { execute(); } }
 
 	bool isExistent() const { return (state() == ::S3StatusOK); }
 
