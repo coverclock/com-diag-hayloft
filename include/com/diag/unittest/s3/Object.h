@@ -77,7 +77,11 @@ TEST_F(ObjectBaseTest, Temporary) {
 // Consistency architecture. Most applications will need to address the former,
 // unless they are using a "Best Effort" model. Few applications will need to
 // address the latter, since the system becomes consistent very quickly and a
-// small amount of lag isn't likely to be an issue.
+// small amount of lag isn't likely to be an issue. TIMEOUT merely means that
+// the socket select(2) timed out waiting for sockets to become ready for
+// reading. In a real application that just means it would have time to go do
+// other work (and other threads would run while the thread was waiting on
+// the select(2) to return).
 
 typedef Fixture ObjectTest;
 
