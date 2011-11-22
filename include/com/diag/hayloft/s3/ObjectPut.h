@@ -33,6 +33,10 @@ class Bucket;
 
 class ObjectPut : public Object {
 
+public:
+
+	typedef ::com::diag::desperado::Input Input;
+
 private:
 
 	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
@@ -53,9 +57,9 @@ protected:
 
 	::S3CannedAcl access;
 
-	::com::diag::desperado::Input * input;
+	Input * input;
 
-	::com::diag::desperado::Input * taken;
+	Input * taken;
 
 	Octets size;
 
@@ -70,7 +74,7 @@ public:
 	explicit ObjectPut(
 		const char * keyname,
 		const Bucket & bucket,
-		::com::diag::desperado::Input & source,
+		Input & source,
 		Octets objectsize,
 		const Properties & props = Properties()
 	);
@@ -78,16 +82,7 @@ public:
 	explicit ObjectPut(
 		const char * keyname,
 		const Bucket & bucket,
-		::com::diag::desperado::Input * sourcep, /* TAKEN */
-		Octets objectsize,
-		const Properties & props = Properties()
-	);
-
-	explicit ObjectPut(
-		const char * keyname,
-		const Bucket & bucket,
-		Multiplex & multiplex,
-		::com::diag::desperado::Input & source,
+		Input * sourcep, /* TAKEN */
 		Octets objectsize,
 		const Properties & props = Properties()
 	);
@@ -96,14 +91,27 @@ public:
 		const char * keyname,
 		const Bucket & bucket,
 		Multiplex & multiplex,
-		::com::diag::desperado::Input * sourcep, /* TAKEN */
+		Input & source,
+		Octets objectsize,
+		const Properties & props = Properties()
+	);
+
+	explicit ObjectPut(
+		const char * keyname,
+		const Bucket & bucket,
+		Multiplex & multiplex,
+		Input * sourcep, /* TAKEN */
 		Octets objectsize,
 		const Properties & props = Properties()
 	);
 
 	virtual ~ObjectPut();
 
-	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
+	void start() { if (state() != BUSY) { execute(); } }
+
+	void reset(Input & source, Octets objectsize) { if ((state() != BUSY)) { input = &source; taken = 0; size = objectsize; }}
+
+	void reset(Input * sourcep /* TAKEN */, Octets objectsize) { if ((state() != BUSY)) { input = sourcep; taken = sourcep; size = objectsize; } }
 
 	bool isPut() const { return (state() == ::S3StatusOK); }
 

@@ -28,7 +28,7 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	return (rc < 0) ? 0 : rc;
 }
 
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input & source, Octets objectsize, const Properties & props)
 : Object(keyname, bucket)
 , type(props.getType())
 , checksum(props.getChecksum())
@@ -45,7 +45,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::d
 	execute();
 }
 
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input * sourcep, Octets objectsize, const Properties & props)
 : Object(keyname, bucket)
 , type(props.getType())
 , checksum(props.getChecksum())
@@ -61,7 +61,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, ::com::diag::d
 	initialize(props.getMetadata());
 	execute();
 }
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Input & source, Octets objectsize, const Properties & props)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Input & source, Octets objectsize, const Properties & props)
 : Object(keyname, bucket, multiplex)
 , type(props.getType())
 , checksum(props.getChecksum())
@@ -77,7 +77,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & mu
 	initialize(props.getMetadata());
 }
 
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Input * sourcep, Octets objectsize, const Properties & props)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Input * sourcep, Octets objectsize, const Properties & props)
 : Object(keyname, bucket, multiplex)
 , type(props.getType())
 , checksum(props.getChecksum())

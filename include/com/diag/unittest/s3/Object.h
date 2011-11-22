@@ -71,10 +71,10 @@ TEST_F(ObjectBaseTest, Temporary) {
 
 typedef Fixture ObjectTest;
 
-TEST_F(ObjectTest, Synchronous) {
+TEST_F(ObjectTest, SynchronousHeap) {
 	static const int LIMIT = 10;
 	static const char BUCKET[] = "ObjectTest";
-	static const char OBJECT[] = "Synchronous.txt";
+	static const char OBJECT[] = "SynchronousHeap.txt";
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
@@ -152,15 +152,15 @@ TEST_F(ObjectTest, Synchronous) {
 	ASSERT_FALSE(objecthead->isExistent());
 	delete objecthead;
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
-	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
-	Size inputsize = size(*input);
-	ASSERT_TRUE(inputsize > 0);
-	/**/
 	ObjectPut * objectput = 0;
+	Size inputsize = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objectput;
-		objectput = new ObjectPut(OBJECT, *bucketcreate, input, inputsize, properties);
+		::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		inputsize = size(*input);
+		ASSERT_TRUE(inputsize > 0);
+		objectput = new ObjectPut(OBJECT, *bucketcreate, input /* TAKEN */, inputsize, properties);
 		ASSERT_NE(objectput, (ObjectPut*)0);
 		EXPECT_EQ(*objectput, true);
 		if (!objectput->isRetryable()) { break; }
@@ -195,13 +195,13 @@ TEST_F(ObjectTest, Synchronous) {
 	ASSERT_TRUE(objecthead->isExistent());
 	delete objecthead;
 	/* http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Synchronous.txt exists. */
-	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
-	ASSERT_NE(output, (::com::diag::desperado::PathOutput*)0);
 	/**/
 	ObjectGet * objectget = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objectget;
-		objectget = new ObjectGet(OBJECT, *bucketcreate, output);
+		::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+		ASSERT_NE(output, (::com::diag::desperado::PathOutput*)0);
+		objectget = new ObjectGet(OBJECT, *bucketcreate, output /* TAKEN */);
 		ASSERT_NE(objectget, (ObjectGet*)0);
 		EXPECT_EQ(*objectget, true);
 		if (!objectget->isRetryable()) { break; }
@@ -214,6 +214,27 @@ TEST_F(ObjectTest, Synchronous) {
 	EXPECT_FALSE(objectget->isNonexistent());
 	ASSERT_TRUE(objectget->isGotten());
 	delete objectget;
+	/**/
+	objecthead = 0;
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			delete objecthead;
+			objecthead = new ObjectHead(OBJECT, *bucketcreate);
+			ASSERT_NE(objecthead, (ObjectHead*)0);
+			EXPECT_EQ(*objecthead, true);
+			if (!objecthead->isRetryable()) { break; }
+			platform.yield(platform.frequency());
+		}
+		if (objecthead->isExistent()) { break; }
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objecthead->isIdle());
+	EXPECT_FALSE(objecthead->isBusy());
+	EXPECT_FALSE(objecthead->isRetryable());
+	EXPECT_FALSE(objecthead->isInaccessible());
+	EXPECT_FALSE(objecthead->isNonexistent());
+	ASSERT_TRUE(objecthead->isExistent());
+	delete objecthead;
 	/**/
 	ObjectDelete * objectdelete = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
@@ -301,9 +322,9 @@ TEST_F(ObjectTest, Synchronous) {
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
-TEST_F(ObjectTest, Asynchronous) {
+TEST_F(ObjectTest, AsynchronousStackComplete) {
 	static const char BUCKET[] = "ObjectTest";
-	static const char OBJECT[] = "Asynchronous.txt";
+	static const char OBJECT[] = "AsynchronousStackComplete.txt";
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
@@ -315,167 +336,300 @@ TEST_F(ObjectTest, Asynchronous) {
 	EXPECT_EQ(buckettest, false);
 	EXPECT_TRUE(buckettest.isIdle());
 	EXPECT_FALSE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isRetryable());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_FALSE(buckettest.isNonexistent());
+	EXPECT_FALSE(buckettest.isExistent());
 	buckettest.start();
 	EXPECT_EQ(buckettest, false);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_TRUE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isRetryable());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_FALSE(buckettest.isNonexistent());
+	EXPECT_FALSE(buckettest.isExistent());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_FALSE(buckettest.isBusy());
-	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
+	ASSERT_FALSE(buckettest.isExistent());
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
 	EXPECT_TRUE(bucketcreate.isIdle());
 	EXPECT_FALSE(bucketcreate.isBusy());
+	EXPECT_FALSE(bucketcreate.isRetryable());
+	EXPECT_FALSE(bucketcreate.isInaccessible());
+	EXPECT_FALSE(bucketcreate.isNonexistent());
+	EXPECT_FALSE(bucketcreate.isCreated());
 	bucketcreate.start();
 	EXPECT_EQ(bucketcreate, false);
 	EXPECT_FALSE(bucketcreate.isIdle());
 	EXPECT_TRUE(bucketcreate.isBusy());
+	EXPECT_FALSE(bucketcreate.isRetryable());
+	EXPECT_FALSE(bucketcreate.isInaccessible());
+	EXPECT_FALSE(bucketcreate.isNonexistent());
+	EXPECT_FALSE(bucketcreate.isCreated());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(bucketcreate, true);
 	EXPECT_FALSE(bucketcreate.isIdle());
 	EXPECT_FALSE(bucketcreate.isBusy());
-	EXPECT_TRUE(bucketcreate.isCreated());
+	EXPECT_FALSE(bucketcreate.isRetryable());
+	EXPECT_FALSE(bucketcreate.isInaccessible());
+	ASSERT_TRUE(bucketcreate.isCreated());
 	/**/
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_FALSE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isRetryable());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_TRUE(buckettest.isNonexistent());
+	EXPECT_FALSE(buckettest.isExistent());
 	buckettest.start();
 	EXPECT_EQ(buckettest, false);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_TRUE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isRetryable());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_FALSE(buckettest.isNonexistent());
+	EXPECT_FALSE(buckettest.isExistent());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_FALSE(buckettest.isBusy());
-	EXPECT_TRUE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
+	ASSERT_TRUE(buckettest.isExistent());
 	/**/
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isExistent());
 	objecthead.start();
 	EXPECT_EQ(objecthead, false);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_TRUE(objecthead.isBusy());
-	EXPECT_TRUE(multiplex.complete());
-	EXPECT_FALSE(objecthead.isBusy());
-	EXPECT_FALSE(objecthead.isBusy());
-	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
 	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_TRUE(multiplex.complete());
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
+	ASSERT_FALSE(objecthead.isExistent());
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
-	/**/
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize, properties);
 	EXPECT_EQ(objectput, false);
 	EXPECT_TRUE(objectput.isIdle());
 	EXPECT_FALSE(objectput.isBusy());
+	EXPECT_FALSE(objectput.isRetryable());
+	EXPECT_FALSE(objectput.isInaccessible());
+	EXPECT_FALSE(objectput.isNonexistent());
+	EXPECT_FALSE(objectput.isPut());
 	objectput.start();
 	EXPECT_EQ(objectput, false);
 	EXPECT_FALSE(objectput.isIdle());
 	EXPECT_TRUE(objectput.isBusy());
+	EXPECT_FALSE(objectput.isRetryable());
+	EXPECT_FALSE(objectput.isInaccessible());
+	EXPECT_FALSE(objectput.isNonexistent());
+	EXPECT_FALSE(objectput.isPut());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(objectput, true);
 	EXPECT_FALSE(objectput.isIdle());
 	EXPECT_FALSE(objectput.isBusy());
-	EXPECT_TRUE(objectput.isPut());
+	EXPECT_FALSE(objectput.isRetryable());
+	EXPECT_FALSE(objectput.isInaccessible());
+	EXPECT_FALSE(objectput.isNonexistent());
+	ASSERT_TRUE(objectput.isPut());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_TRUE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isExistent());
 	objecthead.start();
 	EXPECT_EQ(objecthead, false);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_TRUE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isExistent());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
-	EXPECT_TRUE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
+	ASSERT_TRUE(objecthead.isExistent());
 	/* http://objectputtestsanity.hayloft.diag.com.s3.amazonaws.com/Asynchronous.txt exists. */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
-	/**/
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
 	EXPECT_FALSE(objectget.isBusy());
+	EXPECT_FALSE(objectget.isRetryable());
+	EXPECT_FALSE(objectget.isInaccessible());
+	EXPECT_FALSE(objectget.isNonexistent());
+	EXPECT_FALSE(objectget.isGotten());
 	objectget.start();
 	EXPECT_EQ(objectget, false);
 	EXPECT_FALSE(objectget.isIdle());
 	EXPECT_TRUE(objectget.isBusy());
+	EXPECT_FALSE(objectget.isRetryable());
+	EXPECT_FALSE(objectget.isInaccessible());
+	EXPECT_FALSE(objectget.isNonexistent());
+	EXPECT_FALSE(objectget.isGotten());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(objectget, true);
 	EXPECT_FALSE(objectget.isIdle());
 	EXPECT_FALSE(objectget.isBusy());
+	EXPECT_FALSE(objectget.isRetryable());
+	EXPECT_FALSE(objectget.isInaccessible());
+	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isGotten());
+	/**/
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_TRUE(objecthead.isExistent());
+	objecthead.start();
+	EXPECT_EQ(objecthead, false);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_TRUE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_TRUE(multiplex.complete());
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	ASSERT_TRUE(objecthead.isExistent());
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
 	EXPECT_TRUE(objectdelete.isIdle());
 	EXPECT_FALSE(objectdelete.isBusy());
+	EXPECT_FALSE(objectdelete.isRetryable());
+	EXPECT_FALSE(objectdelete.isInaccessible());
+	EXPECT_FALSE(objectdelete.isNonexistent());
+	EXPECT_FALSE(objectdelete.isDeleted());
 	objectdelete.start();
 	EXPECT_EQ(objectdelete, false);
 	EXPECT_FALSE(objectdelete.isIdle());
 	EXPECT_TRUE(objectdelete.isBusy());
+	EXPECT_FALSE(objectdelete.isRetryable());
+	EXPECT_FALSE(objectdelete.isInaccessible());
+	EXPECT_FALSE(objectdelete.isNonexistent());
+	EXPECT_FALSE(objectdelete.isDeleted());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(objectdelete, true);
 	EXPECT_FALSE(objectdelete.isIdle());
 	EXPECT_FALSE(objectdelete.isBusy());
-	EXPECT_TRUE(objectdelete.isDeleted());
+	EXPECT_FALSE(objectdelete.isRetryable());
+	EXPECT_FALSE(objectdelete.isInaccessible());
+	EXPECT_FALSE(objectdelete.isNonexistent());
+	ASSERT_TRUE(objectdelete.isDeleted());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_TRUE(objecthead.isExistent());
 	objecthead.start();
 	EXPECT_EQ(objecthead, false);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_TRUE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isExistent());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
-	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
+	ASSERT_FALSE(objecthead.isExistent());
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
 	EXPECT_TRUE(bucketdelete.isIdle());
 	EXPECT_FALSE(bucketdelete.isBusy());
+	EXPECT_FALSE(bucketdelete.isRetryable());
+	EXPECT_FALSE(bucketdelete.isInaccessible());
+	EXPECT_FALSE(bucketdelete.isNonexistent());
+	EXPECT_FALSE(bucketdelete.isDeleted());
 	bucketdelete.start();
 	EXPECT_EQ(bucketdelete, false);
 	EXPECT_FALSE(bucketdelete.isIdle());
 	EXPECT_TRUE(bucketdelete.isBusy());
+	EXPECT_FALSE(bucketdelete.isRetryable());
+	EXPECT_FALSE(bucketdelete.isInaccessible());
+	EXPECT_FALSE(bucketdelete.isNonexistent());
+	EXPECT_FALSE(bucketdelete.isDeleted());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(bucketdelete, true);
 	EXPECT_FALSE(bucketdelete.isIdle());
 	EXPECT_FALSE(bucketdelete.isBusy());
-	EXPECT_TRUE(bucketdelete.isDeleted());
+	EXPECT_FALSE(bucketdelete.isRetryable());
+	EXPECT_FALSE(bucketdelete.isInaccessible());
+	EXPECT_FALSE(bucketdelete.isNonexistent());
+	ASSERT_TRUE(bucketdelete.isDeleted());
 	/**/
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_FALSE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isRetryable());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_FALSE(buckettest.isNonexistent());
+	EXPECT_TRUE(buckettest.isExistent());
 	buckettest.start();
 	EXPECT_EQ(buckettest, false);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_TRUE(buckettest.isBusy());
+	EXPECT_FALSE(buckettest.isRetryable());
+	EXPECT_FALSE(buckettest.isInaccessible());
+	EXPECT_FALSE(buckettest.isNonexistent());
+	EXPECT_FALSE(buckettest.isExistent());
 	EXPECT_TRUE(multiplex.complete());
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
 	EXPECT_FALSE(buckettest.isBusy());
-	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
+	ASSERT_FALSE(buckettest.isExistent());
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);

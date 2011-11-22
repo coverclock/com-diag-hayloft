@@ -28,7 +28,7 @@ namespace s3 {
 	return status;
 }
 
-ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket)
 , since(conds.getSince())
 , notsince(conds.getNotSince())
@@ -43,7 +43,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::d
 	execute();
 }
 
-ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::desperado::Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket)
 , since(conds.getSince())
 , notsince(conds.getNotSince())
@@ -58,7 +58,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, ::com::diag::d
 	execute();
 }
 
-ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket, multiplex)
 , since(conds.getSince())
 , notsince(conds.getNotSince())
@@ -72,7 +72,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & mu
 	initialize();
 }
 
-ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, ::com::diag::desperado::Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket, multiplex)
 , since(conds.getSince())
 , notsince(conds.getNotSince())

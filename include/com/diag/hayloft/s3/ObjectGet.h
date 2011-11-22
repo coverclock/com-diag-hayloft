@@ -33,6 +33,10 @@ class Bucket;
 
 class ObjectGet : public Object {
 
+public:
+
+	typedef ::com::diag::desperado::Output Output;
+
 private:
 
 	static ::S3Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
@@ -47,9 +51,9 @@ protected:
 
 	std::string notmatch;
 
-	::com::diag::desperado::Output * output;
+	Output * output;
 
-	::com::diag::desperado::Output * taken;
+	Output * taken;
 
 	Octets offset;
 
@@ -64,7 +68,7 @@ public:
 	explicit ObjectGet(
 		const char * keyname,
 		const Bucket & bucket,
-		::com::diag::desperado::Output & sink,
+		Output & sink,
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
 		const Conditions & conds = Conditions()
@@ -73,17 +77,7 @@ public:
 	explicit ObjectGet(
 		const char * keyname,
 		const Bucket & bucket,
-		::com::diag::desperado::Output * sinkp, /* TAKEN */
-		Octets objectoffset = 0,
-		Octets objectsize = 0,
-		const Conditions & conds = Conditions()
-	);
-
-	explicit ObjectGet(
-		const char * keyname,
-		const Bucket & bucket,
-		Multiplex & multiplex,
-		::com::diag::desperado::Output & sink,
+		Output * sinkp, /* TAKEN */
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
 		const Conditions & conds = Conditions()
@@ -93,7 +87,17 @@ public:
 		const char * keyname,
 		const Bucket & bucket,
 		Multiplex & multiplex,
-		::com::diag::desperado::Output * sinkp, /* TAKEN */
+		Output & sink,
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	explicit ObjectGet(
+		const char * keyname,
+		const Bucket & bucket,
+		Multiplex & multiplex,
+		Output * sinkp, /* TAKEN */
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
 		const Conditions & conds = Conditions()
@@ -101,7 +105,11 @@ public:
 
 	virtual ~ObjectGet();
 
-	virtual void start() { if ((state() != BUSY) && (requests != 0)) { execute(); } }
+	void start() { if (state() != BUSY) { execute(); } }
+
+	void reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0) { if ((state() != BUSY)) { output = &sink; taken = 0; offset = objectoffset; size = objectsize; }}
+
+	void reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0) { if ((state() != BUSY)) { output = sinkp; taken = sinkp; offset = objectoffset; size = objectsize; } }
 
 	bool isGotten() const { return (state() == ::S3StatusOK); }
 
