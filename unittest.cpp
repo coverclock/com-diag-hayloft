@@ -25,6 +25,7 @@
 // Unit tests that also use libs3, SSL, and CURL.
 
 #if 1
+#include "com/diag/unittest/s3/Endpoint.h"
 #include "com/diag/unittest/s3/Session.h"
 #include "com/diag/unittest/s3/Credentials.h"
 #include "com/diag/unittest/s3/Protocol.h"
@@ -39,13 +40,13 @@
 
 // Unit tests that also use S3 and buckets.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 
 // Unit tests that also use objects.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif
 

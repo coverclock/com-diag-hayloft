@@ -162,6 +162,7 @@ MANIFEST_O=\
  hayloft/Packet.o \
  hayloft/Parameter.o \
  hayloft/Size.o \
+ s3/Endpoint.o \
  s3/Session.o \
  s3/Credentials.o \
  s3/Region.o \

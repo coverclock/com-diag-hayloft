@@ -33,73 +33,73 @@ TEST_F(RegionTest, Heap) {
 }
 
 TEST_F(RegionTest, Stack) {
-	Region locationconstraint;
+	Region region;
 }
 
 TEST_F(RegionTest, Default) {
-	Region locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::DEFAULT()), 0);
+	Region region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::DEFAULT()), 0);
 }
 
 TEST_F(RegionTest, Ireland) {
-	RegionIreland locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::EUROPEAN_UNION_WEST_1()), 0);
+	RegionIreland region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::EUROPEAN_UNION_WEST_1()), 0);
 }
 
 TEST_F(RegionTest, NorthernCalifornia) {
-	RegionNorthernCalifornia locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_WEST_1()), 0);
+	RegionNorthernCalifornia region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_WEST_1()), 0);
 }
 
 TEST_F(RegionTest, Singapore) {
-	RegionSingapore locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_SOUTHEAST_1()), 0);
+	RegionSingapore region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::ASIA_PACIFIC_SOUTHEAST_1()), 0);
 }
 
 TEST_F(RegionTest, Tokyo) {
-	RegionTokyo locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	RegionTokyo region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
 }
 
 TEST_F(RegionTest, UnitedStates) {
-	RegionUnitedStates locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_CLASSIC()), 0);
+	RegionUnitedStates region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_CLASSIC()), 0);
 }
 
 TEST_F(RegionTest, NorthernVirginia) {
-	RegionNorthernVirginia locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_EAST_1()), 0);
+	RegionNorthernVirginia region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_EAST_1()), 0);
 }
 
 TEST_F(RegionTest, Oregon) {
-	RegionOregon locationconstraint;
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::UNITED_STATES_WEST_2()), 0);
+	RegionOregon region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_WEST_2()), 0);
 }
 
-static const char * locationconstraintfunction(const Region & constraint = Region()) {
+static const char * regionfunction(const Region & constraint = Region()) {
 	return constraint.getRegion();
 }
 
 TEST_F(RegionTest, DefaultFunctionArgument) {
-	EXPECT_EQ(std::strcmp(locationconstraintfunction(), Region::DEFAULT()), 0);
+	EXPECT_EQ(std::strcmp(regionfunction(), Region::DEFAULT()), 0);
 }
 
 TEST_F(RegionTest, Settors) {
-	Region locationconstraint;
-	locationconstraint.setRegion().setRegion(Region::ASIA_PACIFIC_NORTHEAST_1());
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
-	locationconstraint.setRegion();
-	ASSERT_NE(locationconstraint.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(locationconstraint.getRegion(), Region::DEFAULT()), 0);
+	Region region;
+	region.setRegion().setRegion(Region::ASIA_PACIFIC_NORTHEAST_1());
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	region.setRegion();
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::DEFAULT()), 0);
 }
 
 }

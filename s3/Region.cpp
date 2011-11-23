@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/Region.h"
-#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
