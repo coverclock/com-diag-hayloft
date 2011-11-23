@@ -84,8 +84,8 @@ public:
 	explicit Session(
 		const char * bucketSuffix = 0,
 		const char * userAgentInfo = 0,
-		int flags = S3_INIT_ALL,
-		const char * defaultS3HostName = 0
+		const char * defaultS3HostName = 0,
+		int flags = S3_INIT_ALL
 	);
 
 	virtual ~Session();

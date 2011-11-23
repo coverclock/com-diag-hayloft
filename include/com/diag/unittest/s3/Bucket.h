@@ -18,6 +18,7 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
+#include "com/diag/desperado/stdlib.h"
 
 namespace com {
 namespace diag {
@@ -273,54 +274,100 @@ TEST_F(BucketTest, Stack) {
 	}
 }
 
-#if 0
 TEST_F(BucketTest, Explicit) {
 	static const char BUCKET[] = "BucketTestExplicit";
-	Session session;
-	Credentials credentials;
-	Region constraint;
-	Protocol protocol;
-	Style style;
-	Access list;
-	Context context(credentials, constraint, protocol, style, list);
-	BucketHead test(BUCKET, context, session);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isSuccessful());
-	EXPECT_TRUE(test.isNonexistent());
-	BucketCreate test(BUCKET, context, session);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isSuccessful());
-	BucketHead test(BUCKET, context, session);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_TRUE(test.isSuccessful());
-	EXPECT_FALSE(test.isNonexistent());
-	BucketDelete test(BUCKET, context, session);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isSuccessful());
-	BucketHead test(BUCKET, context, session);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isSuccessful());
-	EXPECT_TRUE(test.isNonexistent());
+	static const int LIMIT = 100;
+	Session session(".test.diag.com", "test.diag.com", "s3-us-west-1.amazonaws.com");
+	Credentials credentials(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
+	RegionNorthernCalifornia constraint;
+	ProtocolUnsecure protocol;
+	StylePath style;
+	AccessPublicRead access;
+	Context context(credentials, constraint, protocol, style, access);
+	{
+		BucketHead buckethead(BUCKET, context, session);
+		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			buckethead.start();
+		}
+		EXPECT_TRUE(buckethead == true);
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_TRUE(buckethead.isNonexistent());
+		ASSERT_FALSE(buckethead.isSuccessful());
+	}
+	{
+		BucketCreate bucketcreate(BUCKET, context, session);
+		for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			bucketcreate.start();
+		}
+		EXPECT_TRUE(bucketcreate == true);
+		EXPECT_FALSE(bucketcreate.isIdle());
+		EXPECT_FALSE(bucketcreate.isBusy());
+		EXPECT_FALSE(bucketcreate.isRetryable());
+		EXPECT_FALSE(bucketcreate.isInaccessible());
+		EXPECT_FALSE(bucketcreate.isNonexistent());
+		ASSERT_TRUE(bucketcreate.isSuccessful());
+	}
+	{
+		BucketHead buckethead(BUCKET, context, session);
+		for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
+			if (buckethead.isRetryable()) {
+				printf("RETRYING %d\n", __LINE__);
+			} else if (!buckethead.isSuccessful()) {
+				printf("WAITING %d\n", __LINE__);
+			}
+			platform.yield(platform.frequency());
+			buckethead.start();
+		}
+		EXPECT_TRUE(buckethead == true);
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_FALSE(buckethead.isNonexistent());
+		ASSERT_TRUE(buckethead.isSuccessful());
+	}
+	{
+		BucketDelete bucketdelete(BUCKET, context, session);
+		for (int ii = 0; bucketdelete.isRetryable() && (ii < LIMIT); ++ii) {
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			bucketdelete.start();
+		}
+		EXPECT_TRUE(bucketdelete == true);
+		EXPECT_FALSE(bucketdelete.isIdle());
+		EXPECT_FALSE(bucketdelete.isBusy());
+		EXPECT_FALSE(bucketdelete.isRetryable());
+		EXPECT_FALSE(bucketdelete.isInaccessible());
+		EXPECT_FALSE(bucketdelete.isNonexistent());
+		ASSERT_TRUE(bucketdelete.isSuccessful());
+	}
+	{
+		BucketHead buckethead(BUCKET, context, session);
+		for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
+			if (buckethead.isRetryable()) {
+				printf("RETRYING %d\n", __LINE__);
+			} else if (buckethead.isSuccessful()) {
+				printf("WAITING %d\n", __LINE__);
+			}
+			platform.yield(platform.frequency());
+			buckethead.start();
+		}
+		EXPECT_TRUE(buckethead == true);
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_TRUE(buckethead.isNonexistent());
+		ASSERT_FALSE(buckethead.isSuccessful());
+	}
 }
-#endif
 
 TEST_F(BucketTest, Complete) {
 	static const char BUCKET[] = "BucketTestComplete";
