@@ -7,17 +7,15 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Style.h"
+#include "com/diag/hayloft/s3/Endpoint.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-const ::S3UriStyle Style::DEFAULT;
-
-Style::Style(::S3UriStyle st)
-: style(st)
+Endpoint::Endpoint(const char * ep)
+: endpoint(set(ep, 0, ""))
 {}
 
 }
