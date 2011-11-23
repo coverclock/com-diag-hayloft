@@ -8,7 +8,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/BucketTest.h"
+#include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/Logger.h"
 
@@ -17,33 +17,33 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketTest::BucketTest(const char * bucketname, const Context & context, const Session & session)
+BucketHead::BucketHead(const char * bucketname, const Context & context, const Session & session)
 : Bucket(bucketname, context, session)
 {
 	initialize();
 	execute();
 }
 
-BucketTest::BucketTest(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+BucketHead::BucketHead(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
 : Bucket(bucketname, multiplex, context, session)
 {
 	initialize();
 }
 
-BucketTest::~BucketTest() {
+BucketHead::~BucketHead() {
 	if (requests != 0) {
 		(void)S3_runall_request_context(requests);
 	}
 }
 
-void BucketTest::initialize() {
+void BucketHead::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	constraint[0] = '\0';
 }
 
-void BucketTest::execute() {
+void BucketHead::execute() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
-	Logger::instance().debug("BucketTest@%p: begin\n", this);
+	Logger::instance().debug("BucketHead@%p: begin\n", this);
 	::S3_test_bucket(
 		protocol,
 		style,
@@ -58,16 +58,16 @@ void BucketTest::execute() {
 	);
 }
 
-void BucketTest::start() {
+void BucketHead::start() {
 	if (state() != BUSY) {
 		execute();
 	}
 }
 
-void BucketTest::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+void BucketHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
 	constraint[sizeof(constraint) - 1] = '\0';
 	region = constraint;
-	Logger::instance().debug("BucketTest@%p: end\n", this);
+	Logger::instance().debug("BucketHead@%p: end\n", this);
 }
 
 }
