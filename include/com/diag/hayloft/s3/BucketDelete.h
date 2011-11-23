@@ -37,9 +37,7 @@ public:
 
 	virtual ~BucketDelete();
 
-	void start();
-
-	bool isDeleted() const { return (state() == ::S3StatusOK); }
+	virtual void start();
 
 protected:
 

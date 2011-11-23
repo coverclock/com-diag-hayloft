@@ -38,9 +38,7 @@ public:
 
 	virtual ~BucketCreate();
 
-	void start();
-
-	bool isCreated() const { return (state() == ::S3StatusOK); }
+	virtual void start();
 
 protected:
 

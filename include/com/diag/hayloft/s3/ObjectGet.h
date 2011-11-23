@@ -105,13 +105,11 @@ public:
 
 	virtual ~ObjectGet();
 
-	void start();
+	virtual void start();
 
-	void reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
+	virtual void reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
 
-	void reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
-
-	bool isGotten() const { return (state() == ::S3StatusOK); }
+	virtual void reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
 
 protected:
 

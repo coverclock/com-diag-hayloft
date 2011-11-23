@@ -30,9 +30,7 @@ public:
 
 	virtual ~BucketValid() {}
 
-	operator bool() const { return (status == ::S3StatusOK); }
-
-	bool isValid() const { return (status == ::S3StatusOK); }
+	operator bool() const { return true; }
 
 private:
 

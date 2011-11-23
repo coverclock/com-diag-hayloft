@@ -50,8 +50,6 @@ public:
 
 	virtual void start();
 
-	bool isDeleted() const { return (state() == ::S3StatusOK); }
-
 protected:
 
 	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
