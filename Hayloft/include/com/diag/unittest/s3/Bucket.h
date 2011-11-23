@@ -314,12 +314,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(test == true);
 			if (!test.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(test.isIdle());
@@ -342,12 +342,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int limit = LIMIT; (create != true) && (limit > 0); --limit) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(create == true);
 			if (!create.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(create.isIdle());
@@ -369,16 +369,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					printf("TIMEDOUT\n");
+					printf("TIMEDOUT %d\n", __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(test == true);
 				if (!test.isRetryable()) { break; }
-				printf("RETRYING\n");
+				printf("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (test.isExistent()) { break; }
-			printf("WAITING\n");
+			printf("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(test.isIdle());
@@ -401,12 +401,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int limit = LIMIT; (remove != true) && (limit > 0); --limit) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(remove == true);
 			if (!remove.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(remove.isIdle());
@@ -428,16 +428,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int limit = LIMIT; (test != true) && (limit > 0); --limit) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					printf("TIMEDOUT\n");
+					printf("TIMEDOUT %d\n", __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(test == true);
 				if (!test.isRetryable()) { break; }
-				printf("RETRYING\n");
+				printf("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!test.isExistent()) { break; }
-			printf("WAITING\n");
+			printf("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(test.isIdle());
