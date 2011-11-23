@@ -77,7 +77,7 @@ TEST_F(ObjectBaseTest, Temporary) {
 // Consistency architecture. Most applications will need to address the former,
 // unless they are using a "Best Effort" model. Few applications will need to
 // address the latter, since the system becomes consistent very quickly and a
-// small amount of lag isn't likely to be an issue. TIMEOUT merely means that
+// small amount of lag isn't likely to be an issue. TIMEDOUT merely means that
 // the socket select(2) timed out waiting for sockets to become ready for
 // reading. In a real application that just means it would have time to go do
 // other work (and other threads would run while the thread was waiting on
@@ -797,7 +797,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEOUT\n");
+			printf("TIMEDOUT\n");
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(buckettest, true);
@@ -832,7 +832,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (bucketcreate != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEOUT\n");
+			printf("TIMEDOUT\n");
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(bucketcreate, true);
@@ -866,7 +866,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEOUT\n");
+				printf("TIMEDOUT\n");
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckettest, true);
@@ -905,7 +905,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEOUT\n");
+			printf("TIMEDOUT\n");
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objecthead, true);
@@ -944,7 +944,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objectput != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEOUT\n");
+			printf("TIMEDOUT\n");
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectput, true);
@@ -984,7 +984,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEOUT\n");
+				printf("TIMEDOUT\n");
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
@@ -1024,7 +1024,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEOUT\n");
+			printf("TIMEDOUT\n");
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectget, true);
@@ -1061,7 +1061,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEOUT\n");
+				printf("TIMEDOUT\n");
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
@@ -1100,7 +1100,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objectdelete != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEOUT\n");
+			printf("TIMEDOUT\n");
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectdelete, true);
@@ -1135,7 +1135,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEOUT\n");
+				printf("TIMEDOUT\n");
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
@@ -1208,7 +1208,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEOUT\n");
+				printf("TIMEDOUT\n");
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckettest, true);

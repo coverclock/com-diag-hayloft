@@ -31,6 +31,9 @@ BucketTest::BucketTest(const char * bucketname, Multiplex & multiplex, const Con
 }
 
 BucketTest::~BucketTest() {
+	if (requests != 0) {
+		(void)S3_runall_request_context(requests);
+	}
 }
 
 void BucketTest::initialize() {

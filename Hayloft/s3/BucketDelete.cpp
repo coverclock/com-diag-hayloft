@@ -31,6 +31,9 @@ BucketDelete::BucketDelete(const char * bucketname, Multiplex & multiplex, const
 }
 
 BucketDelete::~BucketDelete() {
+	if (requests != 0) {
+		(void)S3_runall_request_context(requests);
+	}
 }
 
 void BucketDelete::initialize() {
