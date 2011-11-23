@@ -43,7 +43,7 @@ Session & Session::instance() {
     return *singleton;
 }
 
-Session::Session(const char * bucketSuffix, const char * userAgentInfo, int flags, const char * defaultS3HostName)
+Session::Session(const char * bucketSuffix, const char * userAgentInfo, const char * defaultS3HostName, int flags)
 : bucketsuffix(set(bucketSuffix, BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_STR()))
 , useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
 , hostname(set(defaultS3HostName, HOST_NAME_ENV(), HOST_NAME_STR()))
@@ -53,6 +53,7 @@ Session::Session(const char * bucketSuffix, const char * userAgentInfo, int flag
 	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
 	logger.debug("Session@%p: hostname=\"%s\"\n", this, hostname.c_str());
+	logger.debug("Session@%p: flags=0x%x\n", this, flags);
 	if (status != ::S3StatusOK) {
 		logger.error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}

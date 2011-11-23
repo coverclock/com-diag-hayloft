@@ -95,7 +95,7 @@ TEST_F(SessionTest, Explicit) {
 	static const char * BUCKET_SUFFIX_VAL = ".exp.hayloft.diag.com";
 	static const char * USER_AGENT_VAL = "exp.hayloft.diag.com";
 	static const char * HOST_NAME_VAL = "s5.amazonaws.com";
-	Session session(BUCKET_SUFFIX_VAL, USER_AGENT_VAL, S3_INIT_ALL, HOST_NAME_VAL);
+	Session session(BUCKET_SUFFIX_VAL, USER_AGENT_VAL, HOST_NAME_VAL, S3_INIT_ALL);
 	EXPECT_TRUE(session == true);
 	ASSERT_NE(session.getBucketSuffix(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getBucketSuffix(), BUCKET_SUFFIX_VAL), 0);
