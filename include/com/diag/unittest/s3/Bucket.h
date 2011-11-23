@@ -132,47 +132,97 @@ TEST_F(BucketTest, Heap) {
 	EXPECT_TRUE(test->isNonexistent());
 	delete test;
 }
+#endif
 
 TEST_F(BucketTest, Stack) {
 	static const char BUCKET[] = "BucketTestStack";
-	BucketHead test(BUCKET);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isSuccessful());
-	EXPECT_TRUE(test.isNonexistent());
-	BucketCreate test(BUCKET);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isSuccessful());
-	BucketHead test(BUCKET);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_TRUE(test.isSuccessful());
-	EXPECT_FALSE(test.isNonexistent());
-	BucketDelete test(BUCKET);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isSuccessful());
-	BucketHead test(BUCKET);
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isSuccessful());
-	EXPECT_TRUE(test.isNonexistent());
+	static const int LIMIT = 100;
+	{
+		BucketHead buckethead(BUCKET);
+		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			buckethead.start();
+		}
+		EXPECT_TRUE(buckethead == true);
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_TRUE(buckethead.isNonexistent());
+		ASSERT_FALSE(buckethead.isSuccessful());
+	}
+	{
+		BucketCreate bucketcreate(BUCKET);
+		for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			bucketcreate.start();
+		}
+		EXPECT_TRUE(bucketcreate == true);
+		EXPECT_FALSE(bucketcreate.isIdle());
+		EXPECT_FALSE(bucketcreate.isBusy());
+		EXPECT_FALSE(bucketcreate.isRetryable());
+		EXPECT_FALSE(bucketcreate.isInaccessible());
+		EXPECT_FALSE(bucketcreate.isNonexistent());
+		ASSERT_TRUE(bucketcreate.isSuccessful());
+	}
+	{
+		BucketHead buckethead(BUCKET);
+		for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
+			if (buckethead.isRetryable()) {
+				printf("RETRYING %d\n", __LINE__);
+			} else if (!buckethead.isSuccessful()) {
+				printf("WAITING %d\n", __LINE__);
+			}
+			platform.yield(platform.frequency());
+			buckethead.start();
+		}
+		EXPECT_TRUE(buckethead == true);
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_FALSE(buckethead.isNonexistent());
+		ASSERT_TRUE(buckethead.isSuccessful());
+	}
+	{
+		BucketDelete bucketdelete(BUCKET);
+		for (int ii = 0; bucketdelete.isRetryable() && (ii < LIMIT); ++ii) {
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			bucketdelete.start();
+		}
+		EXPECT_TRUE(bucketdelete == true);
+		EXPECT_FALSE(bucketdelete.isIdle());
+		EXPECT_FALSE(bucketdelete.isBusy());
+		EXPECT_FALSE(bucketdelete.isRetryable());
+		EXPECT_FALSE(bucketdelete.isInaccessible());
+		EXPECT_FALSE(bucketdelete.isNonexistent());
+		ASSERT_TRUE(bucketdelete.isSuccessful());
+	}
+	{
+		BucketHead buckethead(BUCKET);
+		for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
+			if (buckethead.isRetryable()) {
+				printf("RETRYING %d\n", __LINE__);
+			} else if (buckethead.isSuccessful()) {
+				printf("WAITING %d\n", __LINE__);
+			}
+			platform.yield(platform.frequency());
+			buckethead.start();
+		}
+		EXPECT_TRUE(buckethead == true);
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_TRUE(buckethead.isNonexistent());
+		ASSERT_FALSE(buckethead.isSuccessful());
+	}
 }
 
+#if 0
 TEST_F(BucketTest, Explicit) {
 	static const char BUCKET[] = "BucketTestExplicit";
 	Session session;

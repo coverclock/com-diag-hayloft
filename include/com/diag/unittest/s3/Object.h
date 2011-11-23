@@ -297,7 +297,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objecthead->isBusy());
 	EXPECT_FALSE(objecthead->isRetryable());
 	EXPECT_FALSE(objecthead->isInaccessible());
-	EXPECT_TRUE(objectdelete->isNonexistent());
+	EXPECT_TRUE(objecthead->isNonexistent());
 	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
 	/**/
