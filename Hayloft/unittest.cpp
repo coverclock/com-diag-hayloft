@@ -9,6 +9,7 @@
 
 // Infrastructure.
 
+#include "gtest/gtest.h"
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/unittest/s3/Environment.h"
 
