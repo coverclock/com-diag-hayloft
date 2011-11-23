@@ -39,7 +39,7 @@
 
 // Unit tests that also use S3 and buckets.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 

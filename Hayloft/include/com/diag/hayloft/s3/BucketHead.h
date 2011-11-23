@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETTEST_
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETTEST_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETHEAD_
+#define _H_COM_DIAG_HAYLOFT_S3_BUCKETHEAD_
 
 /**
  * @file
@@ -19,7 +19,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class BucketTest : public Bucket {
+class BucketHead : public Bucket {
 
 private:
 
@@ -27,20 +27,20 @@ private:
 
 public:
 
-	explicit BucketTest(
+	explicit BucketHead(
 		const char * bucketname,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
-	explicit BucketTest(
+	explicit BucketHead(
 		const char * bucketname,
 		Multiplex & multiplex,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
-	virtual ~BucketTest();
+	virtual ~BucketHead();
 
 	virtual void start();
 
