@@ -320,82 +320,178 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 }
+#endif
 
 TEST_F(BucketTest, Complete) {
 	static const char BUCKET[] = "BucketTestComplete";
+	static const int LIMIT = 100;
 	Multiplex multiplex;
-	BucketHead test(BUCKET, multiplex);
-	EXPECT_FALSE(test == true);
-	EXPECT_TRUE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	test.start();
-	EXPECT_FALSE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_TRUE(test.isBusy());
-	EXPECT_TRUE(multiplex.complete());
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isSuccessful());
-	EXPECT_TRUE(test.isNonexistent());
-	BucketCreate create(BUCKET, multiplex);
-	create.start();
-	EXPECT_TRUE(multiplex.complete());
-	EXPECT_TRUE(create == true);
-	EXPECT_FALSE(create.isIdle());
-	EXPECT_FALSE(create.isBusy());
-	EXPECT_FALSE(create.isRetryable());
-	EXPECT_TRUE(create.isSuccessful());
-	BucketHead test(BUCKET, multiplex);
-	EXPECT_FALSE(test == true);
-	EXPECT_TRUE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	test.start();
-	EXPECT_FALSE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_TRUE(test.isBusy());
-	EXPECT_TRUE(multiplex.complete());
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_TRUE(test.isSuccessful());
-	EXPECT_FALSE(test.isNonexistent());
-	BucketDelete remove(BUCKET, multiplex);
-	EXPECT_FALSE(remove == true);
-	EXPECT_TRUE(remove.isIdle());
-	EXPECT_FALSE(remove.isBusy());
-	remove.start();
-	EXPECT_FALSE(remove == true);
-	EXPECT_FALSE(remove.isIdle());
-	EXPECT_TRUE(remove.isBusy());
-	EXPECT_TRUE(multiplex.complete());
-	EXPECT_TRUE(remove == true);
-	EXPECT_FALSE(remove.isIdle());
-	EXPECT_FALSE(remove.isBusy());
-	EXPECT_FALSE(remove.isRetryable());
-	EXPECT_TRUE(remove.isDeleted());
-	BucketHead test(BUCKET, multiplex);
-	EXPECT_FALSE(test == true);
-	EXPECT_TRUE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	test.start();
-	EXPECT_FALSE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_TRUE(test.isBusy());
-	EXPECT_TRUE(multiplex.complete());
-	EXPECT_TRUE(test == true);
-	EXPECT_FALSE(test.isIdle());
-	EXPECT_FALSE(test.isBusy());
-	EXPECT_FALSE(test.isRetryable());
-	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isSuccessful());
-	EXPECT_TRUE(test.isNonexistent());
+	{
+		BucketHead buckethead(BUCKET, multiplex);
+		EXPECT_FALSE(buckethead == true);
+		EXPECT_TRUE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_FALSE(buckethead.isNonexistent());
+		EXPECT_FALSE(buckethead.isSuccessful());
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			buckethead.start();
+			EXPECT_FALSE(buckethead == true);
+			EXPECT_FALSE(buckethead.isIdle());
+			EXPECT_TRUE(buckethead.isBusy());
+			EXPECT_FALSE(buckethead.isRetryable());
+			EXPECT_FALSE(buckethead.isInaccessible());
+			EXPECT_FALSE(buckethead.isNonexistent());
+			EXPECT_FALSE(buckethead.isSuccessful());
+			EXPECT_TRUE(multiplex.complete());
+			EXPECT_TRUE(buckethead == true);
+			if (!buckethead.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_TRUE(buckethead.isNonexistent());
+		ASSERT_FALSE(buckethead.isSuccessful());
+	}
+	{
+		BucketCreate bucketcreate(BUCKET, multiplex);
+		EXPECT_FALSE(bucketcreate == true);
+		EXPECT_TRUE(bucketcreate.isIdle());
+		EXPECT_FALSE(bucketcreate.isBusy());
+		EXPECT_FALSE(bucketcreate.isRetryable());
+		EXPECT_FALSE(bucketcreate.isInaccessible());
+		EXPECT_FALSE(bucketcreate.isNonexistent());
+		EXPECT_FALSE(bucketcreate.isSuccessful());
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			bucketcreate.start();
+			EXPECT_FALSE(bucketcreate == true);
+			EXPECT_FALSE(bucketcreate.isIdle());
+			EXPECT_TRUE(bucketcreate.isBusy());
+			EXPECT_FALSE(bucketcreate.isRetryable());
+			EXPECT_FALSE(bucketcreate.isInaccessible());
+			EXPECT_FALSE(bucketcreate.isNonexistent());
+			EXPECT_FALSE(bucketcreate.isSuccessful());
+			EXPECT_TRUE(multiplex.complete());
+			EXPECT_TRUE(bucketcreate == true);
+			if (!bucketcreate.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		EXPECT_FALSE(bucketcreate.isIdle());
+		EXPECT_FALSE(bucketcreate.isBusy());
+		EXPECT_FALSE(bucketcreate.isRetryable());
+		EXPECT_FALSE(bucketcreate.isInaccessible());
+		EXPECT_FALSE(bucketcreate.isNonexistent());
+		ASSERT_TRUE(bucketcreate.isSuccessful());
+	}
+	{
+		BucketHead buckethead(BUCKET, multiplex);
+		EXPECT_FALSE(buckethead == true);
+		EXPECT_TRUE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_FALSE(buckethead.isNonexistent());
+		EXPECT_FALSE(buckethead.isSuccessful());
+		for (int jj = 0; jj < LIMIT; ++jj) {
+			for (int ii = 0; ii < LIMIT; ++ii) {
+				buckethead.start();
+				EXPECT_FALSE(buckethead == true);
+				EXPECT_FALSE(buckethead.isIdle());
+				EXPECT_TRUE(buckethead.isBusy());
+				EXPECT_FALSE(buckethead.isRetryable());
+				EXPECT_FALSE(buckethead.isInaccessible());
+				EXPECT_FALSE(buckethead.isNonexistent());
+				EXPECT_FALSE(buckethead.isSuccessful());
+				EXPECT_TRUE(multiplex.complete());
+				EXPECT_TRUE(buckethead == true);
+				if (!buckethead.isRetryable()) { break; }
+				printf("RETRYING %d\n", __LINE__);
+				platform.yield(platform.frequency());
+			}
+			if (buckethead.isSuccessful()) { break; }
+			printf("WAITING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_FALSE(buckethead.isNonexistent());
+		ASSERT_TRUE(buckethead.isSuccessful());
+	}
+	{
+		BucketDelete bucketdelete(BUCKET, multiplex);
+		EXPECT_FALSE(bucketdelete == true);
+		EXPECT_TRUE(bucketdelete.isIdle());
+		EXPECT_FALSE(bucketdelete.isBusy());
+		EXPECT_FALSE(bucketdelete.isRetryable());
+		EXPECT_FALSE(bucketdelete.isInaccessible());
+		EXPECT_FALSE(bucketdelete.isNonexistent());
+		EXPECT_FALSE(bucketdelete.isSuccessful());
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			bucketdelete.start();
+			EXPECT_FALSE(bucketdelete == true);
+			EXPECT_FALSE(bucketdelete.isIdle());
+			EXPECT_TRUE(bucketdelete.isBusy());
+			EXPECT_FALSE(bucketdelete.isRetryable());
+			EXPECT_FALSE(bucketdelete.isInaccessible());
+			EXPECT_FALSE(bucketdelete.isNonexistent());
+			EXPECT_FALSE(bucketdelete.isSuccessful());
+			EXPECT_TRUE(multiplex.complete());
+			EXPECT_TRUE(bucketdelete == true);
+			if (!bucketdelete.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		EXPECT_FALSE(bucketdelete.isIdle());
+		EXPECT_FALSE(bucketdelete.isBusy());
+		EXPECT_FALSE(bucketdelete.isRetryable());
+		EXPECT_FALSE(bucketdelete.isInaccessible());
+		EXPECT_FALSE(bucketdelete.isNonexistent());
+		ASSERT_TRUE(bucketdelete.isSuccessful());
+	}
+	{
+		BucketHead buckethead(BUCKET, multiplex);
+		EXPECT_FALSE(buckethead == true);
+		EXPECT_TRUE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_FALSE(buckethead.isNonexistent());
+		EXPECT_FALSE(buckethead.isSuccessful());
+		for (int jj = 0; jj < LIMIT; ++jj) {
+			for (int ii = 0; ii < LIMIT; ++ii) {
+				buckethead.start();
+				EXPECT_FALSE(buckethead == true);
+				EXPECT_FALSE(buckethead.isIdle());
+				EXPECT_TRUE(buckethead.isBusy());
+				EXPECT_FALSE(buckethead.isRetryable());
+				EXPECT_FALSE(buckethead.isInaccessible());
+				EXPECT_FALSE(buckethead.isNonexistent());
+				EXPECT_FALSE(buckethead.isSuccessful());
+				EXPECT_TRUE(multiplex.complete());
+				EXPECT_TRUE(buckethead == true);
+				if (!buckethead.isRetryable()) { break; }
+				printf("RETRYING %d\n", __LINE__);
+				platform.yield(platform.frequency());
+			}
+			if (!buckethead.isSuccessful()) { break; }
+			printf("WAITING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		EXPECT_FALSE(buckethead.isIdle());
+		EXPECT_FALSE(buckethead.isBusy());
+		EXPECT_FALSE(buckethead.isRetryable());
+		EXPECT_FALSE(buckethead.isInaccessible());
+		EXPECT_TRUE(buckethead.isNonexistent());
+		ASSERT_FALSE(buckethead.isSuccessful());
+	}
 }
-#endif
 
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
