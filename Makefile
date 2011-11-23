@@ -194,6 +194,14 @@ TARGETS+=s3/Conditions.o
 ARTIFACTS+=s3/Conditions.o
 ARCHIVABLE+=s3/Conditions.o
 
+TARGETS+=s3/Action.o
+ARTIFACTS+=s3/Action.o
+ARCHIVABLE+=s3/Action.o
+
+TARGETS+=s3/Container.o
+ARTIFACTS+=s3/Container.o
+ARCHIVABLE+=s3/Container.o
+
 TARGETS+=s3/Bucket.o
 ARTIFACTS+=s3/Bucket.o
 ARCHIVABLE+=s3/Bucket.o

@@ -31,6 +31,9 @@ BucketCreate::BucketCreate(const char * bucketname, Multiplex & multiplex, const
 }
 
 BucketCreate::~BucketCreate() {
+	if (requests != 0) {
+		(void)S3_runall_request_context(requests);
+	}
 }
 
 void BucketCreate::initialize() {
