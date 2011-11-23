@@ -107,13 +107,11 @@ public:
 
 	virtual ~ObjectPut();
 
-	void start();
+	virtual void start();
 
-	void reset(Input & source, Octets objectsize);
+	virtual void reset(Input & source, Octets objectsize);
 
-	void reset(Input * sourcep /* TAKEN */, Octets objectsize);
-
-	bool isPut() const { return (state() == ::S3StatusOK); }
+	virtual void reset(Input * sourcep /* TAKEN */, Octets objectsize);
 
 protected:
 

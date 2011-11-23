@@ -61,14 +61,14 @@ TEST_F(BucketValidTest, Heap) {
 	BucketValid * valid = new BucketValid("BucketValidTestHeap");
 	ASSERT_NE(valid, (BucketValid*)0);
 	EXPECT_TRUE((*valid) == true);
-	EXPECT_TRUE(valid->isValid());
+	EXPECT_TRUE(valid->isSuccessful());
 	delete valid;
 }
 
 TEST_F(BucketValidTest, Stack) {
 	BucketValid valid("BucketValidTestStack");
 	EXPECT_TRUE(valid == true);
-	EXPECT_TRUE(valid.isValid());
+	EXPECT_TRUE(valid.isSuccessful());
 }
 
 // In the unit tests below, we are testing against the actual AWS S3, not a
@@ -96,7 +96,7 @@ TEST_F(BucketTest, Heap) {
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
-	EXPECT_FALSE(test->isExistent());
+	EXPECT_FALSE(test->isSuccessful());
 	EXPECT_TRUE(test->isNonexistent());
 	delete test;
 	BucketCreate * test = new BucketCreate(BUCKET);
@@ -104,7 +104,7 @@ TEST_F(BucketTest, Heap) {
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isRetryable());
-	EXPECT_TRUE(test->isCreated());
+	EXPECT_TRUE(test->isSuccessful());
 	delete test;
 	BucketTest * test = new BucketTest(BUCKET);
 	EXPECT_TRUE((*test) == true);
@@ -112,7 +112,7 @@ TEST_F(BucketTest, Heap) {
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
-	EXPECT_TRUE(test->isExistent());
+	EXPECT_TRUE(test->isSuccessful());
 	EXPECT_FALSE(test->isNonexistent());
 	delete test;
 	BucketDelete * test = new BucketDelete(BUCKET);
@@ -120,7 +120,7 @@ TEST_F(BucketTest, Heap) {
 	EXPECT_FALSE(test->isIdle());
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
-	EXPECT_TRUE(test->isDeleted());
+	EXPECT_TRUE(test->isSuccessful());
 	delete test;
 	BucketTest * test = new BucketTest(BUCKET);
 	EXPECT_TRUE((*test) == true);
@@ -128,7 +128,7 @@ TEST_F(BucketTest, Heap) {
 	EXPECT_FALSE(test->isBusy());
 	EXPECT_FALSE(test->isRetryable());
 	EXPECT_FALSE(test->isInaccessible());
-	EXPECT_FALSE(test->isExistent());
+	EXPECT_FALSE(test->isSuccessful());
 	EXPECT_TRUE(test->isNonexistent());
 	delete test;
 }
@@ -141,35 +141,35 @@ TEST_F(BucketTest, Stack) {
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
+	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 	BucketCreate test(BUCKET);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isCreated());
+	EXPECT_TRUE(test.isSuccessful());
 	BucketTest test(BUCKET);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_TRUE(test.isExistent());
+	EXPECT_TRUE(test.isSuccessful());
 	EXPECT_FALSE(test.isNonexistent());
 	BucketDelete test(BUCKET);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isDeleted());
+	EXPECT_TRUE(test.isSuccessful());
 	BucketTest test(BUCKET);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
+	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 }
 
@@ -188,35 +188,35 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
+	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 	BucketCreate test(BUCKET, context, session);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isCreated());
+	EXPECT_TRUE(test.isSuccessful());
 	BucketTest test(BUCKET, context, session);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_TRUE(test.isExistent());
+	EXPECT_TRUE(test.isSuccessful());
 	EXPECT_FALSE(test.isNonexistent());
 	BucketDelete test(BUCKET, context, session);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
-	EXPECT_TRUE(test.isDeleted());
+	EXPECT_TRUE(test.isSuccessful());
 	BucketTest test(BUCKET, context, session);
 	EXPECT_TRUE(test == true);
 	EXPECT_FALSE(test.isIdle());
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
+	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 }
 
@@ -237,7 +237,7 @@ TEST_F(BucketTest, Complete) {
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
+	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 	BucketCreate create(BUCKET, multiplex);
 	create.start();
@@ -246,7 +246,7 @@ TEST_F(BucketTest, Complete) {
 	EXPECT_FALSE(create.isIdle());
 	EXPECT_FALSE(create.isBusy());
 	EXPECT_FALSE(create.isRetryable());
-	EXPECT_TRUE(create.isCreated());
+	EXPECT_TRUE(create.isSuccessful());
 	BucketTest test(BUCKET, multiplex);
 	EXPECT_FALSE(test == true);
 	EXPECT_TRUE(test.isIdle());
@@ -261,7 +261,7 @@ TEST_F(BucketTest, Complete) {
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_TRUE(test.isExistent());
+	EXPECT_TRUE(test.isSuccessful());
 	EXPECT_FALSE(test.isNonexistent());
 	BucketDelete remove(BUCKET, multiplex);
 	EXPECT_FALSE(remove == true);
@@ -291,7 +291,7 @@ TEST_F(BucketTest, Complete) {
 	EXPECT_FALSE(test.isBusy());
 	EXPECT_FALSE(test.isRetryable());
 	EXPECT_FALSE(test.isInaccessible());
-	EXPECT_FALSE(test.isExistent());
+	EXPECT_FALSE(test.isSuccessful());
 	EXPECT_TRUE(test.isNonexistent());
 }
 #endif
@@ -326,7 +326,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(test.isBusy());
 		EXPECT_FALSE(test.isRetryable());
 		EXPECT_FALSE(test.isInaccessible());
-		EXPECT_FALSE(test.isExistent());
+		EXPECT_FALSE(test.isSuccessful());
 		EXPECT_TRUE(test.isNonexistent());
 	}
 	{
@@ -353,7 +353,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(create.isIdle());
 		EXPECT_FALSE(create.isBusy());
 		EXPECT_FALSE(create.isRetryable());
-		EXPECT_TRUE(create.isCreated());
+		EXPECT_TRUE(create.isSuccessful());
 	}
 	{
 		BucketTest test(BUCKET, multiplex);
@@ -385,7 +385,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(test.isBusy());
 		EXPECT_FALSE(test.isRetryable());
 		EXPECT_FALSE(test.isInaccessible());
-		EXPECT_TRUE(test.isExistent());
+		EXPECT_TRUE(test.isSuccessful());
 		EXPECT_FALSE(test.isNonexistent());
 	}
 	{
@@ -412,7 +412,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(remove.isIdle());
 		EXPECT_FALSE(remove.isBusy());
 		EXPECT_FALSE(remove.isRetryable());
-		EXPECT_TRUE(remove.isDeleted());
+		EXPECT_TRUE(remove.isSuccessful());
 	}
 	{
 		BucketTest test(BUCKET, multiplex);
@@ -444,7 +444,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(test.isBusy());
 		EXPECT_FALSE(test.isRetryable());
 		EXPECT_FALSE(test.isInaccessible());
-		EXPECT_FALSE(test.isExistent());
+		EXPECT_FALSE(test.isSuccessful());
 		EXPECT_TRUE(test.isNonexistent());
 	}
 }

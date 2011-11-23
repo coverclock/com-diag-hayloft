@@ -42,9 +42,7 @@ public:
 
 	virtual ~BucketTest();
 
-	void start();
-
-	bool isExistent() const { return (state() == ::S3StatusOK); }
+	virtual void start();
 
 protected:
 

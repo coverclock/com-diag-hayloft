@@ -52,9 +52,9 @@ public:
 
 	virtual ~Object();
 
-	bool isInaccessible() const { return (state() == ::S3StatusHttpErrorForbidden); }
+	bool isInaccessible() const { ::S3Status temporary = state(); return ((temporary == ::S3StatusHttpErrorForbidden) || (temporary == ::S3StatusErrorAccessDenied)); }
 
-	bool isNonexistent() const { return (state() == ::S3StatusHttpErrorNotFound); }
+	bool isNonexistent() const { ::S3Status temporary = state(); return ((temporary == ::S3StatusHttpErrorNotFound) || (temporary == ::S3StatusErrorNoSuchKey) || (temporary == ::S3StatusErrorNoSuchBucket)); }
 
 	const char * getKey() const { return key.c_str(); }
 

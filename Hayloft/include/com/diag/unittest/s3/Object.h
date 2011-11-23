@@ -110,7 +110,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(buckettest->isRetryable());
 	EXPECT_FALSE(buckettest->isInaccessible());
 	EXPECT_TRUE(buckettest->isNonexistent());
-	ASSERT_FALSE(buckettest->isExistent());
+	ASSERT_FALSE(buckettest->isSuccessful());
 	delete buckettest;
 	/**/
 	BucketCreate * bucketcreate = 0;
@@ -128,7 +128,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(bucketcreate->isRetryable());
 	EXPECT_FALSE(bucketcreate->isInaccessible());
 	EXPECT_FALSE(bucketcreate->isNonexistent());
-	ASSERT_TRUE(bucketcreate->isCreated());
+	ASSERT_TRUE(bucketcreate->isSuccessful());
 	/**/
 	buckettest = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -141,7 +141,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (buckettest->isExistent()) { break; }
+		if (buckettest->isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -150,7 +150,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(buckettest->isRetryable());
 	EXPECT_FALSE(buckettest->isInaccessible());
 	EXPECT_FALSE(buckettest->isNonexistent());
-	ASSERT_TRUE(buckettest->isExistent());
+	ASSERT_TRUE(buckettest->isSuccessful());
 	delete buckettest;
 	/**/
 	ObjectHead * objecthead = 0;
@@ -168,7 +168,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objecthead->isRetryable());
 	EXPECT_FALSE(objecthead->isInaccessible());
 	EXPECT_TRUE(objecthead->isNonexistent());
-	ASSERT_FALSE(objecthead->isExistent());
+	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
 	/**/
 	ObjectPut * objectput = 0;
@@ -191,7 +191,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objectput->isRetryable());
 	EXPECT_FALSE(objectput->isInaccessible());
 	EXPECT_FALSE(objectput->isNonexistent());
-	ASSERT_TRUE(objectput->isPut());
+	ASSERT_TRUE(objectput->isSuccessful());
 	delete objectput;
 	/**/
 	objecthead = 0;
@@ -205,7 +205,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead->isExistent()) { break; }
+		if (objecthead->isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -214,7 +214,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objecthead->isRetryable());
 	EXPECT_FALSE(objecthead->isInaccessible());
 	EXPECT_FALSE(objecthead->isNonexistent());
-	ASSERT_TRUE(objecthead->isExistent());
+	ASSERT_TRUE(objecthead->isSuccessful());
 	delete objecthead;
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/SynchronousHeap.txt */
 	ObjectGet * objectget = 0;
@@ -234,7 +234,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objectget->isRetryable());
 	EXPECT_FALSE(objectget->isInaccessible());
 	EXPECT_FALSE(objectget->isNonexistent());
-	ASSERT_TRUE(objectget->isGotten());
+	ASSERT_TRUE(objectget->isSuccessful());
 	delete objectget;
 	/**/
 	objecthead = 0;
@@ -248,7 +248,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead->isExistent()) { break; }
+		if (objecthead->isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -257,7 +257,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objecthead->isRetryable());
 	EXPECT_FALSE(objecthead->isInaccessible());
 	EXPECT_FALSE(objecthead->isNonexistent());
-	ASSERT_TRUE(objecthead->isExistent());
+	ASSERT_TRUE(objecthead->isSuccessful());
 	delete objecthead;
 	/**/
 	ObjectDelete * objectdelete = 0;
@@ -275,7 +275,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objectdelete->isRetryable());
 	EXPECT_FALSE(objectdelete->isInaccessible());
 	EXPECT_FALSE(objectdelete->isNonexistent());
-	ASSERT_TRUE(objectdelete->isDeleted());
+	ASSERT_TRUE(objectdelete->isSuccessful());
 	delete objectdelete;
 	/**/
 	objecthead = 0;
@@ -289,7 +289,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead->isNonexistent()) { break; }
+		if (!objecthead->isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -297,7 +297,8 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(objecthead->isBusy());
 	EXPECT_FALSE(objecthead->isRetryable());
 	EXPECT_FALSE(objecthead->isInaccessible());
-	ASSERT_TRUE(objecthead->isNonexistent());
+	EXPECT_TRUE(objectdelete->isNonexistent());
+	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
 	/**/
 	BucketDelete * bucketdelete = 0;
@@ -315,7 +316,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(bucketdelete->isRetryable());
 	EXPECT_FALSE(bucketdelete->isInaccessible());
 	EXPECT_FALSE(bucketdelete->isNonexistent());
-	ASSERT_TRUE(bucketdelete->isDeleted());
+	ASSERT_TRUE(bucketdelete->isSuccessful());
 	delete bucketdelete;
 	/**/
 	buckettest = 0;
@@ -329,7 +330,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (buckettest->isNonexistent()) { break; }
+		if (!buckettest->isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -338,7 +339,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_FALSE(buckettest->isRetryable());
 	EXPECT_FALSE(buckettest->isInaccessible());
 	EXPECT_TRUE(buckettest->isNonexistent());
-	ASSERT_FALSE(buckettest->isExistent());
+	ASSERT_FALSE(buckettest->isSuccessful());
 	delete buckettest;
 	/**/
 	Size outputsize = size(OBJECT);
@@ -370,7 +371,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
-	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		buckettest.start();
 		EXPECT_EQ(buckettest, false);
@@ -379,7 +380,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(buckettest.isRetryable());
 		EXPECT_FALSE(buckettest.isInaccessible());
 		EXPECT_FALSE(buckettest.isNonexistent());
-		EXPECT_FALSE(buckettest.isExistent());
+		EXPECT_FALSE(buckettest.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(buckettest, true);
 		if (!buckettest.isRetryable()) { break; }
@@ -391,7 +392,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
-	ASSERT_FALSE(buckettest.isExistent());
+	ASSERT_FALSE(buckettest.isSuccessful());
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -400,7 +401,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(bucketcreate.isRetryable());
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	EXPECT_FALSE(bucketcreate.isNonexistent());
-	EXPECT_FALSE(bucketcreate.isCreated());
+	EXPECT_FALSE(bucketcreate.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		bucketcreate.start();
 		EXPECT_EQ(bucketcreate, false);
@@ -409,7 +410,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(bucketcreate.isRetryable());
 		EXPECT_FALSE(bucketcreate.isInaccessible());
 		EXPECT_FALSE(bucketcreate.isNonexistent());
-		EXPECT_FALSE(bucketcreate.isCreated());
+		EXPECT_FALSE(bucketcreate.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
@@ -420,7 +421,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(bucketcreate.isBusy());
 	EXPECT_FALSE(bucketcreate.isRetryable());
 	EXPECT_FALSE(bucketcreate.isInaccessible());
-	ASSERT_TRUE(bucketcreate.isCreated());
+	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
@@ -428,7 +429,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
-	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			buckettest.start();
@@ -438,14 +439,14 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_FALSE(buckettest.isRetryable());
 			EXPECT_FALSE(buckettest.isInaccessible());
 			EXPECT_FALSE(buckettest.isNonexistent());
-			EXPECT_FALSE(buckettest.isExistent());
+			EXPECT_FALSE(buckettest.isSuccessful());
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(buckettest, true);
 			if (!buckettest.isRetryable()) { break; }
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (buckettest.isExistent()) { break; }
+		if (buckettest.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -454,7 +455,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
-	ASSERT_TRUE(buckettest.isExistent());
+	ASSERT_TRUE(buckettest.isSuccessful());
 	/**/
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
@@ -463,7 +464,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objecthead.start();
 		EXPECT_EQ(objecthead, false);
@@ -472,7 +473,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(objecthead.isRetryable());
 		EXPECT_FALSE(objecthead.isInaccessible());
 		EXPECT_FALSE(objecthead.isNonexistent());
-		EXPECT_FALSE(objecthead.isExistent());
+		EXPECT_FALSE(objecthead.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
@@ -484,7 +485,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
-	ASSERT_FALSE(objecthead.isExistent());
+	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
@@ -497,7 +498,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objectput.isRetryable());
 	EXPECT_FALSE(objectput.isInaccessible());
 	EXPECT_FALSE(objectput.isNonexistent());
-	EXPECT_FALSE(objectput.isPut());
+	EXPECT_FALSE(objectput.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objectput.start();
 		EXPECT_EQ(objectput, false);
@@ -506,7 +507,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(objectput.isRetryable());
 		EXPECT_FALSE(objectput.isInaccessible());
 		EXPECT_FALSE(objectput.isNonexistent());
-		EXPECT_FALSE(objectput.isPut());
+		EXPECT_FALSE(objectput.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
@@ -523,7 +524,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objectput.isRetryable());
 	EXPECT_FALSE(objectput.isInaccessible());
 	EXPECT_FALSE(objectput.isNonexistent());
-	ASSERT_TRUE(objectput.isPut());
+	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
@@ -531,7 +532,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
-	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			objecthead.start();
@@ -541,14 +542,14 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_FALSE(objecthead.isRetryable());
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
-			EXPECT_FALSE(objecthead.isExistent());
+			EXPECT_FALSE(objecthead.isSuccessful());
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead.isExistent()) { break; }
+		if (objecthead.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -557,7 +558,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	ASSERT_TRUE(objecthead.isExistent());
+	ASSERT_TRUE(objecthead.isSuccessful());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -567,7 +568,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objectget.isRetryable());
 	EXPECT_FALSE(objectget.isInaccessible());
 	EXPECT_FALSE(objectget.isNonexistent());
-	EXPECT_FALSE(objectget.isGotten());
+	EXPECT_FALSE(objectget.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objectget.start();
 		EXPECT_EQ(objectget, false);
@@ -576,7 +577,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(objectget.isRetryable());
 		EXPECT_FALSE(objectget.isInaccessible());
 		EXPECT_FALSE(objectget.isNonexistent());
-		EXPECT_FALSE(objectget.isGotten());
+		EXPECT_FALSE(objectget.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objectget, true);
 		if (!objectget.isRetryable()) { break; }
@@ -590,7 +591,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objectget.isRetryable());
 	EXPECT_FALSE(objectget.isInaccessible());
 	EXPECT_FALSE(objectget.isNonexistent());
-	EXPECT_TRUE(objectget.isGotten());
+	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
@@ -598,7 +599,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	EXPECT_TRUE(objecthead.isExistent());
+	EXPECT_TRUE(objecthead.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			objecthead.start();
@@ -608,14 +609,14 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_FALSE(objecthead.isRetryable());
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
-			EXPECT_FALSE(objecthead.isExistent());
+			EXPECT_FALSE(objecthead.isSuccessful());
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead.isExistent()) { break; }
+		if (objecthead.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -624,7 +625,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	ASSERT_TRUE(objecthead.isExistent());
+	ASSERT_TRUE(objecthead.isSuccessful());
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
@@ -633,7 +634,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objectdelete.isRetryable());
 	EXPECT_FALSE(objectdelete.isInaccessible());
 	EXPECT_FALSE(objectdelete.isNonexistent());
-	EXPECT_FALSE(objectdelete.isDeleted());
+	EXPECT_FALSE(objectdelete.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objectdelete.start();
 		EXPECT_EQ(objectdelete, false);
@@ -642,7 +643,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(objectdelete.isRetryable());
 		EXPECT_FALSE(objectdelete.isInaccessible());
 		EXPECT_FALSE(objectdelete.isNonexistent());
-		EXPECT_FALSE(objectdelete.isDeleted());
+		EXPECT_FALSE(objectdelete.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objectdelete, true);
 		if (!objectdelete.isRetryable()) { break; }
@@ -654,7 +655,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objectdelete.isRetryable());
 	EXPECT_FALSE(objectdelete.isInaccessible());
 	EXPECT_FALSE(objectdelete.isNonexistent());
-	ASSERT_TRUE(objectdelete.isDeleted());
+	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
@@ -662,7 +663,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	EXPECT_TRUE(objecthead.isExistent());
+	EXPECT_TRUE(objecthead.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			objecthead.start();
@@ -672,14 +673,14 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_FALSE(objecthead.isRetryable());
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
-			EXPECT_FALSE(objecthead.isExistent());
+			EXPECT_FALSE(objecthead.isSuccessful());
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (!objecthead.isExistent()) { break; }
+		if (!objecthead.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -688,7 +689,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
-	ASSERT_FALSE(objecthead.isExistent());
+	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -697,7 +698,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(bucketdelete.isRetryable());
 	EXPECT_FALSE(bucketdelete.isInaccessible());
 	EXPECT_FALSE(bucketdelete.isNonexistent());
-	EXPECT_FALSE(bucketdelete.isDeleted());
+	EXPECT_FALSE(bucketdelete.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		bucketdelete.start();
 		EXPECT_EQ(bucketdelete, false);
@@ -706,7 +707,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_FALSE(bucketdelete.isRetryable());
 		EXPECT_FALSE(bucketdelete.isInaccessible());
 		EXPECT_FALSE(bucketdelete.isNonexistent());
-		EXPECT_FALSE(bucketdelete.isDeleted());
+		EXPECT_FALSE(bucketdelete.isSuccessful());
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(bucketdelete, true);
 		if (!bucketdelete.isRetryable()) { break; }
@@ -718,7 +719,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(bucketdelete.isRetryable());
 	EXPECT_FALSE(bucketdelete.isInaccessible());
 	EXPECT_FALSE(bucketdelete.isNonexistent());
-	ASSERT_TRUE(bucketdelete.isDeleted());
+	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
@@ -726,7 +727,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
-	EXPECT_TRUE(buckettest.isExistent());
+	EXPECT_TRUE(buckettest.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			buckettest.start();
@@ -736,14 +737,14 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_FALSE(buckettest.isRetryable());
 			EXPECT_FALSE(buckettest.isInaccessible());
 			EXPECT_FALSE(buckettest.isNonexistent());
-			EXPECT_FALSE(buckettest.isExistent());
+			EXPECT_FALSE(buckettest.isSuccessful());
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(buckettest, true);
 			if (!buckettest.isRetryable()) { break; }
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (!buckettest.isExistent()) { break; }
+		if (!buckettest.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -752,7 +753,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
-	ASSERT_FALSE(buckettest.isExistent());
+	ASSERT_FALSE(buckettest.isSuccessful());
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -784,7 +785,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
-	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		buckettest.start();
 		EXPECT_EQ(buckettest, false);
@@ -793,7 +794,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(buckettest.isRetryable());
 		EXPECT_FALSE(buckettest.isInaccessible());
 		EXPECT_FALSE(buckettest.isNonexistent());
-		EXPECT_FALSE(buckettest.isExistent());
+		EXPECT_FALSE(buckettest.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -810,7 +811,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
-	ASSERT_FALSE(buckettest.isExistent());
+	ASSERT_FALSE(buckettest.isSuccessful());
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -819,7 +820,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(bucketcreate.isRetryable());
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	EXPECT_FALSE(bucketcreate.isNonexistent());
-	EXPECT_FALSE(bucketcreate.isCreated());
+	EXPECT_FALSE(bucketcreate.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		bucketcreate.start();
 		EXPECT_EQ(bucketcreate, false);
@@ -828,7 +829,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(bucketcreate.isRetryable());
 		EXPECT_FALSE(bucketcreate.isInaccessible());
 		EXPECT_FALSE(bucketcreate.isNonexistent());
-		EXPECT_FALSE(bucketcreate.isCreated());
+		EXPECT_FALSE(bucketcreate.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (bucketcreate != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -844,7 +845,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(bucketcreate.isBusy());
 	EXPECT_FALSE(bucketcreate.isRetryable());
 	EXPECT_FALSE(bucketcreate.isInaccessible());
-	ASSERT_TRUE(bucketcreate.isCreated());
+	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
@@ -852,7 +853,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
-	EXPECT_FALSE(buckettest.isExistent());
+	EXPECT_FALSE(buckettest.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			buckettest.start();
@@ -862,7 +863,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			EXPECT_FALSE(buckettest.isRetryable());
 			EXPECT_FALSE(buckettest.isInaccessible());
 			EXPECT_FALSE(buckettest.isNonexistent());
-			EXPECT_FALSE(buckettest.isExistent());
+			EXPECT_FALSE(buckettest.isSuccessful());
 			int bits = 0;
 			for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -874,7 +875,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (buckettest.isExistent()) { break; }
+		if (buckettest.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -883,7 +884,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
-	ASSERT_TRUE(buckettest.isExistent());
+	ASSERT_TRUE(buckettest.isSuccessful());
 	/**/
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
@@ -892,7 +893,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objecthead.start();
 		EXPECT_EQ(objecthead, false);
@@ -901,7 +902,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(objecthead.isRetryable());
 		EXPECT_FALSE(objecthead.isInaccessible());
 		EXPECT_FALSE(objecthead.isNonexistent());
-		EXPECT_FALSE(objecthead.isExistent());
+		EXPECT_FALSE(objecthead.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -918,7 +919,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
-	ASSERT_FALSE(objecthead.isExistent());
+	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
@@ -931,7 +932,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objectput.isRetryable());
 	EXPECT_FALSE(objectput.isInaccessible());
 	EXPECT_FALSE(objectput.isNonexistent());
-	EXPECT_FALSE(objectput.isPut());
+	EXPECT_FALSE(objectput.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objectput.start();
 		EXPECT_EQ(objectput, false);
@@ -940,7 +941,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(objectput.isRetryable());
 		EXPECT_FALSE(objectput.isInaccessible());
 		EXPECT_FALSE(objectput.isNonexistent());
-		EXPECT_FALSE(objectput.isPut());
+		EXPECT_FALSE(objectput.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (objectput != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -962,7 +963,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objectput.isRetryable());
 	EXPECT_FALSE(objectput.isInaccessible());
 	EXPECT_FALSE(objectput.isNonexistent());
-	ASSERT_TRUE(objectput.isPut());
+	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
@@ -970,7 +971,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
-	EXPECT_FALSE(objecthead.isExistent());
+	EXPECT_FALSE(objecthead.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			objecthead.start();
@@ -980,7 +981,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			EXPECT_FALSE(objecthead.isRetryable());
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
-			EXPECT_FALSE(objecthead.isExistent());
+			EXPECT_FALSE(objecthead.isSuccessful());
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -992,7 +993,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead.isExistent()) { break; }
+		if (objecthead.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -1001,7 +1002,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	ASSERT_TRUE(objecthead.isExistent());
+	ASSERT_TRUE(objecthead.isSuccessful());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -1011,7 +1012,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objectget.isRetryable());
 	EXPECT_FALSE(objectget.isInaccessible());
 	EXPECT_FALSE(objectget.isNonexistent());
-	EXPECT_FALSE(objectget.isGotten());
+	EXPECT_FALSE(objectget.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objectget.start();
 		EXPECT_EQ(objectget, false);
@@ -1020,7 +1021,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(objectget.isRetryable());
 		EXPECT_FALSE(objectget.isInaccessible());
 		EXPECT_FALSE(objectget.isNonexistent());
-		EXPECT_FALSE(objectget.isGotten());
+		EXPECT_FALSE(objectget.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -1039,7 +1040,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objectget.isRetryable());
 	EXPECT_FALSE(objectget.isInaccessible());
 	EXPECT_FALSE(objectget.isNonexistent());
-	EXPECT_TRUE(objectget.isGotten());
+	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1047,7 +1048,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	EXPECT_TRUE(objecthead.isExistent());
+	EXPECT_TRUE(objecthead.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			objecthead.start();
@@ -1057,7 +1058,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			EXPECT_FALSE(objecthead.isRetryable());
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
-			EXPECT_FALSE(objecthead.isExistent());
+			EXPECT_FALSE(objecthead.isSuccessful());
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -1069,7 +1070,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (objecthead.isExistent()) { break; }
+		if (objecthead.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -1078,7 +1079,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	ASSERT_TRUE(objecthead.isExistent());
+	ASSERT_TRUE(objecthead.isSuccessful());
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
@@ -1087,7 +1088,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objectdelete.isRetryable());
 	EXPECT_FALSE(objectdelete.isInaccessible());
 	EXPECT_FALSE(objectdelete.isNonexistent());
-	EXPECT_FALSE(objectdelete.isDeleted());
+	EXPECT_FALSE(objectdelete.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		objectdelete.start();
 		EXPECT_EQ(objectdelete, false);
@@ -1096,7 +1097,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(objectdelete.isRetryable());
 		EXPECT_FALSE(objectdelete.isInaccessible());
 		EXPECT_FALSE(objectdelete.isNonexistent());
-		EXPECT_FALSE(objectdelete.isDeleted());
+		EXPECT_FALSE(objectdelete.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (objectdelete != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -1113,7 +1114,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objectdelete.isRetryable());
 	EXPECT_FALSE(objectdelete.isInaccessible());
 	EXPECT_FALSE(objectdelete.isNonexistent());
-	ASSERT_TRUE(objectdelete.isDeleted());
+	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1121,7 +1122,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
-	EXPECT_TRUE(objecthead.isExistent());
+	EXPECT_TRUE(objecthead.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			objecthead.start();
@@ -1131,7 +1132,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			EXPECT_FALSE(objecthead.isRetryable());
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
-			EXPECT_FALSE(objecthead.isExistent());
+			EXPECT_FALSE(objecthead.isSuccessful());
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -1143,7 +1144,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (!objecthead.isExistent()) { break; }
+		if (!objecthead.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -1152,7 +1153,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(objecthead.isRetryable());
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
-	ASSERT_FALSE(objecthead.isExistent());
+	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -1161,7 +1162,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(bucketdelete.isRetryable());
 	EXPECT_FALSE(bucketdelete.isInaccessible());
 	EXPECT_FALSE(bucketdelete.isNonexistent());
-	EXPECT_FALSE(bucketdelete.isDeleted());
+	EXPECT_FALSE(bucketdelete.isSuccessful());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		bucketdelete.start();
 		EXPECT_EQ(bucketdelete, false);
@@ -1170,7 +1171,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_FALSE(bucketdelete.isRetryable());
 		EXPECT_FALSE(bucketdelete.isInaccessible());
 		EXPECT_FALSE(bucketdelete.isNonexistent());
-		EXPECT_FALSE(bucketdelete.isDeleted());
+		EXPECT_FALSE(bucketdelete.isSuccessful());
 		int bits = 0;
 		for (int kk = 0; (bucketdelete != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -1186,7 +1187,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(bucketdelete.isRetryable());
 	EXPECT_FALSE(bucketdelete.isInaccessible());
 	EXPECT_FALSE(bucketdelete.isNonexistent());
-	ASSERT_TRUE(bucketdelete.isDeleted());
+	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
 	EXPECT_EQ(buckettest, true);
 	EXPECT_FALSE(buckettest.isIdle());
@@ -1194,7 +1195,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_FALSE(buckettest.isNonexistent());
-	EXPECT_TRUE(buckettest.isExistent());
+	EXPECT_TRUE(buckettest.isSuccessful());
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			buckettest.start();
@@ -1204,7 +1205,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			EXPECT_FALSE(buckettest.isRetryable());
 			EXPECT_FALSE(buckettest.isInaccessible());
 			EXPECT_FALSE(buckettest.isNonexistent());
-			EXPECT_FALSE(buckettest.isExistent());
+			EXPECT_FALSE(buckettest.isSuccessful());
 			int bits = 0;
 			for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
@@ -1216,7 +1217,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			printf("RETRYING\n");
 			platform.yield(platform.frequency());
 		}
-		if (!buckettest.isExistent()) { break; }
+		if (!buckettest.isSuccessful()) { break; }
 		printf("WAITING\n");
 		platform.yield(platform.frequency());
 	}
@@ -1225,7 +1226,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_FALSE(buckettest.isRetryable());
 	EXPECT_FALSE(buckettest.isInaccessible());
 	EXPECT_TRUE(buckettest.isNonexistent());
-	ASSERT_FALSE(buckettest.isExistent());
+	ASSERT_FALSE(buckettest.isSuccessful());
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);

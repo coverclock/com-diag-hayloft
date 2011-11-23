@@ -62,6 +62,8 @@ public:
 
 	bool isRetryable() const { return (::S3_status_is_retryable(state()) != 0); }
 
+	bool isSuccessful() const { return (state() == ::S3StatusOK); }
+
 	::S3Status getStatus(const char ** description = 0) const;
 
 	virtual void start();
