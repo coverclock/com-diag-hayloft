@@ -102,7 +102,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(buckettest, (BucketTest*)0);
 		EXPECT_EQ(*buckettest, true);
 		if (!buckettest->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest->isIdle());
@@ -120,7 +120,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(bucketcreate, (Bucket*)0);
 		EXPECT_EQ(*bucketcreate, true);
 		if (!bucketcreate->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate->isIdle());
@@ -138,11 +138,11 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			ASSERT_NE(buckettest, (BucketTest*)0);
 			EXPECT_EQ(*buckettest, true);
 			if (!buckettest->isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckettest->isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest->isIdle());
@@ -160,7 +160,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(objecthead, (ObjectHead*)0);
 		EXPECT_EQ(*objecthead, true);
 		if (!objecthead->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -183,7 +183,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(objectput, (ObjectPut*)0);
 		EXPECT_EQ(*objectput, true);
 		if (!objectput->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectput->isIdle());
@@ -202,11 +202,11 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead->isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -226,7 +226,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(objectget, (ObjectGet*)0);
 		EXPECT_EQ(*objectget, true);
 		if (!objectget->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget->isIdle());
@@ -245,11 +245,11 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead->isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -267,7 +267,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(objectdelete, (ObjectDelete*)0);
 		EXPECT_EQ(*objectdelete, true);
 		if (!objectdelete->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete->isIdle());
@@ -286,11 +286,11 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead->isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -308,7 +308,7 @@ TEST_F(ObjectTest, SynchronousHeap) {
 		ASSERT_NE(bucketdelete, (Bucket*)0);
 		EXPECT_EQ(*bucketdelete, true);
 		if (!bucketdelete->isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete->isIdle());
@@ -327,11 +327,11 @@ TEST_F(ObjectTest, SynchronousHeap) {
 			ASSERT_NE(buckettest, (BucketTest*)0);
 			EXPECT_EQ(*buckettest, true);
 			if (!buckettest->isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckettest->isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest->isIdle());
@@ -384,7 +384,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(buckettest, true);
 		if (!buckettest.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest.isIdle());
@@ -414,7 +414,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -443,11 +443,11 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(buckettest, true);
 			if (!buckettest.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckettest.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest.isIdle());
@@ -477,7 +477,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -511,7 +511,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput(__FILE__);
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
@@ -546,11 +546,11 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -581,7 +581,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objectget, true);
 		if (!objectget.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		output = new ::com::diag::desperado::PathOutput(OBJECT);
 		objectget.reset(output);
@@ -613,11 +613,11 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -647,7 +647,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(objectdelete, true);
 		if (!objectdelete.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -677,11 +677,11 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -711,7 +711,7 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 		EXPECT_TRUE(multiplex.complete());
 		EXPECT_EQ(bucketdelete, true);
 		if (!bucketdelete.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -741,11 +741,11 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 			EXPECT_TRUE(multiplex.complete());
 			EXPECT_EQ(buckettest, true);
 			if (!buckettest.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckettest.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest.isIdle());
@@ -798,12 +798,12 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT\n");
+			printf("TIMEDOUT %d\n", __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(buckettest, true);
 		if (!buckettest.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest.isIdle());
@@ -833,12 +833,12 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (bucketcreate != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT\n");
+			printf("TIMEDOUT %d\n", __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -867,16 +867,16 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckettest, true);
 			if (!buckettest.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckettest.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest.isIdle());
@@ -906,12 +906,12 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT\n");
+			printf("TIMEDOUT %d\n", __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -945,12 +945,12 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objectput != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT\n");
+			printf("TIMEDOUT %d\n", __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput(__FILE__);
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
@@ -985,16 +985,16 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1025,12 +1025,12 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT\n");
+			printf("TIMEDOUT %d\n", __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectget, true);
 		if (!objectget.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		output = new ::com::diag::desperado::PathOutput(OBJECT);
 		objectget.reset(output);
@@ -1062,16 +1062,16 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1101,12 +1101,12 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		int bits = 0;
 		for (int kk = 0; (objectdelete != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT\n");
+			printf("TIMEDOUT %d\n", __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectdelete, true);
 		if (!objectdelete.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -1136,16 +1136,16 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1179,7 +1179,7 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(bucketdelete, true);
 		if (!bucketdelete.isRetryable()) { break; }
-		printf("RETRYING\n");
+		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -1209,16 +1209,16 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 			int bits = 0;
 			for (int kk = 0; (buckettest != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT\n");
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckettest, true);
 			if (!buckettest.isRetryable()) { break; }
-			printf("RETRYING\n");
+			printf("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckettest.isSuccessful()) { break; }
-		printf("WAITING\n");
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckettest.isIdle());
