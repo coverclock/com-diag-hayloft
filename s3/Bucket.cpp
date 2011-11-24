@@ -20,7 +20,7 @@ namespace hayloft {
 namespace s3 {
 
 Bucket::Bucket(const char * bucketname, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getHostName(), session.canonicalize(bucketname), context.getProtocol(), context.getStyle())
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), session.canonicalize(bucketname), context.getProtocol(), context.getStyle())
 , region(context.getRegion())
 , access(context.getAccess())
 {
@@ -28,7 +28,7 @@ Bucket::Bucket(const char * bucketname, const Context & context, const Session &
 }
 
 Bucket::Bucket(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getHostName(), session.canonicalize(bucketname), context.getProtocol(), context.getStyle(), multiplex)
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), session.canonicalize(bucketname), context.getProtocol(), context.getStyle(), multiplex)
 , region(context.getRegion())
 , access(context.getAccess())
 {

@@ -38,11 +38,11 @@ private:
 
 public:
 
-	static const char * ACCESS_KEY_ID_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESS_KEY_ID"; }
+	static const char * ACCESS_KEY_ID_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESSKEYID"; }
 
 	static const size_t ACCESS_KEY_ID_LEN = 20;
 
-	static const char * SECRET_ACCESS_KEY_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRET_ACCESS_KEY"; }
+	static const char * SECRET_ACCESS_KEY_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRETACCESSKEY"; }
 
 	static const size_t SECRET_ACCESS_KEY_LEN = 40;
 

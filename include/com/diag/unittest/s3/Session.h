@@ -34,7 +34,7 @@ TEST_F(SessionTest, Heap) {
 	EXPECT_EQ(session->getStatus(), ::S3StatusOK);
 	EXPECT_NE(session->getBucketSuffix(), (char *)0);
 	EXPECT_NE(session->getUserAgent(), (char *)0);
-	EXPECT_NE(session->getHostName(), (char *)0);
+	EXPECT_NE(session->getEndpoint(), (char *)0);
 	delete session;
 }
 
@@ -44,27 +44,22 @@ TEST_F(SessionTest, Stack) {
 	EXPECT_EQ(session.getStatus(), ::S3StatusOK);
 	EXPECT_NE(session.getBucketSuffix(), (char *)0);
 	EXPECT_NE(session.getUserAgent(), (char *)0);
-	EXPECT_NE(session.getHostName(), (char *)0);
+	EXPECT_NE(session.getEndpoint(), (char *)0);
 }
 
 TEST_F(SessionTest, Environment) {
 	const char * bucketsuffix = std::getenv(Session::BUCKET_SUFFIX_ENV());
 	const char * useragent = std::getenv(Session::USER_AGENT_ENV());
-	const char * hostname = std::getenv(Session::HOST_NAME_ENV());
 	static const char * BUCKET_SUFFIX_VAL = ".env.hayloft.diag.com";
 	static const char * USER_AGENT_VAL = "env.hayloft.diag.com";
-	static const char * HOST_NAME_VAL = "s4.amazonaws.com";
 	EXPECT_EQ(::setenv(Session::BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_VAL, !0), 0);
 	EXPECT_EQ(::setenv(Session::USER_AGENT_ENV(), USER_AGENT_VAL, !0), 0);
-	EXPECT_EQ(::setenv(Session::HOST_NAME_ENV(), HOST_NAME_VAL, !0), 0);
 	Session session;
 	EXPECT_TRUE(session == true);
 	ASSERT_NE(session.getBucketSuffix(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getBucketSuffix(), BUCKET_SUFFIX_VAL), 0);
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_VAL), 0);
-	ASSERT_NE(session.getHostName(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getHostName(), HOST_NAME_VAL), 0);
 	if (bucketsuffix != 0) {
 		EXPECT_EQ(::setenv(Session::BUCKET_SUFFIX_ENV(), bucketsuffix, !0), 0);
 		ASSERT_NE(std::getenv(Session::BUCKET_SUFFIX_ENV()), (char *)0);
@@ -81,28 +76,21 @@ TEST_F(SessionTest, Environment) {
 		EXPECT_EQ(::unsetenv(Session::USER_AGENT_ENV()), 0);
 		EXPECT_EQ(std::getenv(Session::USER_AGENT_ENV()), (char *)0);
 	}
-	if (hostname != 0) {
-		EXPECT_EQ(::setenv(Session::HOST_NAME_ENV(), hostname, !0), 0);
-		ASSERT_NE(std::getenv(Session::HOST_NAME_ENV()), (char *)0);
-		EXPECT_EQ(std::strcmp(std::getenv(Session::HOST_NAME_ENV()), hostname), 0);
-	} else {
-		EXPECT_EQ(::unsetenv(Session::HOST_NAME_ENV()), 0);
-		EXPECT_EQ(std::getenv(Session::HOST_NAME_ENV()), (char *)0);
-	}
 }
 
 TEST_F(SessionTest, Explicit) {
 	static const char * BUCKET_SUFFIX_VAL = ".exp.hayloft.diag.com";
 	static const char * USER_AGENT_VAL = "exp.hayloft.diag.com";
-	static const char * HOST_NAME_VAL = "s5.amazonaws.com";
-	Session session(BUCKET_SUFFIX_VAL, USER_AGENT_VAL, HOST_NAME_VAL, S3_INIT_ALL);
+	static const char * ENDPOINT_VAL = "s5.amazonaws.com";
+	Endpoint endpoint(ENDPOINT_VAL);
+	Session session(BUCKET_SUFFIX_VAL, USER_AGENT_VAL, endpoint, S3_INIT_ALL);
 	EXPECT_TRUE(session == true);
 	ASSERT_NE(session.getBucketSuffix(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getBucketSuffix(), BUCKET_SUFFIX_VAL), 0);
 	ASSERT_NE(session.getUserAgent(), (char *)0);
 	EXPECT_EQ(std::strcmp(session.getUserAgent(), USER_AGENT_VAL), 0);
-	ASSERT_NE(session.getHostName(), (char *)0);
-	EXPECT_EQ(std::strcmp(session.getHostName(), HOST_NAME_VAL), 0);
+	ASSERT_NE(session.getEndpoint(), (char *)0);
+	EXPECT_EQ(std::strcmp(session.getEndpoint(), ENDPOINT_VAL), 0);
 }
 
 TEST_F(SessionTest, Canonicalization) {

@@ -69,7 +69,7 @@ TEST_F(RegionTest, Tokyo) {
 TEST_F(RegionTest, UnitedStates) {
 	RegionUnitedStates region;
 	ASSERT_NE(region.getRegion(), (char *)0);
-	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_CLASSIC()), 0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_STANDARD()), 0);
 }
 
 TEST_F(RegionTest, NorthernVirginia) {
@@ -82,6 +82,23 @@ TEST_F(RegionTest, Oregon) {
 	RegionOregon region;
 	ASSERT_NE(region.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_WEST_2()), 0);
+}
+
+TEST_F(RegionTest, Environment) {
+	const char * hostname = std::getenv(Region::REGION_ENV());
+	static const char * REGION_VAL = "babylon-5";
+	EXPECT_EQ(::setenv(Region::REGION_ENV(), REGION_VAL, !0), 0);
+	Region region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), REGION_VAL), 0);
+	if (hostname != 0) {
+		EXPECT_EQ(::setenv(Region::REGION_ENV(), hostname, !0), 0);
+		ASSERT_NE(std::getenv(Region::REGION_ENV()), (char *)0);
+		EXPECT_EQ(std::strcmp(Region::REGION_ENV(), hostname), 0);
+	} else {
+		EXPECT_EQ(::unsetenv(Region::REGION_ENV()), 0);
+		EXPECT_EQ(std::getenv(Region::REGION_ENV()), (char *)0);
+	}
 }
 
 static const char * regionfunction(const Region & constraint = Region()) {

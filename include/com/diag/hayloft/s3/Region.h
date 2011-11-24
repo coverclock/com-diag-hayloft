@@ -29,11 +29,9 @@ namespace s3 {
 
 class Region {
 
-private:
-
-	std::string region;
-
 public:
+
+	static const char * REGION_ENV() { return "COM_DIAG_HAYLOFT_S3_REGION"; }
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "ap-northeast-1"; }
 
@@ -41,7 +39,7 @@ public:
 
 	static const char * EUROPEAN_UNION_WEST_1() { return "eu-west-1"; }
 
-	static const char * UNITED_STATES_CLASSIC() { return ""; }
+	static const char * UNITED_STATES_STANDARD() { return ""; }
 
 	static const char * UNITED_STATES_EAST_1() { return "us-east-1"; }
 
@@ -49,19 +47,25 @@ public:
 
 	static const char * UNITED_STATES_WEST_2() { return "us-west-2"; }
 
-	static const char * DEFAULT() { return UNITED_STATES_CLASSIC(); }
+	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
 
 	static const size_t LENGTH = 64;
 
+private:
+
+	std::string region;
+
+public:
+
 	explicit Region(
-		const char * re = DEFAULT()
+		const char * re = 0
 	);
 
 	virtual ~Region() {}
 
 	const char * getRegion() const { return region.c_str(); }
 
-	Region & setRegion(const char * re = DEFAULT()) { region = set(re, 0, ""); return *this; }
+	Region & setRegion(const char * re = 0) { region = set(re, REGION_ENV(), DEFAULT()); return *this; }
 
 };
 
@@ -142,7 +146,7 @@ class RegionUnitedStates : public Region {
 public:
 
 	explicit RegionUnitedStates()
-	: Region(UNITED_STATES_CLASSIC())
+	: Region(UNITED_STATES_STANDARD())
 	{}
 
 	virtual ~RegionUnitedStates() {}
