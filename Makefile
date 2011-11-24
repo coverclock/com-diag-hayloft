@@ -277,12 +277,20 @@ PHONY+=depend
 
 ARTIFACTS+=dependencies.mk
 
-depend:
-	DEPENDS="`find . -type f \( -name '*.c' -o -name '*.cpp' \) -print`"; \
-	echo "DEPENDS=\"$$DEPENDS\""; \
-	$(CXX) $(CPPFLAGS) -M -MG $$DEPENDS > dependencies.mk
+# This is a lot more difficult than it ought to be.
 
--include dependencies.mk
+DEPENDS_C:=${shell find . -type f \( -name '*.c' -o -name '*.cpp' \) -print}
+DEPENDS_H:=${shell find . -type f -name '*.h' -print}
+
+depend dependencies.mk:	$(DEPENDS_C) $(DEPENDS_H)
+	cp /dev/null dependencies.mk
+	for F in $(DEPENDS_C); do \
+		D=`dirname $$F | sed "s/^\.\///"`; \
+		echo -n "$$D/" >> dependencies.mk; \
+		$(CXX) $(CPPFLAGS) -MM -MG $$F >> dependencies.mk; \
+	done
+
+include dependencies.mk
 
 ################################################################################
 # ENTRY POINTS
