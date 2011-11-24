@@ -32,6 +32,7 @@
 		3440 Youngfield Street, #209
 		Wheat Ridge CO 80033 USA
 		http://www.diag.com
+		mailto:jsloan@diag.com
 
 --------------------------------------------------------------------------------
 
@@ -52,16 +53,18 @@
 	Information regarding libs3 can be found here:
 
 		http://aws.amazon.com/developertools/1648
+		http://libs3.ischo.com/index.html
+		http://libs3.ischo.com.s3.amazonaws.com/dox/index.html
 
 	Information regarding Desperado can be found here:
 
 		http://www.diag.com/navigation/downloads/Desperadito
+		http://www.diag.com/navigation/downloads/Desperado
 
 	Contact:
 
 		Chip Overclock
 		mailto:coverclock@diag.com
-		+1 303 940 9064
 		Digital Aggregates Corporation
 		3440 Youngfield Street, #209
 		Wheat Ridge CO 80033 USA
@@ -73,13 +76,12 @@
 
 	Versions of Hayloft have been built and tested on the following platforms:
 
-		Dell Inspiron 530
-		i686
+		Dell Inspiron 530 i686
 		Ubuntu 10.04 "Lucid Lynx"
 		Linux 2.6.32
 		GCC 4.4.3
 		libs3 2.0
-		Desperado Zinc
+		Desperadito 6.4.0 (Desperado "Empire")
 		AWS S3 API 2006-03-01
 
 	See the Makefile for more information.
@@ -104,9 +106,9 @@
 
 	B. Ischo, s3.c, http://libs3.ischo.com.s3.amazonaws.com/index.html
 
-	C. Overclock, Hayloft, http://www.diag.com/navigation/downloads/Hayloft
+	J. Sloan, Hayloft, http://www.diag.com/navigation/downloads/Hayloft
 
-	C. Overclock, Desperado, http://www.diag.com/navigation/downloads/Desperado
+	J. Sloan, Desperado, http://www.diag.com/navigation/downloads/Desperado
 
 --------------------------------------------------------------------------------
 
