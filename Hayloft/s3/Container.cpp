@@ -20,11 +20,11 @@ namespace hayloft {
 namespace s3 {
 
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * hostName, const char * bucketName, ::S3Protocol proto, ::S3UriStyle uristyle)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * bucketName, ::S3Protocol proto, ::S3UriStyle uristyle)
 : Action()
 , id(accessKeyId)
 , secret(secretAccessKey)
-, hostname(hostName)
+, endpoint(endPoint)
 , name(bucketName)
 , protocol(proto)
 , style(uristyle)
@@ -32,11 +32,11 @@ Container::Container(const char * accessKeyId, const char * secretAccessKey, con
 	initialize();
 }
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * hostName, const char * bucketName, ::S3Protocol proto, ::S3UriStyle uristyle, Multiplex & multiplex)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * bucketName, ::S3Protocol proto, ::S3UriStyle uristyle, Multiplex & multiplex)
 : Action(multiplex)
 , id(accessKeyId)
 , secret(secretAccessKey)
-, hostname(hostName)
+, endpoint(endPoint)
 , name(bucketName)
 , protocol(proto)
 , style(uristyle)
@@ -51,13 +51,13 @@ void Container::initialize() {
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Container@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
 		logger.debug("Container@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
-		logger.debug("Container@%p: hostname=\"%s\"\n", this, hostname.c_str());
+		logger.debug("Container@%p: endpoint=\"%s\"\n", this, endpoint.c_str());
 		logger.debug("Container@%p: name=\"%s\"\n", this, name.c_str());
 		logger.debug("Container@%p: protocol=%d\n", this, protocol);
 		logger.debug("Container@%p: style=%d\n", this, style);
 	}
 	std::memset(&context, 0, sizeof(context));
-	context.hostName = hostname.c_str();
+	context.hostName = endpoint.c_str();
 	context.bucketName = name.c_str();
 	context.protocol = protocol;
 	context.uriStyle = style;

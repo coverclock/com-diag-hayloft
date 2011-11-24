@@ -69,7 +69,7 @@ TEST_F(EndpointTest, Tokyo) {
 TEST_F(EndpointTest, UnitedStates) {
 	EndpointUnitedStates endpoint;
 	ASSERT_NE(endpoint.getEndpoint(), (char *)0);
-	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), Endpoint::UNITED_STATES_CLASSIC()), 0);
+	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), Endpoint::UNITED_STATES_STANDARD()), 0);
 }
 
 TEST_F(EndpointTest, NorthernVirginia) {
@@ -82,6 +82,23 @@ TEST_F(EndpointTest, Oregon) {
 	EndpointOregon endpoint;
 	ASSERT_NE(endpoint.getEndpoint(), (char *)0);
 	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), Endpoint::UNITED_STATES_WEST_2()), 0);
+}
+
+TEST_F(EndpointTest, Environment) {
+	const char * hostname = std::getenv(Endpoint::ENDPOINT_ENV());
+	static const char * ENDPOINT_VAL = "s4.amazonaws.com";
+	EXPECT_EQ(::setenv(Endpoint::ENDPOINT_ENV(), ENDPOINT_VAL, !0), 0);
+	Endpoint endpoint;
+	ASSERT_NE(endpoint.getEndpoint(), (char *)0);
+	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), ENDPOINT_VAL), 0);
+	if (hostname != 0) {
+		EXPECT_EQ(::setenv(Endpoint::ENDPOINT_ENV(), hostname, !0), 0);
+		ASSERT_NE(std::getenv(Endpoint::ENDPOINT_ENV()), (char *)0);
+		EXPECT_EQ(std::strcmp(Endpoint::ENDPOINT_ENV(), hostname), 0);
+	} else {
+		EXPECT_EQ(::unsetenv(Endpoint::ENDPOINT_ENV()), 0);
+		EXPECT_EQ(std::getenv(Endpoint::ENDPOINT_ENV()), (char *)0);
+	}
 }
 
 static const char * endpointfunction(const Endpoint & constraint = Endpoint()) {

@@ -27,7 +27,7 @@ protected:
 
 	std::string secret;
 
-	std::string hostname;
+	std::string endpoint;
 
 	std::string name;
 
@@ -42,7 +42,7 @@ public:
 	explicit Container(
 		const char * accessKeyId,
 		const char * secretAccessKey,
-		const char * hostName,
+		const char * endPoint,
 		const char * bucketName,
 		::S3Protocol proto,
 		::S3UriStyle uristyle
@@ -51,7 +51,7 @@ public:
 	explicit Container(
 		const char * accessKeyId,
 		const char * secretAccessKey,
-		const char * hostName,
+		const char * endPoint,
 		const char * bucketName,
 		::S3Protocol proto,
 		::S3UriStyle uristyle,
@@ -64,7 +64,7 @@ public:
 
 	const char * getSecret() const { return secret.c_str(); }
 
-	const char * getHostName() const { return hostname.c_str(); }
+	const char * getEndpoint() const { return endpoint.c_str(); }
 
 	const char * getName() const { return name.c_str(); }
 

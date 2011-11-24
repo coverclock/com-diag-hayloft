@@ -15,7 +15,7 @@ namespace hayloft {
 namespace s3 {
 
 Endpoint::Endpoint(const char * ep)
-: endpoint(set(ep, 0, ""))
+: endpoint(set(ep, ENDPOINT_ENV(), DEFAULT()))
 {}
 
 }

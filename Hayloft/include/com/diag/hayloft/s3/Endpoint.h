@@ -14,6 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/target.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -22,11 +23,9 @@ namespace s3 {
 
 class Endpoint {
 
-private:
-
-	std::string endpoint;
-
 public:
+
+	static const char * ENDPOINT_ENV() { return "COM_DIAG_HAYLOFT_S3_ENDPOINT_HOSTNAME"; }
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "s3-ap-northeast-1.amazonaws.com"; }
 
@@ -34,7 +33,7 @@ public:
 
 	static const char * EUROPEAN_UNION_WEST_1() { return "s3-eu-west-1.amazonaws.com"; }
 
-	static const char * UNITED_STATES_CLASSIC() { return "s3.amazonaws.com"; }
+	static const char * UNITED_STATES_STANDARD() { return "s3.amazonaws.com"; }
 
 	static const char * UNITED_STATES_EAST_1() { return "s3.amazonaws.com"; }
 
@@ -42,17 +41,23 @@ public:
 
 	static const char * UNITED_STATES_WEST_2() { return "s3-us-west-2.amazonaws.com"; }
 
-	static const char * DEFAULT() { return UNITED_STATES_CLASSIC(); }
+	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
+
+private:
+
+	std::string endpoint;
+
+public:
 
 	explicit Endpoint(
-		const char * ep = DEFAULT()
+		const char * ep = 0
 	);
 
 	virtual ~Endpoint() {}
 
 	const char * getEndpoint() const { return endpoint.c_str(); }
 
-	Endpoint & setEndpoint(const char * ep = DEFAULT()) { endpoint = set(ep, 0, ""); return *this; }
+	Endpoint & setEndpoint(const char * ep = 0) { endpoint = set(ep, ENDPOINT_ENV(), DEFAULT()); return *this; }
 
 };
 
@@ -133,7 +138,7 @@ class EndpointUnitedStates : public Endpoint {
 public:
 
 	explicit EndpointUnitedStates()
-	: Endpoint(UNITED_STATES_CLASSIC())
+	: Endpoint(UNITED_STATES_STANDARD())
 	{}
 
 	virtual ~EndpointUnitedStates() {}

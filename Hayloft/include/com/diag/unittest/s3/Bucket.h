@@ -277,7 +277,8 @@ TEST_F(BucketTest, Stack) {
 TEST_F(BucketTest, Explicit) {
 	static const char BUCKET[] = "BucketTestExplicit";
 	static const int LIMIT = 100;
-	Session session(".test.diag.com", "test.diag.com", "s3-us-west-1.amazonaws.com");
+	EndpointNorthernCalifornia endpoint;
+	Session session(".test.diag.com", "test.diag.com", endpoint);
 	Credentials credentials(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
 	RegionNorthernCalifornia constraint;
 	ProtocolUnsecure protocol;

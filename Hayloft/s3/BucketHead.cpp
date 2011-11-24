@@ -49,7 +49,7 @@ void BucketHead::execute() {
 		style,
 		id.c_str(),
 		secret.c_str(),
-		hostname.c_str(),
+		endpoint.c_str(),
 		name.c_str(),
 		sizeof(constraint) - 1, constraint,
 		requests,

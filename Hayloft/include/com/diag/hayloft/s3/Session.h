@@ -21,6 +21,7 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/Endpoint.h"
 #include "com/diag/desperado/target.h"
 #include "libs3.h"
 
@@ -44,7 +45,7 @@ private:
 
 	std::string useragent;
 
-	std::string hostname;
+	std::string endpoint;
 
 	::S3Status status;
 
@@ -52,15 +53,11 @@ public:
 
 	static const char * BUCKET_SUFFIX_STR() { return ""; }
 
-	static const char * BUCKET_SUFFIX_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_BUCKET_SUFFIX"; }
+	static const char * BUCKET_SUFFIX_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_BUCKETSUFFIX"; }
 
 	static const char * USER_AGENT_STR() { return ""; }
 
-	static const char * USER_AGENT_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_USER_AGENT"; }
-
-	static const char * HOST_NAME_STR() { return S3_DEFAULT_HOSTNAME; }
-
-	static const char * HOST_NAME_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_HOST_NAME"; }
+	static const char * USER_AGENT_ENV() { return "COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT"; }
 
 	/**
 	 * Allocates a reference to a new object of this type suitably initialized
@@ -84,7 +81,7 @@ public:
 	explicit Session(
 		const char * bucketSuffix = 0,
 		const char * userAgentInfo = 0,
-		const char * defaultS3HostName = 0,
+		const Endpoint & endPoint = Endpoint(),
 		int flags = S3_INIT_ALL
 	);
 
@@ -98,7 +95,7 @@ public:
 
 	const char * getUserAgent() const { return useragent.c_str(); }
 
-	const char * getHostName() const { return hostname.c_str(); }
+	const char * getEndpoint() const { return endpoint.c_str(); }
 
 	virtual const char * canonicalize(std::string name) const;
 

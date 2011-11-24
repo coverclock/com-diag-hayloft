@@ -41,9 +41,9 @@
 	which, among other things, presents a C++-based abstraction around Bryan
 	Ischo's excellent C-based libs3 interface to Amazon Web Service (AWS)
 	Simple Storage Service (S3). It is built on top of the Digital Aggregates
-	Corporation Desperado package.
+	Corporation Desperadito package, a C++ systems programming library.
 
-	This software is an original work of its author(s).
+	This software is an original work of its author.
 
 	Information regarding Hayloft can be found here:
 
@@ -55,7 +55,7 @@
 
 	Information regarding Desperado can be found here:
 
-		http://www.diag.com/navigation/downloads/Desperado
+		http://www.diag.com/navigation/downloads/Desperadito
 
 	Contact:
 
@@ -107,6 +107,69 @@
 	C. Overclock, Hayloft, http://www.diag.com/navigation/downloads/Hayloft
 
 	C. Overclock, Desperado, http://www.diag.com/navigation/downloads/Desperado
+
+--------------------------------------------------------------------------------
+
+	ENVIRONMENTAL VARIABLES
+
+	COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESSKEYID
+
+		This string is your twenty character AWS access key id, a sort of
+		login (but not your AWS web login).
+
+	COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRETACCESSKEY
+
+		This string is your forty character AWS secret access key, a sort of
+		password (but not your AWS web password) and encryption key.
+
+	COM_DIAG_HAYLOFT_S3_ENDPOINT_HOSTNAME
+
+		This string is the DNS host name of the AWS S3 service. This host name
+		may (or must) differ depending on the region the bucket is in. If not
+		specified, the United States Standard host name, "s3.amazonaws.com",
+		is used.
+
+	COM_DIAG_HAYLOFT_S3_SESSION_BUCKETSUFFIX
+
+		If specified, this string is is appended without further punctuation
+		to each bucket name specified in any of the Bucket* constructors
+		(BucketCreate, etc.). Bucket names have to be globally unique. I
+		recommend using your DNS domain name with a leading dot, for example
+		".foo.bar.com".
+
+	COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT
+
+		If specified, this string is passed to S3 as the User Agent meta-data
+		to identify your application.
+
+	COM_DIAG_HAYLOFT_LOGGER_MASK
+
+		If specified, this string contains a sixteen bit number, encoded using
+		the normal C syntax rules for octal, decimal, or hexadecimal numbers,
+		to specify a sixteen bit logging mask at run time. The bits in the mask
+		which of the sixteen log levels are enabled via the expression
+		(1 << LEVEL) where LEVEL is one of the following log levels. So for
+		example the DEBUG level is enabled if bit (1 << DEBUG) or 0x10 is set.
+		The different log levels are mapped to appropriate log levels in the
+		underlying logging mechanism; for example, SYSLOG has eight log levels.
+		If not specified, the default logger mask is used, for example 0xff80.
+
+		FINEST          =   0,
+        FINER           =   1,
+        FINE            =   2,
+        TRACE           =   3,
+        DEBUG           =   4,
+        INFORMATION     =   5,
+        CONFIGURATION   =   6,
+        NOTICE          =   7,
+        WARNING         =   8,
+        ERROR           =   9,
+        SEVERE          =   10,
+        CRITICAL        =   11,
+        ALERT           =   12,
+        FATAL           =   13,
+        EMERGENCY       =   14,
+        PRINT           =   15
 
 *******************************************************************************/
 

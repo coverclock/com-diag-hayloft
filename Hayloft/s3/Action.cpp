@@ -29,7 +29,6 @@ namespace s3 {
 
 void Action::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
-	that->status = status;
 	Logger::Level level;
 	// I've never seen ::S3StatusErrorNoSuchKey in response to a GET or a HEAD
 	// so I'm not sure under what circumstances it occurs. A missing OBJECT
@@ -49,6 +48,7 @@ void Action::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	show(errorDetails, level);
 	that->complete(status, errorDetails);
+	that->status = status;
 }
 
 Action::Action()

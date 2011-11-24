@@ -43,7 +43,7 @@ Multiplex::~Multiplex() {
 }
 
 bool Multiplex::complete() {
-	status = ::S3_runall_request_context(requests);
+	::S3Status status = ::S3_runall_request_context(requests);
 	if (status != S3StatusOK) {
 		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
@@ -53,7 +53,7 @@ bool Multiplex::complete() {
 bool Multiplex::iterate(int & pending) {
 	Logger & logger = Logger::instance();
 	int count = 0;
-	status = ::S3_runonce_request_context(requests, &count);
+	::S3Status status = ::S3_runonce_request_context(requests, &count);
 	if (status != S3StatusOK) {
 		logger.error("Multiplex@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
@@ -75,7 +75,7 @@ int Multiplex::ready(Milliseconds timeout) {
 		fd_set exceptions;
 		FD_ZERO(&exceptions);
 		int maxfd = -1;
-		status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
+		::S3Status status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
 		if (status != ::S3StatusOK) {
 			logger.error("Multiplex@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 			rc |= ERROR;
