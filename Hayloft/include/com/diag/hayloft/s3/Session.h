@@ -39,8 +39,6 @@ protected:
      */
     static Session * singleton;
 
-private:
-
 	std::string bucketsuffix;
 
 	std::string useragent;

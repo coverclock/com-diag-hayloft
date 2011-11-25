@@ -29,7 +29,7 @@ namespace s3 {
 
 class Style {
 
-private:
+protected:
 
 	::S3UriStyle style;
 

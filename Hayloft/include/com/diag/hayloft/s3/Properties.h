@@ -33,7 +33,7 @@ public:
 
 	typedef int64_t Epochalseconds;
 
-private:
+protected:
 
 	std::string type;
 

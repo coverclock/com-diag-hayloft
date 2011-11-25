@@ -27,7 +27,7 @@ public:
 
 	typedef int64_t Epochalseconds;
 
-private:
+protected:
 
 	Epochalseconds since;
 

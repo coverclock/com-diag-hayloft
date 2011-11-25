@@ -21,7 +21,7 @@ namespace s3 {
 
 class Protocol {
 
-private:
+protected:
 
 	::S3Protocol protocol;
 

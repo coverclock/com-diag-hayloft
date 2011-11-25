@@ -7,9 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <string>
 #include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
