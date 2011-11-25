@@ -7,7 +7,6 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <string>
 #include "com/diag/hayloft/s3/BucketValid.h"
 #include "com/diag/hayloft/Logger.h"
 

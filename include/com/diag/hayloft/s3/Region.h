@@ -51,7 +51,7 @@ public:
 
 	static const size_t LENGTH = 64;
 
-private:
+protected:
 
 	std::string region;
 

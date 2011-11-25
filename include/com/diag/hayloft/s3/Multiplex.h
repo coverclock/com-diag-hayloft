@@ -60,7 +60,7 @@ public:
 
 	static int dontcare;
 
-private:
+protected:
 
 	::S3RequestContext * requests;
 

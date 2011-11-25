@@ -182,6 +182,7 @@ MANIFEST_O=\
  s3/BucketHead.o \
  s3/BucketCreate.o \
  s3/BucketDelete.o \
+ s3/BucketList.o \
  s3/Object.o \
  s3/ObjectPut.o \
  s3/ObjectGet.o \

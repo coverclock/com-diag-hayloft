@@ -8,8 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
@@ -129,8 +127,8 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 	}
 	show(&properties);
 	std::memset(&handler, 0, sizeof(handler));
-	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Object::handler.completeCallback;
+	handler.responseHandler.propertiesCallback = Action::handler.propertiesCallback;
+	handler.responseHandler.completeCallback = Action::handler.completeCallback;
 	handler.putObjectDataCallback = &putObjectDataCallback;
 }
 

@@ -43,7 +43,7 @@ public:
 
 	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
 
-private:
+protected:
 
 	std::string endpoint;
 

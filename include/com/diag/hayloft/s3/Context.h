@@ -25,7 +25,7 @@ namespace s3 {
 
 class Context {
 
-private:
+protected:
 
 	std::string id;
 

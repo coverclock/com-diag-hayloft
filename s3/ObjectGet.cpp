@@ -8,11 +8,9 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Show.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/Input.h"
+#include "com/diag/desperado/Output.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -102,8 +100,8 @@ void ObjectGet::initialize() {
 	conditions.ifNotMatchETag = notmatch.empty() ? 0 : notmatch.c_str();
 	show(&conditions);
 	std::memset(&handler, 0, sizeof(handler));
-	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Object::handler.completeCallback;
+	handler.responseHandler.propertiesCallback = Action::handler.propertiesCallback;
+	handler.responseHandler.completeCallback = Action::handler.completeCallback;
 	handler.getObjectDataCallback = &getObjectDataCallback;
 }
 

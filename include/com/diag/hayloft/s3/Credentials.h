@@ -30,7 +30,7 @@ namespace s3 {
 
 class Credentials {
 
-private:
+protected:
 
 	std::string id;
 
