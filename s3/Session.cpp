@@ -29,9 +29,10 @@ Session & Session::factory() {
     return (*(new Session));
 }
 
-void Session::instance(Session & that) {
+Session & Session::instance(Session & that) {
 	::com::diag::desperado::CriticalSection guard(mutex);
 	Session::singleton = &that;
+    return *singleton;
 }
 
 Session & Session::instance() {

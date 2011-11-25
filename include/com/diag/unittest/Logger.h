@@ -359,6 +359,23 @@ TEST_F(LoggerTest, Logging) {
 	}
 }
 
+TEST_F(LoggerTest, Instance) {
+	Logger & l1 = Logger::instance();
+	::com::diag::desperado::FileOutput errput(stderr);
+	::com::diag::desperado::LogOutput logput(errput);
+	Logger mylogger(logput);
+	EXPECT_NE(&l1, &mylogger);
+	Logger & l2 = Logger::instance(mylogger);
+	EXPECT_EQ(&mylogger, &l2);
+	EXPECT_NE(&l1, &l2);
+	Logger & l3 = Logger::instance();
+	EXPECT_EQ(&l2, &l3);
+	Logger & l4 = Logger::instance(l1);
+	EXPECT_EQ(&l1, &l4);
+	Logger & l5 = Logger::instance();
+	EXPECT_EQ(&l1, &l5);
+}
+
 }
 }
 }
