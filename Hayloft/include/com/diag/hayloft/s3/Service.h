@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_CONTAINER_
-#define _H_COM_DIAG_HAYLOFT_S3_CONTAINER_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_SERVICE_
+#define _H_COM_DIAG_HAYLOFT_S3_SERVICE_
 
 /**
  * @file
@@ -12,49 +12,51 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/Service.h"
+#include "com/diag/hayloft/s3/Action.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Container : public Service {
+class Service : public Action {
 
 protected:
 
-	std::string name;
+	std::string id;
 
-	::S3UriStyle style;
+	std::string secret;
 
-	::S3BucketContext context;
+	std::string endpoint;
+
+	::S3Protocol protocol;
 
 public:
 
-	explicit Container(
+	explicit Service(
 		const char * accessKeyId,
 		const char * secretAccessKey,
 		const char * endPoint,
-		const char * bucketName,
-		::S3Protocol httpProtocol,
-		::S3UriStyle uristyle
+		::S3Protocol httpProtocol
 	);
 
-	explicit Container(
+	explicit Service(
 		const char * accessKeyId,
 		const char * secretAccessKey,
 		const char * endPoint,
-		const char * bucketName,
 		::S3Protocol httpProtocol,
-		::S3UriStyle uristyle,
 		Multiplex & multiplex
 	);
 
-	virtual ~Container();
+	virtual ~Service();
 
-	const char * getName() const { return name.c_str(); }
+	const char * getId() const { return id.c_str(); }
 
-	::S3UriStyle getStyle() const { return style; }
+	const char * getSecret() const { return secret.c_str(); }
+
+	const char * getEndpoint() const { return endpoint.c_str(); }
+
+	::S3Protocol getProtocol() const { return protocol; }
 
 private:
 

@@ -176,6 +176,7 @@ MANIFEST_O=\
  s3/Conditions.o \
  s3/Action.o \
  s3/Container.o \
+ s3/Service.o \
  s3/Bucket.o \
  s3/BucketValid.o \
  s3/BucketHead.o \
