@@ -53,8 +53,9 @@ public:
 	/**
 	 * Establishes a new default instance of an object of this type.
 	 * @param that refers to an object of this type.
+	 * @return that.
 	 */
-	static void instance(Logger & that);
+	static Logger & instance(Logger & that);
 
     /**
      * Returns a reference to the default instance of an object of this type.

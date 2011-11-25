@@ -93,6 +93,32 @@ TEST_F(SessionTest, Explicit) {
 	EXPECT_EQ(std::strcmp(session.getEndpoint(), ENDPOINT_VAL), 0);
 }
 
+TEST_F(SessionTest, Instance) {
+	Session & s1 = Session::instance();
+	static const char * BUCKET_SUFFIX_VAL = ".ins.hayloft.diag.com";
+	static const char * USER_AGENT_VAL = "ins.hayloft.diag.com";
+	static const char * ENDPOINT_VAL = "s6.amazonaws.com";
+	Endpoint endpoint(ENDPOINT_VAL);
+	Session mysession(BUCKET_SUFFIX_VAL, USER_AGENT_VAL, endpoint, S3_INIT_ALL);
+	EXPECT_NE(&s1, &mysession);
+	Session & s2 = Session::instance(mysession);
+	EXPECT_EQ(&mysession, &s2);
+	EXPECT_NE(&s1, &s2);
+	Session & s3 = Session::instance();
+	EXPECT_EQ(&s2, &s3);
+	Session & s4 = Session::instance(s1);
+	EXPECT_EQ(&s1, &s4);
+	Session & s5 = Session::instance();
+	EXPECT_EQ(&s1, &s5);
+	EXPECT_TRUE(s3 == true);
+	ASSERT_NE(s3.getBucketSuffix(), (char *)0);
+	EXPECT_EQ(std::strcmp(s3.getBucketSuffix(), BUCKET_SUFFIX_VAL), 0);
+	ASSERT_NE(s3.getUserAgent(), (char *)0);
+	EXPECT_EQ(std::strcmp(s3.getUserAgent(), USER_AGENT_VAL), 0);
+	ASSERT_NE(s3.getEndpoint(), (char *)0);
+	EXPECT_EQ(std::strcmp(s3.getEndpoint(), ENDPOINT_VAL), 0);
+}
+
 TEST_F(SessionTest, Canonicalization) {
 	static const char * BUCKET_SUFFIX_VAL = ".Can.Hayloft.Diag.Com";
 	Session session1(BUCKET_SUFFIX_VAL);
