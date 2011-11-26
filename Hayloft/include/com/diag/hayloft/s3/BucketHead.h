@@ -21,7 +21,7 @@ namespace s3 {
 
 class BucketHead : public Bucket {
 
-private:
+protected:
 
 	char constraint[Region::LENGTH + 1];
 

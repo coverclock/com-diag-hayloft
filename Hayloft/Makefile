@@ -188,7 +188,8 @@ MANIFEST_O=\
  s3/ObjectPut.o \
  s3/ObjectGet.o \
  s3/ObjectDelete.o \
- s3/ObjectHead.o
+ s3/ObjectHead.o \
+ s3/ObjectList.o
 
 ################################################################################
 # BUILD
