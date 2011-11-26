@@ -35,6 +35,8 @@ public:
 
 protected:
 
+	std::string name;
+
 	std::string region;
 
 	::S3CannedAcl access;
@@ -60,13 +62,15 @@ public:
 
 	bool isNonexistent() const { return (state() == ::S3StatusErrorNoSuchBucket); }
 
+	const char * getName() const { return name.c_str(); }
+
 	const char * getRegion() const { return region.c_str(); }
 
 	::S3CannedAcl getAccess() const { return access; }
 
 private:
 
-	void initialize();
+	void initialize(const Session & session);
 
 };
 

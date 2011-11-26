@@ -22,7 +22,8 @@
 #include "com/diag/unittest/Size.h"
 #endif
 
-// Unit tests that also use libs3, SSL, and CURL.
+// Unit tests that also use LIBS3, CURL, SSL, and CRYPTO. Running valgrind, my
+// favorite tool, reveals that some of these libraries are not so well behaved.
 
 #if 1
 #include "com/diag/unittest/s3/Endpoint.h"
@@ -36,6 +37,8 @@
 #include "com/diag/unittest/s3/Multiplex.h"
 #include "com/diag/unittest/s3/Properties.h"
 #include "com/diag/unittest/s3/Conditions.h"
+#include "com/diag/unittest/s3/BucketBase.h"
+#include "com/diag/unittest/s3/ObjectBase.h"
 #endif
 
 // Unit tests that also use S3 and buckets.
@@ -46,7 +49,7 @@
 
 // Unit tests that also use objects.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif
 

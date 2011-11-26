@@ -30,9 +30,23 @@ public:
 	typedef int64_t Epochalseconds;
 
 	struct Entry {
+
+		Entry(
+			const char * ownerId = "",
+			const char * ownerDisplayName = "",
+			Epochalseconds creationDateSeconds = 0
+		)
+		: id(ownerId)
+		, display(ownerDisplayName)
+		, created(creationDateSeconds)
+		{}
+
 		std::string id;
+
 		std::string display;
+
 		Epochalseconds created;
+
 	};
 
 	typedef std::map<std::string, Entry> List;

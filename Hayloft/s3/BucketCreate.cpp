@@ -46,7 +46,7 @@ void BucketCreate::execute() {
 		id.c_str(),
 		secret.c_str(),
 		endpoint.c_str(),
-		name.c_str(),
+		canonical.c_str(),
 		access,
 		(region.length() > 0) ? region.c_str() : 0,
 		requests,

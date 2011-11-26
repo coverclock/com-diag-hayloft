@@ -20,26 +20,33 @@ namespace hayloft {
 namespace s3 {
 
 Bucket::Bucket(const char * bucketname, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getEndpoint(), session.canonicalize(bucketname), context.getProtocol(), context.getStyle())
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), "", context.getProtocol(), context.getStyle())
+, name(bucketname)
 , region(context.getRegion())
 , access(context.getAccess())
 {
-	initialize();
+	initialize(session);
 }
 
 Bucket::Bucket(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getEndpoint(), session.canonicalize(bucketname), context.getProtocol(), context.getStyle(), multiplex)
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), "", context.getProtocol(), context.getStyle(), multiplex)
+, name(bucketname)
 , region(context.getRegion())
 , access(context.getAccess())
 {
-	initialize();
+	initialize(session);
 }
 
 Bucket::~Bucket() {}
 
-void Bucket::initialize() {
+void Bucket::initialize(const Session & session) {
+	std::string canonical = name;
+	session.canonicalize(canonical);
+	setCanonical(canonical.c_str());
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
+		logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
+		logger.debug("Bucket@%p: canonical=\"%s\"\n", this, canonical.c_str());
 		logger.debug("Bucket@%p: region=\"%s\"\n", this, region.c_str());
 		logger.debug("Bucket@%p: access=%d\n", this, access);
 	}

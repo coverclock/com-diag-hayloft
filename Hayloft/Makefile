@@ -281,18 +281,17 @@ ARTIFACTS+=dependencies.mk
 
 # This is a lot more difficult than it ought to be.
 
-DEPENDS_C:=${shell find . -type f \( -name '*.c' -o -name '*.cpp' \) -print}
-DEPENDS_H:=${shell find . -type f -name '*.h' -print}
+DEPENDS:=${shell find . -type f \( -name '*.c' -o -name '*.cpp' \) -print}
 
-depend dependencies.mk:	$(DEPENDS_C) $(DEPENDS_H)
+depend:
 	cp /dev/null dependencies.mk
-	for F in $(DEPENDS_C); do \
+	for F in $(DEPENDS); do \
 		D=`dirname $$F | sed "s/^\.\///"`; \
 		echo -n "$$D/" >> dependencies.mk; \
 		$(CXX) $(CPPFLAGS) -MM -MG $$F >> dependencies.mk; \
 	done
 
-include dependencies.mk
+-include dependencies.mk
 
 ################################################################################
 # ENTRY POINTS

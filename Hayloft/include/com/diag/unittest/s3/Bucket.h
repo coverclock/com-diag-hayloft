@@ -13,11 +13,10 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/BucketValid.h"
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
+#include "com/diag/hayloft/s3/BucketList.h"
 #include "com/diag/desperado/stdlib.h"
 #include "com/diag/desperado/string.h"
 
@@ -28,50 +27,6 @@ namespace s3 {
 
 using namespace ::com::diag::hayloft;
 using namespace ::com::diag::hayloft::s3;
-
-typedef Fixture BucketBaseTest;
-
-TEST_F(BucketBaseTest, Heap) {
-	Bucket * bucket = new Bucket("BucketBaseTestHeap");
-	ASSERT_NE(bucket, (Bucket*)0);
-	EXPECT_TRUE((*bucket) == true);
-	EXPECT_FALSE(bucket->isIdle());
-	EXPECT_FALSE(bucket->isBusy());
-	EXPECT_FALSE(bucket->isRetryable());
-	EXPECT_EQ(bucket->getStatus(), ::S3StatusOK);
-	EXPECT_NE(bucket->getName(), (char *)0);
-	delete bucket;
-}
-
-TEST_F(BucketBaseTest, Stack) {
-	Bucket bucket("BucketBaseTestStack");
-	EXPECT_TRUE(bucket == true);
-	EXPECT_FALSE(bucket.isIdle());
-	EXPECT_FALSE(bucket.isBusy());
-	EXPECT_FALSE(bucket.isRetryable());
-	EXPECT_EQ(bucket.getStatus(), ::S3StatusOK);
-	EXPECT_NE(bucket.getName(), (char *)0);
-}
-
-TEST_F(BucketBaseTest, Temporary) {
-	EXPECT_TRUE(Bucket("BucketBaseTestTemporary") == true);
-}
-
-typedef Fixture BucketValidTest;
-
-TEST_F(BucketValidTest, Heap) {
-	BucketValid * valid = new BucketValid("BucketValidTestHeap");
-	ASSERT_NE(valid, (BucketValid*)0);
-	EXPECT_TRUE((*valid) == true);
-	EXPECT_TRUE(valid->isSuccessful());
-	delete valid;
-}
-
-TEST_F(BucketValidTest, Stack) {
-	BucketValid valid("BucketValidTestStack");
-	EXPECT_TRUE(valid == true);
-	EXPECT_TRUE(valid.isSuccessful());
-}
 
 // In the unit tests below, we are testing against the actual AWS S3, not a
 // mock. We see two types of failures: RETRYING means it was a recoverable
@@ -91,7 +46,7 @@ typedef Fixture BucketTest;
 
 TEST_F(BucketTest, Heap) {
 	static const char BUCKET[] = "BucketTestHeap";
-	static const int LIMIT = 100;
+	static const int LIMIT = 10;
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; buckethead->isRetryable() && (ii < LIMIT); ++ii) {
@@ -193,7 +148,7 @@ TEST_F(BucketTest, Heap) {
 
 TEST_F(BucketTest, Stack) {
 	static const char BUCKET[] = "BucketTestStack";
-	static const int LIMIT = 100;
+	static const int LIMIT = 10;
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
@@ -285,7 +240,7 @@ TEST_F(BucketTest, Stack) {
 
 TEST_F(BucketTest, Explicit) {
 	static const char BUCKET[] = "BucketTestExplicit";
-	static const int LIMIT = 100;
+	static const int LIMIT = 10;
 	EndpointNorthernCalifornia endpoint;
 	Session session(".test.diag.com", "test.diag.com", endpoint);
 	Credentials credentials(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
@@ -384,7 +339,7 @@ TEST_F(BucketTest, Explicit) {
 
 TEST_F(BucketTest, Complete) {
 	static const char BUCKET[] = "BucketTestComplete";
-	static const int LIMIT = 100;
+	static const int LIMIT = 10;
 	Multiplex multiplex;
 	{
 		BucketHead buckethead(BUCKET, multiplex);
@@ -560,7 +515,7 @@ TEST_F(BucketTest, Complete) {
 
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
-	static const int LIMIT = 100;
+	static const int LIMIT = 10;
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	{
@@ -758,6 +713,86 @@ TEST_F(BucketTest, Service) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+}
+
+TEST_F(BucketTest, List) {
+	static const int LIMIT = 10;
+	const char BUCKET1[] = "BucketTestList1";
+	const char BUCKET2[] = "BucketTestList2";
+	BucketList bucketlist1;
+	for (int ii = 0; bucketlist1.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketlist1.start();
+	}
+	EXPECT_EQ(bucketlist1.getList().size(), 0);
+	BucketCreate bucketcreate1(BUCKET1);
+	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketcreate1.start();
+	}
+	BucketList bucketlist2;
+	for (int ii = 0; bucketlist2.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketlist2.start();
+	}
+	EXPECT_EQ(bucketlist2.getList().size(), 1);
+	ASSERT_NE(bucketlist2.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
+	BucketCreate bucketcreate2(BUCKET2);
+	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketcreate2.start();
+	}
+	BucketList bucketlist3;
+	for (int ii = 0; bucketlist3.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketlist3.start();
+	}
+	EXPECT_EQ(bucketlist3.getList().size(), 2);
+	ASSERT_NE(bucketlist3.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
+	ASSERT_NE(bucketlist3.find(bucketcreate2.getCanonical()), (BucketList::Entry *)0);
+	BucketDelete bucketdelete1(BUCKET1);
+	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketdelete1.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (bucketdelete1.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		bucketdelete1.start();
+	}
+	BucketList bucketlist4;
+	for (int ii = 0; bucketlist4.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketlist4.start();
+	}
+	EXPECT_EQ(bucketlist4.getList().size(), 1);
+	EXPECT_EQ(bucketlist4.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
+	ASSERT_NE(bucketlist4.find(bucketcreate2.getCanonical()), (BucketList::Entry *)0);
+	BucketDelete bucketdelete2(BUCKET2);
+	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketdelete2.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (bucketdelete2.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		bucketdelete2.start();
+	}
+	BucketList bucketlist5;
+	for (int ii = 0; bucketlist5.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketlist5.start();
+	}
+	EXPECT_EQ(bucketlist5.getList().size(), 0);
+	EXPECT_EQ(bucketlist5.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
+	EXPECT_EQ(bucketlist5.find(bucketcreate2.getCanonical()), (BucketList::Entry *)0);
 }
 
 }

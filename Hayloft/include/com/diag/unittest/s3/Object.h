@@ -38,37 +38,6 @@ namespace s3 {
 using namespace ::com::diag::hayloft;
 using namespace ::com::diag::hayloft::s3;
 
-typedef Fixture ObjectBaseTest;
-
-TEST_F(ObjectBaseTest, Heap) {
-	Bucket * bucket = new Bucket("ObjectBaseTestHeap");
-	Object * object = new Object("ObjectBaseTestHeapKey", *bucket);
-	ASSERT_NE(object, (Object*)0);
-	EXPECT_TRUE((*object) == true);
-	EXPECT_FALSE(object->isIdle());
-	EXPECT_FALSE(object->isBusy());
-	EXPECT_FALSE(object->isRetryable());
-	EXPECT_EQ(object->getStatus(), ::S3StatusOK);
-	EXPECT_NE(object->getKey(), (char *)0);
-	delete object;
-	delete bucket;
-}
-
-TEST_F(ObjectBaseTest, Stack) {
-	Bucket bucket("ObjectBaseTestStack");
-	Object object("ObjectBaseTestStackKey", bucket);
-	EXPECT_TRUE(object == true);
-	EXPECT_FALSE(object.isIdle());
-	EXPECT_FALSE(object.isBusy());
-	EXPECT_FALSE(object.isRetryable());
-	EXPECT_EQ(object.getStatus(), ::S3StatusOK);
-	EXPECT_NE(object.getKey(), (char *)0);
-}
-
-TEST_F(ObjectBaseTest, Temporary) {
-	EXPECT_TRUE(Object("ObjectBaseTestTemporaryKey", Bucket("ObjectBaseTestTemporary")) == true);
-}
-
 // In the unit tests below, we are testing against the actual AWS S3, not a
 // mock. We see two types of failures: RETRYING means it was a recoverable
 // failure, most typically "Failed To Connect"; WAITING means the unit test

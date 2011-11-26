@@ -25,10 +25,7 @@ namespace s3 {
 	if (bucketName == 0) { bucketName = ""; }
 	Logger::instance().log(level, "BucketList@%p: ownerId=\"%s\" ownerDisplayName=\"%s\" bucketName=\"%s\" creationDateSeconds=%lld\n", that, ownerId, ownerDisplayName, bucketName, creationDateSeconds);
 	if (status == ::S3StatusOK) {
-		Entry entry;
-		entry.id = ownerId;
-		entry.display = ownerDisplayName;
-		entry.created = creationDateSeconds;
+		Entry entry(ownerId, ownerDisplayName, creationDateSeconds);
 		that->list.insert(Pair(bucketName, entry));
 	}
 	return status;
