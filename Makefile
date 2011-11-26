@@ -117,6 +117,7 @@ HAYLOFT_INC=include
 
 PROJECT_CPPFLAGS=-I$(HAYLOFT_INC)
 PROJECT_LDFLAGS=-L$(HAYLOFT_LIBS) -lhayloft
+#PROJECT_LDFLAGS=lib$(PROJECT).a# For testing static linking.
 
 CC=gcc
 CXX=g++
