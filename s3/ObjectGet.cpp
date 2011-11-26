@@ -22,7 +22,8 @@ namespace s3 {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
 	::S3Status status = that->get(bufferSize, buffer);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
-	Logger::instance().log(level, "ObjectGet@%p: requested=%d status=%d=\"%s\"\n", that, bufferSize, status, ::S3_get_status_name(status));
+	Logger::instance().log(level, "ObjectGet@%p: bufferSize=%d\n", that, bufferSize);
+	Logger::instance().log(level, "ObjectGet@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	return status;
 }
 

@@ -22,7 +22,8 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
 	int rc = that->put(bufferSize, buffer);
 	Logger::Level level = (rc >= 0) ? Logger::DEBUG : Logger::NOTICE;
-	Logger::instance().log(level, "ObjectPut@%p: requested=%d returned=%d\n", that, bufferSize, rc);
+	Logger::instance().log(level, "ObjectPut@%p: bufferSize=%d\n", that, bufferSize);
+	Logger::instance().log(level, "ObjectPut@%p: return=%d\n", that, rc);
 	return (rc < 0) ? 0 : rc;
 }
 

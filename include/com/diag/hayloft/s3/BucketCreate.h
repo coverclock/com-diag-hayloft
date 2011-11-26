@@ -20,7 +20,6 @@ namespace s3 {
 
 class BucketCreate : public Bucket {
 
-
 public:
 
 	explicit BucketCreate(

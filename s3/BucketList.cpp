@@ -16,17 +16,22 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+BucketList::Entry::Entry(const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
+: id((ownerId != 0) ? ownerId : "")
+, display((ownerDisplayName != 0) ? ownerDisplayName : "")
+, created(creationDateSeconds)
+{}
+
 ::S3Status BucketList::listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData) {
 	BucketList * that = static_cast<BucketList*>(callbackData);
-	::S3Status status = that->service(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
+	::S3Status status = that->entry(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
-	if (ownerId == 0) { ownerId = ""; }
-	if (ownerDisplayName == 0) { ownerDisplayName = ""; }
-	if (bucketName == 0) { bucketName = ""; }
-	Logger::instance().log(level, "BucketList@%p: ownerId=\"%s\" ownerDisplayName=\"%s\" bucketName=\"%s\" creationDateSeconds=%lld\n", that, ownerId, ownerDisplayName, bucketName, creationDateSeconds);
+	const char * effective = (bucketName != 0) ? bucketName : "";
+	Entry entry(ownerId, ownerDisplayName, creationDateSeconds);
+	Logger::instance().log(level, "BucketList@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.id.c_str(), entry.display.c_str(), entry.created);
+	Logger::instance().log(level, "BucketList@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	if (status == ::S3StatusOK) {
-		Entry entry(ownerId, ownerDisplayName, creationDateSeconds);
-		that->list.insert(Pair(bucketName, entry));
+		that->list.insert(Pair(effective, entry));
 	}
 	return status;
 }
@@ -84,7 +89,7 @@ void BucketList::start() {
 	}
 }
 
-::S3Status BucketList::service(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
+::S3Status BucketList::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
 	return ::S3StatusOK;
 }
 
