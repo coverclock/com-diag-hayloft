@@ -96,7 +96,7 @@ public:
 
 	const char * getEndpoint() const { return endpoint.c_str(); }
 
-	virtual const char * canonicalize(std::string name) const;
+	virtual const char * canonicalize(std::string & canonical) const;
 
 private:
 

@@ -64,18 +64,18 @@ Session::~Session() {
 	S3_deinitialize();
 }
 
-const char * Session::canonicalize(std::string name) const {
-	if ((!name.empty()) && (!bucketsuffix.empty())) {
-		name += bucketsuffix;
+const char * Session::canonicalize(std::string & canonical) const {
+	if ((!canonical.empty()) && (!bucketsuffix.empty())) {
+		canonical += bucketsuffix;
 	}
 	// Ref: Amazon Web Services, AMAZON SIMPLE STORAGE SERVICE DEVELOPER GUIDE,
 	// API Version 2006-03-01, "Bucket Restrictions and Limitations", p. 83
-	for (int ii = 0; ii < name.length(); ++ii) {
-		if (isupper(name[ii])) {
-			name.replace(ii, 1, 1, tolower(name[ii]));
+	for (int ii = 0; ii < canonical.length(); ++ii) {
+		if (isupper(canonical[ii])) {
+			canonical.replace(ii, 1, 1, tolower(canonical[ii]));
 		}
 	}
-	return name.c_str();
+	return canonical.c_str();
 }
 
 }

@@ -16,12 +16,12 @@ namespace hayloft {
 namespace s3 {
 
 Object::Object(const char * keyname, const Bucket & bucket)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getName(), bucket.getProtocol(), bucket.getStyle())
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , key(keyname)
 {}
 
 Object::Object(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getName(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , key(keyname)
 {}
 

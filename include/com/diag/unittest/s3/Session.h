@@ -122,14 +122,15 @@ TEST_F(SessionTest, Instance) {
 TEST_F(SessionTest, Canonicalization) {
 	static const char * BUCKET_SUFFIX_VAL = ".Can.Hayloft.Diag.Com";
 	Session session1(BUCKET_SUFFIX_VAL);
+	std::string canonical;
 	EXPECT_TRUE(session1 == true);
-	std::string name1 = session1.canonicalize("");
+	std::string name1 = session1.canonicalize(canonical = "");
 	EXPECT_EQ(name1, "");
-	std::string name2 = session1.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
+	std::string name2 = session1.canonicalize(canonical = "AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
 	EXPECT_EQ(name2, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz.can.hayloft.diag.com");
 	Session session2("");
 	EXPECT_TRUE(session2 == true);
-	std::string name3 = session2.canonicalize("AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKl");
+	std::string name3 = session2.canonicalize(canonical = "AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKl");
 	EXPECT_EQ(name3, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl");
 }
 

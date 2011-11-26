@@ -48,7 +48,7 @@ void BucketHead::execute() {
 		id.c_str(),
 		secret.c_str(),
 		endpoint.c_str(),
-		name.c_str(),
+		canonical.c_str(),
 		sizeof(constraint) - 1, constraint,
 		requests,
 		&handler,

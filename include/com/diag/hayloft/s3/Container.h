@@ -23,7 +23,7 @@ class Container : public Service {
 
 protected:
 
-	std::string name;
+	std::string canonical;
 
 	::S3UriStyle style;
 
@@ -35,7 +35,7 @@ public:
 		const char * accessKeyId,
 		const char * secretAccessKey,
 		const char * endPoint,
-		const char * bucketName,
+		const char * canonicalBucketName,
 		::S3Protocol httpProtocol,
 		::S3UriStyle uristyle
 	);
@@ -44,7 +44,7 @@ public:
 		const char * accessKeyId,
 		const char * secretAccessKey,
 		const char * endPoint,
-		const char * bucketName,
+		const char * canonicalBucketName,
 		::S3Protocol httpProtocol,
 		::S3UriStyle uristyle,
 		Multiplex & multiplex
@@ -52,9 +52,13 @@ public:
 
 	virtual ~Container();
 
-	const char * getName() const { return name.c_str(); }
+	const char * getCanonical() const { return canonical.c_str(); }
 
 	::S3UriStyle getStyle() const { return style; }
+
+protected:
+
+	Container & setCanonical(const char * canonicalBucketName) { canonical = canonicalBucketName; return *this; }
 
 private:
 

@@ -19,17 +19,17 @@ namespace hayloft {
 namespace s3 {
 
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * bucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle)
 : Service(accessKeyId, secretAccessKey, endPoint, httpProtocol)
-, name(bucketName)
+, canonical(canonicalBucketName)
 , style(uristyle)
 {
 	initialize();
 }
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * bucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle, Multiplex & multiplex)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle, Multiplex & multiplex)
 : Service(accessKeyId, secretAccessKey, endPoint, httpProtocol, multiplex)
-, name(bucketName)
+, canonical(canonicalBucketName)
 , style(uristyle)
 {
 	initialize();
@@ -40,12 +40,12 @@ Container::~Container() {}
 void Container::initialize() {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
-		logger.debug("Container@%p: name=\"%s\"\n", this, name.c_str());
+		logger.debug("Container@%p: canonical=\"%s\"\n", this, canonical.c_str());
 		logger.debug("Container@%p: style=%d\n", this, style);
 	}
 	std::memset(&context, 0, sizeof(context));
 	context.hostName = endpoint.c_str();
-	context.bucketName = name.c_str();
+	context.bucketName = canonical.c_str();
 	context.protocol = protocol;
 	context.uriStyle = style;
 	context.accessKeyId = id.c_str();

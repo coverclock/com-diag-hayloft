@@ -47,7 +47,7 @@ void BucketDelete::execute() {
 		id.c_str(),
 		secret.c_str(),
 		endpoint.c_str(),
-		name.c_str(),
+		canonical.c_str(),
 		requests,
 		&handler,
 		this
