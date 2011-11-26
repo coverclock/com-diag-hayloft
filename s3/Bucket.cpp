@@ -40,9 +40,11 @@ Bucket::Bucket(const char * bucketname, Multiplex & multiplex, const Context & c
 Bucket::~Bucket() {}
 
 void Bucket::initialize(const Session & session) {
-	std::string canonical = name;
+	// Generally I prefer to treat protected variables in the superclass as
+	// read-only. But this solves a tough problem, so I'm breaking that rule
+	// here.
+	canonical = name;
 	session.canonicalize(canonical);
-	setCanonical(canonical.c_str());
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());

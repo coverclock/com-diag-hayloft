@@ -56,10 +56,6 @@ public:
 
 	::S3UriStyle getStyle() const { return style; }
 
-protected:
-
-	Container & setCanonical(const char * canonicalBucketName) { canonical = canonicalBucketName; return *this; }
-
 private:
 
 	void initialize();
