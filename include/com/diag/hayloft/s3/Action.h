@@ -11,6 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <string>
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/MemoryBarrier.h"
 #include "libs3.h"
@@ -32,7 +33,7 @@ public:
 
 private:
 
-	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData);
+	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
@@ -43,6 +44,8 @@ protected:
 	::S3Status status;
 
 	::S3ResponseHandler handler;
+
+	std::string server;
 
 	::S3Status state() const { ::com::diag::desperado::MemoryBarrier barrier; return status; }
 
@@ -65,6 +68,8 @@ public:
 	bool isSuccessful() const { return (state() == ::S3StatusOK); }
 
 	::S3Status getStatus(const char ** description = 0) const;
+
+	const char * getServer() const { return server.c_str(); }
 
 	virtual void start();
 

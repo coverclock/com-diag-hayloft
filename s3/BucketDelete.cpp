@@ -29,7 +29,7 @@ BucketDelete::BucketDelete(const char * bucketname, Multiplex & multiplex, const
 }
 
 BucketDelete::~BucketDelete() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 }
@@ -61,6 +61,7 @@ void BucketDelete::start() {
 }
 
 void BucketDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Bucket::complete(status, errorDetails);
 	Logger::instance().debug("BucketDelete@%p: end\n", this);
 }
 

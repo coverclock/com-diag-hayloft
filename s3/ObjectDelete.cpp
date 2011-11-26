@@ -29,7 +29,7 @@ ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, Multiple
 }
 
 ObjectDelete::~ObjectDelete() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 }
@@ -57,6 +57,7 @@ void ObjectDelete::start() {
 }
 
 void ObjectDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Object::complete(status, errorDetails);
 	Logger::instance().debug("ObjectDelete@%p: end\n", this);
 }
 

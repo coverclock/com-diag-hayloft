@@ -53,8 +53,8 @@ BucketList::~BucketList() {
 void BucketList::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&handler, 0, sizeof(handler));
-	handler.responseHandler.propertiesCallback = Action::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Action::handler.completeCallback;
+	handler.responseHandler.propertiesCallback = Service::handler.propertiesCallback;
+	handler.responseHandler.completeCallback = Service::handler.completeCallback;
 	handler.listServiceCallback = &listServiceCallback;
 }
 
@@ -82,7 +82,7 @@ const BucketList::Entry * BucketList::find(const char * name) const {
 }
 
 void BucketList::start() {
-	if (state() != BUSY) {
+	if ((state() == BUSY) && (requests != 0)) {
 		execute();
 	}
 }
@@ -92,6 +92,7 @@ void BucketList::start() {
 }
 
 void BucketList::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Service::complete(status, errorDetails);
 	Logger::instance().debug("BucketList@%p: end\n", this);
 }
 

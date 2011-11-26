@@ -29,7 +29,7 @@ ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, Multiplex & 
 }
 
 ObjectHead::~ObjectHead() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 }
@@ -57,6 +57,7 @@ void ObjectHead::start() {
 }
 
 void ObjectHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Object::complete(status, errorDetails);
 	Logger::instance().debug("ObjectHead@%p: end\n", this);
 }
 
