@@ -92,7 +92,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & mu
 }
 
 ObjectPut::~ObjectPut() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 	if (properties.metaData != 0) {
@@ -127,8 +127,8 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 	}
 	show(&properties);
 	std::memset(&handler, 0, sizeof(handler));
-	handler.responseHandler.propertiesCallback = Action::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Action::handler.completeCallback;
+	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
+	handler.responseHandler.completeCallback = Object::handler.completeCallback;
 	handler.putObjectDataCallback = &putObjectDataCallback;
 }
 
@@ -193,6 +193,7 @@ int ObjectPut::put(int bufferSize, char * buffer) {
 }
 
 void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Object::complete(status, errorDetails);
 	finalize();
 	Logger::instance().debug("ObjectPut@%p: end\n", this);
 }

@@ -121,7 +121,11 @@ protected:
  * can always choose the other on specific test cases, or even create your
  * own by deriving your own class.
 */
+#if 1
 typedef Terse Fixture;
+#else
+typedef Verbose Fixture;
+#endif
 
 }
 }

@@ -29,7 +29,7 @@ BucketHead::BucketHead(const char * bucketname, Multiplex & multiplex, const Con
 }
 
 BucketHead::~BucketHead() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 }
@@ -63,6 +63,7 @@ void BucketHead::start() {
 }
 
 void BucketHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Bucket::complete(status, errorDetails);
 	constraint[sizeof(constraint) - 1] = '\0';
 	region = constraint;
 	Logger::instance().debug("BucketHead@%p: end\n", this);

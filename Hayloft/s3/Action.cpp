@@ -18,12 +18,13 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-::S3Status Action::responsePropertiesCallback(const ::S3ResponseProperties * properties, void * callbackData) {
+::S3Status Action::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
-	::S3Status status = that->properties(properties);
+	if (responseProperties->server != 0) { that->server = responseProperties->server; }
+	::S3Status status = that->properties(responseProperties);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
-	show(properties, level);
+	show(responseProperties, level);
 	return status;
 }
 
@@ -42,7 +43,7 @@ void Action::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 		level = Logger::DEBUG; // Considered to be an application issue.
 		break;
 	default:
-		level = Logger::WARNING; // Considered to be a platform issue.
+		level = Logger::NOTICE; // Considered to be a platform issue.
 		break;
 	}
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));

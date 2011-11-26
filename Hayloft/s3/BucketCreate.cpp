@@ -29,7 +29,7 @@ BucketCreate::BucketCreate(const char * bucketname, Multiplex & multiplex, const
 }
 
 BucketCreate::~BucketCreate() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 }
@@ -62,6 +62,7 @@ void BucketCreate::start() {
 }
 
 void BucketCreate::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Bucket::complete(status, errorDetails);
 	Logger::instance().debug("BucketCreate@%p: end\n", this);
 }
 

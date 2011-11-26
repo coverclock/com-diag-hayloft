@@ -85,7 +85,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & mu
 }
 
 ObjectGet::~ObjectGet() {
-	if (requests != 0) {
+	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
 	finalize();
@@ -100,8 +100,8 @@ void ObjectGet::initialize() {
 	conditions.ifNotMatchETag = notmatch.empty() ? 0 : notmatch.c_str();
 	show(&conditions);
 	std::memset(&handler, 0, sizeof(handler));
-	handler.responseHandler.propertiesCallback = Action::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Action::handler.completeCallback;
+	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
+	handler.responseHandler.completeCallback = Object::handler.completeCallback;
 	handler.getObjectDataCallback = &getObjectDataCallback;
 }
 
@@ -171,6 +171,7 @@ void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 }
 
 void ObjectGet::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Object::complete(status, errorDetails);
 	finalize();
 	Logger::instance().debug("ObjectGet@%p: end\n", this);
 }
