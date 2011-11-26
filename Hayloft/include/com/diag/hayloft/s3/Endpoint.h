@@ -25,6 +25,12 @@ class Endpoint {
 
 public:
 
+	/**
+	 * AWS S3 places a limit of this many characters on the endpoint name (a.k.a.
+	 * the host name).
+	 */
+	static const size_t LENGTH = S3_MAX_HOSTNAME_SIZE;
+
 	static const char * ENDPOINT_ENV() { return "COM_DIAG_HAYLOFT_S3_ENDPOINT_HOSTNAME"; }
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "s3-ap-northeast-1.amazonaws.com"; }

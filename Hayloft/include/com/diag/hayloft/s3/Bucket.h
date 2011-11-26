@@ -29,7 +29,8 @@ public:
 
 	/**
 	 * For virtual host style URIs, AWS S3 places a limit of this many
-	 * characters on the bucket name.
+	 * characters on the bucket name. The limit on path style URIs is
+	 * more like 255 and can be found as S3_MAX_BUCKET_NAME_SIZE.
 	 */
 	static const size_t LENGTH = 64;
 

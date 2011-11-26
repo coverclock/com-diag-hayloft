@@ -27,9 +27,9 @@ public:
 
 	/**
 	 * AWS S3 places a limit of this many characters on the object name (a.k.a.
-	 * key).
+	 * the key).
 	 */
-	static const size_t LENGTH = 1024;
+	static const size_t LENGTH = S3_MAX_KEY_SIZE;
 
 	typedef uint64_t Octets;
 
