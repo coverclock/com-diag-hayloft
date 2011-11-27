@@ -715,10 +715,10 @@ TEST_F(BucketTest, Service) {
 	}
 }
 
-TEST_F(BucketTest, List) {
+TEST_F(BucketTest, Manifest) {
 	static const int LIMIT = 10;
-	const char BUCKET1[] = "BucketTestList1";
-	const char BUCKET2[] = "BucketTestList2";
+	const char BUCKET1[] = "BucketTestManifest1";
+	const char BUCKET2[] = "BucketTestManifest2";
 	ServiceManifest servicemanifest1;
 	for (int ii = 0; servicemanifest1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
