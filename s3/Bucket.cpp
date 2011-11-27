@@ -19,36 +19,37 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+static const char * canonicalize(const char * name, std::string ** canonical, const Session & session) {
+	*canonical = new std::string(name);
+	session.canonicalize(**canonical);
+	return (*canonical)->c_str();
+}
+
 Bucket::Bucket(const char * bucketname, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getEndpoint(), "", context.getProtocol(), context.getStyle())
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), canonicalize(bucketname, &temporary, session), context.getProtocol(), context.getStyle())
 , name(bucketname)
 , region(context.getRegion())
 , access(context.getAccess())
 {
-	initialize(session);
+	initialize();
 }
 
 Bucket::Bucket(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getEndpoint(), "", context.getProtocol(), context.getStyle(), multiplex)
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), canonicalize(bucketname, &temporary, session), context.getProtocol(), context.getStyle(), multiplex)
 , name(bucketname)
 , region(context.getRegion())
 , access(context.getAccess())
 {
-	initialize(session);
+	initialize();
 }
 
 Bucket::~Bucket() {}
 
-void Bucket::initialize(const Session & session) {
-	// Generally I prefer to treat protected variables in the superclass as
-	// read-only. But this solves a tough problem, so I'm breaking that rule
-	// here.
-	canonical = name;
-	session.canonicalize(canonical);
+void Bucket::initialize() {
+	delete temporary;
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Bucket@%p: name=\"%s\"\n", this, name.c_str());
-		logger.debug("Bucket@%p: canonical=\"%s\"\n", this, canonical.c_str());
 		logger.debug("Bucket@%p: region=\"%s\"\n", this, region.c_str());
 		logger.debug("Bucket@%p: access=%d\n", this, access);
 	}

@@ -42,6 +42,8 @@ protected:
 
 	::S3CannedAcl access;
 
+	std::string * temporary;
+
 public:
 
 	explicit Bucket(
@@ -71,7 +73,7 @@ public:
 
 private:
 
-	void initialize(const Session & session);
+	void initialize();
 
 };
 

@@ -33,7 +33,7 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 		for (int ii = 0; ii < contentsCount; ++ii) {
 			const char * effective = (contents[ii].key != 0) ? contents[ii].key : "";
 			Entry entry(contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
-			Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, effective, entry.modified, entry.etag.c_str(), entry.size, entry.id.c_str(), entry.display.c_str());
+			Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, effective, entry.modified, entry.etag.c_str(), entry.size, entry.id.c_str(), entry.display.c_str());
 			if (status == ::S3StatusOK) {
 				that->list.insert(Pair(effective, entry));
 			}
