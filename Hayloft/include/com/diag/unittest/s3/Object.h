@@ -55,10 +55,10 @@ using namespace ::com::diag::hayloft::s3;
 
 typedef Fixture ObjectTest;
 
-TEST_F(ObjectTest, SynchronousHeap) {
+TEST_F(ObjectTest, Heap) {
 	static const int LIMIT = 10;
-	static const char BUCKET[] = "ObjectTest";
-	static const char OBJECT[] = "SynchronousHeap.txt";
+	static const char BUCKET[] = "ObjectTestHeap";
+	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
@@ -333,10 +333,10 @@ TEST_F(ObjectTest, SynchronousHeap) {
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
-TEST_F(ObjectTest, AsynchronousStackComplete) {
+TEST_F(ObjectTest, Complete) {
 	static const int LIMIT = 10;
-	static const char BUCKET[] = "ObjectTest";
-	static const char OBJECT[] = "AsynchronousStackComplete.txt";
+	static const char BUCKET[] = "ObjectTestComplete";
+	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
@@ -756,11 +756,11 @@ TEST_F(ObjectTest, AsynchronousStackComplete) {
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
-TEST_F(ObjectTest, AsynchronousStackService) {
+TEST_F(ObjectTest, Service) {
 	static const Multiplex::Milliseconds TIMEOUT = 1000;
 	static const int LIMIT = 10;
-	static const char BUCKET[] = "ObjectTest";
-	static const char OBJECT[] = "AsynchronousStackService.txt";
+	static const char BUCKET[] = "ObjectTestService";
+	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
@@ -1239,11 +1239,11 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
-TEST_F(Verbose, List) {
+TEST_F(Verbose, Manifest) {
 	static const int LIMIT = 10;
-	const char BUCKET[] = "ObjectTest";
-	const char OBJECT1[] = "List1.txt";
-	const char OBJECT2[] = "List2.txt";
+	const char BUCKET[] = "ObjectTestManifest";
+	const char OBJECT1[] = "Object1.txt";
+	const char OBJECT2[] = "Object2.txt";
 	BucketCreate bucketcreate(BUCKET);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
