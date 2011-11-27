@@ -15,6 +15,13 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+void BucketHead::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+	BucketHead * that = static_cast<BucketHead*>(callbackData);
+	that->constraint[sizeof(constraint) - 1] = '\0';
+	that->region = that->constraint;
+	(*that->Bucket::handler.completeCallback)(status, errorDetails, callbackData);
+}
+
 BucketHead::BucketHead(const char * bucketname, const Context & context, const Session & session)
 : Bucket(bucketname, context, session)
 {
@@ -37,6 +44,8 @@ BucketHead::~BucketHead() {
 void BucketHead::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	constraint[0] = '\0';
+	handler.propertiesCallback = Bucket::handler.propertiesCallback;
+	handler.completeCallback = &responseCompleteCallback;;
 }
 
 void BucketHead::execute() {
@@ -60,13 +69,6 @@ void BucketHead::start() {
 	if (state() != BUSY) {
 		execute();
 	}
-}
-
-void BucketHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Bucket::complete(status, errorDetails);
-	constraint[sizeof(constraint) - 1] = '\0';
-	region = constraint;
-	Logger::instance().debug("BucketHead@%p: end\n", this);
 }
 
 }

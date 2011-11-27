@@ -27,6 +27,12 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	return (rc < 0) ? 0 : rc;
 }
 
+void ObjectPut::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
+	that->finalize();
+	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
+}
+
 ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input & source, Octets objectsize, const Properties & props)
 : Object(keyname, bucket)
 , type(props.getType())
@@ -129,7 +135,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 	show(&properties);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Object::handler.completeCallback;
+	handler.responseHandler.completeCallback = &responseCompleteCallback;;
 	handler.putObjectDataCallback = &putObjectDataCallback;
 }
 
@@ -191,12 +197,6 @@ int ObjectPut::put(int bufferSize, char * buffer) {
 		}
 	}
 	return consumed;
-}
-
-void ObjectPut::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Object::complete(status, errorDetails);
-	finalize();
-	Logger::instance().debug("ObjectPut@%p: end\n", this);
 }
 
 }

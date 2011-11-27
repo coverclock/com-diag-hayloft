@@ -37,11 +37,11 @@ public:
 
 	typedef ::com::diag::desperado::Output Output;
 
-private:
+protected:
 
 	static ::S3Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
 
-protected:
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 	Conditions::Epochalseconds since;
 
@@ -114,8 +114,6 @@ public:
 protected:
 
 	virtual ::S3Status get(int bufferSize, const char * buffer);
-
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 
 private:
 

@@ -56,11 +56,6 @@ void ObjectHead::start() {
 	}
 }
 
-void ObjectHead::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Object::complete(status, errorDetails);
-	Logger::instance().debug("ObjectHead@%p: end\n", this);
-}
-
 }
 }
 }

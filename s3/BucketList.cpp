@@ -93,11 +93,6 @@ void BucketList::start() {
 	return ::S3StatusOK;
 }
 
-void BucketList::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Service::complete(status, errorDetails);
-	Logger::instance().debug("BucketList@%p: end\n", this);
-}
-
 }
 }
 }

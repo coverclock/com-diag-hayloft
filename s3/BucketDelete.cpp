@@ -60,11 +60,6 @@ void BucketDelete::start() {
 	}
 }
 
-void BucketDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Bucket::complete(status, errorDetails);
-	Logger::instance().debug("BucketDelete@%p: end\n", this);
-}
-
 }
 }
 }

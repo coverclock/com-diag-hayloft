@@ -21,9 +21,15 @@ namespace s3 {
 
 class BucketHead : public Bucket {
 
+private:
+
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
 protected:
 
 	char constraint[Region::LENGTH + 1];
+
+	::S3ResponseHandler handler;
 
 public:
 
@@ -43,10 +49,6 @@ public:
 	virtual ~BucketHead();
 
 	virtual void start();
-
-protected:
-
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 
 private:
 

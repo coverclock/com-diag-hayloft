@@ -50,6 +50,7 @@ void Action::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	show(errorDetails, level);
 	that->complete(status, errorDetails);
 	that->status = status;
+	Logger::instance().log(level, "Action@%p: end\n", that);
 }
 
 Action::Action()
