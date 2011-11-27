@@ -21,7 +21,7 @@
 #include "com/diag/desperado/PathOutput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/ObjectHead.h"
-#include "com/diag/hayloft/s3/ObjectList.h"
+#include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/Size.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
@@ -1251,15 +1251,15 @@ TEST_F(Verbose, List) {
 		bucketcreate.start();
 	}
 	/**/
-	ObjectList objectlist1(BUCKET);
-	for (int ii = 0; (objectlist1.isRetryable() || objectlist1.isNonexistent()) && (ii < LIMIT); ++ii) {
-		if (objectlist1.isRetryable()) {
+	BucketManifest bucketmanifest1(BUCKET);
+	for (int ii = 0; (bucketmanifest1.isRetryable() || bucketmanifest1.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketmanifest1.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-		} else if (objectlist1.isNonexistent()) {
+		} else if (bucketmanifest1.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectlist1.start();
+		bucketmanifest1.start();
 	}
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
@@ -1278,15 +1278,15 @@ TEST_F(Verbose, List) {
 		objectput1.start();
 	}
 	/**/
-	ObjectList objectlist2(BUCKET);
-	for (int ii = 0; (objectlist2.isRetryable() || objectlist2.isNonexistent()) && (ii < LIMIT); ++ii) {
-		if (objectlist2.isRetryable()) {
+	BucketManifest bucketmanifest2(BUCKET);
+	for (int ii = 0; (bucketmanifest2.isRetryable() || bucketmanifest2.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketmanifest2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-		} else if (objectlist2.isNonexistent()) {
+		} else if (bucketmanifest2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectlist2.start();
+		bucketmanifest2.start();
 	}
 	/**/
 	input = new ::com::diag::desperado::PathInput(__FILE__);
@@ -1305,15 +1305,15 @@ TEST_F(Verbose, List) {
 		objectput2.start();
 	}
 	/**/
-	ObjectList objectlist3(BUCKET);
-	for (int ii = 0; (objectlist3.isRetryable() || objectlist3.isNonexistent()) && (ii < LIMIT); ++ii) {
-		if (objectlist3.isRetryable()) {
+	BucketManifest bucketmanifest3(BUCKET);
+	for (int ii = 0; (bucketmanifest3.isRetryable() || bucketmanifest3.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketmanifest3.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-		} else if (objectlist3.isNonexistent()) {
+		} else if (bucketmanifest3.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectlist3.start();
+		bucketmanifest3.start();
 	}
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
@@ -1327,15 +1327,15 @@ TEST_F(Verbose, List) {
 		objectdelete1.start();
 	}
 	/**/
-	ObjectList objectlist4(BUCKET);
-	for (int ii = 0; (objectlist4.isRetryable() || objectlist4.isNonexistent()) && (ii < LIMIT); ++ii) {
-		if (objectlist4.isRetryable()) {
+	BucketManifest bucketmanifest4(BUCKET);
+	for (int ii = 0; (bucketmanifest4.isRetryable() || bucketmanifest4.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketmanifest4.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-		} else if (objectlist4.isNonexistent()) {
+		} else if (bucketmanifest4.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectlist4.start();
+		bucketmanifest4.start();
 	}
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
@@ -1349,15 +1349,15 @@ TEST_F(Verbose, List) {
 		objectdelete2.start();
 	}
 	/**/
-	ObjectList objectlist5(BUCKET);
-	for (int ii = 0; (objectlist5.isRetryable() || objectlist5.isNonexistent()) && (ii < LIMIT); ++ii) {
-		if (objectlist5.isRetryable()) {
+	BucketManifest bucketmanifest5(BUCKET);
+	for (int ii = 0; (bucketmanifest5.isRetryable() || bucketmanifest5.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketmanifest5.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-		} else if (objectlist5.isNonexistent()) {
+		} else if (bucketmanifest5.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectlist5.start();
+		bucketmanifest5.start();
 	}
 	/**/
 	BucketDelete bucketdelete(BUCKET);

@@ -183,13 +183,13 @@ MANIFEST_O=\
  s3/BucketHead.o \
  s3/BucketCreate.o \
  s3/BucketDelete.o \
- s3/BucketList.o \
+ s3/ServiceManifest.o \
  s3/Object.o \
  s3/ObjectPut.o \
  s3/ObjectGet.o \
  s3/ObjectDelete.o \
  s3/ObjectHead.o \
- s3/ObjectList.o
+ s3/BucketManifest.o
 
 ################################################################################
 # BUILD
