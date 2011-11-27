@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/BucketList.h"
+#include "com/diag/hayloft/s3/ServiceManifest.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
 
@@ -16,43 +16,43 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketList::Entry::Entry(const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
+ServiceManifest::Entry::Entry(const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
 : id((ownerId != 0) ? ownerId : "")
 , display((ownerDisplayName != 0) ? ownerDisplayName : "")
 , created(creationDateSeconds)
 {}
 
-::S3Status BucketList::listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData) {
-	BucketList * that = static_cast<BucketList*>(callbackData);
+::S3Status ServiceManifest::listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData) {
+	ServiceManifest * that = static_cast<ServiceManifest*>(callbackData);
 	::S3Status status = that->entry(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	const char * effective = (bucketName != 0) ? bucketName : "";
 	Entry entry(ownerId, ownerDisplayName, creationDateSeconds);
-	Logger::instance().log(level, "BucketList@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.id.c_str(), entry.display.c_str(), entry.created);
-	Logger::instance().log(level, "BucketList@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.id.c_str(), entry.display.c_str(), entry.created);
+	Logger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	if (status == ::S3StatusOK) {
 		that->list.insert(Pair(effective, entry));
 	}
 	return status;
 }
 
-BucketList::BucketList(const Context & context, const Session & session)
+ServiceManifest::ServiceManifest(const Context & context, const Session & session)
 : Service(context.getId(), context.getSecret(), session.getEndpoint(), context.getProtocol())
 {
 	initialize();
 	execute();
 }
 
-BucketList::BucketList(Multiplex & multiplex, const Context & context, const Session & session)
+ServiceManifest::ServiceManifest(Multiplex & multiplex, const Context & context, const Session & session)
 : Service(context.getId(), context.getSecret(), session.getEndpoint(), context.getProtocol(), multiplex)
 {
 	initialize();
 }
 
-BucketList::~BucketList() {
+ServiceManifest::~ServiceManifest() {
 }
 
-void BucketList::initialize() {
+void ServiceManifest::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Service::handler.propertiesCallback;
@@ -60,9 +60,9 @@ void BucketList::initialize() {
 	handler.listServiceCallback = &listServiceCallback;
 }
 
-void BucketList::execute() {
+void ServiceManifest::execute() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
-	Logger::instance().debug("BucketList@%p: begin\n", this);
+	Logger::instance().debug("ServiceManifest@%p: begin\n", this);
 	::S3_list_service(
 		protocol,
 		id.c_str(),
@@ -74,7 +74,7 @@ void BucketList::execute() {
 	);
 }
 
-const BucketList::Entry * BucketList::find(const char * name) const {
+const ServiceManifest::Entry * ServiceManifest::find(const char * name) const {
 	const Entry * entry = 0;
 	List::const_iterator here = list.find(name);
 	if (here != list.end()) {
@@ -83,13 +83,13 @@ const BucketList::Entry * BucketList::find(const char * name) const {
 	return entry;
 }
 
-void BucketList::start() {
+void ServiceManifest::start() {
 	if ((state() == BUSY) && (requests != 0)) {
 		execute();
 	}
 }
 
-::S3Status BucketList::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
+::S3Status ServiceManifest::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
 	return ::S3StatusOK;
 }
 

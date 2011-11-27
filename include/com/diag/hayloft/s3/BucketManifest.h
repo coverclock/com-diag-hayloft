@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETLIST_
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETLIST_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETMANIFEST_
+#define _H_COM_DIAG_HAYLOFT_S3_BUCKETMANIFEST_
 
 /**
  * @file
@@ -12,36 +12,40 @@
  */
 
 #include <map>
-#include <string>
-#include "com/diag/hayloft/s3/Service.h"
-#include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/hayloft/s3/Bucket.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class BucketList : public Service {
+class BucketManifest : public Bucket {
 
 public:
 
 	typedef int64_t Epochalseconds;
 
+	typedef uint64_t Octets;
+
 	struct Entry {
 
 		Entry(
+			Epochalseconds lastModified = 0,
+			const char * eTag = 0,
+			Octets objectsize = 0,
 			const char * ownerId = 0,
-			const char * ownerDisplayName = 0,
-			Epochalseconds creationDateSeconds = 0
+			const char * ownerDisplayName = 0
 		);
+
+		Epochalseconds modified;
+
+		std::string etag;
+
+		Octets size;
 
 		std::string id;
 
 		std::string display;
-
-		Epochalseconds created;
 
 	};
 
@@ -51,38 +55,36 @@ public:
 
 private:
 
-	static ::S3Status listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData);
+	static ::S3Status listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData);
 
 protected:
 
 	List list;
 
-	::S3ListServiceHandler handler;
+	::S3ListBucketHandler handler;
 
 public:
 
-	explicit BucketList(
+	explicit BucketManifest(
+		const char * bucketname,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
-	explicit BucketList(
+	explicit BucketManifest(
+		const char * bucketname,
 		Multiplex & multiplex,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
-	virtual ~BucketList();
+	virtual ~BucketManifest();
 
 	virtual void start();
 
-	const List & getList() const { return list; }
-
-	const Entry * find(const char * name) const;
-
 protected:
 
-	virtual ::S3Status entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds);
+	virtual ::S3Status entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes);
 
 private:
 

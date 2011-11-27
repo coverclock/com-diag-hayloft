@@ -16,7 +16,7 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/BucketList.h"
+#include "com/diag/hayloft/s3/ServiceManifest.h"
 #include "com/diag/desperado/stdlib.h"
 #include "com/diag/desperado/string.h"
 
@@ -719,42 +719,42 @@ TEST_F(BucketTest, List) {
 	static const int LIMIT = 10;
 	const char BUCKET1[] = "BucketTestList1";
 	const char BUCKET2[] = "BucketTestList2";
-	BucketList bucketlist1;
-	for (int ii = 0; bucketlist1.isRetryable() && (ii < LIMIT); ++ii) {
+	ServiceManifest servicemanifest1;
+	for (int ii = 0; servicemanifest1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketlist1.start();
+		servicemanifest1.start();
 	}
-	EXPECT_EQ(bucketlist1.getList().size(), 0);
+	EXPECT_EQ(servicemanifest1.getList().size(), 0);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		bucketcreate1.start();
 	}
-	BucketList bucketlist2;
-	for (int ii = 0; bucketlist2.isRetryable() && (ii < LIMIT); ++ii) {
+	ServiceManifest servicemanifest2;
+	for (int ii = 0; servicemanifest2.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketlist2.start();
+		servicemanifest2.start();
 	}
-	EXPECT_EQ(bucketlist2.getList().size(), 1);
-	ASSERT_NE(bucketlist2.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
+	EXPECT_EQ(servicemanifest2.getList().size(), 1);
+	ASSERT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		bucketcreate2.start();
 	}
-	BucketList bucketlist3;
-	for (int ii = 0; bucketlist3.isRetryable() && (ii < LIMIT); ++ii) {
+	ServiceManifest servicemanifest3;
+	for (int ii = 0; servicemanifest3.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketlist3.start();
+		servicemanifest3.start();
 	}
-	EXPECT_EQ(bucketlist3.getList().size(), 2);
-	ASSERT_NE(bucketlist3.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
-	ASSERT_NE(bucketlist3.find(bucketcreate2.getCanonical()), (BucketList::Entry *)0);
+	EXPECT_EQ(servicemanifest3.getList().size(), 2);
+	ASSERT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
+	ASSERT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete1(BUCKET1);
 	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete1.isRetryable()) {
@@ -765,15 +765,15 @@ TEST_F(BucketTest, List) {
 		platform.yield(platform.frequency());
 		bucketdelete1.start();
 	}
-	BucketList bucketlist4;
-	for (int ii = 0; bucketlist4.isRetryable() && (ii < LIMIT); ++ii) {
+	ServiceManifest servicemanifest4;
+	for (int ii = 0; servicemanifest4.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketlist4.start();
+		servicemanifest4.start();
 	}
-	EXPECT_EQ(bucketlist4.getList().size(), 1);
-	EXPECT_EQ(bucketlist4.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
-	ASSERT_NE(bucketlist4.find(bucketcreate2.getCanonical()), (BucketList::Entry *)0);
+	EXPECT_EQ(servicemanifest4.getList().size(), 1);
+	EXPECT_EQ(servicemanifest4.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
+	ASSERT_NE(servicemanifest4.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete2(BUCKET2);
 	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete2.isRetryable()) {
@@ -784,15 +784,15 @@ TEST_F(BucketTest, List) {
 		platform.yield(platform.frequency());
 		bucketdelete2.start();
 	}
-	BucketList bucketlist5;
-	for (int ii = 0; bucketlist5.isRetryable() && (ii < LIMIT); ++ii) {
+	ServiceManifest servicemanifest5;
+	for (int ii = 0; servicemanifest5.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketlist5.start();
+		servicemanifest5.start();
 	}
-	EXPECT_EQ(bucketlist5.getList().size(), 0);
-	EXPECT_EQ(bucketlist5.find(bucketcreate1.getCanonical()), (BucketList::Entry *)0);
-	EXPECT_EQ(bucketlist5.find(bucketcreate2.getCanonical()), (BucketList::Entry *)0);
+	EXPECT_EQ(servicemanifest5.getList().size(), 0);
+	EXPECT_EQ(servicemanifest5.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
+	EXPECT_EQ(servicemanifest5.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 }
 
 }
