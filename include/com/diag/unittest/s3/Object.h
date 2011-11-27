@@ -21,6 +21,7 @@
 #include "com/diag/desperado/PathOutput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/ObjectHead.h"
+#include "com/diag/hayloft/s3/ObjectList.h"
 #include "com/diag/hayloft/Size.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
@@ -1238,6 +1239,138 @@ TEST_F(ObjectTest, AsynchronousStackService) {
 	EXPECT_EQ(::unlink(OBJECT), 0);
 }
 
+TEST_F(Verbose, List) {
+	static const int LIMIT = 10;
+	const char BUCKET[] = "ObjectTest";
+	const char OBJECT1[] = "List1.txt";
+	const char OBJECT2[] = "List2.txt";
+	BucketCreate bucketcreate(BUCKET);
+	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		bucketcreate.start();
+	}
+	/**/
+	ObjectList objectlist1(BUCKET);
+	for (int ii = 0; (objectlist1.isRetryable() || objectlist1.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (objectlist1.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectlist1.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectlist1.start();
+	}
+	/**/
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	Size inputsize = size(*input);
+	EXPECT_TRUE(inputsize > 0);
+	ObjectPut objectput1(OBJECT1, bucketcreate, input, inputsize);
+	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		input = new ::com::diag::desperado::PathInput(__FILE__);
+		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		inputsize = size(*input);
+		EXPECT_TRUE(inputsize > 0);
+		objectput1.reset(input, inputsize);
+		objectput1.start();
+	}
+	/**/
+	ObjectList objectlist2(BUCKET);
+	for (int ii = 0; (objectlist2.isRetryable() || objectlist2.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (objectlist2.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectlist2.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectlist2.start();
+	}
+	/**/
+	input = new ::com::diag::desperado::PathInput(__FILE__);
+	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	inputsize = size(*input);
+	EXPECT_TRUE(inputsize > 0);
+	ObjectPut objectput2(OBJECT2, bucketcreate, input, inputsize);
+	for (int ii = 0; objectput2.isRetryable() && (ii < LIMIT); ++ii) {
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		input = new ::com::diag::desperado::PathInput(__FILE__);
+		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		inputsize = size(*input);
+		EXPECT_TRUE(inputsize > 0);
+		objectput2.reset(input, inputsize);
+		objectput2.start();
+	}
+	/**/
+	ObjectList objectlist3(BUCKET);
+	for (int ii = 0; (objectlist3.isRetryable() || objectlist3.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (objectlist3.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectlist3.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectlist3.start();
+	}
+	/**/
+	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
+	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
+		if (objectdelete1.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectdelete1.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectdelete1.start();
+	}
+	/**/
+	ObjectList objectlist4(BUCKET);
+	for (int ii = 0; (objectlist4.isRetryable() || objectlist4.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (objectlist4.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectlist4.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectlist4.start();
+	}
+	/**/
+	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
+	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
+		if (objectdelete2.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectdelete2.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectdelete2.start();
+	}
+	/**/
+	ObjectList objectlist5(BUCKET);
+	for (int ii = 0; (objectlist5.isRetryable() || objectlist5.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (objectlist5.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectlist5.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectlist5.start();
+	}
+	/**/
+	BucketDelete bucketdelete(BUCKET);
+	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketdelete.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (bucketdelete.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		bucketdelete.start();
+	}
+}
 }
 }
 }
