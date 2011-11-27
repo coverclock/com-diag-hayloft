@@ -41,6 +41,8 @@ private:
 
 	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
 
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
 protected:
 
 	std::string type;
@@ -116,8 +118,6 @@ public:
 protected:
 
 	virtual int put(int bufferSize, char * buffer);
-
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
 
 private:
 

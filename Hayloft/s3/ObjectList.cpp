@@ -101,12 +101,6 @@ void ObjectList::start() {
 	return ::S3StatusOK;
 }
 
-
-void ObjectList::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Bucket::complete(status, errorDetails);
-	Logger::instance().debug("ObjectList@%p: end\n", this);
-}
-
 }
 }
 }

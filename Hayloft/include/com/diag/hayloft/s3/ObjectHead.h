@@ -49,10 +49,6 @@ public:
 
 	virtual void start();
 
-protected:
-
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
-
 private:
 
 	void initialize();

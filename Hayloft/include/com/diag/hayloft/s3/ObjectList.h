@@ -86,8 +86,6 @@ protected:
 
 	virtual ::S3Status entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes);
 
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
-
 private:
 
 	void initialize();

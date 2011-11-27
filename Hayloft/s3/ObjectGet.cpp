@@ -27,6 +27,12 @@ namespace s3 {
 	return status;
 }
 
+void ObjectGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
+	that->finalize();
+	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
+}
+
 ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket)
 , since(conds.getSince())
@@ -102,7 +108,7 @@ void ObjectGet::initialize() {
 	show(&conditions);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Object::handler.completeCallback;
+	handler.responseHandler.completeCallback = &responseCompleteCallback;
 	handler.getObjectDataCallback = &getObjectDataCallback;
 }
 
@@ -169,12 +175,6 @@ void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 		}
 	}
 	return (produced > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
-}
-
-void ObjectGet::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Object::complete(status, errorDetails);
-	finalize();
-	Logger::instance().debug("ObjectGet@%p: end\n", this);
 }
 
 }

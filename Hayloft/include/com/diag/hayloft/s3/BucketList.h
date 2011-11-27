@@ -84,8 +84,6 @@ protected:
 
 	virtual ::S3Status entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds);
 
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
-
 private:
 
 	void initialize();

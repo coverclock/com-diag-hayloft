@@ -56,11 +56,6 @@ void ObjectDelete::start() {
 	}
 }
 
-void ObjectDelete::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
-	Object::complete(status, errorDetails);
-	Logger::instance().debug("ObjectDelete@%p: end\n", this);
-}
-
 }
 }
 }
