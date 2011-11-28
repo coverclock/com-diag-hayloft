@@ -27,7 +27,7 @@ private:
 
 protected:
 
-	char constraint[Region::LENGTH + 1];
+	char constraint[Region::LENGTH];
 
 	::S3ResponseHandler handler;
 
