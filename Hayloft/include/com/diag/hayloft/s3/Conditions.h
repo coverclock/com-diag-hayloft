@@ -14,7 +14,6 @@
 #include <string>
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/target.h"
-#include "libs3.h"
 
 namespace com {
 namespace diag {

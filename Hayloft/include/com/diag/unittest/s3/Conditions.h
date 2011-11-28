@@ -49,7 +49,6 @@ TEST_F(ConditionsTest, Stack) {
 }
 
 TEST_F(ConditionsTest, Explicit) {
-	AccessPublicReadWrite access;
 	Conditions conditions(1234, 5678, "Match", "NotMatch");
 	EXPECT_EQ(conditions.getSince(), 1234);
 	EXPECT_EQ(conditions.getNotSince(), 5678);

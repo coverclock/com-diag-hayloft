@@ -29,13 +29,23 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 	BucketManifest * that = static_cast<BucketManifest*>(callbackData);
 	::S3Status status = that->entry(isTruncated, nextMarker, contentsCount, contents, commonPrefixesCount, commonPrefixes);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
+	// See listBucketCallback() in s3.c from libs3 for Bryan's comments on how
+	// S3 doesn't return nextMarker when there is no delimiter. I've modeled
+	// this after his implementation which alternatively derives nextMarker.
+	that->truncated = (isTruncated != 0);
+	if ((nextMarker != 0) && (nextMarker[0] != '\0') && (contentsCount > 0) && (contents != 0)) {
+		nextMarker = contents[contentsCount - 1].key;
+	}
+	if (nextMarker != 0) {
+		that->nextmarker = nextMarker;
+	}
 	if (contents != 0) {
 		for (int ii = 0; ii < contentsCount; ++ii) {
 			const char * effective = (contents[ii].key != 0) ? contents[ii].key : "";
 			Entry entry(contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
 			Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, effective, entry.modified, entry.etag.c_str(), entry.size, entry.id.c_str(), entry.display.c_str());
-			if (status == ::S3StatusOK) {
-				that->list.insert(Pair(effective, entry));
+			if ((status == ::S3StatusOK) && (that->manifest.size() < that->maximum)) {
+				that->manifest.insert(Pair(effective, entry));
 			}
 		}
 	}
@@ -49,15 +59,37 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 	return status;
 }
 
-BucketManifest::BucketManifest(const char * bucketname, const Context & context, const Session & session)
+void BucketManifest::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+	BucketManifest * that = static_cast<BucketManifest*>(callbackData);
+	if ((status == ::S3StatusOK) && that->truncated && (that->maximum > that->manifest.size())) {
+		that->truncated = false;
+		that->execute();
+	} else {
+		(*that->Bucket::handler.completeCallback)(status, errorDetails, callbackData);
+	}
+}
+
+BucketManifest::BucketManifest(const char * bucketname, const Selection & selection, const Context & context, const Session & session)
 : Bucket(bucketname, context, session)
+, prefix(selection.getPrefix())
+, marker(selection.getMarker())
+, nextmarker(selection.getMarker())
+, delimiter(selection.getDelimiter())
+, maximum(selection.getMaximum())
+, truncated(false)
 {
 	initialize();
 	execute();
 }
 
-BucketManifest::BucketManifest(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+BucketManifest::BucketManifest(const char * bucketname, Multiplex & multiplex, const Selection & selection, const Context & context, const Session & session)
 : Bucket(bucketname, multiplex, context, session)
+, prefix(selection.getPrefix())
+, marker(selection.getMarker())
+, nextmarker(selection.getMarker())
+, delimiter(selection.getDelimiter())
+, maximum(selection.getMaximum())
+, truncated(false)
 {
 	initialize();
 }
@@ -72,23 +104,26 @@ void BucketManifest::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Bucket::handler.propertiesCallback;
-	handler.responseHandler.completeCallback = Bucket::handler.completeCallback;
+	handler.responseHandler.completeCallback = &responseCompleteCallback;
 	handler.listBucketCallback = &listBucketCallback;
 }
 
 void BucketManifest::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
-	Logger::instance().debug("BucketManifest@%p: begin\n", this);
-	::S3_list_bucket(
-		&context,
-		0,
-		0,
-		0,
-		intmaxof(int),
-		requests,
-		&handler,
-		this
-	);
+	Manifest::size_type size = manifest.size();
+	if (maximum > size) {
+		status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+		Logger::instance().debug("BucketManifest@%p: %s\n", this, (size == 0) ? "begin" : "continue");
+		::S3_list_bucket(
+			&context,
+			prefix.empty() ? 0 : prefix.c_str(),
+			nextmarker.empty() ? 0 : nextmarker.c_str(),
+			delimiter.empty() ? 0 : delimiter.c_str(),
+			maximum - size,
+			requests,
+			&handler,
+			this
+		);
+	}
 }
 
 void BucketManifest::start() {
@@ -99,16 +134,18 @@ void BucketManifest::start() {
 
 const BucketManifest::Entry * BucketManifest::find(const char * name) const {
 	const Entry * entry = 0;
-	List::const_iterator here = list.find(name);
-	if (here != list.end()) {
+	Manifest::const_iterator here = manifest.find(name);
+	if (here != manifest.end()) {
 		entry = &(here->second);
 	}
 	return entry;
 }
 
-void BucketManifest::clear() {
+void BucketManifest::reset() {
 	if ((state() != BUSY)) {
-		list.clear();
+		manifest.clear();
+		nextmarker = marker;
+		truncated = false;
 	}
 }
 

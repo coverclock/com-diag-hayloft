@@ -175,6 +175,7 @@ MANIFEST_O=\
  s3/Show.o \
  s3/Properties.o \
  s3/Conditions.o \
+ s3/Selection.o \
  s3/Action.o \
  s3/Container.o \
  s3/Service.o \

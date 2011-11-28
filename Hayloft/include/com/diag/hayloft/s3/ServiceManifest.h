@@ -45,7 +45,7 @@ public:
 
 	};
 
-	typedef std::map<std::string, Entry> List;
+	typedef std::map<std::string, Entry> Manifest;
 
 	typedef std::pair<std::string, Entry> Pair;
 
@@ -55,7 +55,7 @@ private:
 
 protected:
 
-	List list;
+	Manifest manifest;
 
 	::S3ListServiceHandler handler;
 
@@ -76,11 +76,11 @@ public:
 
 	virtual void start();
 
-	const List & getList() const { return list; }
+	const Manifest & getManifest() const { return manifest; }
 
 	virtual const Entry * find(const char * name) const;
 
-	virtual void clear();
+	virtual void reset();
 
 protected:
 
