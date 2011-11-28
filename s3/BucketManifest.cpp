@@ -41,18 +41,23 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 	}
 	if (contents != 0) {
 		for (int ii = 0; ii < contentsCount; ++ii) {
-			const char * effective = (contents[ii].key != 0) ? contents[ii].key : "";
-			Entry entry(contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
-			Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, effective, entry.modified, entry.etag.c_str(), entry.size, entry.id.c_str(), entry.display.c_str());
-			if ((status == ::S3StatusOK) && (that->manifest.size() < that->maximum)) {
-				that->manifest.insert(Pair(effective, entry));
+			if ((contents[ii].key != 0) && (*contents[ii].key != '\0')) {
+				Entry entry(contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
+				Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, contents[ii].key, entry.modified, entry.etag.c_str(), entry.size, entry.id.c_str(), entry.display.c_str());
+				if ((status == ::S3StatusOK) && (that->manifest.size() < that->maximum)) {
+					that->manifest.insert(Pair(contents[ii].key, entry));
+				}
 			}
 		}
 	}
 	if (commonPrefixes != 0) {
 		for (int ii = 0; ii < commonPrefixesCount; ++ii) {
-			const char * effective = (commonPrefixes[ii] != 0) ? commonPrefixes[ii] : "";
-			Logger::instance().log(level, "BucketManifest@%p: commonPrefix=\"%s\"\n", that, effective);
+			if ((commonPrefixes[ii] != 0) && (*commonPrefixes[ii] != '\0')) {
+				Logger::instance().log(level, "BucketManifest@%p: commonPrefix=\"%s\"\n", that, commonPrefixes[ii]);
+				if (status == ::S3StatusOK) {
+					that->common.push_back(commonPrefixes[ii]);
+				}
+			}
 		}
 	}
 	Logger::instance().log(level, "BucketManifest@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
@@ -102,6 +107,13 @@ BucketManifest::~BucketManifest() {
 
 void BucketManifest::initialize() {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(Logger::DEBUG)) {
+		logger.debug("Bucket@%p: prefix=\"%s\"\n", this, prefix.c_str());
+		logger.debug("Bucket@%p: marker=\"%s\"\n", this, nextmarker.c_str());
+		logger.debug("Bucket@%p: delimiter=\"%s\"\n", this, delimiter.c_str());
+		logger.debug("Bucket@%p: maximum=%d\n", this, maximum);
+	}
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Bucket::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = &responseCompleteCallback;
@@ -144,6 +156,7 @@ const BucketManifest::Entry * BucketManifest::find(const char * name) const {
 void BucketManifest::reset() {
 	if ((state() != BUSY)) {
 		manifest.clear();
+		common.clear();
 		nextmarker = marker;
 		truncated = false;
 	}
