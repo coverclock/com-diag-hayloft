@@ -1344,18 +1344,8 @@ TEST_F(Verbose, Manifest) {
 	EXPECT_EQ(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
-	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
-		if (objectdelete1.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
-		} else if (objectdelete1.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
-		}
-		platform.yield(platform.frequency());
-		objectdelete1.start();
-	}
-	/**/
-	BucketManifest bucketmanifest4(BUCKET);
+	Selection selection(0, 0, 0, 1);
+	BucketManifest bucketmanifest4(BUCKET, selection);
 	for (int ii = 0; (bucketmanifest4.isRetryable() || bucketmanifest4.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest4.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
@@ -1366,18 +1356,18 @@ TEST_F(Verbose, Manifest) {
 		bucketmanifest4.start();
 	}
 	EXPECT_EQ(bucketmanifest4.getManifest().size(), 1);
-	EXPECT_EQ(bucketmanifest4.find(OBJECT1), (BucketManifest::Entry *)0);
-	EXPECT_NE(bucketmanifest4.find(OBJECT2), (BucketManifest::Entry *)0);
+	EXPECT_NE(bucketmanifest4.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_EQ(bucketmanifest4.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
-	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
-		if (objectdelete2.isRetryable()) {
+	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
+	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
+		if (objectdelete1.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-		} else if (objectdelete2.isNonexistent()) {
+		} else if (objectdelete1.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectdelete2.start();
+		objectdelete1.start();
 	}
 	/**/
 	BucketManifest bucketmanifest5(BUCKET);
@@ -1390,9 +1380,34 @@ TEST_F(Verbose, Manifest) {
 		platform.yield(platform.frequency());
 		bucketmanifest5.start();
 	}
-	EXPECT_EQ(bucketmanifest5.getManifest().size(), 0);
+	EXPECT_EQ(bucketmanifest5.getManifest().size(), 1);
 	EXPECT_EQ(bucketmanifest5.find(OBJECT1), (BucketManifest::Entry *)0);
-	EXPECT_EQ(bucketmanifest5.find(OBJECT2), (BucketManifest::Entry *)0);
+	EXPECT_NE(bucketmanifest5.find(OBJECT2), (BucketManifest::Entry *)0);
+	/**/
+	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
+	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
+		if (objectdelete2.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objectdelete2.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objectdelete2.start();
+	}
+	/**/
+	BucketManifest bucketmanifest6(BUCKET);
+	for (int ii = 0; (bucketmanifest6.isRetryable() || bucketmanifest6.isNonexistent()) && (ii < LIMIT); ++ii) {
+		if (bucketmanifest6.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (bucketmanifest6.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		bucketmanifest6.start();
+	}
+	EXPECT_EQ(bucketmanifest6.getManifest().size(), 0);
+	EXPECT_EQ(bucketmanifest6.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_EQ(bucketmanifest6.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	BucketDelete bucketdelete(BUCKET);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
