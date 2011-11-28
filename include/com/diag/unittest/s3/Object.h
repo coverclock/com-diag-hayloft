@@ -188,15 +188,20 @@ TEST_F(ObjectTest, Heap) {
 	delete objecthead;
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/SynchronousHeap.txt */
 	ObjectGet * objectget = 0;
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		delete objectget;
-		::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
-		ASSERT_NE(output, (::com::diag::desperado::PathOutput*)0);
-		objectget = new ObjectGet(OBJECT, *bucketcreate, output /* TAKEN */);
-		ASSERT_NE(objectget, (ObjectGet*)0);
-		EXPECT_EQ(*objectget, true);
-		if (!objectget->isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			delete objectget;
+			::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+			ASSERT_NE(output, (::com::diag::desperado::PathOutput*)0);
+			objectget = new ObjectGet(OBJECT, *bucketcreate, output /* TAKEN */);
+			ASSERT_NE(objectget, (ObjectGet*)0);
+			EXPECT_EQ(*objectget, true);
+			if (!objectget->isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (objectget->isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget->isIdle());
@@ -549,22 +554,27 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectget.isInaccessible());
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_FALSE(objectget.isSuccessful());
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		objectget.start();
-		EXPECT_EQ(objectget, false);
-		EXPECT_FALSE(objectget.isIdle());
-		EXPECT_TRUE(objectget.isBusy());
-		EXPECT_FALSE(objectget.isRetryable());
-		EXPECT_FALSE(objectget.isInaccessible());
-		EXPECT_FALSE(objectget.isNonexistent());
-		EXPECT_FALSE(objectget.isSuccessful());
-		EXPECT_TRUE(multiplex.complete());
-		EXPECT_EQ(objectget, true);
-		if (!objectget.isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objectget.start();
+			EXPECT_EQ(objectget, false);
+			EXPECT_FALSE(objectget.isIdle());
+			EXPECT_TRUE(objectget.isBusy());
+			EXPECT_FALSE(objectget.isRetryable());
+			EXPECT_FALSE(objectget.isInaccessible());
+			EXPECT_FALSE(objectget.isNonexistent());
+			EXPECT_FALSE(objectget.isSuccessful());
+			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(objectget, true);
+			if (!objectget.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			output = new ::com::diag::desperado::PathOutput(OBJECT);
+			objectget.reset(output);
+		}
+		if (objectget.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		output = new ::com::diag::desperado::PathOutput(OBJECT);
-		objectget.reset(output);
 	}
 	EXPECT_FALSE(objectget.isIdle());
 	EXPECT_FALSE(objectget.isBusy());
@@ -1003,27 +1013,32 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectget.isInaccessible());
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_FALSE(objectget.isSuccessful());
-	for (int ii = 0; ii < LIMIT; ++ii) {
-		objectget.start();
-		EXPECT_EQ(objectget, false);
-		EXPECT_FALSE(objectget.isIdle());
-		EXPECT_TRUE(objectget.isBusy());
-		EXPECT_FALSE(objectget.isRetryable());
-		EXPECT_FALSE(objectget.isInaccessible());
-		EXPECT_FALSE(objectget.isNonexistent());
-		EXPECT_FALSE(objectget.isSuccessful());
-		int bits = 0;
-		for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
-			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			printf("TIMEDOUT %d\n", __LINE__);
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objectget.start();
+			EXPECT_EQ(objectget, false);
+			EXPECT_FALSE(objectget.isIdle());
+			EXPECT_TRUE(objectget.isBusy());
+			EXPECT_FALSE(objectget.isRetryable());
+			EXPECT_FALSE(objectget.isInaccessible());
+			EXPECT_FALSE(objectget.isNonexistent());
+			EXPECT_FALSE(objectget.isSuccessful());
+			int bits = 0;
+			for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
+				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
+				printf("TIMEDOUT %d\n", __LINE__);
+			}
+			EXPECT_EQ(bits, 0);
+			EXPECT_EQ(objectget, true);
+			if (!objectget.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			output = new ::com::diag::desperado::PathOutput(OBJECT);
+			objectget.reset(output);
 		}
-		EXPECT_EQ(bits, 0);
-		EXPECT_EQ(objectget, true);
-		if (!objectget.isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+		if (objectget.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		output = new ::com::diag::desperado::PathOutput(OBJECT);
-		objectget.reset(output);
 	}
 	EXPECT_FALSE(objectget.isIdle());
 	EXPECT_FALSE(objectget.isBusy());
