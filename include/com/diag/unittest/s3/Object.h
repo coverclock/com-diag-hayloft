@@ -1276,6 +1276,9 @@ TEST_F(Verbose, Manifest) {
 		platform.yield(platform.frequency());
 		bucketmanifest1.start();
 	}
+	EXPECT_EQ(bucketmanifest1.getList().size(), 0);
+	EXPECT_EQ(bucketmanifest1.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_EQ(bucketmanifest1.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
@@ -1303,6 +1306,9 @@ TEST_F(Verbose, Manifest) {
 		platform.yield(platform.frequency());
 		bucketmanifest2.start();
 	}
+	EXPECT_EQ(bucketmanifest2.getList().size(), 1);
+	EXPECT_NE(bucketmanifest2.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_EQ(bucketmanifest2.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	input = new ::com::diag::desperado::PathInput(__FILE__);
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
@@ -1330,6 +1336,13 @@ TEST_F(Verbose, Manifest) {
 		platform.yield(platform.frequency());
 		bucketmanifest3.start();
 	}
+	EXPECT_EQ(bucketmanifest3.getList().size(), 2);
+	EXPECT_NE(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_NE(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
+	bucketmanifest3.clear();
+	EXPECT_EQ(bucketmanifest3.getList().size(), 0);
+	EXPECT_EQ(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_EQ(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
@@ -1352,6 +1365,9 @@ TEST_F(Verbose, Manifest) {
 		platform.yield(platform.frequency());
 		bucketmanifest4.start();
 	}
+	EXPECT_EQ(bucketmanifest4.getList().size(), 1);
+	EXPECT_EQ(bucketmanifest4.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_NE(bucketmanifest4.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
 	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
@@ -1374,6 +1390,9 @@ TEST_F(Verbose, Manifest) {
 		platform.yield(platform.frequency());
 		bucketmanifest5.start();
 	}
+	EXPECT_EQ(bucketmanifest5.getList().size(), 0);
+	EXPECT_EQ(bucketmanifest5.find(OBJECT1), (BucketManifest::Entry *)0);
+	EXPECT_EQ(bucketmanifest5.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	BucketDelete bucketdelete(BUCKET);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
@@ -1386,6 +1405,7 @@ TEST_F(Verbose, Manifest) {
 		bucketdelete.start();
 	}
 }
+
 }
 }
 }

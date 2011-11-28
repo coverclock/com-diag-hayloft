@@ -74,6 +74,12 @@ void ServiceManifest::execute() {
 	);
 }
 
+void ServiceManifest::start() {
+	if ((state() == BUSY) && (requests != 0)) {
+		execute();
+	}
+}
+
 const ServiceManifest::Entry * ServiceManifest::find(const char * name) const {
 	const Entry * entry = 0;
 	List::const_iterator here = list.find(name);
@@ -83,9 +89,9 @@ const ServiceManifest::Entry * ServiceManifest::find(const char * name) const {
 	return entry;
 }
 
-void ServiceManifest::start() {
-	if ((state() == BUSY) && (requests != 0)) {
-		execute();
+void ServiceManifest::clear() {
+	if ((state() != BUSY)) {
+		list.clear();
 	}
 }
 
