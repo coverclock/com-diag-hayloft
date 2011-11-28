@@ -190,6 +190,7 @@ MANIFEST_O=\
  s3/ObjectGet.o \
  s3/ObjectDelete.o \
  s3/ObjectHead.o \
+ s3/ObjectCopy.o \
  s3/BucketManifest.o
 
 ################################################################################

@@ -17,14 +17,6 @@
 
 namespace com {
 namespace diag {
-namespace desperado {
-class Input;
-}
-}
-}
-
-namespace com {
-namespace diag {
 namespace hayloft {
 namespace s3 {
 
