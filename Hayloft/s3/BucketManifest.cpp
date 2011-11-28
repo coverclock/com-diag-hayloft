@@ -97,6 +97,21 @@ void BucketManifest::start() {
 	}
 }
 
+const BucketManifest::Entry * BucketManifest::find(const char * name) const {
+	const Entry * entry = 0;
+	List::const_iterator here = list.find(name);
+	if (here != list.end()) {
+		entry = &(here->second);
+	}
+	return entry;
+}
+
+void BucketManifest::clear() {
+	if ((state() != BUSY)) {
+		list.clear();
+	}
+}
+
 ::S3Status BucketManifest::entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes) {
 	return ::S3StatusOK;
 }

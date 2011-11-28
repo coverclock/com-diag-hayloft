@@ -739,7 +739,7 @@ TEST_F(BucketTest, Manifest) {
 		servicemanifest2.start();
 	}
 	EXPECT_EQ(servicemanifest2.getList().size(), 1);
-	ASSERT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
+	EXPECT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -753,8 +753,12 @@ TEST_F(BucketTest, Manifest) {
 		servicemanifest3.start();
 	}
 	EXPECT_EQ(servicemanifest3.getList().size(), 2);
-	ASSERT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
-	ASSERT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
+	EXPECT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
+	EXPECT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
+	servicemanifest3.clear();
+	EXPECT_EQ(servicemanifest3.getList().size(), 0);
+	EXPECT_EQ(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
+	EXPECT_EQ(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete1(BUCKET1);
 	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete1.isRetryable()) {
@@ -773,7 +777,7 @@ TEST_F(BucketTest, Manifest) {
 	}
 	EXPECT_EQ(servicemanifest4.getList().size(), 1);
 	EXPECT_EQ(servicemanifest4.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
-	ASSERT_NE(servicemanifest4.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
+	EXPECT_NE(servicemanifest4.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete2(BUCKET2);
 	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete2.isRetryable()) {

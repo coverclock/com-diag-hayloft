@@ -78,7 +78,9 @@ public:
 
 	const List & getList() const { return list; }
 
-	const Entry * find(const char * name) const;
+	virtual const Entry * find(const char * name) const;
+
+	virtual void clear();
 
 protected:
 

@@ -82,6 +82,12 @@ public:
 
 	virtual void start();
 
+	const List & getList() const { return list; }
+
+	virtual const Entry * find(const char * name) const;
+
+	virtual void clear();
+
 protected:
 
 	virtual ::S3Status entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes);
