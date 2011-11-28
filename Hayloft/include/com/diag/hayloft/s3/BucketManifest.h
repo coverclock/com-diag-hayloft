@@ -12,6 +12,7 @@
  */
 
 #include <map>
+#include <list>
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Selection.h"
 
@@ -54,6 +55,8 @@ public:
 
 	typedef std::pair<std::string, Entry> Pair;
 
+	typedef std::list<std::string> Common;
+
 private:
 
 	static ::S3Status listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData);
@@ -75,6 +78,8 @@ protected:
 	bool truncated;
 
 	Manifest manifest;
+
+	Common common;
 
 	::S3ListBucketHandler handler;
 
@@ -100,6 +105,8 @@ public:
 	virtual void start();
 
 	const Manifest & getManifest() const { return manifest; }
+
+	const Common & getCommon() const { return common; }
 
 	virtual const Entry * find(const char * name) const;
 
