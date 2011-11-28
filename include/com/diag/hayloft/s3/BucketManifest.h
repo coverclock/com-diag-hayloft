@@ -13,6 +13,7 @@
 
 #include <map>
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/Selection.h"
 
 namespace com {
 namespace diag {
@@ -49,7 +50,7 @@ public:
 
 	};
 
-	typedef std::map<std::string, Entry> List;
+	typedef std::map<std::string, Entry> Manifest;
 
 	typedef std::pair<std::string, Entry> Pair;
 
@@ -57,9 +58,23 @@ private:
 
 	static ::S3Status listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData);
 
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
 protected:
 
-	List list;
+	std::string prefix;
+
+	std::string marker;
+
+	std::string nextmarker;
+
+	std::string delimiter;
+
+	int maximum;
+
+	bool truncated;
+
+	Manifest manifest;
 
 	::S3ListBucketHandler handler;
 
@@ -67,6 +82,7 @@ public:
 
 	explicit BucketManifest(
 		const char * bucketname,
+		const Selection & selection = Selection(),
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
@@ -74,6 +90,7 @@ public:
 	explicit BucketManifest(
 		const char * bucketname,
 		Multiplex & multiplex,
+		const Selection & selection = Selection(),
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
@@ -82,11 +99,11 @@ public:
 
 	virtual void start();
 
-	const List & getList() const { return list; }
+	const Manifest & getManifest() const { return manifest; }
 
 	virtual const Entry * find(const char * name) const;
 
-	virtual void clear();
+	virtual void reset();
 
 protected:
 

@@ -31,7 +31,7 @@ ServiceManifest::Entry::Entry(const char * ownerId, const char * ownerDisplayNam
 	Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.id.c_str(), entry.display.c_str(), entry.created);
 	Logger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
 	if (status == ::S3StatusOK) {
-		that->list.insert(Pair(effective, entry));
+		that->manifest.insert(Pair(effective, entry));
 	}
 	return status;
 }
@@ -82,16 +82,16 @@ void ServiceManifest::start() {
 
 const ServiceManifest::Entry * ServiceManifest::find(const char * name) const {
 	const Entry * entry = 0;
-	List::const_iterator here = list.find(name);
-	if (here != list.end()) {
+	Manifest::const_iterator here = manifest.find(name);
+	if (here != manifest.end()) {
 		entry = &(here->second);
 	}
 	return entry;
 }
 
-void ServiceManifest::clear() {
+void ServiceManifest::reset() {
 	if ((state() != BUSY)) {
-		list.clear();
+		manifest.clear();
 	}
 }
 

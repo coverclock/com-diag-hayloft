@@ -725,7 +725,7 @@ TEST_F(BucketTest, Manifest) {
 		platform.yield(platform.frequency());
 		servicemanifest1.start();
 	}
-	EXPECT_EQ(servicemanifest1.getList().size(), 0);
+	EXPECT_EQ(servicemanifest1.getManifest().size(), 0);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -738,7 +738,7 @@ TEST_F(BucketTest, Manifest) {
 		platform.yield(platform.frequency());
 		servicemanifest2.start();
 	}
-	EXPECT_EQ(servicemanifest2.getList().size(), 1);
+	EXPECT_EQ(servicemanifest2.getManifest().size(), 1);
 	EXPECT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
@@ -752,11 +752,11 @@ TEST_F(BucketTest, Manifest) {
 		platform.yield(platform.frequency());
 		servicemanifest3.start();
 	}
-	EXPECT_EQ(servicemanifest3.getList().size(), 2);
+	EXPECT_EQ(servicemanifest3.getManifest().size(), 2);
 	EXPECT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
-	servicemanifest3.clear();
-	EXPECT_EQ(servicemanifest3.getList().size(), 0);
+	servicemanifest3.reset();
+	EXPECT_EQ(servicemanifest3.getManifest().size(), 0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete1(BUCKET1);
@@ -775,7 +775,7 @@ TEST_F(BucketTest, Manifest) {
 		platform.yield(platform.frequency());
 		servicemanifest4.start();
 	}
-	EXPECT_EQ(servicemanifest4.getList().size(), 1);
+	EXPECT_EQ(servicemanifest4.getManifest().size(), 1);
 	EXPECT_EQ(servicemanifest4.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest4.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete2(BUCKET2);
@@ -794,7 +794,7 @@ TEST_F(BucketTest, Manifest) {
 		platform.yield(platform.frequency());
 		servicemanifest5.start();
 	}
-	EXPECT_EQ(servicemanifest5.getList().size(), 0);
+	EXPECT_EQ(servicemanifest5.getManifest().size(), 0);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 }
