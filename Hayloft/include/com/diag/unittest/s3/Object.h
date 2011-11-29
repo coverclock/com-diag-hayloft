@@ -1499,7 +1499,10 @@ TEST_F(ObjectTest, Manifest) {
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 }
 
-TEST_F(ObjectTest, Copy) {
+TEST_F(Verbose, Copy) {
+	// I'm also experimenting to see what meta-data is returned by which
+	// OBJECT ACTION. It looks like a full set of Response Properties are
+	// only returned by OBJECT HEAD and OBJECT GET.
 	static const int LIMIT = 10;
 	const char BUCKET1[] = "ObjectTestManifest1";
 	const char BUCKET2[] = "ObjectTestManifest2";
@@ -1566,15 +1569,40 @@ TEST_F(ObjectTest, Copy) {
 		objectcopy.start();
 	}
 	ASSERT_TRUE(objectcopy.isSuccessful());
+	// Turning debug logging on suggests that S3 doesn't respond with a
+	// response properties for an OBJECT COPY, so most of these fields don't
+	// get filled in. libs3.h suggests that its S3_object_copy() functions
+	// provides eTag and modificationTime for the new OBJECT. But unless there's
+	// a bug in my code (entirely possible) that doesn't seem to happen either.
+	// If you want them, you're going to have to do an OBJECT HEAD.
 	printf("key=\"%s\"\n", objectcopy.getKey());
 	printf("bucket=\"%s\"\n", objectcopy.getCanonical());
 	printf("server=\"%s\"\n", objectcopy.getServer());
 	printf("requestId=\"%s\"\n", objectcopy.getRequestId());
 	printf("requestId2=\"%s\"\n", objectcopy.getRequestId2());
-	printf("contentType=\"%s\"\n", objectcopy.getContentType());
 	printf("eTag=\"%s\"\n", objectcopy.getETag());
-	printf("contentLength=%llu\n", objectcopy.getContentLength());
 	printf("modificationTime=%lld\n", objectcopy.getModificationTime());
+	/**/
+	ObjectHead objecthead2(OBJECT2, bucket2);
+	for (int ii = 0; (objecthead2.isRetryable() || objecthead2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
+		if (objecthead2.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objecthead2.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objecthead2.start();
+	}
+	ASSERT_TRUE(objecthead2.isSuccessful());
+	printf("key=\"%s\"\n", objecthead2.getKey());
+	printf("bucket=\"%s\"\n", objecthead2.getCanonical());
+	printf("server=\"%s\"\n", objecthead2.getServer());
+	printf("requestId=\"%s\"\n", objecthead2.getRequestId());
+	printf("requestId2=\"%s\"\n", objecthead2.getRequestId2());
+	printf("contentType=\"%s\"\n", objecthead2.getContentType());
+	printf("eTag=\"%s\"\n", objecthead2.getETag());
+	printf("contentLength=%llu\n", objecthead2.getContentLength());
+	printf("modificationTime=%lld\n", objecthead2.getModificationTime());
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);
@@ -1590,6 +1618,15 @@ TEST_F(ObjectTest, Copy) {
 		objectget2.start();
 	}
 	ASSERT_TRUE(objectget2.isSuccessful());
+	printf("key=\"%s\"\n", objectget2.getKey());
+	printf("bucket=\"%s\"\n", objectget2.getCanonical());
+	printf("server=\"%s\"\n", objectget2.getServer());
+	printf("requestId=\"%s\"\n", objectget2.getRequestId());
+	printf("requestId2=\"%s\"\n", objectget2.getRequestId2());
+	printf("contentType=\"%s\"\n", objectget2.getContentType());
+	printf("eTag=\"%s\"\n", objectget2.getETag());
+	printf("contentLength=%llu\n", objectget2.getContentLength());
+	printf("modificationTime=%lld\n", objectget2.getModificationTime());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucket1);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
