@@ -187,7 +187,7 @@ public:
 	Action & setRequests(::S3RequestContext * req);
 
 	/**
-	 * Return the status for this Action. A pointer to a C string describing the
+	 * Get the status for this Action. A pointer to a C string describing the
 	 * status can be optionally returned.
 	 *
 	 * @param description if non-null points to a variable into which a pointer
@@ -197,7 +197,7 @@ public:
 	::S3Status getStatus(const char ** description = 0) const;
 
 	/**
-	 * Return the name of the S3 server used to execute this Action. This is
+	 * Get the name of the S3 server used to execute this Action. This is
 	 * less useful than it sounds, since I have never seen S3 return any
 	 * name other than "AmazonS3".
 	 *
@@ -206,14 +206,14 @@ public:
 	const char * getServer() const { return server.c_str(); }
 
 	/**
-	 * Return the request ID used to execute this Action.
+	 * Get the request ID used to execute this Action.
 	 *
 	 * @return the request ID used to execute this Action.
 	 */
 	const char * getRequestId() const { return requestid.c_str(); }
 
 	/**
-	 * Return the request ID 2 used to execute this Action.
+	 * Get the request ID 2 used to execute this Action.
 	 *
 	 * @return the request ID 2 used to execute this Action..
 	 */

@@ -86,7 +86,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 */
@@ -98,7 +99,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
@@ -117,14 +119,14 @@ public:
 	virtual ~Object();
 
 	/**
-	 * Return the key (object name) associated with this Object.
+	 * Get the key (object name) associated with this Object.
 	 *
 	 * @return the key (object name).
 	 */
 	const char * getKey() const { return key.c_str(); }
 
 	/**
-	 * Return the non-canonical (application) bucket name associated with this
+	 * Get the non-canonical (application) bucket name associated with this
 	 * Object.
 	 *
 	 * @return the non-canonical bucket name.
@@ -132,31 +134,31 @@ public:
 	const char * getName() const { return name.c_str(); }
 
 	/**
-	 * Return the content type provided by S3 once this Action completes.
+	 * Get the content type provided by S3 once this Action completes.
 	 * @return the content type.
 	 */
 	const char * getContentType() const { return type.c_str(); }
 
 	/**
-	 * Return the eTag provided by S3 once this Action completes.
+	 * Get the eTag provided by S3 once this Action completes.
 	 * @return the eTag.
 	 */
 	const char * getETag() const { return etag.c_str(); }
 
 	/**
-	 * Return the content length provided by S3 once this Action completes.
+	 * Get the content length provided by S3 once this Action completes.
 	 * @return the length.
 	 */
 	Octets getContentLength() const { return length; }
 
 	/**
-	 * Return the modification time provided by S3 once this Action completes.
+	 * Get the modification time provided by S3 once this Action completes.
 	 * @return the modification time.
 	 */
 	Epochalseconds getModificationTime() const { return modified; }
 
 	/**
-	 * Return a constant reference to the Metadata map.
+	 * Get a constant reference to the Metadata map.
 	 *
 	 * @return a constant reference to the Metadata map.
 	 */

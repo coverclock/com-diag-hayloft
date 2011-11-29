@@ -77,13 +77,15 @@ public:
 	 * Ctor. Use this for the synchronous interface.
 	 *
 	 * @param fromkeyname is the name of this Object from which the copy is
-	 *        made.
+	 *        made. A copy is made of this C string.
 	 * @param frombucket refers to the Bucket associated with this object from
 	 *        which the copy is made. This reference is only used during
-	 *        construction.
+	 *        construction. A copy is made of this C string.
 	 * @param tokeyname is the name of that Object to which the copy is made.
+	 *        A copy is made of this C string.
 	 * @param tobucket refers to the Bucket to which the copy is made. This
-	 *        reference is only used during construction.
+	 *        reference is only used during construction. A copy is made of
+	 *        this C string.
 	 * @param props refers to the Properties to be associated with the object
 	 *        to which the copy is being made. This reference is only used
 	 *        during construction.
@@ -100,11 +102,12 @@ public:
 	 * Ctor. Use this for the synchronous interface.
 	 *
 	 * @param fromkeyname is the name of this Object from which the copy is
-	 *        made.
+	 *        made. A copy is made of this C string.
 	 * @param frombucket refers to the Bucket associated with this object from
 	 *        which the copy is made. This reference is only used during
 	 *        construction.
 	 * @param tokeyname is the name of that Object to which the copy is made.
+	 *        A copy is made of this C string.
 	 * @param tobucket refers to the Bucket to which the copy is made. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
@@ -135,13 +138,13 @@ public:
 	virtual void start();
 
 	/**
-	 * Return the canonical name of the bucket to which the copy is made.
+	 * Get the canonical name of the bucket to which the copy is made.
 	 * @return the canonical name of the bucket to which the copy is made.
 	 */
 	const char * getCanonicalTo() const { return tocanonical.c_str(); }
 
 	/**
-	 * Return the non-canonical (application) anme of the bucket to which the
+	 * Get the non-canonical (application) anme of the bucket to which the
 	 * copy is made.
 	 * @return the non-canonical (application) anme of the bucket to which the
 	 * copy is made.
@@ -149,7 +152,7 @@ public:
 	const char * getNameTo() const { return toname.c_str(); }
 
 	/**
-	 * Return the name of the object to which the copy is made.
+	 * Get the name of the object to which the copy is made.
 	 * @return name of the object to which the copy is made.
 	 */
 	const char * getKeyTo() const { return tokey.c_str(); }

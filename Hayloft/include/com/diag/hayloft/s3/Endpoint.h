@@ -21,16 +21,23 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * Endpoint identifies a particular host name for use in the Uniform Resource
+ * Identifier for executing Actions or accessing Services. The end point you
+ * should use depends on your geographic location and the region or location
+ * constraint you have used or intend to use with any S3 buckets. S3 rejects
+ * operations where the end point doesn't jive with the location constraint.
+ * Your default end point (and region) can be set with environmental variables.
+ * Be aware that AWS occasionally adds new end points and regions.
+ */
 class Endpoint {
 
 public:
 
 	/**
-	 * AWS S3 places a limit of this many characters on the endpoint name (a.k.a.
-	 * the host name).
+	 * This is the name of the environmental variable with which you can
+	 * specify the name of your default end point.
 	 */
-	static const size_t LENGTH = S3_MAX_HOSTNAME_SIZE;
-
 	static const char * ENDPOINT_ENV() { return "COM_DIAG_HAYLOFT_S3_ENDPOINT_HOSTNAME"; }
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "s3-ap-northeast-1.amazonaws.com"; }
@@ -47,7 +54,17 @@ public:
 
 	static const char * UNITED_STATES_WEST_2() { return "s3-us-west-2.amazonaws.com"; }
 
+	/**
+	 * This is the name of the default end point if you don't specify one
+	 * otherwise.
+	 */
 	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
+
+	/**
+	 * AWS S3 places a limit of this many characters on the end point name
+	 * (a.k.a. the host name).
+	 */
+	static const size_t LENGTH = S3_MAX_HOSTNAME_SIZE;
 
 protected:
 
@@ -55,18 +72,43 @@ protected:
 
 public:
 
+	/**
+	 * Ctor.
+	 *
+	 * @param ep is an AWS end point name. If null, the end point name is
+	 *        taken from the environment. A copy is made of this C string.
+	 */
 	explicit Endpoint(
 		const char * ep = 0
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~Endpoint() {}
 
+	/**
+	 * Get the end point name.
+	 *
+	 * @return the end point name.
+	 */
 	const char * getEndpoint() const { return endpoint.c_str(); }
 
+	/**
+	 * Set the end point name.
+	 *
+	 * @param ep is an AWS end point name. If null, the end point name is
+	 *        taken from the environment.
+	 * @return a reference to this object.
+	 */
 	Endpoint & setEndpoint(const char * ep = 0) { endpoint = set(ep, ENDPOINT_ENV(), DEFAULT()); return *this; }
 
 };
 
+/**
+ * EndpointIreland is an Endpoint that represents the Ireland (a.k.a. EU WEST 1)
+ * AWS region.
+ */
 class EndpointIreland : public Endpoint {
 
 public:
@@ -79,6 +121,10 @@ public:
 
 };
 
+/**
+ * EndpointNorthernVirginia is an Endpoint that represents the Northern
+ * Virginia (a.k.a. EAST 1) AWS region.
+ */
 class EndpointNorthernVirginia : public Endpoint {
 
 public:
@@ -91,6 +137,10 @@ public:
 
 };
 
+/**
+ * EndpointNorthernCalifornia is an Endpoint that represents the Northern
+ * California (a.k.a. WEST 1) AWS region.
+ */
 class EndpointNorthernCalifornia : public Endpoint {
 
 public:
@@ -103,6 +153,10 @@ public:
 
 };
 
+/**
+ * EndpointOregon is an Endpoint that represents the Oregon (a.k.a. WEST 2)
+ * AWS region.
+ */
 class EndpointOregon : public Endpoint {
 
 public:
@@ -115,6 +169,10 @@ public:
 
 };
 
+/**
+ * EndpointSingapore is an Endpoint that represents the Singapore (a.k.a.
+ * SOUTH EAST 1) AWS region.
+ */
 class EndpointSingapore : public Endpoint {
 
 public:
@@ -127,6 +185,10 @@ public:
 
 };
 
+/**
+ * EndpointTokyo is an Endpoint that represents the Tokyo (a.k.a.
+ * NORTH EAST 1) AWS region.
+ */
 class EndpointTokyo : public Endpoint {
 
 public:
@@ -139,6 +201,10 @@ public:
 
 };
 
+/**
+ * EndpointUnitedStates is an Endpoint that represents the bi-coastal
+ * United States (a.k.a. STANDARD or CLASSIC) AWS region.
+ */
 class EndpointUnitedStates : public Endpoint {
 
 public:

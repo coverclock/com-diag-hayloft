@@ -69,28 +69,28 @@ public:
 	virtual ~Conditions() {}
 
 	/**
-	 * Return the ifModifiedSince condition.
+	 * Get the ifModifiedSince condition.
 	 *
 	 * @return the ifModifiedSince condition.
 	 */
 	Epochalseconds getSince() const { return since; }
 
 	/**
-	 * Return the ifNotModifiedSince condition.
+	 * Get the ifNotModifiedSince condition.
 	 *
 	 * @return the ifNotModifiedSince condition.
 	 */
 	Epochalseconds getNotSince() const { return notsince; }
 
 	/**
-	 * Return the ifMatchETag condition.
+	 * Get the ifMatchETag condition.
 	 *
 	 * @return the ifMatchETag condition.
 	 */
 	const char * getMatch() const { return match.c_str(); }
 
 	/**
-	 * Return the ifNotMatchETag condition.
+	 * Get the ifNotMatchETag condition.
 	 *
 	 * @return the ifNotMatchETag condition.
 	 */

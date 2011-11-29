@@ -74,42 +74,42 @@ public:
 	virtual ~Context() {}
 
 	/**
-	 * Return the access key ID.
+	 * Get the access key ID.
 	 *
 	 * @return the access key ID.
 	 */
 	const char * getId() const { return id.c_str(); }
 
 	/**
-	 * Return the secret access key.
+	 * Get the secret access key.
 	 *
 	 * @return the secret access key.
 	 */
 	const char * getSecret() const { return secret.c_str(); }
 
 	/**
-	 * Return the region.
+	 * Get the region.
 	 *
 	 * @return the region.
 	 */
 	const char * getRegion() const { return region.c_str(); }
 
 	/**
-	 * Return the protocol.
+	 * Get the protocol.
 	 *
 	 * @return the protocol.
 	 */
 	::S3Protocol getProtocol() const { return protocol; }
 
 	/**
-	 * Return the style.
+	 * Get the style.
 	 *
 	 * @return the style.
 	 */
 	::S3UriStyle getStyle() const { return style; }
 
 	/**
-	 * Return the access.
+	 * Get the access.
 	 *
 	 * @return the access.
 	 */

@@ -35,7 +35,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 */
@@ -47,7 +48,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this

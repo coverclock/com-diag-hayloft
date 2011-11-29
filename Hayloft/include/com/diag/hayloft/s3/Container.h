@@ -41,13 +41,15 @@ public:
 	 * Ctor. This is used by the synchronous interface.
 	 *
 	 * @param accessKeyId is the access key ID (like a login or account number)
-	 *        provided by AWS used to access this Container.
+	 *        provided by AWS used to access this Container. A copy is made of
+	 *        this C string.
 	 * @param secretAccessKey is the secret access key (like a password or
-	 *        encryption key) provided by AWS used to access this Container.
+	 *        encryption key) provided by AWS used to access this Container. A
+	 *        copy is made of this C string.
 	 * @param endPoint is the end point (hostname) used to access this
-	 *        Container.
+	 *        Container. A copy is made of this C string.
 	 * @param canonicalBucketName is the canonical bucket name used to access
-	 *        this Container.
+	 *        this Container. A copy is made of this C string.
 	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
 	 *        access this Container.
 	 * @param uriStyle is the URI style, Virtual Host or Path, used to access
@@ -66,13 +68,15 @@ public:
 	 * Ctor. This is used by the asynchronous interface.
 	 *
 	 * @param accessKeyId is the access key ID (like a login or account number)
-	 *        provided by AWS used to access this Container.
+	 *        provided by AWS used to access this Container. A copy is made of
+	 *        this C string.
 	 * @param secretAccessKey is the secret access key (like a password or
-	 *        encryption key) provided by AWS used to access this Container.
+	 *        encryption key) provided by AWS used to access this Container. A
+	 *        copy is made of this C string.
 	 * @param endPoint is the end point (hostname) used to access this
-	 *        Container.
+	 *        Container. A copy is made of this C string.
 	 * @param canonicalBucketName is the canonical bucket name used to access
-	 *        this Container.
+	 *        this Container. A copy is made of this C string.
 	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
 	 *        access this Container.
 	 * @param uriStyle is the URI style, Virtual Host or Path, used to access
@@ -97,14 +101,14 @@ public:
 	virtual ~Container();
 
 	/**
-	 * Return the canonical name associated with this Container.
+	 * Get the canonical name associated with this Container.
 	 *
 	 * @return the canonical name.
 	 */
 	const char * getCanonical() const { return canonical.c_str(); }
 
 	/**
-	 * Return the URI style associated with this Container.
+	 * Get the URI style associated with this Container.
 	 *
 	 * @return the URI style.
 	 */

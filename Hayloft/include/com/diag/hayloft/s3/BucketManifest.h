@@ -116,7 +116,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param bucketname is the non-canonical (application) bucket name. A copy
+	 *        is made of this C string.
 	 * @param context refers to a Context object which provides the Credentials,
 	 *        Region, Protocol, Style, and Access associated with this Bucket.
 	 *        This reference is only used during construction.
@@ -133,7 +134,8 @@ public:
 	/**
 	 * Ctor. Use this for the asynchronous interface.
 	 *
-	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param bucketname is the non-canonical (application) bucket name. A copy
+	 *        is made of this C string.
 	 * @param multiplex refers to the Multiplex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
@@ -163,14 +165,14 @@ public:
 	virtual void start();
 
 	/**
-	 * Return a constant reference to the Manifest map.
+	 * Get a constant reference to the Manifest map.
 	 *
 	 * @return a constant reference to the Manifest map.
 	 */
 	const Manifest & getManifest() const { return manifest; }
 
 	/**
-	 * Return a reference to the Common list.
+	 * Get a reference to the Common list.
 	 *
 	 * @return a reference to the Common list.
 	 */

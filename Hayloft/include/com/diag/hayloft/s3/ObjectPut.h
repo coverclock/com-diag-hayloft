@@ -86,7 +86,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param source refers to an Input functor.
@@ -106,7 +107,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
@@ -127,7 +129,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
@@ -151,7 +154,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
@@ -219,18 +223,18 @@ protected:
 	 */
 	virtual int put(int bufferSize, void * buffer);
 
-private:
-
-	void initialize(const Properties::Metadata & settings);
-
-	void execute();
-
 	/**
 	 * Handle the close processing of the underlying data source. A derived
 	 * class can override this function to perform its own close processing, but
 	 * should call this method.
 	 */
-	void finalize();
+	virtual void finalize();
+
+private:
+
+	void initialize(const Properties::Metadata & settings);
+
+	void execute();
 
 };
 
