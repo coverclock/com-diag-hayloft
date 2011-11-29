@@ -187,7 +187,7 @@ void ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
 	}
 }
 
-int ObjectPut::put(int bufferSize, char * buffer) {
+int ObjectPut::put(int bufferSize, void * buffer) {
 	ssize_t consumed = 0;
 	if (input != 0) {
 		consumed = (*input)(buffer, 1, bufferSize);
