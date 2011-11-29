@@ -8,7 +8,9 @@
  */
 
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Credentials.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -105,6 +107,28 @@ void show(const ::S3GetConditions * conditions, Logger::Level level) {
 			if (conditions->ifNotModifiedSince >= 0) { logger.log(level, "S3GetConditions@%p: ifNotModifiedSince=%lld\n", conditions, conditions->ifNotModifiedSince); }
 			if (conditions->ifMatchETag != 0) { logger.log(level, "S3GetConditions@%p: ifMatchETag=\"%s\"\n", conditions, conditions->ifMatchETag); }
 			if (conditions->ifNotMatchETag != 0) { logger.log(level, "S3GetConditions@%p: ifNotMatchETag=\"%s\"\n", conditions, conditions->ifNotMatchETag); }
+		}
+	}
+}
+
+void show(const Object & object, Logger::Level level) {
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(level)) {
+		logger.log(level, "Object%p: key=\"%s\"\n", &object, object.getKey());
+		logger.log(level, "Object%p: name=\"%s\"\n", &object, object.getName());
+		logger.log(level, "Object%p: canonical=\"%s\"\n", &object, object.getCanonical());
+		logger.log(level, "Object%p: server=\"%s\"\n", &object, object.getServer());
+		logger.log(level, "Object%p: requestId=\"%s\"\n", &object, object.getRequestId());
+		logger.log(level, "Object%p: requestId2=\"%s\"\n", &object, object.getRequestId2());
+		logger.log(level, "Object%p: contentType=\"%s\"\n", &object, object.getContentType());
+		logger.log(level, "Object%p: eTag=\"%s\"\n", &object, object.getETag());
+		logger.log(level, "Object%p: contentLength=%llu\n", &object, object.getContentLength());
+		logger.log(level, "Object%p: modificationTime=%lld\n", &object, object.getModificationTime());
+		Object::Metadata::const_iterator here = object.getMetadata().begin();
+		Object::Metadata::const_iterator there = object.getMetadata().end();
+		while (here != there) {
+			logger.log(level, "Object%p: \"%s\"=\"%s\"\n", &object, here->first.c_str(), here->second.c_str());
+			++here;
 		}
 	}
 }

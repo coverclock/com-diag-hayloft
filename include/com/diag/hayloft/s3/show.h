@@ -12,12 +12,19 @@
  */
 
 #include "com/diag/hayloft/Logger.h"
-#include "libs3.h"
+
+struct S3ErrorDetails;
+struct S3ResponseProperties;
+struct S3BucketContext;
+struct S3PutProperties;
+struct S3GetConditions;
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
+
+class Object;
 
 extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger::DEBUG);
 
@@ -28,6 +35,8 @@ extern void show(const ::S3BucketContext * context, Logger::Level level = Logger
 extern void show(const ::S3PutProperties * properties, Logger::Level level = Logger::DEBUG);
 
 extern void show(const ::S3GetConditions * conditions, Logger::Level level = Logger::DEBUG);
+
+extern void show(const Object & object, Logger::Level level = Logger::DEBUG);
 
 }
 }

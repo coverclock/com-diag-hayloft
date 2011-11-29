@@ -30,6 +30,7 @@
 #include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Access.h"
+#include "com/diag/hayloft/s3/show.h"
 #include "com/diag/desperado/stdlib.h"
 
 namespace com {
@@ -1524,9 +1525,11 @@ TEST_F(ObjectTest, Copy) {
 	}
 	ASSERT_TRUE(bucketcreate2.isSuccessful());
 	/**/
+	Properties properties;
+	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
-	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize);
+	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
@@ -1536,6 +1539,7 @@ TEST_F(ObjectTest, Copy) {
 		objectput1.start();
 	}
 	ASSERT_TRUE(objectput1.isSuccessful());
+	show(objectput1, Logger::PRINT);
 	/**/
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
 	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
@@ -1548,15 +1552,14 @@ TEST_F(ObjectTest, Copy) {
 		objecthead1.start();
 	}
 	ASSERT_TRUE(objecthead1.isSuccessful());
-	printf("key=\"%s\"\n", objecthead1.getKey());
-	printf("bucket=\"%s\"\n", objecthead1.getCanonical());
-	printf("server=\"%s\"\n", objecthead1.getServer());
-	printf("requestId=\"%s\"\n", objecthead1.getRequestId());
-	printf("requestId2=\"%s\"\n", objecthead1.getRequestId2());
-	printf("contentType=\"%s\"\n", objecthead1.getContentType());
-	printf("eTag=\"%s\"\n", objecthead1.getETag());
-	printf("contentLength=%llu\n", objecthead1.getContentLength());
-	printf("modificationTime=%lld\n", objecthead1.getModificationTime());
+	show(objecthead1, Logger::PRINT);
+	// Note that S3 converts the keyword strings to lower case. That's because
+	// they actually become part of HTTP message header field names whose
+	// prefixes libs3 strips off.
+	ASSERT_NE(objecthead1.find("keyworda"), (char *)0);
+	EXPECT_EQ(std::strcmp(objecthead1.find("keyworda"), "ValueA"), 0);
+	ASSERT_NE(objecthead1.find("keywordb"), (char *)0);
+	EXPECT_EQ(std::strcmp(objecthead1.find("keywordb"), "ValueB"), 0);
 	/**/
 	// I could have just used bucketcreate1 and bucketcreate2 but I wanted to
 	// try just using the base class since I intended it to be used this way.
@@ -1575,13 +1578,6 @@ TEST_F(ObjectTest, Copy) {
 	// provides eTag and modificationTime for the new OBJECT. But unless there's
 	// a bug in my code (entirely possible) that doesn't seem to happen either.
 	// If you want them, you're going to have to do an OBJECT HEAD.
-	printf("key=\"%s\"\n", objectcopy.getKey());
-	printf("bucket=\"%s\"\n", objectcopy.getCanonical());
-	printf("server=\"%s\"\n", objectcopy.getServer());
-	printf("requestId=\"%s\"\n", objectcopy.getRequestId());
-	printf("requestId2=\"%s\"\n", objectcopy.getRequestId2());
-	printf("eTag=\"%s\"\n", objectcopy.getETag());
-	printf("modificationTime=%lld\n", objectcopy.getModificationTime());
 	/**/
 	ObjectHead objecthead2(OBJECT2, bucket2);
 	for (int ii = 0; (objecthead2.isRetryable() || objecthead2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
@@ -1594,15 +1590,11 @@ TEST_F(ObjectTest, Copy) {
 		objecthead2.start();
 	}
 	ASSERT_TRUE(objecthead2.isSuccessful());
-	printf("key=\"%s\"\n", objecthead2.getKey());
-	printf("bucket=\"%s\"\n", objecthead2.getCanonical());
-	printf("server=\"%s\"\n", objecthead2.getServer());
-	printf("requestId=\"%s\"\n", objecthead2.getRequestId());
-	printf("requestId2=\"%s\"\n", objecthead2.getRequestId2());
-	printf("contentType=\"%s\"\n", objecthead2.getContentType());
-	printf("eTag=\"%s\"\n", objecthead2.getETag());
-	printf("contentLength=%llu\n", objecthead2.getContentLength());
-	printf("modificationTime=%lld\n", objecthead2.getModificationTime());
+	show(objecthead2, Logger::PRINT);
+	// Note that S3 does not copy the metadata from the source object to the
+	// sink object.
+	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
+	EXPECT_EQ(objecthead2.find("keywordb"), (char *)0);
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);
@@ -1618,15 +1610,9 @@ TEST_F(ObjectTest, Copy) {
 		objectget2.start();
 	}
 	ASSERT_TRUE(objectget2.isSuccessful());
-	printf("key=\"%s\"\n", objectget2.getKey());
-	printf("bucket=\"%s\"\n", objectget2.getCanonical());
-	printf("server=\"%s\"\n", objectget2.getServer());
-	printf("requestId=\"%s\"\n", objectget2.getRequestId());
-	printf("requestId2=\"%s\"\n", objectget2.getRequestId2());
-	printf("contentType=\"%s\"\n", objectget2.getContentType());
-	printf("eTag=\"%s\"\n", objectget2.getETag());
-	printf("contentLength=%llu\n", objectget2.getContentLength());
-	printf("modificationTime=%lld\n", objectget2.getModificationTime());
+	EXPECT_EQ(objectget2.find("keyworda"), (char *)0);
+	EXPECT_EQ(objectget2.find("keywordb"), (char *)0);
+	show(objectget2, Logger::PRINT);
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucket1);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {

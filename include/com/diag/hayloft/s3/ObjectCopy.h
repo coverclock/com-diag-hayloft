@@ -65,8 +65,6 @@ protected:
 
 	::S3CannedAcl access;
 
-	Properties::Metadata metadata;
-
 	char tag[LENGTH];
 
 	::S3PutProperties properties;

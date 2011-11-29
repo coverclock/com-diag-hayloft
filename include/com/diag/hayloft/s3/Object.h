@@ -11,6 +11,8 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <map>
+#include <string>
 #include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Container.h"
 
@@ -41,6 +43,22 @@ public:
 	 */
 	static const size_t LENGTH = S3_MAX_KEY_SIZE;
 
+	/**
+	 * ObjectHead and ObjectGet return metadata in the form of (keyword,value)
+	 * tuples. ObjectPut and ObjectCopy apply metadata in the same form to S3
+	 * objects. The only Object Action which does not use metadata is Object
+	 * Delete. This is a map containing those tuples.
+	 */
+	typedef std::map<std::string, std::string> Metadata;
+
+	/**
+	 * ObjectHead and ObjectGet return metadata in the form of (keyword,value)
+	 * tuples. ObjectPut and ObjectCopy apply metadata in the same form to S3
+	 * objects. The only Object Action which does not use metadata is Object
+	 * Delete. This is a tuple.
+	 */
+	typedef std::pair<std::string, std::string> Pair;
+
 private:
 
 	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
@@ -49,6 +67,8 @@ protected:
 
 	std::string key;
 
+	std::string name;
+
 	std::string type;
 
 	std::string etag;
@@ -56,6 +76,8 @@ protected:
 	Octets length;
 
 	Epochalseconds modified;
+
+	Metadata metadata;
 
 	::S3ResponseHandler handler;
 
@@ -96,9 +118,18 @@ public:
 
 	/**
 	 * Return the key (object name) associated with this Object.
+	 *
 	 * @return the key (object name).
 	 */
 	const char * getKey() const { return key.c_str(); }
+
+	/**
+	 * Return the non-canonical (application) bucket name associated with this
+	 * Object.
+	 *
+	 * @return the non-canonical bucket name.
+	 */
+	const char * getName() const { return name.c_str(); }
 
 	/**
 	 * Return the content type provided by S3 once this Action completes.
@@ -123,6 +154,21 @@ public:
 	 * @return the modification time.
 	 */
 	Epochalseconds getModificationTime() const { return modified; }
+
+	/**
+	 * Return a constant reference to the Metadata map.
+	 *
+	 * @return a constant reference to the Metadata map.
+	 */
+	const Metadata & getMetadata() const { return metadata; }
+
+	/**
+	 * If there is a metadata entry with the given key, return its value,
+	 * otherwise return null.
+	 *
+	 * @return a metadata value for the key or null.
+	 */
+	const char * find(const char * key) const;
 
 private:
 

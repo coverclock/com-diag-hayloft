@@ -77,8 +77,6 @@ protected:
 
 	Octets size;
 
-	Properties::Metadata metadata;
-
 	::S3PutProperties properties;
 
 	::S3PutObjectHandler handler;

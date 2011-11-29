@@ -123,7 +123,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 		Properties::Metadata::const_iterator here;
 		Properties::Metadata::const_iterator end;
 		for (here = settings.begin(), end = settings.end(); here != end; ++here) {
-			metadata.insert(Properties::Pair(here->first, here->second));
+			metadata.insert(Pair(here->first, here->second));
 		}
 		::S3NameValue * pair = new ::S3NameValue [properties.metaDataCount];
 		properties.metaData = pair;
