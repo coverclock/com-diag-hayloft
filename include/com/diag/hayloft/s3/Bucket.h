@@ -23,6 +23,16 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * Bucket is a Container which describes an S3 bucket which is identified by
+ * a non-canonical name provided by the application, and has associated with it
+ * a region (a.k.a. location constraint) and a libs3 canned access control list.
+ * Practically speaking, an S3 bucket is a web site hosted in S3 that is
+ * identified by a internet domain name derived from the canonical bucket name
+ * and the Amazon Web Services (AWS) Endpoint name which contains S3 objects
+ * which can be accessed via HTTP or HTTPS using Universal Resource Locations
+ * or URLs.
+ */
 class Bucket : public Container {
 
 public:
@@ -46,12 +56,34 @@ protected:
 
 public:
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param context refers to a Context object which provides the Credentials,
+	 *        Region, Protocol, Style, and Access associated with this Bucket.
+	 *        This reference is only used during construction.
+	 * @param session refers to a Session object associated with this Bucket.
+	 *        This reference is only used during construction.
+	 */
 	explicit Bucket(
 		const char * bucketname,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param context refers to a Context object which provides the Credentials,
+	 *        Region, Protocol, Style, and Access associated with this Bucket.
+	 *        This reference is only used during construction.
+	 * @param session refers to a Session object associated with this Bucket.
+	 */
 	explicit Bucket(
 		const char * bucketname,
 		Multiplex & multiplex,
@@ -59,16 +91,31 @@ public:
 		const Session & session = Session::instance()
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~Bucket();
 
-	bool isInaccessible() const { return (state() == ::S3StatusErrorAccessDenied); }
-
-	bool isNonexistent() const { return (state() == ::S3StatusErrorNoSuchBucket); }
-
+	/**
+	 * Return the non-canonical (application) bucket name associated with this
+	 * Bucket.
+	 *
+	 * @return the non-canonical (application) bucket name.
+	 */
 	const char * getName() const { return name.c_str(); }
 
+	/**
+	 * Return the region (location constraint) associated with this Bucket.
+	 *
+	 * @return the region (location constraint).
+	 */
 	const char * getRegion() const { return region.c_str(); }
 
+	/**
+	 * Return the libs3 ::S3CannedAcl value associated with this Bucket.
+	 *
+	 * @return the libs3 ::S3CannedAcl value.
+	 */
 	::S3CannedAcl getAccess() const { return access; }
 
 private:

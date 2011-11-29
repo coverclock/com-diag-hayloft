@@ -18,16 +18,41 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * BucketDelete is a Bucket Action which deletes a bucket.
+ */
 class BucketDelete : public Bucket {
 
 public:
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param context refers to a Context object which provides the Credentials,
+	 *        Region, Protocol, Style, and Access associated with this Bucket.
+	 *        This reference is only used during construction.
+	 * @param session refers to a Session object associated with this Bucket.
+	 *        This reference is only used during construction.
+	 */
 	explicit BucketDelete(
 		const char * bucketname,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param context refers to a Context object which provides the Credentials,
+	 *        Region, Protocol, Style, and Access associated with this Bucket.
+	 *        This reference is only used during construction.
+	 * @param session refers to a Session object associated with this Bucket.
+	 */
 	explicit BucketDelete(
 		const char * bucketname,
 		Multiplex & multiplex,
@@ -35,8 +60,16 @@ public:
 		const Session & session = Session::instance()
 	);
 
+	/**
+	 * Dtor. If the Action is in the BUSY state this forces the execution of
+	 * all Actions on the same Multiplex and blocks until they all complete.
+	 */
 	virtual ~BucketDelete();
 
+	/**
+	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
+	 * BUSY.
+	 */
 	virtual void start();
 
 private:
