@@ -1499,7 +1499,7 @@ TEST_F(ObjectTest, Manifest) {
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 }
 
-TEST_F(Verbose, Copy) {
+TEST_F(ObjectTest, Copy) {
 	// I'm also experimenting to see what meta-data is returned by which
 	// OBJECT ACTION. It looks like a full set of Response Properties are
 	// only returned by OBJECT HEAD and OBJECT GET.
