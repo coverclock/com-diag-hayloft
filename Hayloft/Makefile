@@ -162,7 +162,7 @@ MANIFEST_O=\
  hayloft/Logger.o \
  hayloft/Packet.o \
  hayloft/Parameter.o \
- hayloft/Size.o \
+ hayloft/size.o \
  s3/Endpoint.o \
  s3/Session.o \
  s3/Credentials.o \
@@ -172,7 +172,7 @@ MANIFEST_O=\
  s3/Access.o \
  s3/Context.o \
  s3/Multiplex.o \
- s3/Show.o \
+ s3/show.o \
  s3/Properties.o \
  s3/Conditions.o \
  s3/Selection.o \

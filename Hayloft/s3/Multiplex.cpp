@@ -28,17 +28,34 @@ int Multiplex::dontcare = 0;
 Multiplex::Multiplex()
 : requests(0)
 , status(::S3_create_request_context(&requests))
+, taken(requests)
 {
-	Logger & logger = Logger::instance();
-	logger.debug("Multiplex@%p: requests=%p\n", this, requests);
-	if (status != S3StatusOK) {
-		logger.error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
-	}
+	initialize();
+}
+
+Multiplex::Multiplex(::S3RequestContext * requestContext)
+: requests(requestContext)
+, status(::S3StatusOK)
+, taken(0)
+{
+	initialize();
 }
 
 Multiplex::~Multiplex() {
-	if (status == S3StatusOK) {
-		S3_destroy_request_context(requests);
+	if (requests != 0) {
+		S3_runall_request_context(requests);
+	}
+	if (taken != 0) {
+		S3_destroy_request_context(taken);
+	}
+}
+
+void Multiplex::initialize() {
+	Logger & logger = Logger::instance();
+	logger.debug("Multiplex@%p: requests=%p\n", this, requests);
+	logger.debug("Multiplex@%p: taken=%p\n", this, taken);
+	if (status != S3StatusOK) {
+		logger.error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
 	}
 }
 

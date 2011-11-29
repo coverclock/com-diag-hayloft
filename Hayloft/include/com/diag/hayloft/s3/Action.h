@@ -67,6 +67,8 @@ public:
 
 	bool isSuccessful() const { return (state() == ::S3StatusOK); }
 
+	::S3RequestContext * getRequests() const { return requests; }
+
 	::S3Status getStatus(const char ** description = 0) const;
 
 	const char * getServer() const { return server.c_str(); }

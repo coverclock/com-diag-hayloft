@@ -8,7 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/Show.h"
+#include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/desperado/string.h"

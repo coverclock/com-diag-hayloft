@@ -19,7 +19,7 @@
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/Parameter.h"
-#include "com/diag/unittest/Size.h"
+#include "com/diag/unittest/size.h"
 #endif
 
 // Unit tests that also use LIBS3, CURL, SSL, and CRYPTO. Running valgrind, my
