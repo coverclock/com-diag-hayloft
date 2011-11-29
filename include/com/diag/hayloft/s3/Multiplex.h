@@ -66,9 +66,13 @@ protected:
 
 	::S3Status status;
 
+	::S3RequestContext * taken;
+
 public:
 
 	explicit Multiplex();
+
+	explicit Multiplex(::S3RequestContext * requestContext /* UNTAKEN */);
 
 	virtual ~Multiplex();
 
@@ -99,6 +103,8 @@ private:
      *  @param that refers to an R-value object of this type.
      */
 	Multiplex& operator=(const Multiplex& that);
+
+	void initialize();
 
 };
 

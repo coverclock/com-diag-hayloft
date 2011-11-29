@@ -22,7 +22,7 @@
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/ObjectHead.h"
 #include "com/diag/hayloft/s3/ObjectCopy.h"
-#include "com/diag/hayloft/Size.h"
+#include "com/diag/hayloft/size.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/BucketCreate.h"
@@ -1187,6 +1187,7 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (bucketdelete != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
+				printf("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(bucketdelete, true);

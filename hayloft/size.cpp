@@ -9,7 +9,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
-#include "com/diag/hayloft/Size.h"
+#include "com/diag/hayloft/size.h"
 #include "com/diag/desperado/BufferInput.h"
 #include "com/diag/desperado/BufferOutput.h"
 #include "com/diag/desperado/DataInput.h"

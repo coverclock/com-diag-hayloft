@@ -14,7 +14,7 @@
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/Packet.h"
-#include "com/diag/hayloft/Size.h"
+#include "com/diag/hayloft/size.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/Print.h"
 #include "com/diag/desperado/DataInput.h"
