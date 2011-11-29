@@ -21,13 +21,25 @@ namespace s3 {
 	if ((responseProperties->contentType != 0) && (responseProperties->contentType[0] != '\0')) { that->type = responseProperties->contentType; }
 	that->length = responseProperties->contentLength;
 	if ((responseProperties->eTag != 0) && (responseProperties->eTag[0] != '\0')) { that->etag = responseProperties->eTag; }
-	if (responseProperties->lastModified != -1) { that->modified = responseProperties->lastModified; }
+	that->modified = responseProperties->lastModified;
+	if (responseProperties->metaData != 0) {
+		for (int ii = 0; ii < responseProperties->metaDataCount; ++ii) {
+			if (
+				(responseProperties->metaData[ii].name != 0) &&
+				(responseProperties->metaData[ii].name[0] != '\0') &&
+				(responseProperties->metaData[ii].value != 0)
+			) {
+				that->metadata.insert(Pair(responseProperties->metaData[ii].name, responseProperties->metaData[ii].value));
+			}
+		}
+	}
 	return (*that->Container::handler.propertiesCallback)(responseProperties, callbackData);
 }
 
 Object::Object(const char * keyname, const Bucket & bucket)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , key(keyname)
+, name(bucket.getName())
 , length(0)
 , modified(-1)
 {
@@ -37,6 +49,7 @@ Object::Object(const char * keyname, const Bucket & bucket)
 Object::Object(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , key(keyname)
+, name(bucket.getName())
 , length(0)
 , modified(-1)
 {
@@ -46,9 +59,23 @@ Object::Object(const char * keyname, const Bucket & bucket, Multiplex & multiple
 Object::~Object() {}
 
 void Object::initialize() {
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(Logger::DEBUG)) {
+		logger.debug("Object@%p: key=\"%s\"\n", this, key.c_str());
+		logger.debug("Object@%p: name=\"%s\"\n", this, name.c_str());
+	}
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = Container::handler.completeCallback;
+}
+
+const char * Object::find(const char * key) const {
+	const char * value = 0;
+	Metadata::const_iterator here = metadata.find(key);
+	if (here != metadata.end()) {
+		value = (here->second).c_str();
+	}
+	return value;
 }
 
 }

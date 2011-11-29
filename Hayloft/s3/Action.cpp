@@ -101,10 +101,12 @@ Action & Action::setRequests(::S3RequestContext * req) {
 }
 
 ::S3Status Action::properties(const ::S3ResponseProperties * properties) {
+	Logger::instance().debug("Action%p: properties\n", this);
 	return ::S3StatusOK;
 }
 
 void Action::complete(::S3Status status, const ::S3ErrorDetails * errorDetails) {
+	Logger::instance().debug("Action%p: complete\n", this);
 	return;
 }
 

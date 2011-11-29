@@ -93,6 +93,16 @@ public:
 
 	const Metadata & getMetadata() const { return metadata; }
 
+	/**
+	 * Insert a (keyword,value) tuple into the metadata. Avoid
+	 * special characters in the key C string. Also, S3 will convert all the
+	 * upper case alphas in the key C string to lower case when it stores
+	 * them.
+	 *
+	 * @param key is a C string that is the keyword.
+	 * @param value is a C string that is the value.
+	 * @return a reference to this object.
+	 */
 	Properties & insert(const char * key, const char * value) { metadata.insert(Pair(key, value)); return *this; }
 
 	Properties & erase(const char * key) { metadata.erase(key); return *this; }
