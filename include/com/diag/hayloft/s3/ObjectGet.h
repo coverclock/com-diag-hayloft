@@ -79,7 +79,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param sink refers to an Output functor.
@@ -102,7 +103,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
@@ -126,7 +128,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
@@ -153,7 +156,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param keyname is the name of this Object.
+	 * @param keyname is the name of this Object. A copy is made of this C
+	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
@@ -230,18 +234,18 @@ protected:
 	 */
 	virtual ::S3Status get(int bufferSize, const void * buffer);
 
-private:
-
-	void initialize();
-
-	void execute();
-
 	/**
 	 * Handle the close processing of the underlying data sink. A derived class
 	 * can override this function to perform its own close processing, but
 	 * should call this method.
 	 */
 	virtual void finalize();
+
+private:
+
+	void initialize();
+
+	void execute();
 
 };
 

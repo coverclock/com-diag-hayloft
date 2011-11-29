@@ -9,13 +9,6 @@
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
- *
- * The only way I can see to specify UNITED STATES CLASSIC (a.k.a. UNITED
- * STATES STANDARD) is to pass NULL to libs3 as a location constraint. This
- * causes libs3 to indicate UNITED STATES CLASSIC via invoking it as the
- * default by omitting the location constraint altogether. So although here we
- * encode UNITED STATES CLASSIC as an empty string, in practice it is mapped to
- * NULL when we use it in a libs3 call.
  */
 
 #include <string>
@@ -27,10 +20,21 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * Region specifies on what geographical collection of AWS servers an S3 bucket
+ * will be hosted. This is known in some contexts as a Location Constraint.
+ * Buckets are hosted in specific geographic areas for reasons of performance,
+ * latency, redundancy, and most especially for legal reasons such as national
+ * privacy laws.
+ */
 class Region {
 
 public:
 
+	/**
+	 * This is the name of the environmental variable with which you can
+	 * specify the name of your default region.
+	 */
 	static const char * REGION_ENV() { return "COM_DIAG_HAYLOFT_S3_REGION"; }
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "ap-northeast-1"; }
@@ -39,6 +43,22 @@ public:
 
 	static const char * EUROPEAN_UNION_WEST_1() { return "eu-west-1"; }
 
+	/**
+	 * The only way I can see to specify UNITED STATES STANDARD (a.k.a. UNITED
+	 * STATES CLASSIC) is to pass NULL to libs3 as a location constraint. This
+	 * causes libs3 to indicate UNITED STATES STANDARD via invoking it as the
+	 * default by omitting the location constraint altogether. So although here
+	 * we encode UNITED STATES STANDARD as an empty string, in practice it is
+	 * mapped to NULL when we use it in a libs3 call.
+	 *
+	 * UNITED STATES STANDARD is a actually a bi-coastal region, using servers
+	 * on both the East and West coasts. As such it exhibits more artifacts of
+	 * the AWS Eventual Consistency architecture than the other regions. In
+	 * fact, the consistency rules for some of the other reasons are more
+	 * stringent than that for UNITED STATES STANDARD, guaranteeing, for
+	 * example, read-after-write consistency, where as the bi-coastal region
+	 * does not.
+	 */
 	static const char * UNITED_STATES_STANDARD() { return ""; }
 
 	static const char * UNITED_STATES_EAST_1() { return "us-east-1"; }
@@ -47,8 +67,18 @@ public:
 
 	static const char * UNITED_STATES_WEST_2() { return "us-west-2"; }
 
+	/**
+	 * This is the name of the default region if you don't specify one
+	 * otherwise. UNITED STATES STANDARD is chosen as the default because it
+	 * is still the most commonly used region, probably because it has the
+	 * least expensive billing rates.
+	 */
 	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
 
+	/**
+	 * Hayloft places a limit of this many characters on the region name
+	 * (a.k.a. the location constraint).
+	 */
 	static const size_t LENGTH = 64;
 
 protected:
@@ -57,18 +87,43 @@ protected:
 
 public:
 
+	/**
+	 * Ctor.
+	 *
+	 * @param re is an AWS region name. If null, the region name is
+	 *        taken from the environment. A copy is made of this C string.
+	 */
 	explicit Region(
 		const char * re = 0
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~Region() {}
 
+	/**
+	 * Get the region name.
+	 *
+	 * @return the region name.
+	 */
 	const char * getRegion() const { return region.c_str(); }
 
+	/**
+	 * Set the region name.
+	 *
+	 * @param re is an AWS region name. If null, the region name is
+	 *        taken from the environment. A copy is made of this C string.
+	 * @return a reference to this object.
+	 */
 	Region & setRegion(const char * re = 0) { region = set(re, REGION_ENV(), DEFAULT()); return *this; }
 
 };
 
+/**
+ * RegionIreland is a Region that represents the Ireland (a.k.a EU WEST 1)
+ * AWS region.
+ */
 class RegionIreland : public Region {
 
 public:
@@ -81,6 +136,10 @@ public:
 
 };
 
+/**
+ * RegionNorthernVirginia is a Region that represents the Northern
+ * Virginia (a.k.a. EAST 1) AWS region.
+ */
 class RegionNorthernVirginia : public Region {
 
 public:
@@ -93,6 +152,10 @@ public:
 
 };
 
+/**
+ * RegionNorthernCalifornia is a Region that represents the Northern
+ * California (a.k.a. WEST 1) AWS region.
+ */
 class RegionNorthernCalifornia : public Region {
 
 public:
@@ -105,6 +168,10 @@ public:
 
 };
 
+/**
+ * RegionOregon is a Region that represents the Oregon (a.k.a. WEST 2)
+ * AWS region.
+ */
 class RegionOregon : public Region {
 
 public:
@@ -117,6 +184,10 @@ public:
 
 };
 
+/**
+ * RegionSingapore is a Region that represents the Singapore (a.k.a.
+ * SOUTH EAST 1) AWS region.
+ */
 class RegionSingapore : public Region {
 
 public:
@@ -129,6 +200,10 @@ public:
 
 };
 
+/**
+ * RegionTokyo is a Region that represents the Tokyo (a.k.a.
+ * NORTH EAST 1) AWS region.
+ */
 class RegionTokyo : public Region {
 
 public:
@@ -141,6 +216,10 @@ public:
 
 };
 
+/**
+ * RegionUnitedStates is a Region that represents the bi-coastal
+ * United States (a.k.a. STANDARD or CLASSIC) AWS region.
+ */
 class RegionUnitedStates : public Region {
 
 public:

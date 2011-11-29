@@ -59,7 +59,8 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param bucketname is the non-canonical (application) bucket name. A copy
+	 *        is made of this C string.
 	 * @param context refers to a Context object which provides the Credentials,
 	 *        Region, Protocol, Style, and Access associated with this Bucket.
 	 *        This reference is only used during construction.
@@ -75,7 +76,8 @@ public:
 	/**
 	 * Ctor. Use this for the asynchronous interface.
 	 *
-	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param bucketname is the non-canonical (application) bucket name. A copy
+	 *        is made of this C string.
 	 * @param multiplex refers to the Multiplex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
@@ -97,7 +99,7 @@ public:
 	virtual ~Bucket();
 
 	/**
-	 * Return the non-canonical (application) bucket name associated with this
+	 * Get the non-canonical (application) bucket name associated with this
 	 * Bucket.
 	 *
 	 * @return the non-canonical (application) bucket name.
@@ -105,14 +107,14 @@ public:
 	const char * getName() const { return name.c_str(); }
 
 	/**
-	 * Return the region (location constraint) associated with this Bucket.
+	 * Get the region (location constraint) associated with this Bucket.
 	 *
 	 * @return the region (location constraint).
 	 */
 	const char * getRegion() const { return region.c_str(); }
 
 	/**
-	 * Return the libs3 ::S3CannedAcl value associated with this Bucket.
+	 * Get the libs3 ::S3CannedAcl value associated with this Bucket.
 	 *
 	 * @return the libs3 ::S3CannedAcl value.
 	 */

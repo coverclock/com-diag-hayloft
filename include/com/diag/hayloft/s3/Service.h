@@ -88,28 +88,28 @@ public:
 	virtual ~Service();
 
 	/**
-	 * Return the twenty-character access key ID.
+	 * Get the twenty-character access key ID.
 	 *
 	 * @return the twenty-character access key ID.
 	 */
 	const char * getId() const { return id.c_str(); }
 
 	/**
-	 * Return the forty-character secret access key.
+	 * Get the forty-character secret access key.
 	 *
 	 * @return the forty-character secret access key.
 	 */
 	const char * getSecret() const { return secret.c_str(); }
 
 	/**
-	 * Return the end point name.
+	 * Get the end point name.
 	 *
 	 * @return the end point name.
 	 */
 	const char * getEndpoint() const { return endpoint.c_str(); }
 
 	/**
-	 * Return the protocol.
+	 * Get the protocol.
 	 *
 	 * @return the protocol.
 	 */
