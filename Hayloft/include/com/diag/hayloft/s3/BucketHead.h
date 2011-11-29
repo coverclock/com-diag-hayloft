@@ -19,6 +19,10 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * BucketHead is a Bucket Action which retrieves the meta-data associated with
+ * a bucket, which is its existence and its region (location constraint).
+ */
 class BucketHead : public Bucket {
 
 private:
@@ -33,12 +37,34 @@ protected:
 
 public:
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param context refers to a Context object which provides the Credentials,
+	 *        Region, Protocol, Style, and Access associated with this Bucket.
+	 *        This reference is only used during construction.
+	 * @param session refers to a Session object associated with this Bucket.
+	 *        This reference is only used during construction.
+	 */
 	explicit BucketHead(
 		const char * bucketname,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param bucketname is the non-canonical (application) bucket name.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param context refers to a Context object which provides the Credentials,
+	 *        Region, Protocol, Style, and Access associated with this Bucket.
+	 *        This reference is only used during construction.
+	 * @param session refers to a Session object associated with this Bucket.
+	 */
 	explicit BucketHead(
 		const char * bucketname,
 		Multiplex & multiplex,
@@ -46,8 +72,16 @@ public:
 		const Session & session = Session::instance()
 	);
 
+	/**
+	 * Dtor. If the Action is in the BUSY state this forces the execution of
+	 * all Actions on the same Multiplex and blocks until they all complete.
+	 */
 	virtual ~BucketHead();
 
+	/**
+	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
+	 * BUSY.
+	 */
 	virtual void start();
 
 private:

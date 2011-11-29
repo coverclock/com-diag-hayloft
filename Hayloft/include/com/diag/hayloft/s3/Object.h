@@ -21,6 +21,16 @@ namespace s3 {
 
 class Bucket;
 
+/**
+ * Object is a Container which describes an S3 object which is identified by
+ * a key provided by the application. An Object is a Container by virtue of
+ * the fact that it is always associated with a Bucket with a canonical name.
+ * In a traditional file system sense, the Container is the directory path name
+ * and the Object is the file. Practically speaking, an S3 object is a opaque
+ * blob of application data, whose size is measured in integral octets, which
+ * resides inside an S3 bucket, and which can be accessed via HTTP or HTTPS
+ * using Universal Resource Locations or URLs.
+ */
 class Object : public Container {
 
 public:
@@ -31,6 +41,9 @@ public:
 	 */
 	static const size_t LENGTH = S3_MAX_KEY_SIZE;
 
+	/**
+	 * S3 object size encoded in units of eight-bit bytes.
+	 */
 	typedef uint64_t Octets;
 
 protected:
@@ -39,23 +52,43 @@ protected:
 
 public:
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param keyname is the name of this Object.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 */
 	explicit Object(
 		const char * keyname,
 		const Bucket & bucket
 	);
 
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param keyname is the name of this Object.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
 	explicit Object(
 		const char * keyname,
 		const Bucket & bucket,
  		Multiplex & multiplex
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~Object();
 
-	bool isInaccessible() const { ::S3Status temporary = state(); return ((temporary == ::S3StatusHttpErrorForbidden) || (temporary == ::S3StatusErrorAccessDenied)); }
-
-	bool isNonexistent() const { ::S3Status temporary = state(); return ((temporary == ::S3StatusHttpErrorNotFound) || (temporary == ::S3StatusErrorNoSuchKey) || (temporary == ::S3StatusErrorNoSuchBucket)); }
-
+	/**
+	 * Return the key (object name) associated with this Object.
+	 * @return the key (object name).
+	 */
 	const char * getKey() const { return key.c_str(); }
 
 };

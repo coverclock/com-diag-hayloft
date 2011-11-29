@@ -91,6 +91,13 @@ void Action::start() {
 	return;
 }
 
+Action & Action::setRequests(::S3RequestContext * req) {
+	if (state() != BUSY) {
+		requests = req;
+	}
+	return *this;
+}
+
 ::S3Status Action::properties(const ::S3ResponseProperties * properties) {
 	return ::S3StatusOK;
 }
