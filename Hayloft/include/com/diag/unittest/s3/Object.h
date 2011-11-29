@@ -768,7 +768,7 @@ TEST_F(ObjectTest, Complete) {
 }
 
 TEST_F(ObjectTest, Service) {
-	static const Multiplex::Milliseconds TIMEOUT = 1000;
+	static const Milliseconds TIMEOUT = 1000;
 	static const int LIMIT = 10;
 	static const char BUCKET[] = "ObjectTestService";
 	static const char OBJECT[] = "Object.txt";
@@ -1499,7 +1499,7 @@ TEST_F(ObjectTest, Manifest) {
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 }
 
-TEST_F(Fixture, Copy) {
+TEST_F(ObjectTest, Copy) {
 	static const int LIMIT = 10;
 	const char BUCKET1[] = "ObjectTestManifest1";
 	const char BUCKET2[] = "ObjectTestManifest2";
@@ -1534,8 +1534,29 @@ TEST_F(Fixture, Copy) {
 	}
 	ASSERT_TRUE(objectput1.isSuccessful());
 	/**/
+	ObjectHead objecthead1(OBJECT1, bucketcreate1);
+	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
+		if (objecthead1.isRetryable()) {
+			printf("RETRYING %d\n", __LINE__);
+		} else if (objecthead1.isNonexistent()) {
+			printf("WAITING %d\n", __LINE__);
+		}
+		platform.yield(platform.frequency());
+		objecthead1.start();
+	}
+	ASSERT_TRUE(objecthead1.isSuccessful());
+	printf("key=\"%s\"\n", objecthead1.getKey());
+	printf("bucket=\"%s\"\n", objecthead1.getCanonical());
+	printf("server=\"%s\"\n", objecthead1.getServer());
+	printf("requestId=\"%s\"\n", objecthead1.getRequestId());
+	printf("requestId2=\"%s\"\n", objecthead1.getRequestId2());
+	printf("contentType=\"%s\"\n", objecthead1.getContentType());
+	printf("eTag=\"%s\"\n", objecthead1.getETag());
+	printf("contentLength=%llu\n", objecthead1.getContentLength());
+	printf("modificationTime=%lld\n", objecthead1.getModificationTime());
+	/**/
 	// I could have just used bucketcreate1 and bucketcreate2 but I wanted to
-	// try just using the base class.
+	// try just using the base class since I intended it to be used this way.
 	Bucket bucket1(BUCKET1);
 	Bucket bucket2(BUCKET2);
 	ObjectCopy objectcopy(OBJECT1, bucket1, OBJECT2, bucket2);
@@ -1545,6 +1566,15 @@ TEST_F(Fixture, Copy) {
 		objectcopy.start();
 	}
 	ASSERT_TRUE(objectcopy.isSuccessful());
+	printf("key=\"%s\"\n", objectcopy.getKey());
+	printf("bucket=\"%s\"\n", objectcopy.getCanonical());
+	printf("server=\"%s\"\n", objectcopy.getServer());
+	printf("requestId=\"%s\"\n", objectcopy.getRequestId());
+	printf("requestId2=\"%s\"\n", objectcopy.getRequestId2());
+	printf("contentType=\"%s\"\n", objectcopy.getContentType());
+	printf("eTag=\"%s\"\n", objectcopy.getETag());
+	printf("contentLength=%llu\n", objectcopy.getContentLength());
+	printf("modificationTime=%lld\n", objectcopy.getModificationTime());
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);

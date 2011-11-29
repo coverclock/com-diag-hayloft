@@ -11,10 +11,10 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Container.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/desperado/target.h"
 #include "com/diag/desperado/MemoryBarrier.h"
 #include "libs3.h"
 

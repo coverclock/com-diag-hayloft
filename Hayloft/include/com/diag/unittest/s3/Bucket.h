@@ -516,7 +516,7 @@ TEST_F(BucketTest, Complete) {
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
 	static const int LIMIT = 10;
-	static const Multiplex::Milliseconds TIMEOUT = 1000;
+	static const Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	{
 		BucketHead buckethead(BUCKET, multiplex);

@@ -19,8 +19,8 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {

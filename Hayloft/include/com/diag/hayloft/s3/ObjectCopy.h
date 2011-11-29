@@ -12,6 +12,7 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
 #include "libs3.h"
@@ -32,11 +33,6 @@ class Bucket;
 class ObjectCopy : public Object {
 
 public:
-
-	/**
-	 * S3 object modification time encoded as seconds past the UNIX Epoch.
-	 */
-	typedef int64_t Epochalseconds;
 
 	/**
 	 * The maximum length of an eTag C string returned by this Action.
@@ -65,15 +61,11 @@ protected:
 
 	std::string encoding;
 
-	Properties::Epochalseconds expires;
+	Epochalseconds expires;
 
 	::S3CannedAcl access;
 
 	Properties::Metadata metadata;
-
-	std::string etag;
-
-	Epochalseconds modified;
 
 	char tag[LENGTH];
 
@@ -163,18 +155,6 @@ public:
 	 * @return name of the object to which the copy is made.
 	 */
 	const char * getKeyTo() const { return tokey.c_str(); }
-
-	/**
-	 * Return the modification time provided by S3 once this Action completes.
-	 * @return the modification time.
-	 */
-	Epochalseconds getModified() const { return modified; }
-
-	/**
-	 * Return the eTag provided by S3 once this Action completes.
-	 * @return the eTag.
-	 */
-	const char * getTag() const { return etag.c_str(); }
 
 private:
 

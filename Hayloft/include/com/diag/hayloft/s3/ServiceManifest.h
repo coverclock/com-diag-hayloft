@@ -13,10 +13,10 @@
 
 #include <map>
 #include <string>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Service.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {
@@ -26,8 +26,6 @@ namespace s3 {
 class ServiceManifest : public Service {
 
 public:
-
-	typedef int64_t Epochalseconds;
 
 	struct Entry {
 

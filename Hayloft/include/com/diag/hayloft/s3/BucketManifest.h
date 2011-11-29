@@ -13,6 +13,7 @@
 
 #include <map>
 #include <list>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Selection.h"
 
@@ -28,16 +29,6 @@ namespace s3 {
 class BucketManifest : public Bucket {
 
 public:
-
-	/**
-	 * S3 object modification time encoded as seconds past the UNIX Epoch.
-	 */
-	typedef int64_t Epochalseconds;
-
-	/**
-	 * S3 object size encoded in units of eight-bit bytes.
-	 */
-	typedef uint64_t Octets;
 
 	/**
 	 * Entry decribes an entry in the Manifest map.
