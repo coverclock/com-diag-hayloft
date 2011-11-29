@@ -22,23 +22,52 @@ namespace s3 {
 
 class Bucket;
 
+/**
+ * ObjectHead is an Object Action which retrieves the meta-data for the Object
+ * but not the Object contents. The meta-data for an Object consists of its
+ * libs3 ::S3ResponseProperties.
+ */
 class ObjectHead : public Object {
 
 public:
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param keyname is the name of this Object.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 */
 	explicit ObjectHead(
 		const char * keyname,
 		const Bucket & bucket
 	);
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param keyname is the name of this Object.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
 	explicit ObjectHead(
 		const char * keyname,
 		const Bucket & bucket,
 		Multiplex & multiplex
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~ObjectHead();
 
+	/**
+	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
+	 * BUSY.
+	 */
 	virtual void start();
 
 private:

@@ -65,7 +65,7 @@ public:
 	);
 
 	/**
-	 * Ctor. Use this for the asynchronous interface.
+	 * Ctor. Use this for the synchronous interface.
 	 *
 	 * @param keyname is the name of this Object.
 	 * @param bucket refers to the Bucket associated with this object. This

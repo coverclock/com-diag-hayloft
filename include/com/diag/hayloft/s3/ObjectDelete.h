@@ -17,24 +17,33 @@
 
 namespace com {
 namespace diag {
-namespace desperado {
-class Input;
-}
-}
-}
-
-namespace com {
-namespace diag {
 namespace hayloft {
 namespace s3 {
 
 class Bucket;
 class Multiplex;
 
+/**
+ * ObjectDelete is an Object Action which deletes an Object from a Bucket.
+ */
 class ObjectDelete : public Object {
 
 public:
 
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param keyname is the name of this Object.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 */
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param keyname is the name of this Object.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 */
 	explicit ObjectDelete(
 		const char * keyname,
 		const Bucket & bucket
@@ -46,8 +55,15 @@ public:
 		Multiplex & multiplex
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~ObjectDelete();
 
+	/**
+	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
+	 * BUSY.
+	 */
 	virtual void start();
 
 private:

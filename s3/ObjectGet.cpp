@@ -165,7 +165,7 @@ void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 	}
 }
 
-::S3Status ObjectGet::get(int bufferSize, const char * buffer) {
+::S3Status ObjectGet::get(int bufferSize, const void * buffer) {
 	ssize_t produced = 0;
 	if (output != 0) {
 		produced = (*output)(buffer, bufferSize, bufferSize);
