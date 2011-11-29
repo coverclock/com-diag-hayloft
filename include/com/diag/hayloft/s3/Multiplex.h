@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/target.h"
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/desperado/generics.h"
 #include "libs3.h"
 
@@ -36,8 +36,6 @@ public:
 		RETRY		= (1 << (widthof(Bits) - 2)),
 		ERROR		= (1 << (widthof(Bits) - 1))
 	};
-
-	typedef int64_t Milliseconds;
 
 	/**
 	 * This isn't really the default timeout value in milliseconds, which would

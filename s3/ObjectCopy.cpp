@@ -20,8 +20,7 @@ namespace s3 {
 
 void ObjectCopy::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectCopy * that = static_cast<ObjectCopy*>(callbackData);
-	that->tag[sizeof(tag) - 1] = '\0';
-	that->etag = that->tag;
+	if (that->tag[0] != '\0') { that->tag[sizeof(tag) - 1] = '\0'; that->etag = that->tag; }
 	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
 }
 
@@ -37,7 +36,6 @@ ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, cons
 , encoding(props.getEncoding())
 , expires(props.getExpires())
 , access(props.getAccess())
-, modified(-1)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -55,7 +53,6 @@ ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, cons
 , encoding(props.getEncoding())
 , expires(props.getExpires())
 , access(props.getAccess())
-, modified(-1)
 {
 	initialize(props.getMetadata());
 	execute();

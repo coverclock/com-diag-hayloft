@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/desperado/target.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/hayloft/Logger.h"

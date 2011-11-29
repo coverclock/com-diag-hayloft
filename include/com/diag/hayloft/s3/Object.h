@@ -11,8 +11,8 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Container.h"
-#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {
@@ -41,14 +41,23 @@ public:
 	 */
 	static const size_t LENGTH = S3_MAX_KEY_SIZE;
 
-	/**
-	 * S3 object size encoded in units of eight-bit bytes.
-	 */
-	typedef uint64_t Octets;
+private:
+
+	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
 protected:
 
 	std::string key;
+
+	std::string type;
+
+	std::string etag;
+
+	Octets length;
+
+	Epochalseconds modified;
+
+	::S3ResponseHandler handler;
 
 public:
 
@@ -90,6 +99,34 @@ public:
 	 * @return the key (object name).
 	 */
 	const char * getKey() const { return key.c_str(); }
+
+	/**
+	 * Return the content type provided by S3 once this Action completes.
+	 * @return the content type.
+	 */
+	const char * getContentType() const { return type.c_str(); }
+
+	/**
+	 * Return the eTag provided by S3 once this Action completes.
+	 * @return the eTag.
+	 */
+	const char * getETag() const { return etag.c_str(); }
+
+	/**
+	 * Return the content length provided by S3 once this Action completes.
+	 * @return the length.
+	 */
+	Octets getContentLength() const { return length; }
+
+	/**
+	 * Return the modification time provided by S3 once this Action completes.
+	 * @return the modification time.
+	 */
+	Epochalseconds getModificationTime() const { return modified; }
+
+private:
+
+	void initialize();
 
 };
 

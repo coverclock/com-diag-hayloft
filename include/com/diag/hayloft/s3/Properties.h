@@ -14,8 +14,8 @@
 #include <map>
 #include <string>
 #include "com/diag/hayloft/set.h"
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Access.h"
-#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {
@@ -30,8 +30,6 @@ public:
 	typedef std::map<std::string, std::string> Metadata;
 
 	typedef std::pair<std::string, std::string> Pair;
-
-	typedef int64_t Epochalseconds;
 
 protected:
 

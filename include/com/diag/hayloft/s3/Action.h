@@ -64,6 +64,10 @@ protected:
 
 	std::string server;
 
+	std::string requestid;
+
+	std::string requestid2;
+
 	/**
 	 * This returns the current status within the context of a full global
 	 * memory barrier with both read and write semantics that is performed both
@@ -200,6 +204,20 @@ public:
 	 * @return the name S3 server used to execute this Action.
 	 */
 	const char * getServer() const { return server.c_str(); }
+
+	/**
+	 * Return the request ID used to execute this Action.
+	 *
+	 * @return the request ID used to execute this Action.
+	 */
+	const char * getRequestId() const { return requestid.c_str(); }
+
+	/**
+	 * Return the request ID 2 used to execute this Action.
+	 *
+	 * @return the request ID 2 used to execute this Action..
+	 */
+	const char * getRequestId2() const { return requestid2.c_str(); }
 
 	/**
 	 * Start the Action. If the Action is BUSY, this does nothing. If the

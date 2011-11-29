@@ -20,7 +20,9 @@ namespace s3 {
 
 ::S3Status Action::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
-	if (responseProperties->server != 0) { that->server = responseProperties->server; }
+	if ((responseProperties->requestId != 0) && (responseProperties->requestId[0] != '\0')) { that->requestid = responseProperties->requestId; }
+	if ((responseProperties->requestId2 != 0) && (responseProperties->requestId2[0] != '\0')) { that->requestid2 = responseProperties->requestId2; }
+	if ((responseProperties->server != 0) && (responseProperties->server[0] != '\0')) { that->server = responseProperties->server; }
 	::S3Status status = that->properties(responseProperties);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));

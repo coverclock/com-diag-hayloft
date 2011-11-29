@@ -21,8 +21,8 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Endpoint.h"
-#include "com/diag/desperado/target.h"
 #include "libs3.h"
 
 namespace com {

@@ -12,8 +12,8 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {
@@ -21,10 +21,6 @@ namespace hayloft {
 namespace s3 {
 
 class Conditions {
-
-public:
-
-	typedef int64_t Epochalseconds;
 
 protected:
 

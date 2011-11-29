@@ -12,6 +12,7 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Conditions.h"
 #include "libs3.h"
@@ -53,9 +54,9 @@ protected:
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
-	Conditions::Epochalseconds since;
+	Epochalseconds since;
 
-	Conditions::Epochalseconds notsince;
+	Epochalseconds notsince;
 
 	std::string match;
 

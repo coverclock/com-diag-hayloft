@@ -25,7 +25,8 @@ class Bucket;
 /**
  * ObjectHead is an Object Action which retrieves the meta-data for the Object
  * but not the Object contents. The meta-data for an Object consists of its
- * libs3 ::S3ResponseProperties.
+ * libs3 ::S3ResponseProperties. (All of the meta-data handling is actually
+ * done in the base class since it is common to all Object Actions.)
  */
 class ObjectHead : public Object {
 
