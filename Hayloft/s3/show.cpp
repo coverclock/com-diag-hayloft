@@ -10,6 +10,10 @@
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/desperado/Platform.h"
+#include "com/diag/desperado/types.h"
+#include "com/diag/desperado/CommonEra.h"
+#include "com/diag/desperado/TimeStamp.h"
 #include "libs3.h"
 
 namespace com {
@@ -123,7 +127,16 @@ void show(const Object & object, Logger::Level level) {
 		logger.log(level, "Object%p: contentType=\"%s\"\n", &object, object.getContentType());
 		logger.log(level, "Object%p: eTag=\"%s\"\n", &object, object.getETag());
 		logger.log(level, "Object%p: contentLength=%llu\n", &object, object.getContentLength());
-		logger.log(level, "Object%p: modificationTime=%lld\n", &object, object.getModificationTime());
+		Epochalseconds seconds = object.getModificationTime();
+		ticks_t numerator;
+		ticks_t denominator;
+		::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
+		ticks_t ticks = (seconds * numerator) / denominator;
+		::com::diag::desperado::CommonEra commonera;
+		commonera.fromTicks(ticks);
+		::com::diag::desperado::TimeStamp timestamp;
+		const char * stamp = timestamp.iso8601(commonera);
+		logger.log(level, "Object%p: modificationTime=%lld=\"%s\"\n", &object, seconds, stamp);
 		Object::Metadata::const_iterator here = object.getMetadata().begin();
 		Object::Metadata::const_iterator there = object.getMetadata().end();
 		while (here != there) {
