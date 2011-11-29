@@ -1509,6 +1509,7 @@ TEST_F(ObjectTest, Copy) {
 	const char BUCKET2[] = "ObjectTestManifest2";
 	const char OBJECT1[] = "Object1.txt";
 	const char OBJECT2[] = "Object2.txt";
+	Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -1539,7 +1540,7 @@ TEST_F(ObjectTest, Copy) {
 		objectput1.start();
 	}
 	ASSERT_TRUE(objectput1.isSuccessful());
-	show(objectput1, Logger::PRINT);
+	show(objectput1, LEVEL);
 	/**/
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
 	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
@@ -1552,7 +1553,7 @@ TEST_F(ObjectTest, Copy) {
 		objecthead1.start();
 	}
 	ASSERT_TRUE(objecthead1.isSuccessful());
-	show(objecthead1, Logger::PRINT);
+	show(objecthead1, LEVEL);
 	// Note that S3 converts the keyword strings to lower case. That's because
 	// they actually become part of HTTP message header field names whose
 	// prefixes libs3 strips off.
@@ -1590,7 +1591,7 @@ TEST_F(ObjectTest, Copy) {
 		objecthead2.start();
 	}
 	ASSERT_TRUE(objecthead2.isSuccessful());
-	show(objecthead2, Logger::PRINT);
+	show(objecthead2, LEVEL);
 	// Note that S3 does not copy the metadata from the source object to the
 	// sink object.
 	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
@@ -1612,7 +1613,7 @@ TEST_F(ObjectTest, Copy) {
 	ASSERT_TRUE(objectget2.isSuccessful());
 	EXPECT_EQ(objectget2.find("keyworda"), (char *)0);
 	EXPECT_EQ(objectget2.find("keywordb"), (char *)0);
-	show(objectget2, Logger::PRINT);
+	show(objectget2, LEVEL);
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucket1);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
