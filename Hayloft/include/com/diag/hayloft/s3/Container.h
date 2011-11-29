@@ -19,6 +19,12 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * Container is a Service that is identified with a canonical name and has a
+ * Uniform Resource Indentifier (URI) style, Virtual Host or Path, with which
+ * it is accessed. Is is a superclass of other classes like Bucket and Object
+ * and is not used directly.
+ */
 class Container : public Service {
 
 protected:
@@ -31,6 +37,22 @@ protected:
 
 public:
 
+	/**
+	 * Ctor. This is used by the synchronous interface.
+	 *
+	 * @param accessKeyId is the access key ID (like a login or account number)
+	 *        provided by AWS used to access this Container.
+	 * @param secretAccessKey is the secret access key (like a password or
+	 *        encryption key) provided by AWS used to access this Container.
+	 * @param endPoint is the end point (hostname) used to access this
+	 *        Container.
+	 * @param canonicalBucketName is the canonical bucket name used to access
+	 *        this Container.
+	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
+	 *        access this Container.
+	 * @param uriStyle is the URI style, Virtual Host or Path, used to access
+	 *        this Container.
+	 */
 	explicit Container(
 		const char * accessKeyId,
 		const char * secretAccessKey,
@@ -40,6 +62,25 @@ public:
 		::S3UriStyle uristyle
 	);
 
+	/**
+	 * Ctor. This is used by the asynchronous interface.
+	 *
+	 * @param accessKeyId is the access key ID (like a login or account number)
+	 *        provided by AWS used to access this Container.
+	 * @param secretAccessKey is the secret access key (like a password or
+	 *        encryption key) provided by AWS used to access this Container.
+	 * @param endPoint is the end point (hostname) used to access this
+	 *        Container.
+	 * @param canonicalBucketName is the canonical bucket name used to access
+	 *        this Container.
+	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
+	 *        access this Container.
+	 * @param uriStyle is the URI style, Virtual Host or Path, used to access
+	 *        this Container.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
 	explicit Container(
 		const char * accessKeyId,
 		const char * secretAccessKey,
@@ -50,10 +91,23 @@ public:
 		Multiplex & multiplex
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~Container();
 
+	/**
+	 * Return the canonical name associated with this Container.
+	 *
+	 * @return the canonical name.
+	 */
 	const char * getCanonical() const { return canonical.c_str(); }
 
+	/**
+	 * Return the URI style associated with this Container.
+	 *
+	 * @return the URI style.
+	 */
 	::S3UriStyle getStyle() const { return style; }
 
 private:
