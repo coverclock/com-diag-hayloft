@@ -19,6 +19,13 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/**
+ * Service is an Action which is accessed by using an access key ID (like a
+ * login or account number) provided by AWS, a secret access key (like a
+ * password or encryption key) also provided by AWS, an end point (essentially
+ * a hostname), and an HTTP protocol (Secure or Unsecure). It is a superclass
+ * that is not used directly.
+ */
 class Service : public Action {
 
 protected:
@@ -33,6 +40,18 @@ protected:
 
 public:
 
+	/**
+	 * Ctor. This is used by the synchronous interface.
+	 *
+	 * @param accessKeyId is the access key ID (like a login or account number)
+	 *        provided by AWS used to access this Container.
+	 * @param secretAccessKey is the secret access key (like a password or
+	 *        encryption key) provided by AWS used to access this Container.
+	 * @param endPoint is the end point (hostname) used to access this
+	 *        Container.
+	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
+	 *        access this Container.
+	 */
 	explicit Service(
 		const char * accessKeyId,
 		const char * secretAccessKey,
@@ -40,6 +59,21 @@ public:
 		::S3Protocol httpProtocol
 	);
 
+	/**
+	 * Ctor. This is used by the asynchronous interface.
+	 *
+	 * @param accessKeyId is the access key ID (like a login or account number)
+	 *        provided by AWS used to access this Container.
+	 * @param secretAccessKey is the secret access key (like a password or
+	 *        encryption key) provided by AWS used to access this Container.
+	 * @param endPoint is the end point (hostname) used to access this
+	 *        Container.
+	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
+	 *        access this Container.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
 	explicit Service(
 		const char * accessKeyId,
 		const char * secretAccessKey,
@@ -48,14 +82,37 @@ public:
 		Multiplex & multiplex
 	);
 
+	/**
+	 * Dtor.
+	 */
 	virtual ~Service();
 
+	/**
+	 * Return the twenty-character access key ID.
+	 *
+	 * @return the twenty-character access key ID.
+	 */
 	const char * getId() const { return id.c_str(); }
 
+	/**
+	 * Return the forty-character secret access key.
+	 *
+	 * @return the forty-character secret access key.
+	 */
 	const char * getSecret() const { return secret.c_str(); }
 
+	/**
+	 * Return the end point name.
+	 *
+	 * @return the end point name.
+	 */
 	const char * getEndpoint() const { return endpoint.c_str(); }
 
+	/**
+	 * Return the protocol.
+	 *
+	 * @return the protocol.
+	 */
 	::S3Protocol getProtocol() const { return protocol; }
 
 private:

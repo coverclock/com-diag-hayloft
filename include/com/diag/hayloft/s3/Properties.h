@@ -51,6 +51,10 @@ protected:
 
 public:
 
+	/**
+	 * @param cannedAcl  This reference is only used during
+	 *        construction.
+	 */
 	explicit Properties(
 		const char * contentType = 0,
 		const char * md5 = 0,
