@@ -22,7 +22,7 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 : modified(lastModified)
 , etag((eTag != 0) ? eTag : "")
 , size(objectsize)
-, id((ownerId != 0) ? ownerId : "")
+, owner((ownerId != 0) ? ownerId : "")
 , display((ownerDisplayName != 0) ? ownerDisplayName : "")
 {}
 
@@ -44,7 +44,7 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 		for (int ii = 0; ii < contentsCount; ++ii) {
 			if ((contents[ii].key != 0) && (*contents[ii].key != '\0')) {
 				Entry entry(contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
-				Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, contents[ii].key, entry.modified, entry.etag.c_str(), entry.size, entry.id.c_str(), entry.display.c_str());
+				Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, contents[ii].key, entry.modified, entry.etag.c_str(), entry.size, entry.owner.c_str(), entry.display.c_str());
 				if ((status == ::S3StatusOK) && (that->manifest.size() < that->maximum)) {
 					that->manifest.insert(Pair(contents[ii].key, entry));
 				}

@@ -1262,6 +1262,7 @@ TEST_F(ObjectTest, Manifest) {
 	const char BUCKET[] = "ObjectTestManifest";
 	const char OBJECT1[] = "Object1.txt";
 	const char OBJECT2[] = "Object2.txt";
+	Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate(BUCKET);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -1348,6 +1349,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 2);
 	EXPECT_NE(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
+	show(bucketmanifest3, LEVEL);
 	bucketmanifest3.reset();
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 0);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
@@ -1505,8 +1507,8 @@ TEST_F(ObjectTest, Copy) {
 	// OBJECT ACTION. It looks like a full set of Response Properties are
 	// only returned by OBJECT HEAD and OBJECT GET.
 	static const int LIMIT = 10;
-	const char BUCKET1[] = "ObjectTestManifest1";
-	const char BUCKET2[] = "ObjectTestManifest2";
+	const char BUCKET1[] = "ObjectTestCopy1";
+	const char BUCKET2[] = "ObjectTestCopy2";
 	const char OBJECT1[] = "Object1.txt";
 	const char OBJECT2[] = "Object2.txt";
 	Logger::Level LEVEL = Logger::PRINT;

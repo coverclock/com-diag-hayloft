@@ -18,7 +18,7 @@ namespace hayloft {
 namespace s3 {
 
 ServiceManifest::Entry::Entry(const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
-: id((ownerId != 0) ? ownerId : "")
+: owner((ownerId != 0) ? ownerId : "")
 , display((ownerDisplayName != 0) ? ownerDisplayName : "")
 , created(creationDateSeconds)
 {}
@@ -29,7 +29,7 @@ ServiceManifest::Entry::Entry(const char * ownerId, const char * ownerDisplayNam
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	const char * effective = (bucketName != 0) ? bucketName : "";
 	Entry entry(ownerId, ownerDisplayName, creationDateSeconds);
-	Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.id.c_str(), entry.display.c_str(), entry.created);
+	Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.owner.c_str(), entry.display.c_str(), entry.created);
 	Logger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	if (status == ::S3StatusOK) {
 		that->manifest.insert(Pair(effective, entry));

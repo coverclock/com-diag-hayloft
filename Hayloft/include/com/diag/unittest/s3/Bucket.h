@@ -17,6 +17,7 @@
 #include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/ServiceManifest.h"
+#include "com/diag/hayloft/s3/show.h"
 #include "com/diag/desperado/stdlib.h"
 #include "com/diag/desperado/string.h"
 
@@ -719,6 +720,7 @@ TEST_F(BucketTest, Manifest) {
 	static const int LIMIT = 10;
 	const char BUCKET1[] = "BucketTestManifest1";
 	const char BUCKET2[] = "BucketTestManifest2";
+	Logger::Level LEVEL = Logger::PRINT;
 	ServiceManifest servicemanifest1;
 	for (int ii = 0; servicemanifest1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -755,6 +757,7 @@ TEST_F(BucketTest, Manifest) {
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 2);
 	EXPECT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
+	show(servicemanifest3, LEVEL);
 	servicemanifest3.reset();
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);

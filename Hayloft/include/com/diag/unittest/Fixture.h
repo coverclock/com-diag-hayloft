@@ -25,71 +25,58 @@ namespace unittest {
 
 using namespace ::com::diag::hayloft;
 
-class Terse : public ::testing::Test {
-
-public:
-
-	::com::diag::desperado::Platform & platform;
-	::com::diag::desperado::FileOutput errput;
-	::com::diag::desperado::LogOutput logput;
-	::com::diag::desperado::Print printf;
-	::com::diag::desperado::Dump dump;
-	Logger & logger;
-
-	explicit Terse()
-	: platform(::com::diag::desperado::Platform::instance())
-	, errput(::stderr)
-	, logput(errput)
-	, printf(errput)
-	, dump(errput)
-	, logger(Logger::instance())
-	{}
+class Test : public ::testing::Test {
 
 protected:
 
+	::com::diag::desperado::FileOutput errput;
+	::com::diag::desperado::LogOutput logput;
 	::com::diag::desperado::Output * output;
 	Logger::Mask mask;
 
-	virtual void SetUp() {
-		output = &(logger.getOutput());
-		mask = logger.getMask();
+public:
+
+	Logger & logger;
+	::com::diag::desperado::Platform & platform;
+	::com::diag::desperado::Print printf;
+	::com::diag::desperado::Dump dump;
+
+	explicit Test()
+	: errput(::stderr)
+	, logput(errput)
+	, output(0)
+	, mask(0)
+	, logger(Logger::instance())
+	, platform(::com::diag::desperado::Platform::instance())
+	, printf(errput)
+	, dump(errput)
+	{}
+
+	virtual Logger::Mask terse() {
+		Logger::Mask save = logger.getMask();
 		logger
-			.setOutput(logput)
-	    	.disable(Logger::FINEST)
-	    	.disable(Logger::FINER)
-	    	.disable(Logger::FINE)
-	    	.disable(Logger::TRACE)
-	    	.disable(Logger::DEBUG)
-	    	.disable(Logger::INFORMATION)
-	    	.disable(Logger::CONFIGURATION)
-	    	.disable(Logger::NOTICE)
-	    	.enable(Logger::WARNING)
-	    	.enable(Logger::ERROR)
-	    	.enable(Logger::SEVERE)
-	    	.enable(Logger::CRITICAL)
-	    	.enable(Logger::ALERT)
-	    	.enable(Logger::FATAL)
-	    	.enable(Logger::EMERGENCY)
-	    	.enable(Logger::PRINT)
-			.setMask();
+			.disable(Logger::FINEST)
+			.disable(Logger::FINER)
+			.disable(Logger::FINE)
+			.disable(Logger::TRACE)
+			.disable(Logger::DEBUG)
+			.disable(Logger::INFORMATION)
+			.disable(Logger::CONFIGURATION)
+			.disable(Logger::NOTICE)
+			.enable(Logger::WARNING)
+			.enable(Logger::ERROR)
+			.enable(Logger::SEVERE)
+			.enable(Logger::CRITICAL)
+			.enable(Logger::ALERT)
+			.enable(Logger::FATAL)
+			.enable(Logger::EMERGENCY)
+			.enable(Logger::PRINT);
+		return save;
 	}
 
-	virtual void TearDown() {
-		logger.setMask(mask);
-		logger.setOutput(*output);
-	}
-
-};
-
-class Verbose : public Terse {
-
-protected:
-
-	virtual void SetUp() {
-		output = &(logger.getOutput());
-		mask = logger.getMask();
+	virtual Logger::Mask verbose() {
+		Logger::Mask save = logger.getMask();
 		logger
-			.setOutput(logput)
 	    	.enable(Logger::FINEST)
 	    	.enable(Logger::FINER)
 	    	.enable(Logger::FINE)
@@ -105,12 +92,47 @@ protected:
 	    	.enable(Logger::ALERT)
 	    	.enable(Logger::FATAL)
 	    	.enable(Logger::EMERGENCY)
-	    	.enable(Logger::PRINT)
-			.setMask();
+	    	.enable(Logger::PRINT);
+		return save;
+	}
+
+	virtual void restore(Logger::Mask save) {
+		logger.setMask(save);
+	}
+
+};
+
+class Terse : public Test {
+
+protected:
+
+	virtual void SetUp() {
+		output = &(logger.getOutput());
+		logger.setOutput(logput);
+		mask = terse();
+		logger.setMask();
 	}
 
 	virtual void TearDown() {
-		logger.setMask(mask);
+		restore(mask);
+		logger.setOutput(*output);
+	}
+
+};
+
+class Verbose : public Test {
+
+protected:
+
+	virtual void SetUp() {
+		output = &(logger.getOutput());
+		logger.setOutput(logput);
+		mask = verbose();
+		logger.setMask();
+	}
+
+	virtual void TearDown() {
+		restore(mask);
 		logger.setOutput(*output);
 	}
 

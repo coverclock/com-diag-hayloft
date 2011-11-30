@@ -173,6 +173,7 @@ MANIFEST_O=\
  s3/Access.o \
  s3/Context.o \
  s3/Multiplex.o \
+ s3/convergence.o \
  s3/show.o \
  s3/tostring.o \
  s3/Properties.o \

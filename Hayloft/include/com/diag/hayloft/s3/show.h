@@ -24,8 +24,10 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Object;
 class Bucket;
+class Object;
+class ServiceManifest;
+class BucketManifest;
 
 /**
  * Display a libS3 S3ErrorDetails structure.
@@ -76,12 +78,28 @@ extern void show(const ::S3GetConditions * conditions, Logger::Level level = Log
 extern void show(const Object & object, Logger::Level level = Logger::INFORMATION);
 
 /**
- * Display the metadata associated with a Hayloft Object.
+ * Display the metadata associated with a Hayloft Bucket.
  *
- * @param object refers to the object.
+ * @param bucket refers to the object.
  * @param level specifies the logging level.
  */
 extern void show(const Bucket & bucket, Logger::Level level = Logger::INFORMATION);
+
+/**
+ * Display the metadata associated with a Hayloft ServiceManifest.
+ *
+ * @param manifest refers to the object.
+ * @param level specifies the logging level.
+ */
+extern void show(const ServiceManifest & manifest, Logger::Level level = Logger::INFORMATION);
+
+/**
+ * Display the metadata associated with a Hayloft BucketManifest.
+ *
+ * @param manifest refers to the object.
+ * @param level specifies the logging level.
+ */
+extern void show(const BucketManifest & manifest, Logger::Level level = Logger::INFORMATION);
 
 }
 }

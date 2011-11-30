@@ -45,7 +45,7 @@ public:
 		/**
 		 * Id of the owner of the Object.
 		 */
-		std::string id;
+		std::string owner;
 
 		/**
 		 * Display name of the owner of the Object.
