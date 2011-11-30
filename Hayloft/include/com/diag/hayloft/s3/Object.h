@@ -158,6 +158,7 @@ public:
 	 * If there is a metadata entry with the given key, return its value,
 	 * otherwise return null.
 	 *
+	 * @param key is the metadata keyword.
 	 * @return a metadata value for the key or null.
 	 */
 	const char * find(const char * key) const;
