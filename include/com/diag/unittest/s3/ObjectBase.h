@@ -71,7 +71,7 @@ TEST_F(ObjectBaseTest, VirtualHostURI) {
 	std::string uri;
 	const char * str = tostring(object, uri);
 	ASSERT_NE(str, (char *)0);
-	printf("uri=\"%s\"\n", str);
+	printf("URI=\"%s\"\n", str);
 	EXPECT_EQ(uri, "https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com/VirtualHost.txt");
 }
 
@@ -89,7 +89,7 @@ TEST_F(ObjectBaseTest, PathURI) {
 	std::string uri;
 	const char * str = tostring(object, uri);
 	ASSERT_NE(str, (char *)0);
-	printf("uri=\"%s\"\n", str);
+	printf("URI=\"%s\"\n", str);
 	EXPECT_EQ(uri, "http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt");
 }
 
