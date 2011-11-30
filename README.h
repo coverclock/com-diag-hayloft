@@ -102,6 +102,9 @@
 	Amazon.com, Amazon Simple Storage Service, Console User Guide,
 	API Version 2006-03-01, Amazon Web Services
 
+	R. Fielding et al., "Hypertext Transfer Protocol -- HTTP/1.1", RFC2616,
+	The Internet Society, June 1999
+
 	B. Ischo, libs3.h, http://libs3.ischo.com.s3.amazonaws.com/index.html
 
 	B. Ischo, s3.c, http://libs3.ischo.com.s3.amazonaws.com/index.html

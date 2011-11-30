@@ -12,7 +12,7 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Region.h"
+#include "com/diag/hayloft/s3/types.h"
 
 namespace com {
 namespace diag {
@@ -25,13 +25,22 @@ namespace s3 {
  */
 class BucketHead : public Bucket {
 
+public:
+
+	/**
+	 * Hayloft places a limit of this many characters on the location constraint
+	 * returned by this Action. S3 currently has region names of around eighteen
+	 * or so characters in length.
+	 */
+	static const size_t LENGTH = 24;
+
 private:
 
 	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 
-	char constraint[Region::LENGTH];
+	char constraint[LENGTH];
 
 	::S3ResponseHandler handler;
 

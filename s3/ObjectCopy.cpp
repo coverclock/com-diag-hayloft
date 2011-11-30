@@ -20,7 +20,7 @@ namespace s3 {
 
 void ObjectCopy::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectCopy * that = static_cast<ObjectCopy*>(callbackData);
-	if (that->tag[0] != '\0') { that->tag[sizeof(tag) - 1] = '\0'; that->etag = that->tag; }
+	if (that->entitytag[0] != '\0') { that->entitytag[sizeof(that->entitytag) - 1] = '\0'; that->etag = that->entitytag; }
 	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
 }
 
@@ -75,7 +75,7 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 		logger.debug("ObjectCopy@%p: toname=\"%s\"\n", this, toname.c_str());
 		logger.debug("ObjectCopy@%p: tokey=\"%s\"\n", this, tokey.c_str());
 	}
-	tag[0] = '\0';
+	entitytag[0] = '\0';
 	std::memset(&properties, 0, sizeof(properties));
 	properties.contentType = type.empty() ? 0 : type.c_str();
 	properties.md5 = checksum.empty() ? 0 : checksum.c_str();
@@ -113,7 +113,7 @@ void ObjectCopy::execute() {
 		tokey.c_str(),
 		&properties,
 		&modified,
-		sizeof(tag), tag,
+		sizeof(entitytag), entitytag,
 		requests,
 		&handler,
 		this

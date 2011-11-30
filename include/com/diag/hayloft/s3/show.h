@@ -25,6 +25,7 @@ namespace hayloft {
 namespace s3 {
 
 class Object;
+class Bucket;
 
 /**
  * Display a libS3 S3ErrorDetails structure.
@@ -32,7 +33,7 @@ class Object;
  * @param details points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger::INFORMATION);
 
 /**
  * Display a libS3 S3ResponseProperties structure.
@@ -40,7 +41,7 @@ extern void show(const ::S3ErrorDetails * details, Logger::Level level = Logger:
  * @param response points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3ResponseProperties * response, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3ResponseProperties * response, Logger::Level level = Logger::INFORMATION);
 
 /**
  * Display a libS3 S3BucketContext structure.
@@ -48,7 +49,7 @@ extern void show(const ::S3ResponseProperties * response, Logger::Level level = 
  * @param context points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3BucketContext * context, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3BucketContext * context, Logger::Level level = Logger::INFORMATION);
 
 /**
  * Display a libS3 S3PutProperties structure.
@@ -56,7 +57,7 @@ extern void show(const ::S3BucketContext * context, Logger::Level level = Logger
  * @param properties points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3PutProperties * properties, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3PutProperties * properties, Logger::Level level = Logger::INFORMATION);
 
 /**
  * Display a libS3 S3GetConditions structure.
@@ -64,7 +65,7 @@ extern void show(const ::S3PutProperties * properties, Logger::Level level = Log
  * @param conditions points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3GetConditions * conditions, Logger::Level level = Logger::DEBUG);
+extern void show(const ::S3GetConditions * conditions, Logger::Level level = Logger::INFORMATION);
 
 /**
  * Display the metadata associated with a Hayloft Object.
@@ -72,7 +73,15 @@ extern void show(const ::S3GetConditions * conditions, Logger::Level level = Log
  * @param object refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const Object & object, Logger::Level level = Logger::DEBUG);
+extern void show(const Object & object, Logger::Level level = Logger::INFORMATION);
+
+/**
+ * Display the metadata associated with a Hayloft Object.
+ *
+ * @param object refers to the object.
+ * @param level specifies the logging level.
+ */
+extern void show(const Bucket & bucket, Logger::Level level = Logger::INFORMATION);
 
 }
 }

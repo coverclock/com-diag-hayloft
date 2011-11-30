@@ -67,8 +67,6 @@ protected:
 
 	std::string key;
 
-	std::string name;
-
 	std::string type;
 
 	std::string etag;
@@ -124,14 +122,6 @@ public:
 	 * @return the key (object name).
 	 */
 	const char * getKey() const { return key.c_str(); }
-
-	/**
-	 * Get the non-canonical (application) bucket name associated with this
-	 * Object.
-	 *
-	 * @return the non-canonical bucket name.
-	 */
-	const char * getName() const { return name.c_str(); }
 
 	/**
 	 * Get the content type provided by S3 once this Action completes.
