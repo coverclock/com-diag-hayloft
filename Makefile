@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=1
-MINOR=0
+MINOR=1
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -163,6 +163,7 @@ MANIFEST_O=\
  hayloft/Packet.o \
  hayloft/Parameter.o \
  hayloft/size.o \
+ hayloft/set.o \
  s3/Endpoint.o \
  s3/Session.o \
  s3/Credentials.o \
