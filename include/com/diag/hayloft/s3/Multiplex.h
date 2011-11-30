@@ -38,12 +38,7 @@ class Multiplex {
 public:
 
 	/**
-	 * When Bits are returned this is what they are returned in.
-	 */
-	typedef int32_t Bits;
-
-	/**
-	 * This defines the meaning of the Bits returned when iterating and
+	 * This defines the meaning of the bits returned when iterating and
 	 * servicing.
 	 */
 	enum Ready {
@@ -51,8 +46,8 @@ public:
 		WRITE		= (1 << 1),						/* Sockets to be WRITTEN */
 		EXCEPTION	= (1 << 2),						/* Sockets with EXCEPTIONS */
 		PENDING		= (1 << 3),						/* Actions PENDING */
-		RETRY		= (1 << (widthof(Bits) - 2)),	/* Failed but RETRYable */
-		ERROR		= (1 << (widthof(Bits) - 1))	/* Failed */
+		RETRY		= (1 << (widthof(int) - 2)),	/* Failed but RETRYable */
+		ERROR		= (1 << (widthof(int) - 1))		/* Failed */
 	};
 
 	/**
@@ -159,7 +154,7 @@ public:
 	 * @param timeout is a timeout duration in milliseconds.
 	 * @return a mask of Ready bits containing READ, WRITE, etc.
 	 */
-	virtual Bits ready(Milliseconds timeout = TIMEOUT);
+	virtual int ready(Milliseconds timeout = TIMEOUT);
 
 	/**
 	 * Wait for ready() sockets and iterate() on any pending Actions when those
@@ -169,7 +164,7 @@ public:
 	 * @param limit is the maximum number of iterations to do.
 	 * @return a mask of Ready bits containing READ, WRITE, etc.
 	 */
-	virtual Bits service(Milliseconds timeout = TIMEOUT, int limit = LIMIT);
+	virtual int service(Milliseconds timeout = TIMEOUT, int limit = LIMIT);
 
 private:
 

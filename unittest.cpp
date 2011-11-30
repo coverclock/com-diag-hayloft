@@ -56,6 +56,12 @@
 #include "com/diag/unittest/s3/Object.h"
 #endif
 
+// Unit tests that also use S3 and objects.
+
+#if 1
+#include "com/diag/unittest/s3/convergence.h"
+#endif
+
 int main(int argc, char ** argv, char **envp) {
 	return ::com::diag::lariat::main(argc, argv, envp);
 }

@@ -38,7 +38,10 @@ public:
 	 * Hayloft places a limit on the maximum length of an Entity Tag C string
 	 * returned by this Action. S3 appears to generate thirty-two byte ETags
 	 * in the form of hexadecimal characters. That represents a binary value
-	 * of (32 * 4) or 128 bits.
+	 * of (32 * 4) or 128 bits. Bizarrely, S3 returns the ETag value with
+	 * embedded double quotes around it, making it thirty-four characters (plus
+	 * one for the trailing NUL). I don't see this in the libs3 code, nor do
+	 * I see anything about this in the HTTP standard.
 	 */
 	static const size_t LENGTH = 36;
 

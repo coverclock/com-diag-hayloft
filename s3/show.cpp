@@ -12,6 +12,8 @@
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/ServiceManifest.h"
+#include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
 #include "com/diag/desperado/CommonEra.h"
@@ -127,19 +129,19 @@ void show(const Object & object, Logger::Level level) {
 		if ((object.getContentType())[0] != '\0') { logger.log(level, "Object@%p: contentType=\"%s\"\n", &object, object.getContentType()); }
 		if ((object.getETag())[0] != '\0') { logger.log(level, "Object@%p: eTag=\"%s\"\n", &object, object.getETag()); }
 		logger.log(level, "Object@%p: contentLength=%llu\n", &object, object.getContentLength());
-		Epochalseconds seconds = object.getModificationTime();
-		if (seconds >= 0) {
+		Epochalseconds modified = object.getModificationTime();
+		if (modified >= 0) {
 			ticks_t numerator;
 			ticks_t denominator;
 			::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
-			ticks_t ticks = (seconds * numerator) / denominator;
+			ticks_t ticks = (modified * numerator) / denominator;
 			::com::diag::desperado::CommonEra commonera;
 			commonera.fromTicks(ticks);
 			::com::diag::desperado::TimeStamp timestamp;
 			const char * stamp = timestamp.iso8601(commonera);
-			logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, seconds, stamp);
+			logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, modified, stamp);
 		} else {
-			logger.log(level, "Object@%p: modificationTime=%lld\n", &object, seconds);
+			logger.log(level, "Object@%p: modificationTime=%lld\n", &object, modified);
 		}
 		Object::Metadata::const_iterator here = object.getMetadata().begin();
 		Object::Metadata::const_iterator there = object.getMetadata().end();
@@ -187,6 +189,73 @@ void show(const Bucket & bucket, Logger::Level level) {
 		logger.log(level, "Object@%p: status=%d=\"%s\"\n", &bucket, bucket.getStatus(), tostring(bucket.getStatus()));
 	}
 }
+
+void show(const ServiceManifest & manifest, Logger::Level level) {
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(level)) {
+		::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+		ticks_t numerator;
+		ticks_t denominator;
+		platform.frequency(numerator, denominator);
+		ServiceManifest::Manifest::const_iterator here = manifest.getManifest().begin();
+		ServiceManifest::Manifest::const_iterator there = manifest.getManifest().end();
+		const char * canonical;
+		const char * owner;
+		const char * display;
+		Epochalseconds created;
+		ticks_t ticks;
+		::com::diag::desperado::CommonEra commonera;
+		::com::diag::desperado::TimeStamp timestamp;
+		const char * stamp;
+		while (here != there) {
+			canonical = here->first.c_str();
+			owner = here->second.owner.c_str();
+			display = here->second.display.c_str();
+			created = here->second.created;
+			ticks = (created * numerator) / denominator;
+			commonera.fromTicks(ticks);
+			stamp = timestamp.iso8601(commonera);
+			logger.log(level, "ServiceManifest%p: canonical=\"%s\" owner=\"%s\" display=\"%s\" created=%lld=\"%s\"\n", &manifest, canonical, owner, display, created, stamp);
+			++here;
+		}
+	}
+}
+
+void show(const BucketManifest & manifest, Logger::Level level) {
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(level)) {
+		::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+		ticks_t numerator;
+		ticks_t denominator;
+		platform.frequency(numerator, denominator);
+		BucketManifest::Manifest::const_iterator here = manifest.getManifest().begin();
+		BucketManifest::Manifest::const_iterator there = manifest.getManifest().end();
+		const char * key;
+		Epochalseconds modified;
+		const char * etag;
+		Octets size;
+		const char * owner;
+		const char * display;
+		ticks_t ticks;
+		::com::diag::desperado::CommonEra commonera;
+		::com::diag::desperado::TimeStamp timestamp;
+		const char * stamp;
+		while (here != there) {
+			key = here->first.c_str();
+			modified = here->second.modified;
+			ticks = (modified * numerator) / denominator;
+			commonera.fromTicks(ticks);
+			stamp = timestamp.iso8601(commonera);
+			etag = here->second.etag.c_str();
+			size = here->second.size;
+			owner = here->second.owner.c_str();
+			display = here->second.display.c_str();
+			logger.log(level, "BucketManifest%p: key=\"%s\" etag=\"%s\" size=%llu owner=\"%s\" display=\"%s\" modified=%lld=\"%s\"\n", &manifest, key, etag, size, owner, display, modified, stamp);
+			++here;
+		}
+	}
+}
+
 
 }
 }
