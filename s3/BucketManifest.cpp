@@ -163,6 +163,7 @@ void BucketManifest::reset() {
 }
 
 ::S3Status BucketManifest::entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes) {
+	Logger::instance().debug("BucketManifest%p: entry\n", this);
 	return ::S3StatusOK;
 }
 

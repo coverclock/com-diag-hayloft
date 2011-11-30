@@ -96,6 +96,7 @@ void ServiceManifest::reset() {
 }
 
 ::S3Status ServiceManifest::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
+	Logger::instance().debug("ServiceManifest%p: entry\n", this);
 	return ::S3StatusOK;
 }
 

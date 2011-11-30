@@ -42,9 +42,6 @@ Multiplex::Multiplex(::S3RequestContext * requestContext)
 }
 
 Multiplex::~Multiplex() {
-	if (requests != 0) {
-		S3_runall_request_context(requests);
-	}
 	if (taken != 0) {
 		S3_destroy_request_context(taken);
 	}

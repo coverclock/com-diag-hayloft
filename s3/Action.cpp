@@ -52,6 +52,9 @@ void Action::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	show(errorDetails, level);
 	that->complete(status, errorDetails);
 	that->status = status;
+	// An ::S3StatusInterrupted means someone destroyed our request context.
+	// We are now a synchronous Action.
+	if (status == ::S3StatusInterrupted) { that->requests = 0; }
 	Logger::instance().log(level, "Action@%p: end\n", that);
 }
 

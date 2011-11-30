@@ -35,7 +35,7 @@ public:
 	 * This is the name of the environmental variable with which you can
 	 * specify the name of your default region.
 	 */
-	static const char * REGION_ENV() { return "COM_DIAG_HAYLOFT_S3_REGION"; }
+	static const char * REGION_ENV() { return "COM_DIAG_HAYLOFT_S3_REGION_NAME"; }
 
 	static const char * ASIA_PACIFIC_NORTHEAST_1() { return "ap-northeast-1"; }
 
