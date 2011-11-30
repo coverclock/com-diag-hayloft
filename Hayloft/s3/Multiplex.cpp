@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/Multiplex.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
@@ -52,14 +53,14 @@ void Multiplex::initialize() {
 	logger.debug("Multiplex@%p: requests=%p\n", this, requests);
 	logger.debug("Multiplex@%p: taken=%p\n", this, taken);
 	if (status != S3StatusOK) {
-		logger.error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 	}
 }
 
 bool Multiplex::complete() {
 	::S3Status status = ::S3_runall_request_context(requests);
 	if (status != S3StatusOK) {
-		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 	}
 	return (status == ::S3StatusOK);
 }
@@ -69,7 +70,7 @@ bool Multiplex::iterate(int & pending) {
 	int count = 0;
 	::S3Status status = ::S3_runonce_request_context(requests, &count);
 	if (status != S3StatusOK) {
-		logger.error("Multiplex@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Multiplex@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 	}
 	if (count > 0) {
 		logger.debug("Multiplex@%p: pending=%d\n", this, count);
@@ -91,7 +92,7 @@ int Multiplex::ready(Milliseconds timeout) {
 		int maxfd = -1;
 		::S3Status status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
 		if (status != ::S3StatusOK) {
-			logger.error("Multiplex@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+			logger.error("Multiplex@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, tostring(status));
 			rc |= ERROR;
 			if (::S3_status_is_retryable(status) != 0) {
 				rc |= RETRY;

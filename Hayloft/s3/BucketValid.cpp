@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/BucketValid.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -31,7 +32,7 @@ void BucketValid::execute() {
 	logger.debug("BucketValid@%p: begin\n", this);
 	status = ::S3_validate_bucket_name(canonical.c_str(), style);
 	if (status != ::S3StatusOK) {
-		logger.warning("BucketValid@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, name.c_str(), name.length(), status, ::S3_get_status_name(status));
+		logger.warning("BucketValid@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, name.c_str(), name.length(), status, tostring(status));
 	}
 	logger.debug("BucketValid@%p: end\n", this);
 }

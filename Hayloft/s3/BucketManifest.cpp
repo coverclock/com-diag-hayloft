@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/BucketManifest.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/generics.h"
@@ -60,7 +61,7 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 			}
 		}
 	}
-	Logger::instance().log(level, "BucketManifest@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	Logger::instance().log(level, "BucketManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	return status;
 }
 

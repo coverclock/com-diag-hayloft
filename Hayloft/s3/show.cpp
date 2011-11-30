@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Bucket.h"
@@ -72,8 +73,8 @@ void show(const ::S3BucketContext * context, Logger::Level level) {
 		if (logger.isEnabled(level)) {
 			if (context->hostName != 0) { logger.log(level, "S3BucketContext@%p: hostName=\"%s\"\n", context, context->hostName); }
 			if (context->bucketName != 0) { logger.log(level, "S3BucketContext@%p: bucketName=\"%s\"\n", context, context->bucketName); }
-			logger.log(level, "S3BucketContext@%p: protocol=%d\n", context, context->protocol);
-			logger.log(level, "S3BucketContext@%p: uriStyle=%d\n", context, context->uriStyle);
+			logger.log(level, "S3BucketContext@%p: protocol=%d=\"%s\"\n", context, context->protocol, tostring(context->protocol));
+			logger.log(level, "S3BucketContext@%p: uriStyle=%d=\"%s\"\n", context, context->uriStyle, tostring(context->uriStyle));
 			if (context->accessKeyId != 0) { logger.log(level, "S3BucketContext@%p: accessKeyId=\"%s\"\n", context, Credentials::obfuscate(context->accessKeyId)); }
 			if (context->secretAccessKey != 0) { logger.log(level, "S3BucketContext@%p: secretAccessKey=\"%s\"\n", context, Credentials::obfuscate(context->secretAccessKey)); }
 		}
@@ -90,7 +91,7 @@ void show(const ::S3PutProperties * properties, Logger::Level level) {
 			if (properties->contentDispositionFilename != 0) { logger.log(level, "S3PutProperties@%p: contentDispositionFilename=\"%s\"\n", properties, properties->contentDispositionFilename); }
 			if (properties->contentEncoding != 0) { logger.log(level, "S3PutProperties@%p: contentEncoding=\"%s\"\n", properties, properties->contentEncoding); }
 			if (properties->expires >= 0) { logger.log(level, "S3PutProperties@%p: expires=%lld\n", properties, properties->expires); }
-			logger.log(level, "S3PutProperties@%p: cannedAcl=%d\n", properties, properties->cannedAcl);
+			logger.log(level, "S3PutProperties@%p: cannedAcl=%d=\"%s\"\n", properties, properties->cannedAcl, tostring(properties->cannedAcl));
 			if (properties->metaData != 0) {
 				for (int ii = 0; ii < properties->metaDataCount; ++ii) {
 					if ((properties->metaData[ii].name != 0) || (properties->metaData[ii].value != 0)) {
@@ -119,63 +120,71 @@ void show(const ::S3GetConditions * conditions, Logger::Level level) {
 void show(const Object & object, Logger::Level level) {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(level)) {
+		std::string uri;
+		logger.log(level, "Object@%p: uri=\"%s\"\n", &object, tostring(object, uri));
 		// Object
-		logger.log(level, "Object@%p: key=\"%s\"\n", &object, object.getKey());
-		logger.log(level, "Object@%p: contentType=\"%s\"\n", &object, object.getContentType());
-		logger.log(level, "Object@%p: eTag=\"%s\"\n", &object, object.getETag());
+		if ((object.getKey())[0] != '\0') { logger.log(level, "Object@%p: key=\"%s\"\n", &object, object.getKey()); }
+		if ((object.getContentType())[0] != '\0') { logger.log(level, "Object@%p: contentType=\"%s\"\n", &object, object.getContentType()); }
+		if ((object.getETag())[0] != '\0') { logger.log(level, "Object@%p: eTag=\"%s\"\n", &object, object.getETag()); }
 		logger.log(level, "Object@%p: contentLength=%llu\n", &object, object.getContentLength());
 		Epochalseconds seconds = object.getModificationTime();
-		ticks_t numerator;
-		ticks_t denominator;
-		::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
-		ticks_t ticks = (seconds * numerator) / denominator;
-		::com::diag::desperado::CommonEra commonera;
-		commonera.fromTicks(ticks);
-		::com::diag::desperado::TimeStamp timestamp;
-		const char * stamp = timestamp.iso8601(commonera);
-		logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, seconds, stamp);
+		if (seconds >= 0) {
+			ticks_t numerator;
+			ticks_t denominator;
+			::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
+			ticks_t ticks = (seconds * numerator) / denominator;
+			::com::diag::desperado::CommonEra commonera;
+			commonera.fromTicks(ticks);
+			::com::diag::desperado::TimeStamp timestamp;
+			const char * stamp = timestamp.iso8601(commonera);
+			logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, seconds, stamp);
+		} else {
+			logger.log(level, "Object@%p: modificationTime=%lld\n", &object, seconds);
+		}
 		Object::Metadata::const_iterator here = object.getMetadata().begin();
 		Object::Metadata::const_iterator there = object.getMetadata().end();
 		while (here != there) {
-			logger.log(level, "Object@%p: \"%s\"=\"%s\"\n", &object, here->first.c_str(), here->second.c_str());
+			if ((object.getKey())[0] != '\0') { logger.log(level, "Object@%p: \"%s\"=\"%s\"\n", &object, here->first.c_str(), here->second.c_str()); }
 			++here;
 		}
 		//Container
-		logger.log(level, "Object@%p: canonical=\"%s\"\n", &object, object.getCanonical());
-		logger.log(level, "Object@%p: style=%d\n", &object, object.getStyle());
+		if ((object.getCanonical())[0] != '\0') { logger.log(level, "Object@%p: canonical=\"%s\"\n", &object, object.getCanonical()); }
+		logger.log(level, "Object@%p: style=%d=\"%s\"\n", &object, object.getStyle(), tostring(object.getStyle()));
 		// Service
-		logger.log(level, "Object@%p: id=\"%s\"\n", &object, Credentials::obfuscate(object.getId()));
-		logger.log(level, "Object@%p: secret=\"%s\"\n", &object, Credentials::obfuscate(object.getSecret()));
-		logger.log(level, "Object@%p: endpoint=\"%s\"\n", &object, object.getEndpoint());
-		logger.log(level, "Object@%p: prototol=%d\n", &object, object.getProtocol());
+		if ((object.getId())[0] != '\0') { logger.log(level, "Object@%p: id=\"%s\"\n", &object, Credentials::obfuscate(object.getId())); }
+		if ((object.getSecret())[0] != '\0') { logger.log(level, "Object@%p: secret=\"%s\"\n", &object, Credentials::obfuscate(object.getSecret())); }
+		if ((object.getEndpoint())[0] != '\0') { logger.log(level, "Object@%p: endpoint=\"%s\"\n", &object, object.getEndpoint()); }
+		logger.log(level, "Object@%p: prototol=%d=\"%s\"\n", &object, object.getProtocol(), tostring(object.getProtocol()));
 		// Action
-		logger.log(level, "Object@%p: server=\"%s\"\n", &object, object.getServer());
-		logger.log(level, "Object@%p: requestId=\"%s\"\n", &object, object.getRequestId());
-		logger.log(level, "Object@%p: requestId2=\"%s\"\n", &object, object.getRequestId2());
-		logger.log(level, "Object@%p: status=%d=\"%s\"\n", &object, object.getStatus(), ::S3_get_status_name(object.getStatus()));
+		if ((object.getServer())[0] != '\0') { logger.log(level, "Object@%p: server=\"%s\"\n", &object, object.getServer()); }
+		if ((object.getRequestId())[0] != '\0') { logger.log(level, "Object@%p: requestId=\"%s\"\n", &object, object.getRequestId()); }
+		if ((object.getRequestId2())[0] != '\0') { logger.log(level, "Object@%p: requestId2=\"%s\"\n", &object, object.getRequestId2()); }
+		logger.log(level, "Object@%p: status=%d=\"%s\"\n", &object, object.getStatus(), tostring(object.getStatus()));
 	}
 }
 
 void show(const Bucket & bucket, Logger::Level level) {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(level)) {
+		std::string uri;
+		logger.log(level, "Bucket@%p: uri=\"%s\"\n", &bucket, tostring(bucket, uri));
 		// Bucket
-		logger.log(level, "Bucket@%p: name=\"%s\"\n", &bucket, bucket.getName());
-		logger.log(level, "Bucket@%p: region=\"%s\"\n", &bucket, bucket.getRegion());
-		logger.log(level, "Bucket@%p: access=%d\n", &bucket, bucket.getAccess());
+		if ((bucket.getName())[0] != '\0') { logger.log(level, "Bucket@%p: name=\"%s\"\n", &bucket, bucket.getName()); }
+		if ((bucket.getRegion())[0] != '\0') { logger.log(level, "Bucket@%p: region=\"%s\"\n", &bucket, bucket.getRegion()); }
+		logger.log(level, "Bucket@%p: access=%d=\"%s\"\n", &bucket, bucket.getAccess(), tostring(bucket.getAccess()));
 		//Container
-		logger.log(level, "Bucket@%p: canonical=\"%s\"\n", &bucket, bucket.getCanonical());
-		logger.log(level, "Bucket@%p: style=%d\n", &bucket, bucket.getStyle());
+		if ((bucket.getCanonical())[0] != '\0') { logger.log(level, "Bucket@%p: canonical=\"%s\"\n", &bucket, bucket.getCanonical()); }
+		logger.log(level, "Bucket@%p: style=%d=\"%s\"\n", &bucket, bucket.getStyle(), tostring(bucket.getStyle()));
 		// Service
-		logger.log(level, "Bucket@%p: id=\"%s\"\n", &bucket, Credentials::obfuscate(bucket.getId()));
-		logger.log(level, "Bucket@%p: secret=\"%s\"\n", &bucket, Credentials::obfuscate(bucket.getSecret()));
-		logger.log(level, "Bucket@%p: endpoint=\"%s\"\n", &bucket, bucket.getEndpoint());
-		logger.log(level, "Bucket@%p: prototol=%d\n", &bucket, bucket.getProtocol());
+		if ((bucket.getId())[0] != '\0') { logger.log(level, "Bucket@%p: id=\"%s\"\n", &bucket, Credentials::obfuscate(bucket.getId())); }
+		if ((bucket.getSecret())[0] != '\0') { logger.log(level, "Bucket@%p: secret=\"%s\"\n", &bucket, Credentials::obfuscate(bucket.getSecret())); }
+		if ((bucket.getEndpoint())[0] != '\0') { logger.log(level, "Bucket@%p: endpoint=\"%s\"\n", &bucket, bucket.getEndpoint()); }
+		logger.log(level, "Bucket@%p: prototol=%d=\"%s\"\n", &bucket, bucket.getProtocol(), tostring(bucket.getProtocol()));
 		// Action
-		logger.log(level, "Bucket@%p: server=\"%s\"\n", &bucket, bucket.getServer());
-		logger.log(level, "Bucket@%p: requestId=\"%s\"\n", &bucket, bucket.getRequestId());
-		logger.log(level, "Bucket@%p: requestId2=\"%s\"\n", &bucket, bucket.getRequestId2());
-		logger.log(level, "Object@%p: status=%d=\"%s\"\n", &bucket, bucket.getStatus(), ::S3_get_status_name(bucket.getStatus()));
+		if ((bucket.getServer())[0] != '\0') { logger.log(level, "Bucket@%p: server=\"%s\"\n", &bucket, bucket.getServer()); }
+		if ((bucket.getRequestId())[0] != '\0') { logger.log(level, "Bucket@%p: requestId=\"%s\"\n", &bucket, bucket.getRequestId()); }
+		if ((bucket.getRequestId2())[0] != '\0') { logger.log(level, "Bucket@%p: requestId2=\"%s\"\n", &bucket, bucket.getRequestId2()); }
+		logger.log(level, "Object@%p: status=%d=\"%s\"\n", &bucket, bucket.getStatus(), tostring(bucket.getStatus()));
 	}
 }
 

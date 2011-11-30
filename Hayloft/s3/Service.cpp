@@ -9,6 +9,7 @@
 
 #include "com/diag/hayloft/s3/Service.h"
 #include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -44,7 +45,7 @@ void Service::initialize() {
 		logger.debug("Service@%p: id=\"%s\"[%zu]\n", this, Credentials::obfuscate(id.c_str()), id.length());
 		logger.debug("Service@%p: secret=\"%s\"[%zu]\n", this, Credentials::obfuscate(secret.c_str()), secret.length());
 		logger.debug("Service@%p: endpoint=\"%s\"\n", this, endpoint.c_str());
-		logger.debug("Service@%p: protocol=%d\n", this, protocol);
+		logger.debug("Service@%p: protocol=%d=\"%s\"\n", this, protocol, tostring(protocol));
 	}
 }
 

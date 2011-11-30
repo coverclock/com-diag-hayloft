@@ -15,6 +15,7 @@
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketValid.h"
+#include "com/diag/hayloft/s3/tostring.h"
 
 namespace com {
 namespace diag {
@@ -50,6 +51,40 @@ TEST_F(BucketBaseTest, Stack) {
 
 TEST_F(BucketBaseTest, Temporary) {
 	EXPECT_TRUE(Bucket("BucketBaseTestTemporary") == true);
+}
+
+TEST_F(BucketBaseTest, VirtualHostURI) {
+	EndpointIreland endpoint;
+	Session session(".virtualhost.diag.com", 0, endpoint);
+	Credentials credentials;
+	Region region;
+	ProtocolSecure protocol;
+	StyleVirtualHost style;
+	Access access;
+	Context context(credentials, region, protocol, style);
+	Bucket bucket("virtualhosturi", context, session);
+	std::string uri;
+	const char * str = tostring(bucket, uri);
+	ASSERT_NE(str, (char *)0);
+	printf("uri=\"%s\"\n", str);
+	EXPECT_EQ(uri, "https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com");
+}
+
+TEST_F(BucketBaseTest, PathURI) {
+	EndpointTokyo endpoint;
+	Session session(".path.diag.com", 0, endpoint);
+	Credentials credentials;
+	Region region;
+	ProtocolUnsecure protocol;
+	StylePath style;
+	Access access;
+	Context context(credentials, region, protocol, style);
+	Bucket bucket("pathuri", context, session);
+	std::string uri;
+	const char * str = tostring(bucket, uri);
+	ASSERT_NE(str, (char *)0);
+	printf("uri=\"%s\"\n", str);
+	EXPECT_EQ(uri, "http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com");
 }
 
 typedef Fixture BucketValidTest;
