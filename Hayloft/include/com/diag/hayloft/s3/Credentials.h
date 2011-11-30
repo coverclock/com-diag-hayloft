@@ -33,12 +33,6 @@ namespace s3 {
  */
 class Credentials {
 
-protected:
-
-	std::string id;
-
-	std::string secret;
-
 public:
 
 	/**
@@ -48,15 +42,15 @@ public:
 	static const char * ACCESS_KEY_ID_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESSKEYID"; }
 
 	/**
-	 * This is the fixed length of the access key ID.
-	 */
-	static const size_t ACCESS_KEY_ID_LEN = 20;
-
-	/**
 	 * This is the name of the environmental variable that may specify your
 	 * forty-character secret access key.
 	 */
 	static const char * SECRET_ACCESS_KEY_ENV() { return "COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRETACCESSKEY"; }
+
+	/**
+	 * This is the fixed length of the access key ID.
+	 */
+	static const size_t ACCESS_KEY_ID_LEN = 20;
 
 	/**
 	 * This is the fixed length of the secret access key.
@@ -71,6 +65,14 @@ public:
 	 * @return an obfuscated string or (specially) the input string.
 	 */
 	static const char * obfuscate(const char * str);
+
+protected:
+
+	std::string id;
+
+	std::string secret;
+
+public:
 
 	/**
 	 * Ctor.

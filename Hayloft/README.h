@@ -128,7 +128,7 @@
 
 		This string is the DNS host name of the AWS S3 service. This host name
 		may (or must) differ depending on the region the bucket is in. If not
-		specified, the United States Standard host name, "s3.amazonaws.com",
+		specified, the United States Standard end point, "s3.amazonaws.com",
 		is used.
 
 	COM_DIAG_HAYLOFT_S3_SESSION_BUCKETSUFFIX
@@ -143,6 +143,12 @@
 
 		If specified, this string is passed to S3 as the User Agent meta-data
 		to identify your application.
+
+	COM_DIAG_HAYLOFT_S3_REGION_NAME
+
+		This string is the default AWS region to use. If not specified, the
+		United States Standard region is used (which is actually specified by
+		omitting the region parameter altogether in messages to S3).
 
 	COM_DIAG_HAYLOFT_LOGGER_MASK
 

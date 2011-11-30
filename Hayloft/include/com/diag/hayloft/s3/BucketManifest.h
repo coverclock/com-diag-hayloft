@@ -118,6 +118,8 @@ public:
 	 *
 	 * @param bucketname is the non-canonical (application) bucket name. A copy
 	 *        is made of this C string.
+	 * @param selection specifies a Selection criteria as to what object keys
+	 *        are to be returned. See Selection.
 	 * @param context refers to a Context object which provides the Credentials,
 	 *        Region, Protocol, Style, and Access associated with this Bucket.
 	 *        This reference is only used during construction.
@@ -139,6 +141,8 @@ public:
 	 * @param multiplex refers to the Multiplex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
+	 * @param selection specifies a Selection criteria as to what object keys
+	 *        are to be returned. See Selection.
 	 * @param context refers to a Context object which provides the Credentials,
 	 *        Region, Protocol, Style, and Access associated with this Bucket.
 	 *        This reference is only used during construction.
