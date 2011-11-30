@@ -24,8 +24,8 @@ namespace s3 {
 class Multiplex;
 
 /**
- * Action is an object whose state may be altered in the background by a
- * libs3 thread and which presents an asynchronous interface such that the
+ * Action is a C++ object whose state may be altered in the background by a
+ * libs3 thread and which presents an asynchronous interface in which the
  * Action has to be explicitly started by the application. Actions can also
  * be used synchronously so that the Action is started and completed all within
  * the constructor of the derived class.
@@ -56,17 +56,17 @@ private:
 
 protected:
 
-	::S3RequestContext * requests;
-
-	::S3Status status;
-
-	::S3ResponseHandler handler;
-
 	std::string server;
 
 	std::string requestid;
 
 	std::string requestid2;
+
+	::S3RequestContext * requests;
+
+	::S3Status status;
+
+	::S3ResponseHandler handler;
 
 	/**
 	 * This returns the current status within the context of a full global

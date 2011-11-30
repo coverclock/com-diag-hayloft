@@ -12,7 +12,6 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/set.h"
 
 namespace com {
@@ -74,12 +73,6 @@ public:
 	 * least expensive billing rates.
 	 */
 	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
-
-	/**
-	 * Hayloft places a limit of this many characters on the region name
-	 * (a.k.a. the location constraint).
-	 */
-	static const size_t LENGTH = 64;
 
 protected:
 

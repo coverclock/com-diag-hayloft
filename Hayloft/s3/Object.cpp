@@ -39,7 +39,6 @@ namespace s3 {
 Object::Object(const char * keyname, const Bucket & bucket)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , key(keyname)
-, name(bucket.getName())
 , length(0)
 , modified(-1)
 {
@@ -49,7 +48,6 @@ Object::Object(const char * keyname, const Bucket & bucket)
 Object::Object(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , key(keyname)
-, name(bucket.getName())
 , length(0)
 , modified(-1)
 {
@@ -62,7 +60,6 @@ void Object::initialize() {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Object@%p: key=\"%s\"\n", this, key.c_str());
-		logger.debug("Object@%p: name=\"%s\"\n", this, name.c_str());
 	}
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;

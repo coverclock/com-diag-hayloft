@@ -27,6 +27,7 @@
 // (Maybe this is a latent issue in my code, but so far I don't think so.)
 
 #if 1
+#include "com/diag/unittest/s3/sizeof.h"
 #include "com/diag/unittest/s3/Endpoint.h"
 #include "com/diag/unittest/s3/Session.h"
 #include "com/diag/unittest/s3/Credentials.h"
@@ -45,13 +46,13 @@
 
 // Unit tests that also use S3 and buckets.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 
 // Unit tests that also use S3 and objects.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif
 

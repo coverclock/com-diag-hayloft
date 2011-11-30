@@ -1525,6 +1525,7 @@ TEST_F(ObjectTest, Copy) {
 		bucketcreate2.start();
 	}
 	ASSERT_TRUE(bucketcreate2.isSuccessful());
+	show(bucketcreate1);
 	/**/
 	Properties properties;
 	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");

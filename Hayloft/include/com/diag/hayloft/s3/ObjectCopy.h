@@ -27,7 +27,7 @@ class Bucket;
 /**
  * ObjectCopy is an Object Action which makes a copy of an S3 object in an S3
  * bucket. The copy can be placed in a different S3 bucket, in the same S3
- * bucket under a different key or obejct name, or even to the same S3 object
+ * bucket under a different key (object name), or even to the same S3 object
  * which has the effect of altering its meta-data.
  */
 class ObjectCopy : public Object {
@@ -35,9 +35,12 @@ class ObjectCopy : public Object {
 public:
 
 	/**
-	 * The maximum length of an eTag C string returned by this Action.
+	 * Hayloft places a limit on the maximum length of an Entity Tag C string
+	 * returned by this Action. S3 appears to generate thirty-two byte ETags
+	 * in the form of hexadecimal characters. That represents a binary value
+	 * of (32 * 4) or 128 bits.
 	 */
-	static const size_t LENGTH = 256;
+	static const size_t LENGTH = 36;
 
 private:
 
@@ -65,7 +68,7 @@ protected:
 
 	::S3CannedAcl access;
 
-	char tag[LENGTH];
+	char entitytag[LENGTH];
 
 	::S3PutProperties properties;
 

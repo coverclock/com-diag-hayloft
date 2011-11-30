@@ -14,8 +14,6 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-const size_t Region::LENGTH;
-
 Region::Region(const char * re)
 : region(set(re, REGION_ENV(), DEFAULT()))
 {}
