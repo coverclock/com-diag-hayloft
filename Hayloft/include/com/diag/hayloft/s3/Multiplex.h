@@ -37,10 +37,13 @@ class Multiplex {
 
 public:
 
+	/**
+	 * When Bits are returned this is what they are returned in.
+	 */
 	typedef int32_t Bits;
 
 	/**
-	 * This defines the meaning of the bits returned when iterating and
+	 * This defines the meaning of the Bits returned when iterating and
 	 * servicing.
 	 */
 	enum Ready {

@@ -31,7 +31,7 @@ class BucketManifest : public Bucket {
 public:
 
 	/**
-	 * Entry decribes an entry in the Manifest map.
+	 * Entry describes an entry in the Manifest map.
 	 */
 	struct Entry {
 
