@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/Container.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
 
@@ -41,7 +42,7 @@ void Container::initialize() {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Container@%p: canonical=\"%s\"\n", this, canonical.c_str());
-		logger.debug("Container@%p: style=%d\n", this, style);
+		logger.debug("Container@%p: style=%d=\"%s\"\n", this, style, tostring(style));
 	}
 	std::memset(&context, 0, sizeof(context));
 	context.hostName = endpoint.c_str();

@@ -173,6 +173,7 @@ MANIFEST_O=\
  s3/Context.o \
  s3/Multiplex.o \
  s3/show.o \
+ s3/tostring.o \
  s3/Properties.o \
  s3/Conditions.o \
  s3/Selection.o \

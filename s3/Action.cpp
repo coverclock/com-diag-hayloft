@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/Action.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
 
@@ -25,7 +26,7 @@ namespace s3 {
 	if ((responseProperties->server != 0) && (responseProperties->server[0] != '\0')) { that->server = responseProperties->server; }
 	::S3Status status = that->properties(responseProperties);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
-	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(responseProperties, level);
 	return status;
 }
@@ -48,7 +49,7 @@ void Action::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 		level = Logger::NOTICE; // Considered to be a platform issue.
 		break;
 	}
-	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(errorDetails, level);
 	that->complete(status, errorDetails);
 	that->status = status;
@@ -88,7 +89,7 @@ void Action::initialize() {
 }
 
 ::S3Status Action::getStatus(const char ** description) const {
-	if (description != 0) { *description = ::S3_get_status_name(status); }
+	if (description != 0) { *description = tostring(status); }
 	return status;
 }
 

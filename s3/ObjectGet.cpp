@@ -9,6 +9,7 @@
 
 #include "com/diag/hayloft/s3/ObjectGet.h"
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Output.h"
 #include "com/diag/desperado/string.h"
@@ -23,7 +24,7 @@ namespace s3 {
 	::S3Status status = that->get(bufferSize, buffer);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "ObjectGet@%p: bufferSize=%d\n", that, bufferSize);
-	Logger::instance().log(level, "ObjectGet@%p: status=%d=\"%s\"\n", that, status, ::S3_get_status_name(status));
+	Logger::instance().log(level, "ObjectGet@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	return status;
 }
 

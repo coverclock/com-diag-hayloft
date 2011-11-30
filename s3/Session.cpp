@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/CriticalSection.h"
@@ -56,7 +57,7 @@ Session::Session(const char * bucketSuffix, const char * userAgentInfo, const En
 	logger.debug("Session@%p: endpoint=\"%s\"\n", this, endpoint.c_str());
 	logger.debug("Session@%p: flags=0x%x\n", this, flags);
 	if (status != ::S3StatusOK) {
-		logger.error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, ::S3_get_status_name(status));
+		logger.error("Session@%p: S3_initialize failed! status=%d=\"%s\"\n", this, status, tostring(status));
 	}
 }
 

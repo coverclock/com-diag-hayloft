@@ -15,6 +15,8 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
+#include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/tostring.h"
 
 namespace com {
 namespace diag {
@@ -53,6 +55,42 @@ TEST_F(ObjectBaseTest, Stack) {
 
 TEST_F(ObjectBaseTest, Temporary) {
 	EXPECT_TRUE(Object("ObjectBaseTestTemporaryKey", Bucket("ObjectBaseTestTemporary")) == true);
+}
+
+TEST_F(ObjectBaseTest, VirtualHostURI) {
+	EndpointIreland endpoint;
+	Session session(".virtualhost.diag.com", 0, endpoint);
+	Credentials credentials;
+	Region region;
+	ProtocolSecure protocol;
+	StyleVirtualHost style;
+	Access access;
+	Context context(credentials, region, protocol, style);
+	Bucket bucket("virtualhosturi", context, session);
+	Object object("VirtualHost.txt", bucket);
+	std::string uri;
+	const char * str = tostring(object, uri);
+	ASSERT_NE(str, (char *)0);
+	printf("uri=\"%s\"\n", str);
+	EXPECT_EQ(uri, "https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com/VirtualHost.txt");
+}
+
+TEST_F(ObjectBaseTest, PathURI) {
+	EndpointTokyo endpoint;
+	Session session(".path.diag.com", 0, endpoint);
+	Credentials credentials;
+	Region region;
+	ProtocolUnsecure protocol;
+	StylePath style;
+	Access access;
+	Context context(credentials, region, protocol, style);
+	Bucket bucket("pathuri", context, session);
+	Object object("Path.txt", bucket);
+	std::string uri;
+	const char * str = tostring(object, uri);
+	ASSERT_NE(str, (char *)0);
+	printf("uri=\"%s\"\n", str);
+	EXPECT_EQ(uri, "http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt");
 }
 
 }
