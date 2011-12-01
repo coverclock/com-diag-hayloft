@@ -85,7 +85,7 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 					logger.log(level, "failing@%p\n", &action);
 					break;
 				} else if ((rc & Multiplex::RETRY) != 0) {
-					// Uh oh. But libs3 thinks it might work if we RETRY.
+					// Still uh oh. But libs3 thinks it might work if we RETRY.
 					logger.log(level, "repeating@%p\n", &action);
 					continue;
 				} else if ((rc & Multiplex::PENDING) == 0) {
@@ -106,21 +106,28 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 					// Action we care about. Still selfish bastards.
 				}
 				if (action.isBusy()) {
-					// This Action still isn't complete. Keep processing.
+					// This Action is still BUSY. Keep processing.
 					continue;
 				}
 			}
 		}
-		if (action.isBusy()) {
-			logger.log(level, "hanging@%p\n", &action);
-			break;
-		} else if (action.isRetryable()) {
+		// It should be impossible for the Action to be BUSY at this point.
+		// If it hasn't completed yet, then we're burned up our tries by
+		// continuing above and never reach here.
+		if (action.isRetryable()) {
+			// The Action completed but unsuccessfully with a status that libs3
+			// thinks might work if we try it again.
 			logger.log(level, "retrying@%p\n", &action);
 		} else if (converge && (!invert) && (!action.isSuccessful())) {
+			// The Action completed but hasn't yet converged to Success.
+			// The application thinks it might if we try again.
 			logger.log(level, "converging@%p\n", &action);
 		} else if (converge && invert && (!action.isNonexistent())) {
+			// The Action completed but hasn't yet converged to Non-existence.
+			// The application thinks it might if we try again.
 			logger.log(level, "converging@%p\n", &action);
 		} else {
+			// We're done.
 			break;
 		}
 		platform.yield(pause);

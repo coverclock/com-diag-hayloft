@@ -59,10 +59,10 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
 	/**/
 	BucketCreate bucketcreate1(BUCKET1);
-	EXPECT_TRUE(complete_until_success(bucketcreate1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
 	/**/
 	BucketCreate bucketcreate2(BUCKET2);
-	EXPECT_TRUE(complete_until_success(bucketcreate2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
@@ -78,13 +78,13 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
-	EXPECT_TRUE(complete_until_success(objecthead1,LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead1,LEVEL));
 	/**/
 	ObjectCopy objectcopy(OBJECT1, bucketcreate1, OBJECT2, bucketcreate2);
-	EXPECT_TRUE(complete_until_success(objectcopy, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
 	/**/
 	ObjectHead objecthead2(OBJECT2, bucketcreate2);
-	EXPECT_TRUE(complete_until_success(objecthead2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucketcreate2, output2);
@@ -102,16 +102,16 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate1);
-	EXPECT_TRUE(complete_until_success(objectdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete1, LEVEL));
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate2);
-	EXPECT_TRUE(complete_until_success(objectdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete2, LEVEL));
 	/**/
 	BucketDelete bucketdelete1(BUCKET1);
-	EXPECT_TRUE(complete_until_success(bucketdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete1, LEVEL));
 	/**/
 	BucketDelete bucketdelete2(BUCKET2);
-	EXPECT_TRUE(complete_until_success(bucketdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
 	command += __FILE__;
@@ -138,10 +138,10 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
-	EXPECT_TRUE(complete_until_success(bucketcreate1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
 	/**/
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
-	EXPECT_TRUE(complete_until_success(bucketcreate2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
@@ -157,13 +157,13 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
 	ObjectHead objecthead1(OBJECT1, bucketcreate1, multiplex);
-	EXPECT_TRUE(complete_until_success(objecthead1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
 	/**/
 	ObjectCopy objectcopy(OBJECT1, bucketcreate1, OBJECT2, bucketcreate2, multiplex);
-	EXPECT_TRUE(complete_until_success(objectcopy, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
 	/**/
 	ObjectHead objecthead2(OBJECT2, bucketcreate2, multiplex);
-	EXPECT_TRUE(complete_until_success(objecthead2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucketcreate2, output2);
@@ -181,16 +181,16 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate1, multiplex);
-	EXPECT_TRUE(complete_until_success(objectdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete1, LEVEL));
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate2, multiplex);
-	EXPECT_TRUE(complete_until_success(objectdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete2, LEVEL));
 	/**/
 	BucketDelete bucketdelete1(BUCKET1, multiplex);
-	EXPECT_TRUE(complete_until_success(bucketdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete1, LEVEL));
 	/**/
 	BucketDelete bucketdelete2(BUCKET2, multiplex);
-	EXPECT_TRUE(complete_until_success(bucketdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
 	command += __FILE__;
@@ -217,10 +217,10 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(service_until_nonexistent(buckethead2, LEVEL));
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
-	EXPECT_TRUE(service_until_success(bucketcreate1, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketcreate1, LEVEL));
 	/**/
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
-	EXPECT_TRUE(service_until_success(bucketcreate2, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
@@ -236,13 +236,13 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
 	ObjectHead objecthead1(OBJECT1, bucketcreate1, multiplex);
-	EXPECT_TRUE(service_until_success(objecthead1, LEVEL));
+	EXPECT_TRUE(service_until_successful(objecthead1, LEVEL));
 	/**/
 	ObjectCopy objectcopy(OBJECT1, bucketcreate1, OBJECT2, bucketcreate2, multiplex);
-	EXPECT_TRUE(service_until_success(objectcopy, LEVEL));
+	EXPECT_TRUE(service_until_successful(objectcopy, LEVEL));
 	/**/
 	ObjectHead objecthead2(OBJECT2, bucketcreate2, multiplex);
-	EXPECT_TRUE(service_until_success(objecthead2, LEVEL));
+	EXPECT_TRUE(service_until_successful(objecthead2, LEVEL));
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucketcreate2, output2);
@@ -260,16 +260,16 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate1, multiplex);
-	EXPECT_TRUE(service_until_success(objectdelete1, LEVEL));
+	EXPECT_TRUE(service_until_successful(objectdelete1, LEVEL));
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate2, multiplex);
-	EXPECT_TRUE(service_until_success(objectdelete2, LEVEL));
+	EXPECT_TRUE(service_until_successful(objectdelete2, LEVEL));
 	/**/
 	BucketDelete bucketdelete1(BUCKET1, multiplex);
-	EXPECT_TRUE(service_until_success(bucketdelete1, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketdelete1, LEVEL));
 	/**/
 	BucketDelete bucketdelete2(BUCKET2, multiplex);
-	EXPECT_TRUE(service_until_success(bucketdelete2, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
 	command += __FILE__;
