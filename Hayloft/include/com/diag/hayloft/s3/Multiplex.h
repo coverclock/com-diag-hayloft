@@ -11,6 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <sys/select.h>
 #include "com/diag/hayloft/s3/types.h"
 #include "com/diag/desperado/generics.h"
 #include "libs3.h"
@@ -42,12 +43,10 @@ public:
 	 * servicing.
 	 */
 	enum Ready {
-		READ		= (1 << 0),						/* Sockets to be READ */
-		WRITE		= (1 << 1),						/* Sockets to be WRITTEN */
-		EXCEPTION	= (1 << 2),						/* Sockets with EXCEPTIONS */
-		PENDING		= (1 << 3),						/* Actions PENDING */
-		RETRY		= (1 << (widthof(int) - 2)),	/* Failed but RETRYable */
-		ERROR		= (1 << (widthof(int) - 1))		/* Failed */
+		READY		= (1 << 0),						/* Sockets are READY */
+		PENDING		= (1 << 1),						/* Actions are PENDING */
+		RETRY		= (1 << 2),						/* Failed but RETRYable */
+		ERROR		= (1 << (widthof(int) - 1))		/* Failed with ERROR */
 	};
 
 	/**
@@ -61,8 +60,8 @@ public:
 
 	/**
 	 * This is the default LIMIT, which is a really big number. But the
-	 * service() method only iterates while their are pending Actions and
-	 * while their are READable sockets. It would be quite the application that
+	 * service() method only iterates while their are PENDING Actions and
+	 * while there are READY sockets. It would be quite the application that
 	 * hit this LIMIT.
 	 */
 	static const int LIMIT = intmaxof(int);
@@ -134,35 +133,42 @@ public:
 	/**
 	 * Force all Actions on this Multiplex to run to completion.
 	 *
-	 * @return true if successful, false otherwise.
+	 * @return a mask of Ready bits containing ERROR or RETRY.
 	 */
-	virtual bool complete();
+	virtual int complete();
 
 	/**
 	 * Perform a single iteration of all Actions on this Multiplex
 	 *
 	 * @param pending refers to a variable into which the number of pending
 	 *        Actions is stored.
-	 * @return true if successful, false otherwise.
+	 * @return a mask of Ready bits containing ERROR, RETRY, or PENDING.
 	 */
-	virtual bool iterate(int & pending = dontcare);
+	virtual int iterate(int & pending = dontcare);
 
 	/**
 	 * Perform a select(2) system call on any sockets being mananged by libs3
 	 * and return a mask of Ready bits indicating what their state is.
 	 *
 	 * @param timeout is a timeout duration in milliseconds.
-	 * @return a mask of Ready bits containing READ, WRITE, etc.
+	 * @return a mask of Ready bits containing ERROR, RETRY, or READY.
 	 */
 	virtual int ready(Milliseconds timeout = TIMEOUT);
 
 	/**
-	 * Wait for ready() sockets and iterate() on any pending Actions when those
-	 * sockets become readable.
+	 * Wait for ready() sockets and iterate() on any pending Actions. Simply
+	 * calling iteratively until PENDING is not returned is functionally
+	 * equivalent to complete() (ideally zero would be returned if no errors
+	 * occurred). Returning with PENDING and READY means there is work to do
+	 * and unprocessed responses available from S3. Returning with PENDING but
+	 * not READY means there is still work to do but we're waiting on S3 to
+	 * respond.
 	 *
-	 * @param timeout is a timeout duration in milliseconds.
-	 * @param limit is the maximum number of iterations to do.
-	 * @return a mask of Ready bits containing READ, WRITE, etc.
+	 * @param timeout is a timeout duration in milliseconds to wait for any
+	 *        interesting sockets to become READY.
+	 * @param limit is the maximum number of iterations to do as long as Actions
+	 *        are PENDING and sockets are READY.
+	 * @return a mask of Ready bits containing ERROR, RETRY, PENDING, or READY.
 	 */
 	virtual int service(Milliseconds timeout = TIMEOUT, int limit = LIMIT);
 

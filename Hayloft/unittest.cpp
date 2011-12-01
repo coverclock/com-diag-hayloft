@@ -44,19 +44,15 @@
 #include "com/diag/unittest/s3/ObjectBase.h"
 #endif
 
-// Unit tests that also use S3 and buckets.
+// Unit tests that use S3.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 
-// Unit tests that also use S3 and objects.
-
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif
-
-// Unit tests that also use S3 and objects.
 
 #if 1
 #include "com/diag/unittest/s3/convergence.h"
