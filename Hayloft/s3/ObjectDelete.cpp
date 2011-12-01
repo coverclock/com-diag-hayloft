@@ -22,7 +22,7 @@ ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket)
 	execute();
 }
 
-ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
+ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, const Multiplex & multiplex)
 : Object(keyname, bucket, multiplex)
 {
 	initialize();

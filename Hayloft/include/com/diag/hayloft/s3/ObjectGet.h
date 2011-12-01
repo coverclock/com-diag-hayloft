@@ -146,7 +146,7 @@ public:
 	explicit ObjectGet(
 		const char * keyname,
 		const Bucket & bucket,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		Output & sink,
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
@@ -175,7 +175,7 @@ public:
 	explicit ObjectGet(
 		const char * keyname,
 		const Bucket & bucket,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		Output * sinkp, /* TAKEN */
 		Octets objectoffset = 0,
 		Octets objectsize = 0,

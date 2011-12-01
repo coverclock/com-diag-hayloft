@@ -27,7 +27,7 @@ Service::Service(const char * accessKeyId, const char * secretAccessKey, const c
 	initialize();
 }
 
-Service::Service(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, ::S3Protocol httpProtocol, Multiplex & multiplex)
+Service::Service(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, ::S3Protocol httpProtocol, const Multiplex & multiplex)
 : Action(multiplex)
 , id(accessKeyId)
 , secret(secretAccessKey)

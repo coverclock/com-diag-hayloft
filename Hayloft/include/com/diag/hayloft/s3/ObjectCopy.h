@@ -128,7 +128,7 @@ public:
 		const Bucket & frombucket,
 		const char * tokeyname,
 		const Bucket & tobucket,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		const Properties & props = Properties()
 	);
 

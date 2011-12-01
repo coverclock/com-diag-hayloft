@@ -66,7 +66,7 @@ Action::Action()
 	initialize();
 }
 
-Action::Action(Multiplex & multiplex)
+Action::Action(const Multiplex & multiplex)
 : requests(multiplex.getRequests())
 , status(::S3StatusOK)
 {

@@ -79,7 +79,7 @@ public:
 		const char * secretAccessKey,
 		const char * endPoint,
 		::S3Protocol httpProtocol,
-		Multiplex & multiplex
+		const Multiplex & multiplex
 	);
 
 	/**

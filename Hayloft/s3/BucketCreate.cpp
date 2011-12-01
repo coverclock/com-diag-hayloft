@@ -22,7 +22,7 @@ BucketCreate::BucketCreate(const char * bucketname, const Context & context, con
 	execute();
 }
 
-BucketCreate::BucketCreate(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+BucketCreate::BucketCreate(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
 : Bucket(bucketname, multiplex, context, session)
 {
 	initialize();

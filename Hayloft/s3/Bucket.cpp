@@ -35,7 +35,7 @@ Bucket::Bucket(const char * bucketname, const Context & context, const Session &
 	initialize();
 }
 
-Bucket::Bucket(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+Bucket::Bucket(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
 : Container(context.getId(), context.getSecret(), session.getEndpoint(), canonicalize(bucketname, &temporary, session), context.getProtocol(), context.getStyle(), multiplex)
 , name(bucketname)
 , region(context.getRegion())

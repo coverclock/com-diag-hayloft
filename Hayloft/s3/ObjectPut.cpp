@@ -66,7 +66,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input * source
 	initialize(props.getMetadata());
 	execute();
 }
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Input & source, Octets objectsize, const Properties & props)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Multiplex & multiplex, Input & source, Octets objectsize, const Properties & props)
 : Object(keyname, bucket, multiplex)
 , type(props.getType())
 , checksum(props.getChecksum())
@@ -82,7 +82,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & mu
 	initialize(props.getMetadata());
 }
 
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Input * sourcep, Octets objectsize, const Properties & props)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Multiplex & multiplex, Input * sourcep, Octets objectsize, const Properties & props)
 : Object(keyname, bucket, multiplex)
 , type(props.getType())
 , checksum(props.getChecksum())

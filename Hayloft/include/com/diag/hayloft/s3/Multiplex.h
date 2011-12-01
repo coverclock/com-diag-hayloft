@@ -114,7 +114,7 @@ public:
 	 *
 	 * @return true if construction was successful.
 	 */
-	operator bool() { return (status == ::S3StatusOK); }
+	operator bool() const { return (status == ::S3StatusOK); }
 
 	/**
 	 * Get the status associated with construction.

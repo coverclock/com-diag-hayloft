@@ -44,7 +44,7 @@ ServiceManifest::ServiceManifest(const Context & context, const Session & sessio
 	execute();
 }
 
-ServiceManifest::ServiceManifest(Multiplex & multiplex, const Context & context, const Session & session)
+ServiceManifest::ServiceManifest(const Multiplex & multiplex, const Context & context, const Session & session)
 : Service(context.getId(), context.getSecret(), session.getEndpoint(), context.getProtocol(), multiplex)
 {
 	initialize();

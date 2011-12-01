@@ -88,7 +88,7 @@ BucketManifest::BucketManifest(const char * bucketname, const Selection & select
 	execute();
 }
 
-BucketManifest::BucketManifest(const char * bucketname, Multiplex & multiplex, const Selection & selection, const Context & context, const Session & session)
+BucketManifest::BucketManifest(const char * bucketname, const Multiplex & multiplex, const Selection & selection, const Context & context, const Session & session)
 : Bucket(bucketname, multiplex, context, session)
 , prefix(selection.getPrefix())
 , marker(selection.getMarker())

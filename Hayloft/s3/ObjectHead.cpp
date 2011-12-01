@@ -22,7 +22,7 @@ ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket)
 	execute();
 }
 
-ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
+ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, const Multiplex & multiplex)
 : Object(keyname, bucket, multiplex)
 {
 	initialize();

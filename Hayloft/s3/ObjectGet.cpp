@@ -64,7 +64,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output * sinkp
 	execute();
 }
 
-ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Multiplex & multiplex, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket, multiplex)
 , since(conds.getSince())
 , notsince(conds.getNotSince())
@@ -78,7 +78,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & mu
 	initialize();
 }
 
-ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Multiplex & multiplex, Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Multiplex & multiplex, Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
 : Object(keyname, bucket, multiplex)
 , since(conds.getSince())
 , notsince(conds.getNotSince())

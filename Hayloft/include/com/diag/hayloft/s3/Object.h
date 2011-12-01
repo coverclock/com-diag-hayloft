@@ -108,7 +108,7 @@ public:
 	explicit Object(
 		const char * keyname,
 		const Bucket & bucket,
- 		Multiplex & multiplex
+		const Multiplex & multiplex
 	);
 
 	/**
