@@ -4,11 +4,18 @@
 
 /**
  * @file
- *
  * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ *
+ * These functions represent my attempts to figure out the error recovery and
+ * consistency convergence logic of dealing with S3. A real application
+ * architecture will probably choose to start many (possible unrelated)
+ * asynchronous Actions in parallel on a single Multiplex and handle all of
+ * those Actions in parallel, possibly doing so through a single service
+ * thread. Rather than polling for completion, an application will probably
+ * derive from the various Action classes and override the complete() method.
  */
 
 #include "com/diag/hayloft/s3/types.h"
@@ -22,8 +29,9 @@ namespace s3 {
 class Action;
 
 /**
- * Handle the retry and convergence logic for an Action by blocking until it is
- * complete. Both synchronous and asynchronous Actions are handled.
+ * Handle the error recovery and consistency convergence logic for an Action
+ * by blocking until it is complete. Both synchronous and asynchronous Actions
+ * are handled.
  *
  * @param action refers to the action.
  * @param converge if true causes the function to loop until the desired state
@@ -60,7 +68,7 @@ inline bool complete(Action & action, Logger::Level level = Logger::DEBUG) {
  * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool complete_until_success(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool complete_until_successful(Action & action, Logger::Level level = Logger::DEBUG) {
 	return complete_generic(action, true, false, 20, 1000, level);
 }
 
@@ -78,13 +86,14 @@ inline bool complete_until_nonexistent(Action & action, Logger::Level level = Lo
 }
 
 /**
- * Handle the retry and convergence logic for an Action by iteratively servicing
- * it until it is complete. Both synchronous and asynchronous Actions are
- * handled. When the Action is asynchronous, this mechanism is really only
- * useful when that Action is the only one on the Multiplex, since it only
- * checks the one Action for completion. Truly multiplexing multiple
- * asynchronous Actions will require a more application level approach. But
- * this function can serve as a model for such an implementation.
+ * Handle the error recovery and consistency convergence logic for an Action
+ * by iteratively servicing it until it is complete. Both synchronous and
+ * asynchronous Actions are handled. When the Action is asynchronous, this
+ * mechanism is really only useful when that Action is the only one on the
+ * Multiplex, since it only checks the one Action for completion. Truly
+ * multiplexing multiple asynchronous Actions will require a more application
+ * level approach. But this function can serve as a model for such an
+ * implementation.
  *
  * @param action refers to the action.
  * @param converge if true causes the function to loop until the desired state
@@ -126,7 +135,7 @@ inline bool service(Action & action, Logger::Level level = Logger::DEBUG) {
  * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool service_until_success(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool service_until_successful(Action & action, Logger::Level level = Logger::DEBUG) {
 	return service_generic(action, true, false, 20, 1000, 100, 1000, level);
 }
 
