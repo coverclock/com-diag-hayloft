@@ -248,7 +248,8 @@ lib$(PROJECT).so:	lib$(PROJECT).so.$(MAJOR)
 ################################################################################
 
 TARGETS+=unittest
-ARTIFACTS+=unittest
+ARTIFACTS+=unittest.o
+DELIVERABLES+=unittest
 
 unittest:	unittest.o $(HAYLOFT_LIB) $(LARIAT_LIB) $(GMOCK_LIB) $(GTEST_LIB) $(DESPERADO_LIB) $(S3_LIB) $(XML2_LIB) $(CURL_LIB) $(OPENSSL_LIB) $(CRYPTO_LIB)
 	$(CXX) -o unittest unittest.o $(LDFLAGS)
@@ -256,8 +257,7 @@ unittest:	unittest.o $(HAYLOFT_LIB) $(LARIAT_LIB) $(GMOCK_LIB) $(GTEST_LIB) $(DE
 PHONY+=test
 
 test:	unittest
-	./unittest
-	echo "PASSED all"
+	./unittest && echo "PASSED all"
 
 ################################################################################
 # PATTERNS
