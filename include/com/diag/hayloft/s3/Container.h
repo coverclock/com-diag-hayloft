@@ -92,7 +92,7 @@ public:
 		const char * canonicalBucketName,
 		::S3Protocol httpProtocol,
 		::S3UriStyle uristyle,
-		Multiplex & multiplex
+		 const Multiplex & multiplex
 	);
 
 	/**

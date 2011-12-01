@@ -45,7 +45,7 @@ Object::Object(const char * keyname, const Bucket & bucket)
 	initialize();
 }
 
-Object::Object(const char * keyname, const Bucket & bucket, Multiplex & multiplex)
+Object::Object(const char * keyname, const Bucket & bucket, const Multiplex & multiplex)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , key(keyname)
 , length(0)

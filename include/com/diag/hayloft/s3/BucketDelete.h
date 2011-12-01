@@ -57,7 +57,7 @@ public:
 	 */
 	explicit BucketDelete(
 		const char * bucketname,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);

@@ -100,7 +100,7 @@ public:
 	 *        construction. However the Multiplex dtor will force all Actions
 	 *        pending on the Multiplex to complete.
 	 */
-	explicit Action(Multiplex & multiplex);
+	explicit Action(const Multiplex & multiplex);
 
 	/**
 	 * Dtor. If called while the Action is BUSY, the dtor will block until all

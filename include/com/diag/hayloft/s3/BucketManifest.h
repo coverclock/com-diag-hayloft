@@ -150,7 +150,7 @@ public:
 	 */
 	explicit BucketManifest(
 		const char * bucketname,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		const Selection & selection = Selection(),
 		const Context & context = Context(),
 		const Session & session = Session::instance()

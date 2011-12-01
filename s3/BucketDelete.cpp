@@ -22,7 +22,7 @@ BucketDelete::BucketDelete(const char * bucketname, const Context & context, con
 	execute();
 }
 
-BucketDelete::BucketDelete(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+BucketDelete::BucketDelete(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
 : Bucket(bucketname, multiplex, context, session)
 {
 	initialize();

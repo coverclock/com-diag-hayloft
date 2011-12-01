@@ -59,7 +59,7 @@ public:
 	explicit ObjectHead(
 		const char * keyname,
 		const Bucket & bucket,
-		Multiplex & multiplex
+		const Multiplex & multiplex
 	);
 
 	/**

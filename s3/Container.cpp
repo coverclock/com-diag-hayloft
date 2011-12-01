@@ -28,7 +28,7 @@ Container::Container(const char * accessKeyId, const char * secretAccessKey, con
 	initialize();
 }
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle, Multiplex & multiplex)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle, const Multiplex & multiplex)
 : Service(accessKeyId, secretAccessKey, endPoint, httpProtocol, multiplex)
 , canonical(canonicalBucketName)
 , style(uristyle)

@@ -54,7 +54,7 @@ public:
 	explicit ObjectDelete(
 		const char * keyname,
 		const Bucket & bucket,
-		Multiplex & multiplex
+		const Multiplex & multiplex
 	);
 
 	/**

@@ -41,7 +41,7 @@ ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, cons
 	execute();
 }
 
-ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, const char * tokeyname, const Bucket & tobucket, Multiplex & multiplex, const Properties & props)
+ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, const char * tokeyname, const Bucket & tobucket, const Multiplex & multiplex, const Properties & props)
 : Object(fromkeyname, frombucket, multiplex)
 , tocanonical(tobucket.getCanonical())
 , toname(tobucket.getName())

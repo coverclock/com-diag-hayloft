@@ -108,7 +108,7 @@ public:
 	 * @param session refers to a Session object associated with this Service.
 	 */
 	explicit ServiceManifest(
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);

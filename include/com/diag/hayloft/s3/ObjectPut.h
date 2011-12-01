@@ -145,7 +145,7 @@ public:
 	explicit ObjectPut(
 		const char * keyname,
 		const Bucket & bucket,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		Input & source,
 		Octets objectsize,
 		const Properties & props = Properties()
@@ -171,7 +171,7 @@ public:
 	explicit ObjectPut(
 		const char * keyname,
 		const Bucket & bucket,
-		Multiplex & multiplex,
+		const Multiplex & multiplex,
 		Input * sourcep = 0, /* TAKEN */
 		Octets objectsize = 0,
 		const Properties & props = Properties()

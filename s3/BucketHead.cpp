@@ -29,7 +29,7 @@ BucketHead::BucketHead(const char * bucketname, const Context & context, const S
 	execute();
 }
 
-BucketHead::BucketHead(const char * bucketname, Multiplex & multiplex, const Context & context, const Session & session)
+BucketHead::BucketHead(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
 : Bucket(bucketname, multiplex, context, session)
 {
 	initialize();
