@@ -368,7 +368,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_FALSE(buckethead.isInaccessible());
 		EXPECT_FALSE(buckethead.isNonexistent());
 		EXPECT_FALSE(buckethead.isSuccessful());
-		EXPECT_TRUE(multiplex.complete());
+		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
@@ -398,7 +398,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_FALSE(bucketcreate.isInaccessible());
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		EXPECT_FALSE(bucketcreate.isSuccessful());
-		EXPECT_TRUE(multiplex.complete());
+		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
@@ -427,7 +427,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(buckethead.isInaccessible());
 			EXPECT_FALSE(buckethead.isNonexistent());
 			EXPECT_FALSE(buckethead.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -461,7 +461,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_FALSE(objecthead.isInaccessible());
 		EXPECT_FALSE(objecthead.isNonexistent());
 		EXPECT_FALSE(objecthead.isSuccessful());
-		EXPECT_TRUE(multiplex.complete());
+		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
@@ -495,7 +495,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_FALSE(objectput.isInaccessible());
 		EXPECT_FALSE(objectput.isNonexistent());
 		EXPECT_FALSE(objectput.isSuccessful());
-		EXPECT_TRUE(multiplex.complete());
+		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
@@ -530,7 +530,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
 			EXPECT_FALSE(objecthead.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -566,7 +566,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(objectget.isInaccessible());
 			EXPECT_FALSE(objectget.isNonexistent());
 			EXPECT_FALSE(objectget.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -602,7 +602,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
 			EXPECT_FALSE(objecthead.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -637,7 +637,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(objectdelete.isInaccessible());
 			EXPECT_FALSE(objectdelete.isNonexistent());
 			EXPECT_FALSE(objectdelete.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -671,7 +671,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(objecthead.isInaccessible());
 			EXPECT_FALSE(objecthead.isNonexistent());
 			EXPECT_FALSE(objecthead.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -706,7 +706,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(bucketdelete.isInaccessible());
 			EXPECT_FALSE(bucketdelete.isNonexistent());
 			EXPECT_FALSE(bucketdelete.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -740,7 +740,7 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(buckethead.isInaccessible());
 			EXPECT_FALSE(buckethead.isNonexistent());
 			EXPECT_FALSE(buckethead.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -770,7 +770,7 @@ TEST_F(ObjectTest, Complete) {
 
 TEST_F(ObjectTest, Service) {
 	static const Milliseconds TIMEOUT = 1000;
-	static const int LIMIT = 10;
+	static const int LIMIT = 60;
 	static const char BUCKET[] = "ObjectTestService";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -1259,9 +1259,9 @@ TEST_F(ObjectTest, Service) {
 
 TEST_F(ObjectTest, Manifest) {
 	static const int LIMIT = 10;
-	const char BUCKET[] = "ObjectTestManifest";
-	const char OBJECT1[] = "Object1.txt";
-	const char OBJECT2[] = "Object2.txt";
+	static const char BUCKET[] = "ObjectTestManifest";
+	static const char OBJECT1[] = "Object1.txt";
+	static const char OBJECT2[] = "Object2.txt";
 	Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate(BUCKET);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
@@ -1506,12 +1506,12 @@ TEST_F(ObjectTest, Copy) {
 	// I'm also experimenting to see what meta-data is returned by which
 	// OBJECT ACTION. It looks like a full set of Response Properties are
 	// only returned by OBJECT HEAD and OBJECT GET.
+	static const char BUCKET1[] = "ObjectTestCopy1";
+	static const char BUCKET2[] = "ObjectTestCopy2";
+	static const char OBJECT1[] = "Object1.txt";
+	static const char OBJECT2[] = "Object2.txt";
+	static const Logger::Level LEVEL = Logger::PRINT;
 	static const int LIMIT = 10;
-	const char BUCKET1[] = "ObjectTestCopy1";
-	const char BUCKET2[] = "ObjectTestCopy2";
-	const char OBJECT1[] = "Object1.txt";
-	const char OBJECT2[] = "Object2.txt";
-	Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);

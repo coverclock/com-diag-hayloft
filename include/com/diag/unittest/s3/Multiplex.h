@@ -43,14 +43,14 @@ TEST_F(MultiplexTest, Stack) {
 TEST_F(MultiplexTest, Complete) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_TRUE(multiplex.complete());
+	EXPECT_EQ(multiplex.complete(), 0);
 }
 
 TEST_F(MultiplexTest, Iterate) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
 	int pending;
-	EXPECT_TRUE(multiplex.iterate(pending));
+	EXPECT_EQ(multiplex.iterate(pending), 0);
 	EXPECT_EQ(pending, 0);
 }
 

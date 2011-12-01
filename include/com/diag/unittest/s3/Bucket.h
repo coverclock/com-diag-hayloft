@@ -360,7 +360,7 @@ TEST_F(BucketTest, Complete) {
 			EXPECT_FALSE(buckethead.isInaccessible());
 			EXPECT_FALSE(buckethead.isNonexistent());
 			EXPECT_FALSE(buckethead.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -391,7 +391,7 @@ TEST_F(BucketTest, Complete) {
 			EXPECT_FALSE(bucketcreate.isInaccessible());
 			EXPECT_FALSE(bucketcreate.isNonexistent());
 			EXPECT_FALSE(bucketcreate.isSuccessful());
-			EXPECT_TRUE(multiplex.complete());
+			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
@@ -423,7 +423,7 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_FALSE(buckethead.isInaccessible());
 				EXPECT_FALSE(buckethead.isNonexistent());
 				EXPECT_FALSE(buckethead.isSuccessful());
-				EXPECT_TRUE(multiplex.complete());
+				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
 				printf("RETRYING %d\n", __LINE__);
@@ -459,7 +459,7 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_FALSE(bucketdelete.isInaccessible());
 				EXPECT_FALSE(bucketdelete.isNonexistent());
 				EXPECT_FALSE(bucketdelete.isSuccessful());
-				EXPECT_TRUE(multiplex.complete());
+				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
 				printf("RETRYING %d\n", __LINE__);
@@ -495,7 +495,7 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_FALSE(buckethead.isInaccessible());
 				EXPECT_FALSE(buckethead.isNonexistent());
 				EXPECT_FALSE(buckethead.isSuccessful());
-				EXPECT_TRUE(multiplex.complete());
+				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
 				printf("RETRYING %d\n", __LINE__);
@@ -516,7 +516,7 @@ TEST_F(BucketTest, Complete) {
 
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
-	static const int LIMIT = 10;
+	static const int LIMIT = 60;
 	static const Milliseconds TIMEOUT = 1000;
 	Multiplex multiplex;
 	{
