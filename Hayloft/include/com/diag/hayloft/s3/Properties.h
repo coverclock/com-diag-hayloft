@@ -177,7 +177,6 @@ public:
 	 *
 	 * @param contentDispositionFilename changes the filename the S3 object is
 	 *        downloaded to when accessed by a web browser.
-	 * @param
 	 * @return a reference to this object.
 	 */
 	Properties & setFilename(const char * contentDispositionFilename = 0) { filename = set(contentDispositionFilename, 0, ""); return *this; }

@@ -32,7 +32,7 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
-	 * @param xml is a C string containing an XML representation of an S3 ACL.
+	 * @param xmlacl is a C string containing an XML representation of an S3 ACL.
 	 */
 	explicit GrantXml(
 		const char * xmlacl
