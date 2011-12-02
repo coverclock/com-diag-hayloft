@@ -20,7 +20,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-static ::com::diag::desperado::Mutex mutex;
+static ::com::diag::desperado::Mutex instancemutex;
+static ::com::diag::desperado::Mutex initializationmutex;
 
 static Session * instant = 0;
 
@@ -31,13 +32,13 @@ Session & Session::factory() {
 }
 
 Session & Session::instance(Session & that) {
-	::com::diag::desperado::CriticalSection guard(mutex);
+	::com::diag::desperado::CriticalSection guard(instancemutex);
 	Session::singleton = &that;
     return *singleton;
 }
 
 Session & Session::instance() {
-	::com::diag::desperado::CriticalSection guard(mutex);
+	::com::diag::desperado::CriticalSection guard(instancemutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());
@@ -49,8 +50,12 @@ Session::Session(const char * bucketSuffix, const char * userAgentInfo, const En
 : bucketsuffix(set(bucketSuffix, BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_STR()))
 , useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
 , endpoint(endPoint.getEndpoint())
-, status(::S3_initialize(useragent.c_str(), flags, endpoint.c_str()))
+, status(::S3StatusOK)
 {
+	{
+		::com::diag::desperado::CriticalSection guard(initializationmutex);
+		status = ::S3_initialize(useragent.c_str(), flags, endpoint.c_str());
+	}
 	Logger & logger = Logger::instance();
 	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());

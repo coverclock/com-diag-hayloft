@@ -14,12 +14,15 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/GrantGet.h"
-#include "com/diag/hayloft/s3/GrantXml.h"
+#include "com/diag/hayloft/s3/GrantSet.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/desperado/PathInput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/size.h"
 #include "com/diag/hayloft/s3/BucketCreate.h"
+#include "com/diag/hayloft/s3/Access.h"
+#include "com/diag/hayloft/s3/Properties.h"
+#include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/convergence.h"
@@ -98,6 +101,43 @@ TEST_F(GrantTest, GetAsynchronous) {
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	ASSERT_TRUE(complete_until_successful(objectdelete));
 	BucketDelete bucketdelete(BUCKET, multiplex);
+	ASSERT_TRUE(complete_until_successful(bucketdelete));
+}
+
+TEST_F(GrantTest, GetPublicRead) {
+	static const int LIMIT = 10;
+	static const char BUCKET[] = "GrantTestGetPublicRead";
+	static const char OBJECT[] = "Object.txt";
+	static const Logger::Level LEVEL = Logger::PRINT;
+	AccessPublicRead access;
+	Context context;
+	context.setAccess(access);
+	BucketCreate bucketcreate(BUCKET);
+	ASSERT_TRUE(complete_until_successful(bucketcreate));
+	GrantGet grantgetbucket(bucketcreate);
+	ASSERT_TRUE(complete_until_successful(grantgetbucket));
+	show(grantgetbucket, LEVEL);
+	Properties properties;
+	properties.setAccess(access);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	Size inputsize = size(*input);
+	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
+	for (int ii = 0; ii < LIMIT; ++ii) {
+		if (!objectput.isRetryable()) { break; }
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		input = new ::com::diag::desperado::PathInput(__FILE__);
+		inputsize = size(*input);
+		objectput.reset(input, inputsize);
+		objectput.start();
+	}
+	ASSERT_TRUE(objectput.isSuccessful());
+	GrantGet grantgetobject(objectput, bucketcreate);
+	ASSERT_TRUE(complete_until_successful(grantgetobject));
+	show(grantgetobject, LEVEL);
+	ObjectDelete objectdelete(OBJECT, bucketcreate);
+	ASSERT_TRUE(complete_until_successful(objectdelete));
+	BucketDelete bucketdelete(BUCKET);
 	ASSERT_TRUE(complete_until_successful(bucketdelete));
 }
 

@@ -197,7 +197,7 @@ MANIFEST_O=\
  s3/BucketManifest.o \
  s3/Grant.o \
  s3/GrantGet.o \
- s3/GrantXml.o
+ s3/GrantSet.o
 
 ################################################################################
 # BUILD
