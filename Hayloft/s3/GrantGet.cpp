@@ -73,6 +73,8 @@ void GrantGet::initialize() {
 }
 
 void GrantGet::execute() {
+	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
+	Logger::instance().debug("GrantGet@%p: begin\n", this);
 	S3_get_acl(
 		&context,
 		keypointer,
