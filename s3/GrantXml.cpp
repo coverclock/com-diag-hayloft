@@ -8,8 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/GrantXml.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Object.h"
 
 namespace com {
 namespace diag {

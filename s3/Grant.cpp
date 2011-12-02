@@ -17,6 +17,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+int Grant::dontcare = 0;
+
 Grant::Grant()
 : Container("", "", "", "", Protocol::DEFAULT, Style::DEFAULT)
 , keypointer(0)

@@ -29,6 +29,7 @@ class Bucket;
 class Object;
 class ServiceManifest;
 class BucketManifest;
+class Grant;
 
 /**
  * Display a libS3 S3ErrorDetails structure.
@@ -109,6 +110,14 @@ extern void show(const ServiceManifest & manifest, Logger::Level level = Logger:
  * @param level specifies the logging level.
  */
 extern void show(const BucketManifest & manifest, Logger::Level level = Logger::INFORMATION);
+
+/**
+ * Display the metadata associated with a Hayloft Grant.
+ *
+ * @param grant refers to the object.
+ * @param level specifies the logging level.
+ */
+extern void show(const Grant & grant, Logger::Level level = Logger::INFORMATION);
 
 }
 }

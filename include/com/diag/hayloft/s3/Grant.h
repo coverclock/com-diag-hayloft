@@ -27,7 +27,8 @@ class Object;
 /**
  * Grant represents an S3 access control list (ACL) for an S3 bucket or object.
  * Grants can be retrieved from an existing bucket or object, imported
- * from an XML file in a pre-defined format, or created from scratch.
+ * from an Extensible Markup Language (XML) file in a pre-defined format, or
+ * created from scratch.
  */
 class Grant : public Container {
 
@@ -47,6 +48,10 @@ public:
 	 *
 	 */
 	static const size_t COUNT = S3_MAX_ACL_GRANT_COUNT;
+
+private:
+
+	static int dontcare;
 
 protected:
 
@@ -153,6 +158,14 @@ public:
 	virtual ~Grant();
 
 	/**
+	 * Get the key pointer associated with this Object. The key pointer is
+	 * NULL if this is a grant for a bucket, non-null if for an object.
+	 *
+	 * @return the key pointer.
+	 */
+	const char * getKeyPointer() const { return keypointer; }
+
+	/**
 	 * Get the key (object name) associated with this Object.
 	 *
 	 * @return the key (object name).
@@ -170,6 +183,8 @@ public:
 	 * @return the eTag.
 	 */
 	const char * getOwnerDisplayName() const { return display.c_str(); }
+
+	const ::S3AclGrant * getGrants(int & number = dontcare) const { number = count; return grants; }
 
 private:
 
