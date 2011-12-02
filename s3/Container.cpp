@@ -20,18 +20,18 @@ namespace hayloft {
 namespace s3 {
 
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uriStyle)
 : Service(accessKeyId, secretAccessKey, endPoint, httpProtocol)
 , canonical(canonicalBucketName)
-, style(uristyle)
+, style(uriStyle)
 {
 	initialize();
 }
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uristyle, const Multiplex & multiplex)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uriStyle, const Multiplex & multiplex)
 : Service(accessKeyId, secretAccessKey, endPoint, httpProtocol, multiplex)
 , canonical(canonicalBucketName)
-, style(uristyle)
+, style(uriStyle)
 {
 	initialize();
 }

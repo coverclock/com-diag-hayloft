@@ -61,7 +61,7 @@ public:
 		const char * endPoint,
 		const char * canonicalBucketName,
 		::S3Protocol httpProtocol,
-		::S3UriStyle uristyle
+		::S3UriStyle uriStyle
 	);
 
 	/**
@@ -91,7 +91,7 @@ public:
 		const char * endPoint,
 		const char * canonicalBucketName,
 		::S3Protocol httpProtocol,
-		::S3UriStyle uristyle,
+		::S3UriStyle uriStyle,
 		 const Multiplex & multiplex
 	);
 

@@ -21,7 +21,7 @@ namespace diag {
 namespace hayloft {
 
 /**
- * A PacketData is an object that can be appended or prepended to a Packet.
+ * PacketData is an object that can be appended or prepended to a Packet.
  * It contains a pointer to a user provided data structure that it does not
  * take. It is constructed in the full state so that new data cannot be appended
  * or prepended to it unless existing data is consumed.
@@ -62,10 +62,11 @@ public:
 
 	/**
 	 * Ctor.
+	 *
 	 * @param dp points to the user data object.
 	 * @param ve is the size of the user data object in octets.
 	 * @param vf specifies how the user data object is to be initialized:
-	 * for append, prepend, or either.
+	 *        for append, prepend, or either.
 	 */
 	explicit PacketData(void * dp /* UNTAKEN */, size_t ve, size_t vf = EITHER)
 	: next(0)
@@ -84,6 +85,7 @@ public:
 	/**
 	 * Append as much of the user data as the suffix space allows. Octets are
 	 * copied from the user data front to back.
+	 *
 	 * @param data points to the user data.
 	 * @param length is the length of the data to append in octets.
 	 * @return the actual number of octets appended.
@@ -93,6 +95,7 @@ public:
 	/**
 	 * Prepend as much of the user data as the preface space allows. Octets are
 	 * copied from the user data back to front.
+	 *
 	 * @param data points to the user data.
 	 * @param length is the length of the data to prepend in octets.
 	 * @return the actual number of octets prepended.
@@ -102,6 +105,7 @@ public:
 	/**
 	 * Consume no more than the specified length of data if it is available.
 	 * Data is consumed from front to back and copied into the buffer.
+	 *
 	 * @param buffer points to the user buffer.
 	 * @param length is the length of the data to consume in octets.
 	 * @return the actual number of octets consumed.
@@ -110,7 +114,8 @@ public:
 
 	/**
 	 * Consume no more than the specified length of data if it is available.
-	 * Data is consumed from front to back and discarded
+	 * Data is consumed from front to back and discarded.
+	 *
 	 * @param length is the length of the data to consume in octets.
 	 * @return the actual number of octets consumed.
 	 */
@@ -171,6 +176,7 @@ public:
 
 	/**
 	 * Return true if the object is empty, false otherwise.
+	 *
 	 * @return true if the object is empty, false otherwise.
 	 */
 	bool empty() const { return (head == 0); }
@@ -178,6 +184,7 @@ public:
 	/**
 	 * Return the total extent of the object in octets. This is always equal to
 	 * prefix() plus length() plus suffix().
+	 *
 	 * @return the total length of the data storage in octets.
 	 */
 	size_t size() const { return extent; }
@@ -185,24 +192,28 @@ public:
 	/**
 	 * Return a pointer to the beginning of user data in the object. NULL is
 	 * returned if the object is empty.
+	 *
 	 * @return a pointer to the beginning of user data in the object or NULL.
 	 */
 	const void * buffer() const { return head; }
 
 	/**
 	 * Return the number of octets available to be consumed.
+	 *
 	 * @return the number of octets available to be consumed.
 	 */
 	size_t length() const { return tail - head; }
 
 	/**
 	 * Return the number of octets available to be prepended.
+	 *
 	 * @return the number of octets available to be prepended.
 	 */
 	size_t prefix() const { return (head == 0) ? extent : head - payload; }
 
-	/*
+	/**
 	 * Return the number of octets available to be appended.
+	 *
 	 * @return the number of octets available to be eppended.
 	 */
 	size_t suffix() const { return (tail == 0) ? extent : payload + extent - tail; }
@@ -216,12 +227,14 @@ private:
 
     /**
      *  Copy constructor.
+     *
      *  @param that refers to an R-value object of this type.
      */
     PacketData(const PacketData& that);
 
     /**
      *  Assignment operator.
+     *
      *  @param that refers to an R-value object of this type.
      */
     PacketData& operator=(const PacketData& that);
@@ -229,7 +242,7 @@ private:
 };
 
 /**
- * A PacketDataDynamic is an object that can be appended or prepended to a
+ * PacketDataDynamic is an object that can be appended or prepended to a
  * Packet. It contains a pointer to a user provided data array that it takes and
  * deletes upon destruction. It is constructed in the full state so that new
  * data cannot be appended or prepended to it unless existing data is consumed.
@@ -241,11 +254,12 @@ public:
 
 	/**
 	 * Ctor.
+	 *
 	 * @param dp points to the dynamically allocated user data array.
 	 * @param ve is the size of the dynamically allocated user data array in
-	 * octets.
+	 *        octets.
 	 * @param vf specifies how the dynamically allocated user data array is to
-	 * be initialized, for append, prepend, or either.
+	 *        be initialized, for append, prepend, or either.
 	 */
 	explicit PacketDataDynamic(Datum * dp /* TAKEN */, size_t ve, size_t vf = EITHER)
 	: PacketData(dp, ve, vf)
@@ -259,7 +273,7 @@ public:
 };
 
 /**
- * A PacketBuffer is an object that can be appended or prepended to a Packet.
+ * PacketBuffer is an object that can be appended or prepended to a Packet.
  * It contains a pointer to a user provided data structure that it does not
  * take. It is constructed in the empty state so that new data can be appended
  * or prepended to it. A PacketBuffer can be used independently of a Packet as
@@ -272,10 +286,11 @@ public:
 
 	/**
 	 * Ctor.
+	 *
 	 * @param bp points to the user buffer object.
 	 * @param ve is the size of the buffer object in octets.
 	 * @param vf specifies how the user buffer object is to be initialized:
-	 * for append, prepend, or either.
+	 *        for append, prepend, or either.
 	 */
 	explicit PacketBuffer(void * bp /* UNTAKEN */, size_t ve, size_t vf = EITHER)
 	: PacketData(bp, ve, vf)
@@ -289,7 +304,7 @@ public:
 };
 
 /**
- * A PacketBufferDynamic is an object that can be appended or prepended to a
+ * PacketBufferDynamic is an object that can be appended or prepended to a
  * Packet. It contains a pointer to a data array, either user provided that it
  * takes, or self-allocated, and deletes upon destruction. It is constructed
  * in the empty state so that new data can be appended or prepended to it.
@@ -303,11 +318,12 @@ public:
 
 	/**
 	 * Ctor.
-	 * @param data points to the dynamically allocated user buffer array.
+	 *
+	 * @param bp points to the dynamically allocated user buffer array.
 	 * @param ve is the size of the dynamically allocated user buffer array in
-	 * octets.
+	 *        octets.
 	 * @param vf specifies how the dynamically allocated user buffer array is
-	 * to be initialized: for append, prepend, or either.
+	 *        to be initialized: for append, prepend, or either.
 	 */
 	explicit PacketBufferDynamic(Datum * bp /* TAKEN */, size_t ve, size_t vf = EITHER)
 	: PacketBuffer(bp, ve, vf)
@@ -315,10 +331,11 @@ public:
 
 	/**
 	 * Ctor. Dynamically allocates its own buffer array.
+	 *
 	 * @param ve is the size of the dynamically allocated buffer array in
-	 * octets.
+	 *        octets.
 	 * @param vf specifies how the dynamically allocated buffer array is
-	 * to be initialized: for append, prepend, or either.
+	 *        to be initialized: for append, prepend, or either.
 	 */
 	explicit PacketBufferDynamic(size_t ve = ALLOCATION, size_t vf = EITHER)
 	: PacketBuffer(new Datum[ve], ve, vf)
@@ -334,7 +351,7 @@ public:
 class Packet;
 
 /**
- * Implements an Input functor for a Packet.
+ * PacketInput implements an Input functor for a Packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketInput : public ::com::diag::desperado::Input {
@@ -343,7 +360,8 @@ public:
 
     /**
      * Ctor.
-     * @param rs refers to the Packet for this functor.
+     *
+     * @param rp refers to the Packet for this functor.
      */
     explicit PacketInput(Packet & rp /* UNTAKEN */)
     : packet(rp)
@@ -356,12 +374,14 @@ public:
 
 	/**
 	 * Return the number of octets available to be consumed.
+	 *
 	 * @return the number of octets available to be consumed.
 	 */
-	size_t getLength() const;
+    size_t getLength() const;
 
     /**
      * Returns the next character.
+     *
      * @return a character in an integer if successful, EOF otherwise.
      */
     virtual int operator() ();
@@ -374,6 +394,7 @@ public:
      * pushed back does not have to be the previous character input,
      * or even any character that was ever input, although at least
      * one character must have been previously input.
+     *
      * @param c is the character to push back into the input.
      * @return the pushed back character is successful, EOF otherwise.
      */
@@ -385,11 +406,12 @@ public:
      * into the buffer. Guarantees that the buffer is NUL terminated
      * if it is at least one octet in size. Guarantees that no more
      * than the specified number of octets are returned.
-     * @param bufferpoints to the buffer.
+     *
+     * @param buffer points to the buffer.
      * @param size is the size of the buffer in octets. Size should be no
-     * larger than the largest possible signed integer.
+     *        larger than the largest possible signed integer.
      * @return the number of octets input (which may be zero) including the
-     * terminating NUL, if successful, EOF otherwise.
+     *         terminating NUL, if successful, EOF otherwise.
      */
     virtual ssize_t operator() (char * buffer, size_t size);
 
@@ -410,25 +432,26 @@ public:
      * @param minimum is the minimum number of octets to input.
      * @param maximum is the maximum number of octets to input.
      * @return the number of octets input (which may be any number less
-     * than maximum including zero) if successful, EOF otherwise.
+     *         than maximum including zero) if successful, EOF otherwise.
      */
     virtual ssize_t operator() (void * buffer, size_t minimum, size_t maximum);
 
     /**
      * Displays internal information about this object to the specified
      * output object. Useful for debugging and troubleshooting.
+     *
      * @param level sets the verbosity of the output. What this means
-     * is object dependent. However, the level is passed from outer to inner
-     * objects this object calls the show methods of its inherited or composited
-     * objects.
-     * @param display  points to the output object to which output is sent. If
-     * null (zero), the default platform output object is used as the effective
-     * output object. The effective output object is passed from outer to inner
-     * objects as this object calls the show methods of its inherited and
-     * composited objects.
+     *        is object dependent. However, the level is passed from outer to
+     *        inner objects this object calls the show methods of its inherited
+     *        or composited objects.
+     * @param display points to the output object to which output is sent. If
+     *        null (zero), the default platform output object is used as the
+     *        effective output object. The effective output object is passed
+     *        from outer to inner objects as this object calls the show methods
+     *        of its inherited and composited objects.
      * @param indent specifies the level of indentation. One more than this
-     * value is passed from outer to inner objects as this object calls the
-     * show methods of its inherited and composited objects.
+     *        value is passed from outer to inner objects as this object calls
+     *        the show methods of its inherited and composited objects.
      */
     virtual void show(int level = 0, com::diag::desperado::Output * display = 0, int indent = 0) const;
 
@@ -442,7 +465,7 @@ private:
 };
 
 /**
- * Implements an Output functor for a Packet.
+ * PacketOutput implements an Output functor for a Packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
 class PacketOutput : public ::com::diag::desperado::Output {
@@ -451,7 +474,8 @@ public:
 
     /**
      * Ctor.
-     *@param rs refers to the Packet for this functor.
+     *
+     * @param rp refers to the Packet for this functor.
      */
     explicit PacketOutput(Packet & rp /* UNTAKEN */)
     : packet(rp)
@@ -464,6 +488,7 @@ public:
 
     /**
      * Outputs a character in integer form.
+     *
      * @param c is a character in integer form.
      * @return the output character if successful, EOF otherwise.
      */
@@ -472,17 +497,19 @@ public:
     /**
      * Outputs a string of no more than the specified length not including
      * its terminating NUL.
+     *
      * @param s points to a constant NUL-terminated string.
      * @param size is the size of the string in octets.
      * @return the number of octets output if successful (which may be zero),
-     * EOF otherwise.
+     *         EOF otherwise.
      */
     virtual ssize_t operator() (const char * s /* COPIED */, size_t size = com::diag::desperado::Output::maximum_string_length);
 
     /**
      * Format a variable length argument list and output the result.
-     * @paramformatis a NUL-terminated string containing a printf-style format
-     * statement.
+     *
+     * @param format is a NUL-terminated string containing a printf-style format
+     *        statement.
      * @param ap is a variable length argument object.
      * @return a non-negative number if successful, EOF otherwise.
      */
@@ -496,17 +523,19 @@ public:
      * may be output. Specific implementations may differ. The interface
      * only guarantees that at least the minimum number of octets are
      * output from the buffer.
+     *
      * @param buffer points to the buffer.
      * @param minimum is the minimum number of octets to output.
      * @param maximum is the maximum number of octets to output.
      * @return the number of octets output (which may be any number less
-     * than maximum including zero) if successful, EOF otherwise.
+     *         than maximum including zero) if successful, EOF otherwise.
      */
     virtual ssize_t operator() (const void * buffer /* COPIED */, size_t minimum, size_t maximum);
 
     /**
      * Flush any buffered data to the file. Specific implementations may do
      * nothing if they do not buffer.
+     *
       * @return a non-negative number if successful, EOF otherwise.
      */
     virtual int operator() ();
@@ -514,17 +543,19 @@ public:
     /**
      * Displays internal information about this object to the specified
      * output object. Useful for debugging and troubleshooting.
-     * @param level sets the verbosity of the output. What this means is object
-     * dependent. However, the level is passed from outer to inner objects this
-     * object calls the show methods of its inherited or composited objects.
+     *
+     * @param level sets the verbosity of the output. What this means
+     *        is object dependent. However, the level is passed from outer to
+     *        inner objects this object calls the show methods of its inherited
+     *        or composited objects.
      * @param display points to the output object to which output is sent. If
-     * null (zero), the default platform output object is used as the effective
-     * output object. The effective output object is passed from outer to
-     * inner objects as this object calls the show methods of its inherited and
-     * composited objects.
+     *        null (zero), the default platform output object is used as the
+     *        effective output object. The effective output object is passed
+     *        from outer to inner objects as this object calls the show methods
+     *        of its inherited and composited objects.
      * @param indent specifies the level of indentation. One more than this
-     * value is passed from outer to inner objects as this object calls the
-     * show methods of its inherited and composited objects.
+     *        value is passed from outer to inner objects as this object calls
+     *        the show methods of its inherited and composited objects.
      */
     virtual void show(int level = 0, com::diag::desperado::Output * display = 0, int indent = 0) const;
 
@@ -538,7 +569,7 @@ private:
 };
 
 /**
- * Implements a linked list of PacketData, PacketDataDynamic, PacketBuffer,
+ * Packet is a container of PacketData, PacketDataDynamic, PacketBuffer,
  * and/or PacketBufferDynamic objects to which data can be prepended and
  * appended. Data can be appended using an Output functor and consumed using
  * an Input functor. Appropriate use of the various PacketData and PacketBuffer
@@ -578,6 +609,7 @@ public:
 
     /**
      *  Ctor.
+     *
      *  @param va is the default allocation size in octets.
      *  @param vf is the fraction of the very first allocation.
      */
@@ -597,12 +629,14 @@ public:
 
     /**
      *  Returns a reference to the input functor interface.
+     *
      *  @return a reference to the input functor interface.
      */
     virtual PacketInput & input() { return in; }
 
     /**
      *  Returns a reference to the output functor interface.
+     *
      *  @return a reference to the output functor interface.
      */
     virtual PacketOutput & output() { return out; }
@@ -611,6 +645,7 @@ public:
      * Returns true if the object is empty, false otherwise. Empty means the
      * object has nothing on its linked list. It is not empty even if the
      * items on its linked list are empty.
+     *
      * @return true if the object is empty, false otherwise.
      */
     bool empty() const { return (head == 0); }
@@ -622,12 +657,14 @@ public:
 
     /**
      * Append the PacketData (or derivative) onto the object.
+     *
      * @param rd refers to a PacketData (or derivative).
      */
 	void append(PacketData & rd /* TAKEN */);
 
     /**
      * Prepend the PacketData (or derivative) onto the object.
+     *
      * @param rd refers to a PacketData (or derivative).
      */
 	void prepend(PacketData & rd /* TAKEN */);
@@ -635,6 +672,7 @@ public:
 	/**
 	 * Append the data by copying it, allocating new PacketBufferDynamic objects
 	 * and appended them as needed. Data is copied from front to back.
+	 *
 	 * @param data points to the data.
 	 * @param length is the length of the data to append in octets.
 	 * @return the number of octets appended.
@@ -644,6 +682,7 @@ public:
 	/**
 	 * Prepend the data by copying it, allocating new PacketBufferDynamic
 	 * objects and prepending them as needed. Data is copied from back to front.
+	 *
 	 * @param data points to the data.
 	 * @param length is the length of the data to prepend in octets.
 	 * @return the number of octets appended.
@@ -653,6 +692,7 @@ public:
 	/**
 	 * Consume no more than the specified length of data if it is available.
 	 * Data is consumed front to back and copied into the buffer.
+	 *
 	 * @param buffer points to the buffer.
 	 * @param length is the length of the data to consume in octets.
 	 * @return the number of octets consumed.
@@ -662,6 +702,7 @@ public:
 	/**
 	 * Consume no more than the specified length of data if it is available.
 	 * Data is consumed front to back and discarded.
+	 *
 	 * @param length is the length of the data to consume in octets.
 	 * @return the number of octets consumed.
 	 */
@@ -671,6 +712,7 @@ public:
 	 * Tranfers the contents of an input functor into this object using an
 	 * algorithm that minimizes memory to memory copying until the input is
 	 * empty or an error occurs.
+	 *
 	 * @param from refers to the input functor.
 	 * @return the number of octets transferred.
 	 */
@@ -680,7 +722,8 @@ public:
 	 * Tranfers the contents of this object into an output functor using an
 	 * algorithm that minimizes memory to memory copying until the object is
 	 * empty or an error occurs.
-	 * @param from refers to the output functor.
+	 *
+	 * @param to refers to the output functor.
 	 * @return the number of octets transferred.
 	 */
 	size_t sink(::com::diag::desperado::Output& to);
@@ -689,6 +732,7 @@ public:
 	 * Return the number of octets available to be consumed. This is done at
 	 * every call by traversing the entire linked list and summing the length
 	 * of each individual PacketData.
+	 *
 	 * @return the number of octets available to be consumed.
 	 */
 	size_t length() const;
@@ -696,17 +740,19 @@ public:
     /**
      * Displays internal information about this object to the specified
      * output object. Useful for debugging and troubleshooting.
-     * @param level sets the verbosity of the output. What this means is object
-     * dependent. However, the level is passed from outer to inner objects this
-     * object calls the show methods of its inherited or composited objects.
+     *
+     * @param level sets the verbosity of the output. What this means
+     *        is object dependent. However, the level is passed from outer to
+     *        inner objects this object calls the show methods of its inherited
+     *        or composited objects.
      * @param display points to the output object to which output is sent. If
-     * null (zero), the default platform output object is used as the effective
-     * output object. The effective output object is passed from outer to
-     * inner objects as this object calls the show methods of its inherited and
-     * composited objects.
+     *        null (zero), the default platform output object is used as the
+     *        effective output object. The effective output object is passed
+     *        from outer to inner objects as this object calls the show methods
+     *        of its inherited and composited objects.
      * @param indent specifies the level of indentation. One more than this
-     * value is passed from outer to inner objects as this object calls the
-     * show methods of its inherited and composited objects.
+     *        value is passed from outer to inner objects as this object calls
+     *        the show methods of its inherited and composited objects.
      */
     virtual void show(int level = 0, ::com::diag::desperado::Output * display = 0, int indent = 0) const;
 
@@ -748,18 +794,22 @@ private:
 
     /**
      *  Copy ctor.
+     *
      *  @param that refers to an R-value object of this type.
      */
     Packet(const Packet & that);
 
     /**
      *  Assignment operator.
+     *
      *  @param that refers to an R-value object of this type.
      */
     Packet& operator=(const Packet & that);
 
 };
 
+// This is here because the type of packet isn't fully defined during the
+// class declaration.
 inline size_t PacketInput::getLength() const { return packet.length(); }
 
 }

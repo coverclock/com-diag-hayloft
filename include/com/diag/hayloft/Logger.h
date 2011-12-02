@@ -19,6 +19,12 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
+/**
+ * Logger extends the Desperado Logger class to implement a mechanism to enable
+ * and disable log levels selectively. The superclass supports sixteen logging
+ * levels (which turns out to be the transitive closure of logging levels
+ * support by common logging systems such as Syslog, Java, and Apache).
+ */
 class Logger : public ::com::diag::desperado::Logger {
 
 public:
@@ -46,12 +52,14 @@ public:
 	/**
 	 * Allocates a reference to a new object of this type suitably initialized
 	 * with default parameters.
+	 *
 	 * @return a reference to a new object of this type.
 	 */
 	static Logger & factory();
 
 	/**
 	 * Establishes a new default instance of an object of this type.
+	 *
 	 * @param that refers to an object of this type.
 	 * @return that.
 	 */
@@ -59,6 +67,7 @@ public:
 
     /**
      * Returns a reference to the default instance of an object of this type.
+     *
      * @return a reference to the default instance of an object of this type.
      */
 	static Logger & instance();
@@ -66,6 +75,8 @@ public:
     /**
      * Returns the name of the environmental variable that can be used to
      * set the mask.
+     *
+     * @return the name of the environmental variable.
      */
     static const char * MASK_ENV() {
     	return "COM_DIAG_HAYLOFT_LOGGER_MASK";
@@ -82,6 +93,7 @@ public:
 
 	/**
 	 * Ctor.
+	 *
 	 * @param ro refers to an Output functor to which log messages are emitted.
 	 */
     explicit Logger(::com::diag::desperado::Output & ro)
@@ -99,6 +111,7 @@ public:
 
     /**
      * Set the Output functor to which log messages are emitted.
+     *
 	 * @param ro refers to an Output functor to which log messages are emitted.
      * @return a reference to this object.
      */
@@ -127,6 +140,7 @@ public:
 
     /**
      * Get a reference to the current output functor.
+     *
      * @return the current output functor.
      */
     ::com::diag::desperado::Output & getOutput() {
@@ -135,6 +149,7 @@ public:
 
     /**
      * Set the mask which controls which log levels are enabled.
+     *
      * @param vm is the new mask value.
      * @return a reference to this object.
      */
@@ -146,6 +161,7 @@ public:
     /**
      * Set the mask which controls which log levels are enabled from
      * an environmental variable.
+     *
      * @return a reference to this object.
      */
     Logger & setMask();
@@ -153,6 +169,7 @@ public:
     /**
      * Get the current mask. This is mostly useful for saving the current mask
      * so that it can be restored after temporarily changing it.
+     *
      * @return the current mask;
      */
     Mask getMask() {
@@ -161,6 +178,7 @@ public:
 
     /**
      * Enable the specified log level.
+     *
      * @param level is the log level to be enabled.
      * @return a reference to this object.
      */
@@ -171,6 +189,7 @@ public:
 
     /**
      * Disable the specified log level.
+     *
      * @param level is the log level to be disabled.
      * @return a reference to this object.
      */
@@ -181,6 +200,7 @@ public:
 
     /**
      * Returns true if the specified log level is enabled, false otherwise.
+     *
      * @return true if the specified log level is enabled, false otherwise.
      */
     virtual bool isEnabled(Level level) {
