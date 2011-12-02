@@ -134,10 +134,8 @@ void ObjectGet::finalize() {
 		(*output)();
 		output = 0;
 	}
-	if (taken != 0) {
-		delete taken;
-		taken = 0;
-	}
+	delete taken;
+	taken = 0;
 }
 
 void ObjectGet::start() {

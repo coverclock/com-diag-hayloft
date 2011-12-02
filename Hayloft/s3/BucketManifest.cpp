@@ -18,8 +18,9 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Octets objectsize, const char * ownerId, const char * ownerDisplayName)
-: modified(lastModified)
+BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModified, const char * eTag, Octets objectsize, const char * ownerId, const char * ownerDisplayName)
+: key(objectname)
+, modified(lastModified)
 , etag((eTag != 0) ? eTag : "")
 , size(objectsize)
 , owner((ownerId != 0) ? ownerId : "")
@@ -42,9 +43,9 @@ BucketManifest::Entry::Entry(Epochalseconds lastModified, const char * eTag, Oct
 	}
 	if (contents != 0) {
 		for (int ii = 0; ii < contentsCount; ++ii) {
-			if ((contents[ii].key != 0) && (*contents[ii].key != '\0')) {
-				Entry entry(contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
-				Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, contents[ii].key, entry.modified, entry.etag.c_str(), entry.size, entry.owner.c_str(), entry.display.c_str());
+			if ((contents[ii].key != 0) && (contents[ii].key[0] != '\0')) {
+				Entry entry(contents[ii].key, contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
+				Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, entry.getKey(), entry.getModified(), entry.getETag(), entry.getSize(), entry.getOwnerId(), entry.getOwnerDisplayName());
 				if ((status == ::S3StatusOK) && (that->manifest.size() < that->maximum)) {
 					that->manifest.insert(Pair(contents[ii].key, entry));
 				}

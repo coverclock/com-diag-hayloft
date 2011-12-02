@@ -17,8 +17,9 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-ServiceManifest::Entry::Entry(const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
-: owner((ownerId != 0) ? ownerId : "")
+ServiceManifest::Entry::Entry(const char * bucketname, const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
+: canonical(bucketname)
+, owner((ownerId != 0) ? ownerId : "")
 , display((ownerDisplayName != 0) ? ownerDisplayName : "")
 , created(creationDateSeconds)
 {}
@@ -26,13 +27,14 @@ ServiceManifest::Entry::Entry(const char * ownerId, const char * ownerDisplayNam
 ::S3Status ServiceManifest::listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData) {
 	ServiceManifest * that = static_cast<ServiceManifest*>(callbackData);
 	::S3Status status = that->entry(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
-	const char * effective = (bucketName != 0) ? bucketName : "";
-	Entry entry(ownerId, ownerDisplayName, creationDateSeconds);
-	Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, effective, entry.owner.c_str(), entry.display.c_str(), entry.created);
-	Logger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
-	if (status == ::S3StatusOK) {
-		that->manifest.insert(Pair(effective, entry));
+	if ((bucketName != 0) && (bucketName != '\0')) {
+		Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
+		Entry entry(bucketName, ownerId, ownerDisplayName, creationDateSeconds);
+		Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, entry.getCanonical(), entry.getOwnerId(), entry.getOwnerDisplayName(), entry.getCreated());
+		Logger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
+		if (status == ::S3StatusOK) {
+			that->manifest.insert(Pair(bucketName, entry));
+		}
 	}
 	return status;
 }

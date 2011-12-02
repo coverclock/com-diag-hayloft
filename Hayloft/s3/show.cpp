@@ -119,6 +119,30 @@ void show(const ::S3GetConditions * conditions, Logger::Level level) {
 	}
 }
 
+void show(const ::S3AclGrant * grant, int count, Logger::Level level) {
+	if (grant != 0) {
+		Logger & logger = Logger::instance();
+		if (logger.isEnabled(level)) {
+			for (int ii = 0; ii < count; ++ii) {
+				logger.log(level, "S3AclGrant@%p: granteeType=%d=\"%s\"\n", grant->granteeType, tostring(grant->granteeType));
+				switch (grant->granteeType) {
+				case ::S3GranteeTypeAmazonCustomerByEmail:
+					logger.log(level, "S3AclGrant@%p: emailAddress=\"%.*s\"\n", sizeof(grant->grantee.amazonCustomerByEmail.emailAddress), grant->grantee.amazonCustomerByEmail.emailAddress);
+					break;
+				case ::S3GranteeTypeCanonicalUser:
+					logger.log(level, "S3AclGrant@%p: id=\"%.*s\"\n", sizeof(grant->grantee.canonicalUser.id), grant->grantee.canonicalUser.id);
+					logger.log(level, "S3AclGrant@%p: displayName=\"%.*s\"\n", sizeof(grant->grantee.canonicalUser.displayName), grant->grantee.canonicalUser.displayName);
+					break;
+				default:
+					break;
+				}
+				logger.log(level, "S3AclGrant@%p: permission=%d=\"%s\"\n", grant->permission, tostring(grant->permission));
+				++grant;
+			}
+		}
+	}
+}
+
 void show(const Object & object, Logger::Level level) {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(level)) {
@@ -208,10 +232,10 @@ void show(const ServiceManifest & manifest, Logger::Level level) {
 		::com::diag::desperado::TimeStamp timestamp;
 		const char * stamp;
 		while (here != there) {
-			canonical = here->first.c_str();
-			owner = here->second.owner.c_str();
-			display = here->second.display.c_str();
-			created = here->second.created;
+			canonical = here->second.getCanonical();
+			owner = here->second.getOwnerId();
+			display = here->second.getOwnerDisplayName();
+			created = here->second.getCreated();
 			ticks = (created * numerator) / denominator;
 			commonera.fromTicks(ticks);
 			stamp = timestamp.iso8601(commonera);
@@ -241,15 +265,15 @@ void show(const BucketManifest & manifest, Logger::Level level) {
 		::com::diag::desperado::TimeStamp timestamp;
 		const char * stamp;
 		while (here != there) {
-			key = here->first.c_str();
-			modified = here->second.modified;
+			key = here->second.getKey();
+			modified = here->second.getModified();
 			ticks = (modified * numerator) / denominator;
 			commonera.fromTicks(ticks);
 			stamp = timestamp.iso8601(commonera);
-			etag = here->second.etag.c_str();
-			size = here->second.size;
-			owner = here->second.owner.c_str();
-			display = here->second.display.c_str();
+			etag = here->second.getETag();
+			size = here->second.getSize();;
+			owner = here->second.getOwnerId();
+			display = here->second.getOwnerDisplayName();
 			logger.log(level, "BucketManifest%p: key=\"%s\" etag=\"%s\" size=%llu owner=\"%s\" display=\"%s\" modified=%lld=\"%s\"\n", &manifest, key, etag, size, owner, display, modified, stamp);
 			++here;
 		}

@@ -55,6 +55,22 @@ extern const char * tostring(::S3UriStyle style);
 extern const char * tostring(::S3CannedAcl access);
 
 /**
+ * Convert an ::S3GranteeType to its C string representation.
+ *
+ * @param type is an ::S3GranteeType.
+ * @return a C string representation.
+ */
+extern const char * tostring(::S3GranteeType type);
+
+/**
+ * Convert an ::S3Permission to its C string representation.
+ *
+ * @param permission is an ::S3Permission.
+ * @return a C string representation.
+ */
+extern const char * tostring(::S3Permission permission);
+
+/**
  * Convert a Container (Bucket) to its C string representation which is a URI.
  *
  * @param container refers to a Container.

@@ -34,28 +34,34 @@ public:
 	/**
 	 * Entry describes an entry in the Manifest map.
 	 */
-	struct Entry {
+	class Entry {
+
+	private:
+
+		const std::string canonical;
+
+		const std::string owner;
+
+		const std::string display;
+
+		const Epochalseconds created;
+
+	public:
 
 		Entry(
-			const char * ownerId = 0,
-			const char * ownerDisplayName = 0,
-			Epochalseconds creationDateSeconds = 0
+			const char * bucketname,
+			const char * ownerId,
+			const char * ownerDisplayName,
+			Epochalseconds creationDateSeconds
 		);
 
-		/**
-		 * Id of the owner of the Object.
-		 */
-		std::string owner;
+		const char * getCanonical() const { return canonical.c_str(); }
 
-		/**
-		 * Display name of the owner of the Object.
-		 */
-		std::string display;
+		const char * getOwnerId() const { return owner.c_str(); }
 
-		/**
-		 * Creation time of the Bucket.
-		 */
-		Epochalseconds created;
+		const char * getOwnerDisplayName() const { return display.c_str(); }
+
+		Epochalseconds getCreated() const { return created; }
 
 	};
 

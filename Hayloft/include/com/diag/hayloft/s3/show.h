@@ -18,6 +18,7 @@ struct S3ResponseProperties;
 struct S3BucketContext;
 struct S3PutProperties;
 struct S3GetConditions;
+struct S3AclGrant;
 
 namespace com {
 namespace diag {
@@ -68,6 +69,14 @@ extern void show(const ::S3PutProperties * properties, Logger::Level level = Log
  * @param level specifies the logging level.
  */
 extern void show(const ::S3GetConditions * conditions, Logger::Level level = Logger::INFORMATION);
+
+/**
+ * Display an array of libS3 S3AclGrant structures.
+ *
+ * @param grant points to the structure.
+ * @param level specifies the logging level.
+ */
+extern void show(const ::S3AclGrant * grant, int count = 1, Logger::Level level = Logger::INFORMATION);
 
 /**
  * Display the metadata associated with a Hayloft Object.

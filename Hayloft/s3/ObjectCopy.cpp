@@ -62,9 +62,7 @@ ObjectCopy::~ObjectCopy() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
-	if (properties.metaData != 0) {
-		delete [] properties.metaData;
-	}
+	delete [] properties.metaData;
 }
 
 void ObjectCopy::initialize(const Properties::Metadata & settings) {
