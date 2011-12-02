@@ -141,6 +141,50 @@ TEST_F(GrantTest, GetPublicRead) {
 	ASSERT_TRUE(complete_until_successful(bucketdelete));
 }
 
+TEST_F(GrantTest, GetSet) {
+	static const int LIMIT = 10;
+	static const char BUCKET[] = "GrantTestGetPublicRead";
+	static const char OBJECT[] = "Object.txt";
+	static const Logger::Level LEVEL = Logger::PRINT;
+	AccessPublicRead access;
+	Context context;
+	context.setAccess(access);
+	BucketCreate bucketcreate(BUCKET);
+	ASSERT_TRUE(complete_until_successful(bucketcreate));
+	Properties properties;
+	properties.setAccess(access);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	Size inputsize = size(*input);
+	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
+	for (int ii = 0; ii < LIMIT; ++ii) {
+		if (!objectput.isRetryable()) { break; }
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		input = new ::com::diag::desperado::PathInput(__FILE__);
+		inputsize = size(*input);
+		objectput.reset(input, inputsize);
+		objectput.start();
+	}
+	ASSERT_TRUE(objectput.isSuccessful());
+	GrantGet grantgetobject1(objectput, bucketcreate);
+	ASSERT_TRUE(complete_until_successful(grantgetobject1));
+	show(grantgetobject1, LEVEL);
+	Grant grant;
+	grant.setOwnerId(grantgetobject1.getOwnerId());
+	grant.setOwnerDisplayName(grantgetobject1.getOwnerDisplayName());
+	grant.add(::S3GranteeTypeCanonicalUser, ::S3PermissionFullControl, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
+	show(grant, LEVEL);
+	GrantSet grantsetobject(objectput, bucketcreate, grant);
+	ASSERT_TRUE(complete_until_successful(grantsetobject));
+	GrantGet grantgetobject2(objectput, bucketcreate);
+	ASSERT_TRUE(complete_until_successful(grantgetobject2));
+	show(grantgetobject2, LEVEL);
+	ObjectDelete objectdelete(OBJECT, bucketcreate);
+	ASSERT_TRUE(complete_until_successful(objectdelete));
+	BucketDelete bucketdelete(BUCKET);
+	ASSERT_TRUE(complete_until_successful(bucketdelete));
+}
+
 }
 }
 }

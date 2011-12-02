@@ -236,7 +236,7 @@ public:
 
 	Grant & setOwnerId(const char * ownerId) { owner = ownerId; return *this; }
 
-	Grant & setOwnerDisplay(const char * ownerDisplayName) { display = ownerDisplayName; return *this; }
+	Grant & setOwnerDisplayName(const char * ownerDisplayName) { display = ownerDisplayName; return *this; }
 
 	virtual bool import(const char * xml);
 
