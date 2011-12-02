@@ -65,6 +65,7 @@ const char * tostring(::S3GranteeType type) {
 	case ::S3GranteeTypeLogDelivery:			result = "LogDelivery";				break;
 	// No default generates warning for missing case.
 	}
+	return result;
 }
 
 const char * tostring(::S3Permission permission) {
@@ -77,6 +78,7 @@ const char * tostring(::S3Permission permission) {
 	case ::S3PermissionFullControl:		result = "FullControl";		break;
 	// No default generates warning for missing case.
 	}
+	return result;
 }
 
 const char * tostring(const Container & container, std::string & uri) {
