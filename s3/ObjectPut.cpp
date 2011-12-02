@@ -102,9 +102,7 @@ ObjectPut::~ObjectPut() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
-	if (properties.metaData != 0) {
-		delete [] properties.metaData;
-	}
+	delete [] properties.metaData;
 	finalize();
 }
 
@@ -157,10 +155,8 @@ void ObjectPut::finalize() {
 	if (input != 0) {
 		input = 0;
 	}
-	if (taken != 0) {
-		delete taken;
-		taken = 0;
-	}
+	delete taken;
+	taken = 0;
 }
 
 void ObjectPut::start() {

@@ -33,40 +33,44 @@ public:
 	/**
 	 * Entry describes an entry in the Manifest map.
 	 */
-	struct Entry {
+	class Entry {
+
+	private:
+
+		const std::string key;
+
+		const Epochalseconds modified;
+
+		const std::string etag;
+
+		const Octets size;
+
+		const std::string owner;
+
+		const std::string display;
+
+	public:
 
 		Entry(
-			Epochalseconds lastModified = 0,
-			const char * eTag = 0,
-			Octets objectsize = 0,
-			const char * ownerId = 0,
-			const char * ownerDisplayName = 0
+			const char * objectname,
+			Epochalseconds lastModified,
+			const char * eTag,
+			Octets objectsize,
+			const char * ownerId,
+			const char * ownerDisplayName
 		);
 
-		/**
-		 * Modification time of the Object.
-		 */
-		Epochalseconds modified;
+		const char * getKey() const { return key.c_str(); }
 
-		/**
-		 * ETag of the Object.
-		 */
-		std::string etag;
+		Epochalseconds getModified() const { return modified; }
 
-		/**
-		 * Size of the Object.
-		 */
-		Octets size;
+		const char * getETag() const { return etag.c_str(); }
 
-		/**
-		 * Id of the owner of the Object.
-		 */
-		std::string owner;
+		Octets getSize() const { return size; }
 
-		/**
-		 * Display name of the owner of the Object.
-		 */
-		std::string display;
+		const char * getOwnerId() const { return owner.c_str(); }
+
+		const char * getOwnerDisplayName() const { return display.c_str(); }
 
 	};
 

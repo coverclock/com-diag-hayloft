@@ -55,6 +55,30 @@ const char * tostring(::S3CannedAcl access) {
 	return result;
 }
 
+const char * tostring(::S3GranteeType type) {
+	const char * result = "Invalid";
+	switch (type) {
+	case ::S3GranteeTypeAmazonCustomerByEmail:	result = "AmazonCustomerByEmail";	break;
+	case ::S3GranteeTypeCanonicalUser:			result = "CanonicalUser";			break;
+	case ::S3GranteeTypeAllAwsUsers:			result = "AllAwsUSers";				break;
+	case ::S3GranteeTypeAllUsers:				result = "AllUsers";				break;
+	case ::S3GranteeTypeLogDelivery:			result = "LogDelivery";				break;
+	// No default generates warning for missing case.
+	}
+}
+
+const char * tostring(::S3Permission permission) {
+	const char * result = "Invalid";
+	switch (permission) {
+	case ::S3PermissionRead:			result = "Read";			break;
+	case ::S3PermissionWrite:			result = "Write";			break;
+	case ::S3PermissionReadACP:			result = "ReadACP";			break;
+	case ::S3PermissionWriteACP:		result = "WriteACP";		break;
+	case ::S3PermissionFullControl:		result = "FullControl";		break;
+	// No default generates warning for missing case.
+	}
+}
+
 const char * tostring(const Container & container, std::string & uri) {
 	uri = tostring(container.getProtocol());
 	uri += "://";
