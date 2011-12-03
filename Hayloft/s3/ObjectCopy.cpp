@@ -53,7 +53,6 @@ ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, cons
 , access(props.getAccess())
 {
 	initialize(props.getMetadata());
-	execute();
 }
 
 ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const Properties & props)
@@ -85,7 +84,6 @@ ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const
 , access(props.getAccess())
 {
 	initialize(props.getMetadata());
-	execute();
 }
 
 ObjectCopy::~ObjectCopy() {
