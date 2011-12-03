@@ -116,7 +116,7 @@ TEST_F(ConvergenceTest, Synchronous) {
 	std::string command = "diff ";
 	command += __FILE__;
 	command += " ";
-	command += OBJECT2;
+	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
 	/**/
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
@@ -195,7 +195,7 @@ TEST_F(ConvergenceTest, Complete) {
 	std::string command = "diff ";
 	command += __FILE__;
 	command += " ";
-	command += OBJECT2;
+	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
 	/**/
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
@@ -274,7 +274,7 @@ TEST_F(ConvergenceTest, Service) {
 	std::string command = "diff ";
 	command += __FILE__;
 	command += " ";
-	command += OBJECT2;
+	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
 	/**/
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
