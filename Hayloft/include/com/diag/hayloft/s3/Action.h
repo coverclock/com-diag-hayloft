@@ -262,12 +262,19 @@ private:
     /**
      *  Copy constructor. POISONED.
      *
+     *  Subclasses such as Object and Bucket provide their own copy ctors.
+     *  It isn't safe to sythentically copy an Action (on either the LHS or the
+     *  RHS) while it may be being modified by a background thread.
+     *
      *  @param that refers to an R-value object of this type.
      */
 	Action(const Action& that);
 
     /**
      *  Assignment operator. POISONED.
+     *
+     *  It isn't safe to sythentically assign an Action (on either the LHS or
+     *  the RHS) while it may be being modified by a background thread.
      *
      *  @param that refers to an R-value object of this type.
      */

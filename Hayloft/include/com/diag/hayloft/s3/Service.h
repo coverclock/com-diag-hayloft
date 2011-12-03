@@ -119,6 +119,10 @@ private:
 
 	void initialize();
 
+	/*
+	 * Copy constructor and assignment operator POISONED in a superclass.
+	 */
+
 };
 
 }
