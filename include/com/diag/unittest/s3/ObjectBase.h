@@ -93,6 +93,47 @@ TEST_F(ObjectBaseTest, PathURI) {
 	EXPECT_EQ(uri, "http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt");
 }
 
+TEST_F(ObjectBaseTest, CopyConstructor) {
+	EndpointTokyo endpoint;
+	Session session(".copy.diag.com", 0, endpoint);
+	Credentials credentials;
+	RegionTokyo region;
+	ProtocolUnsecure protocol;
+	StylePath style;
+	AccessPublicRead access;
+	Context context(credentials, region, protocol, style, access);
+	Bucket bucket("Bucket", context, session);
+	Object source("CopyConstructor", bucket);
+	EXPECT_EQ(source.getRequests(), (::S3RequestContext*)0);
+	EXPECT_TRUE(source == true);
+	EXPECT_FALSE(source.isIdle());
+	EXPECT_FALSE(source.isBusy());
+	EXPECT_FALSE(source.isRetryable());
+	EXPECT_EQ(source.getStatus(), ::S3StatusOK);
+	EXPECT_EQ(std::strcmp(source.getKey(), "CopyConstructor"), 0);
+	EXPECT_EQ(std::strcmp(source.getCanonical(), "bucket.copy.diag.com"), 0);
+	EXPECT_EQ(source.getStyle(), ::S3UriStylePath);
+	EXPECT_NE(source.getId(), (char *)0);
+	EXPECT_NE(source.getSecret(), (char *)0);
+	EXPECT_EQ(std::strcmp(source.getEndpoint(), Endpoint::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	EXPECT_EQ(source.getProtocol(), ::S3ProtocolHTTP);
+	Multiplex multiplex;
+	Object sink(source, multiplex);
+	EXPECT_NE(sink.getRequests(), (::S3RequestContext*)0);
+	EXPECT_TRUE(sink == true);
+	EXPECT_FALSE(sink.isIdle());
+	EXPECT_FALSE(sink.isBusy());
+	EXPECT_FALSE(sink.isRetryable());
+	EXPECT_EQ(sink.getStatus(), ::S3StatusOK);
+	EXPECT_EQ(std::strcmp(source.getKey(), sink.getKey()), 0);
+	EXPECT_EQ(std::strcmp(source.getCanonical(), sink.getCanonical()), 0);
+	EXPECT_EQ(source.getStyle(), sink.getStyle());
+	EXPECT_NE(source.getId(), sink.getId());
+	EXPECT_NE(source.getSecret(), sink.getSecret());
+	EXPECT_EQ(std::strcmp(source.getEndpoint(), sink.getEndpoint()), 0);
+	EXPECT_EQ(source.getProtocol(), sink.getProtocol());
+}
+
 }
 }
 }

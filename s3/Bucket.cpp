@@ -49,6 +49,7 @@ Bucket::Bucket(const Bucket & bucket)
 , name(bucket.getName())
 , region(bucket.getRegion())
 , access(bucket.getAccess())
+, temporary(0)
 {
 	initialize();
 }
@@ -58,6 +59,7 @@ Bucket::Bucket(const Bucket & bucket, const Multiplex & multiplex)
 , name(bucket.getName())
 , region(bucket.getRegion())
 , access(bucket.getAccess())
+, temporary(0)
 {
 	initialize();
 }

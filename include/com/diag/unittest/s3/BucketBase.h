@@ -11,11 +11,14 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <string>
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/BucketValid.h"
 #include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/desperado/string.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -57,11 +60,11 @@ TEST_F(BucketBaseTest, VirtualHostURI) {
 	EndpointIreland endpoint;
 	Session session(".virtualhost.diag.com", 0, endpoint);
 	Credentials credentials;
-	Region region;
+	RegionIreland region;
 	ProtocolSecure protocol;
 	StyleVirtualHost style;
-	Access access;
-	Context context(credentials, region, protocol, style);
+	AccessPublicRead access;
+	Context context(credentials, region, protocol, style, access);
 	Bucket bucket("virtualhosturi", context, session);
 	std::string uri;
 	const char * str = tostring(bucket, uri);
@@ -74,17 +77,61 @@ TEST_F(BucketBaseTest, PathURI) {
 	EndpointTokyo endpoint;
 	Session session(".path.diag.com", 0, endpoint);
 	Credentials credentials;
-	Region region;
+	RegionTokyo region;
 	ProtocolUnsecure protocol;
 	StylePath style;
-	Access access;
-	Context context(credentials, region, protocol, style);
+	AccessPublicRead access;
+	Context context(credentials, region, protocol, style, access);
 	Bucket bucket("pathuri", context, session);
 	std::string uri;
 	const char * str = tostring(bucket, uri);
 	ASSERT_NE(str, (char *)0);
 	printf("URI=\"%s\"\n", str);
 	EXPECT_EQ(uri, "http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com");
+}
+
+TEST_F(BucketBaseTest, CopyConstructor) {
+	EndpointTokyo endpoint;
+	Session session(".copy.diag.com", 0, endpoint);
+	Credentials credentials;
+	RegionTokyo region;
+	ProtocolUnsecure protocol;
+	StylePath style;
+	AccessPublicRead access;
+	Context context(credentials, region, protocol, style, access);
+	Bucket source("CopyConstructor", context, session);
+	ASSERT_EQ(source.getRequests(), (::S3RequestContext*)0);
+	EXPECT_TRUE(source == true);
+	EXPECT_FALSE(source.isIdle());
+	EXPECT_FALSE(source.isBusy());
+	EXPECT_FALSE(source.isRetryable());
+	EXPECT_EQ(source.getStatus(), ::S3StatusOK);
+	EXPECT_EQ(std::strcmp(source.getName(), "CopyConstructor"), 0);
+	EXPECT_EQ(std::strcmp(source.getRegion(), Region::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	EXPECT_EQ(source.getAccess(), ::S3CannedAclPublicRead);
+	EXPECT_EQ(std::strcmp(source.getCanonical(), "copyconstructor.copy.diag.com"), 0);
+	EXPECT_EQ(source.getStyle(), ::S3UriStylePath);
+	EXPECT_NE(source.getId(), (char *)0);
+	EXPECT_NE(source.getSecret(), (char *)0);
+	EXPECT_EQ(std::strcmp(source.getEndpoint(), Endpoint::ASIA_PACIFIC_NORTHEAST_1()), 0);
+	EXPECT_EQ(source.getProtocol(), ::S3ProtocolHTTP);
+	Multiplex multiplex;
+	Bucket sink(source, multiplex);
+	ASSERT_NE(sink.getRequests(), (::S3RequestContext*)0);
+	EXPECT_TRUE(sink == true);
+	EXPECT_FALSE(sink.isIdle());
+	EXPECT_FALSE(sink.isBusy());
+	EXPECT_FALSE(sink.isRetryable());
+	EXPECT_EQ(sink.getStatus(), ::S3StatusOK);
+	EXPECT_EQ(std::strcmp(source.getName(), sink.getName()), 0);
+	EXPECT_EQ(std::strcmp(source.getRegion(), sink.getRegion()), 0);
+	EXPECT_EQ(source.getAccess(), sink.getAccess());
+	EXPECT_EQ(std::strcmp(source.getCanonical(), sink.getCanonical()), 0);
+	EXPECT_EQ(source.getStyle(), sink.getStyle());
+	EXPECT_NE(source.getId(), sink.getId());
+	EXPECT_NE(source.getSecret(), sink.getSecret());
+	EXPECT_EQ(std::strcmp(source.getEndpoint(), sink.getEndpoint()), 0);
+	EXPECT_EQ(source.getProtocol(), sink.getProtocol());
 }
 
 typedef Fixture BucketValidTest;
