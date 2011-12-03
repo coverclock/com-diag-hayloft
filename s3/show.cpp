@@ -125,19 +125,32 @@ void show(const ::S3AclGrant * grant, int count, Logger::Level level) {
 		Logger & logger = Logger::instance();
 		if (logger.isEnabled(level)) {
 			for (int ii = 0; ii < count; ++ii) {
-				logger.log(level, "S3AclGrant@%p: granteeType=%d=\"%s\"\n", grant, grant->granteeType, tostring(grant->granteeType));
 				switch (grant->granteeType) {
 				case ::S3GranteeTypeAmazonCustomerByEmail:
-					logger.log(level, "S3AclGrant@%p: emailAddress=\"%.*s\"\n", grant, sizeof(grant->grantee.amazonCustomerByEmail.emailAddress), grant->grantee.amazonCustomerByEmail.emailAddress);
+					logger.log(level, "S3AclGrant@%p: granteeType=%d=\"%s\" permission=%d=\"%s\" emailAddress=\"%.*s\"\n",
+						grant,
+						grant->granteeType, tostring(grant->granteeType),
+						grant->permission, tostring(grant->permission),
+						sizeof(grant->grantee.amazonCustomerByEmail.emailAddress), grant->grantee.amazonCustomerByEmail.emailAddress
+					);
 					break;
 				case ::S3GranteeTypeCanonicalUser:
-					logger.log(level, "S3AclGrant@%p: id=\"%.*s\"\n", grant, sizeof(grant->grantee.canonicalUser.id), grant->grantee.canonicalUser.id);
-					logger.log(level, "S3AclGrant@%p: displayName=\"%.*s\"\n", grant, sizeof(grant->grantee.canonicalUser.displayName), grant->grantee.canonicalUser.displayName);
+					logger.log(level, "S3AclGrant@%p: granteeType=%d=\"%s\" permission=%d=\"%s\" id=\"%.*s\" displayName=\"%.*s\"\n",
+						grant,
+						grant->granteeType, tostring(grant->granteeType),
+						grant->permission, tostring(grant->permission),
+						sizeof(grant->grantee.canonicalUser.id), grant->grantee.canonicalUser.id,
+						sizeof(grant->grantee.canonicalUser.displayName), grant->grantee.canonicalUser.displayName
+					);
 					break;
 				default:
+					logger.log(level, "S3AclGrant@%p: granteeType=%d=\"%s\" permission=%d=\"%s\"\n",
+						grant,
+						grant->granteeType, tostring(grant->granteeType),
+						grant->permission, tostring(grant->permission)
+					);
 					break;
 				}
-				logger.log(level, "S3AclGrant@%p: permission=%d=\"%s\"\n", grant, grant->permission, tostring(grant->permission));
 				++grant;
 			}
 		}

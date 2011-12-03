@@ -143,19 +143,16 @@ TEST_F(GrantTest, GetPublicRead) {
 
 TEST_F(GrantTest, GetSet) {
 	static const int LIMIT = 10;
-	static const char BUCKET[] = "GrantTestGetPublicRead";
+	static const char BUCKET[] = "GrantTestGetSet";
 	static const char OBJECT[] = "Object.txt";
 	static const Logger::Level LEVEL = Logger::PRINT;
-	AccessPublicRead access;
-	Context context;
-	context.setAccess(access);
+	/**/
 	BucketCreate bucketcreate(BUCKET);
 	ASSERT_TRUE(complete_until_successful(bucketcreate));
-	Properties properties;
-	properties.setAccess(access);
+	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
-	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
+	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
@@ -166,21 +163,34 @@ TEST_F(GrantTest, GetSet) {
 		objectput.start();
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
+	/**/
 	GrantGet grantgetobject1(objectput, bucketcreate);
 	ASSERT_TRUE(complete_until_successful(grantgetobject1));
 	show(grantgetobject1, LEVEL);
+	int count = -1;
+	EXPECT_NE(grantgetobject1.getGrants(count), (::S3AclGrant*)0);
+	EXPECT_EQ(count, 1);
+	/**/
 	Grant grant;
 	grant.setOwnerId(grantgetobject1.getOwnerId());
 	grant.setOwnerDisplayName(grantgetobject1.getOwnerDisplayName());
-	grant.add(::S3GranteeTypeCanonicalUser, ::S3PermissionFullControl, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
+	grant.add(::S3GranteeTypeAllUsers, ::S3PermissionRead, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
 	show(grant, LEVEL);
+	/**/
 	GrantSet grantsetobject(objectput, bucketcreate, grant);
 	ASSERT_TRUE(complete_until_successful(grantsetobject));
+	show(grantsetobject, LEVEL);
+	/**/
 	GrantGet grantgetobject2(objectput, bucketcreate);
 	ASSERT_TRUE(complete_until_successful(grantgetobject2));
 	show(grantgetobject2, LEVEL);
+	count = -1;
+	EXPECT_NE(grantgetobject2.getGrants(count), (::S3AclGrant*)0);
+	EXPECT_EQ(count, 2);
+	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
 	ASSERT_TRUE(complete_until_successful(objectdelete));
+	/**/
 	BucketDelete bucketdelete(BUCKET);
 	ASSERT_TRUE(complete_until_successful(bucketdelete));
 }
