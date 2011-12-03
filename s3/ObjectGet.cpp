@@ -92,6 +92,64 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Multiple
 	initialize();
 }
 
+ObjectGet::ObjectGet(const Object & object, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(object)
+, since(conds.getSince())
+, notsince(conds.getNotSince())
+, match(conds.getMatch())
+, notmatch(conds.getNotMatch())
+, output(&sink)
+, taken(0)
+, offset(objectoffset)
+, size(objectsize)
+{
+	initialize();
+	execute();
+}
+
+ObjectGet::ObjectGet(const Object & object, Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(object)
+, since(conds.getSince())
+, notsince(conds.getNotSince())
+, match(conds.getMatch())
+, notmatch(conds.getNotMatch())
+, output(sinkp)
+, taken(sinkp)
+, offset(objectoffset)
+, size(objectsize)
+{
+	initialize();
+	execute();
+}
+
+ObjectGet::ObjectGet(const Object & object, const Multiplex & multiplex, Output & sink, Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(object, multiplex)
+, since(conds.getSince())
+, notsince(conds.getNotSince())
+, match(conds.getMatch())
+, notmatch(conds.getNotMatch())
+, output(&sink)
+, taken(0)
+, offset(objectoffset)
+, size(objectsize)
+{
+	initialize();
+}
+
+ObjectGet::ObjectGet(const Object & object, const Multiplex & multiplex, Output * sinkp, /* TAKEN */ Octets objectoffset, Octets objectsize, const Conditions & conds)
+: Object(object, multiplex)
+, since(conds.getSince())
+, notsince(conds.getNotSince())
+, match(conds.getMatch())
+, notmatch(conds.getNotMatch())
+, output(sinkp)
+, taken(sinkp)
+, offset(objectoffset)
+, size(objectsize)
+{
+	initialize();
+}
+
 ObjectGet::~ObjectGet() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

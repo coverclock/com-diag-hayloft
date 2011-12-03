@@ -23,6 +23,13 @@ BucketValid::BucketValid(const char * bucketname, const Context & context, const
 	execute();
 }
 
+BucketValid::BucketValid(const Bucket & bucket)
+: Bucket(bucket)
+{
+	initialize();
+	execute();
+}
+
 void BucketValid::initialize() {
 }
 

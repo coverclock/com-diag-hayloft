@@ -38,22 +38,49 @@ public:
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 */
-	/**
-	 * Ctor. Use this for the synchronous interface.
-	 *
-	 * @param keyname is the name of this Object. A copy is made of this
-	 *        C string.
-	 * @param bucket refers to the Bucket associated with this object. This
-	 *        reference is only used during construction.
-	 */
 	explicit ObjectDelete(
 		const char * keyname,
 		const Bucket & bucket
 	);
 
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param keyname is the name of this Object. A copy is made of this
+	 *        C string.
+	 * @param bucket refers to the Bucket associated with this object. This
+	 *        reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
 	explicit ObjectDelete(
 		const char * keyname,
 		const Bucket & bucket,
+		const Multiplex & multiplex
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 */
+	explicit ObjectDelete(
+		const Object & object
+	);
+
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
+	explicit ObjectDelete(
+		const Object & object,
 		const Multiplex & multiplex
 	);
 

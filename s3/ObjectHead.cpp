@@ -28,6 +28,19 @@ ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, const Multip
 	initialize();
 }
 
+ObjectHead::ObjectHead(const Object & object)
+: Object(object)
+{
+	initialize();
+	execute();
+}
+
+ObjectHead::ObjectHead(const Object & object, const Multiplex & multiplex)
+: Object(object, multiplex)
+{
+	initialize();
+}
+
 ObjectHead::~ObjectHead() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

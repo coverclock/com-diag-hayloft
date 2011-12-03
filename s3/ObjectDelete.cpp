@@ -28,6 +28,19 @@ ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, const Mu
 	initialize();
 }
 
+ObjectDelete::ObjectDelete(const Object & object)
+: Object(object)
+{
+	initialize();
+	execute();
+}
+
+ObjectDelete::ObjectDelete(const Object & object, const Multiplex & multiplex)
+: Object(object, multiplex)
+{
+	initialize();
+}
+
 ObjectDelete::~ObjectDelete() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

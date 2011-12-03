@@ -45,6 +45,16 @@ public:
 	);
 
 	/**
+	 * Ctor. There is only a synchronous interface.
+	 *
+	 * @param bucket refers to a Bucket Action from which this Bucket Action
+	 *        is configured. This reference is only used during construction.
+	 */
+	explicit BucketValid(
+		const Bucket & bucket
+	);
+
+	/**
 	 * Dtor.
 	 */
 	virtual ~BucketValid() {}

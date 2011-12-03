@@ -247,6 +247,15 @@ public:
 	 */
 	const char * find(const char * key) const;
 
+private:
+
+	/*
+	 * The copy constructor and assignment operator aren't poisoned here,
+	 * because the synthesized versions will work and won't be functionally
+	 * different from explicitly defined ones. But copying an object of this
+	 * type is likely to be expensive.
+	 */
+
 };
 
 }

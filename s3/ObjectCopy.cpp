@@ -27,7 +27,6 @@ void ObjectCopy::responseCompleteCallback(::S3Status status, const ::S3ErrorDeta
 ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, const char * tokeyname, const Bucket & tobucket, const Properties & props)
 : Object(fromkeyname, frombucket)
 , tocanonical(tobucket.getCanonical())
-, toname(tobucket.getName())
 , tokey(tokeyname)
 , type(props.getType())
 , checksum(props.getChecksum())
@@ -44,8 +43,39 @@ ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, cons
 ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, const char * tokeyname, const Bucket & tobucket, const Multiplex & multiplex, const Properties & props)
 : Object(fromkeyname, frombucket, multiplex)
 , tocanonical(tobucket.getCanonical())
-, toname(tobucket.getName())
 , tokey(tokeyname)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+{
+	initialize(props.getMetadata());
+	execute();
+}
+
+ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const Properties & props)
+: Object(fromobject)
+, tocanonical(toobject.getCanonical())
+, tokey(toobject.getKey())
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+{
+	initialize(props.getMetadata());
+	execute();
+}
+
+ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const Multiplex & multiplex, const Properties & props)
+: Object(fromobject, multiplex)
+, tocanonical(toobject.getCanonical())
+, tokey(toobject.getKey())
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
@@ -70,7 +100,6 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("ObjectCopy@%p: tocanonical=\"%s\"\n", this, tocanonical.c_str());
-		logger.debug("ObjectCopy@%p: toname=\"%s\"\n", this, toname.c_str());
 		logger.debug("ObjectCopy@%p: tokey=\"%s\"\n", this, tokey.c_str());
 	}
 	entitytag[0] = '\0';

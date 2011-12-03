@@ -44,6 +44,24 @@ Bucket::Bucket(const char * bucketname, const Multiplex & multiplex, const Conte
 	initialize();
 }
 
+Bucket::Bucket(const Bucket & bucket)
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
+, name(bucket.getName())
+, region(bucket.getRegion())
+, access(bucket.getAccess())
+{
+	initialize();
+}
+
+Bucket::Bucket(const Bucket & bucket, const Multiplex & multiplex)
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+, name(bucket.getName())
+, region(bucket.getRegion())
+, access(bucket.getAccess())
+{
+	initialize();
+}
+
 Bucket::~Bucket() {}
 
 void Bucket::initialize() {

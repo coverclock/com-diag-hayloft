@@ -53,8 +53,6 @@ protected:
 
 	std::string tocanonical;
 
-	std::string toname;
-
 	std::string tokey;
 
 	std::string type;
@@ -133,6 +131,44 @@ public:
 	);
 
 	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param fromobject refers to the Object Action from which this copy is
+	 *        made. This reference is only used during construction.
+	 * @param toobject refers to a Object Action to which this copy is made.
+	 *        This reference is only used during construction.
+	 * @param props refers to the Properties to be associated with the object
+	 *        to which the copy is being made. This reference is only used
+	 *        during construction.
+	 */
+	explicit ObjectCopy(
+			const Object & fromobject,
+			const Object & tofromobject,
+			const Properties & props = Properties()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param fromobject refers to the Object Action from which this copy is
+	 *        made. This reference is only used during construction.
+	 * @param toobject refers to a Object Action to which this copy is made.
+	 *        This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param props refers to the Properties to be associated with the object
+	 *        to which the copy is being made. This reference is only used
+	 *        during construction.
+	 */
+	explicit ObjectCopy(
+		const Object & fromobject,
+		const Object & tofromobject,
+		const Multiplex & multiplex,
+		const Properties & props = Properties()
+	);
+
+	/**
 	 * Dtor.
 	 */
 	virtual ~ObjectCopy();
@@ -148,14 +184,6 @@ public:
 	 * @return the canonical name of the bucket to which the copy is made.
 	 */
 	const char * getCanonicalTo() const { return tocanonical.c_str(); }
-
-	/**
-	 * Get the non-canonical (application) anme of the bucket to which the
-	 * copy is made.
-	 * @return the non-canonical (application) anme of the bucket to which the
-	 * copy is made.
-	 */
-	const char * getNameTo() const { return toname.c_str(); }
 
 	/**
 	 * Get the name of the object to which the copy is made.

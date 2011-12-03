@@ -84,6 +84,30 @@ public:
 	);
 
 	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param bucket refers to a Bucket Action from which this Bucket Action
+	 *        is configured. This reference is only used during construction.
+	 */
+	explicit BucketHead(
+		const Bucket & bucket
+	);
+
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param bucket refers to a Bucket Action from which this Bucket Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
+	explicit BucketHead(
+		const Bucket & bucket,
+		const Multiplex & multiplex
+	);
+
+	/**
 	 * Dtor. If the Action is in the BUSY state this forces the execution of
 	 * all Actions on the same Multiplex and blocks until they all complete.
 	 */

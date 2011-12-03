@@ -54,6 +54,28 @@ Object::Object(const char * keyname, const Bucket & bucket, const Multiplex & mu
 	initialize();
 }
 
+Object::Object(const Object & object)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle())
+, key(object.getKey())
+, type(object.getContentType())
+, etag(object.getETag())
+, length(object.getContentLength())
+, modified(object.getModificationTime())
+{
+	initialize();
+}
+
+Object::Object(const Object & object, const Multiplex & multiplex)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
+, key(object.getKey())
+, type(object.getContentType())
+, etag(object.getETag())
+, length(object.getContentLength())
+, modified(object.getModificationTime())
+{
+	initialize();
+}
+
 Object::~Object() {}
 
 void Object::initialize() {
