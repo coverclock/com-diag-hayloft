@@ -28,6 +28,19 @@ BucketDelete::BucketDelete(const char * bucketname, const Multiplex & multiplex,
 	initialize();
 }
 
+BucketDelete::BucketDelete(const Bucket & bucket)
+: Bucket(bucket)
+{
+	initialize();
+	execute();
+}
+
+BucketDelete::BucketDelete(const Bucket & bucket, const Multiplex & multiplex)
+: Bucket(bucket, multiplex)
+{
+	initialize();
+}
+
 BucketDelete::~BucketDelete() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

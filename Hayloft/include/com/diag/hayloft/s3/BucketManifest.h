@@ -161,6 +161,36 @@ public:
 	);
 
 	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param bucket refers to a Bucket Action from which this Bucket Action
+	 *        is configured. This reference is only used during construction.
+	 * @param selection specifies a Selection criteria as to what object keys
+	 *        are to be returned. See Selection.
+	 */
+	explicit BucketManifest(
+		const Bucket & bucket,
+		const Selection & selection = Selection()
+	);
+
+	/**
+	 * Ctor. Use this for the asynchronous interface.
+	 *
+	 * @param bucket refers to a Bucket Action from which this Bucket Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param selection specifies a Selection criteria as to what object keys
+	 *        are to be returned. See Selection.
+	 */
+	explicit BucketManifest(
+		const Bucket & bucket,
+		const Multiplex & multiplex,
+		const Selection & selection = Selection()
+	);
+
+	/**
 	 * Dtor. If the Action is in the BUSY state this forces the execution of
 	 * all Actions on the same Multiplex and blocks until they all complete.
 	 */

@@ -174,19 +174,21 @@ public:
 
 private:
 
+	void initialize();
+
     /**
-     *  Copy constructor.
+     *  Copy constructor. POISONED.
+     *
      *  @param that refers to an R-value object of this type.
      */
 	Multiplex(const Multiplex& that);
 
     /**
-     *  Assignment operator.
+     *  Assignment operator. POISONED..
+     *
      *  @param that refers to an R-value object of this type.
      */
 	Multiplex& operator=(const Multiplex& that);
-
-	void initialize();
 
 };
 

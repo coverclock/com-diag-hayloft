@@ -98,6 +98,71 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Multiple
 	initialize(props.getMetadata());
 }
 
+ObjectPut::ObjectPut(const Object & object, Input & source, Octets objectsize, const Properties & props)
+: Object(object)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+, input(&source)
+, taken(0)
+, size(objectsize)
+{
+	initialize(props.getMetadata());
+	execute();
+}
+
+ObjectPut::ObjectPut(const Object & object, Input * sourcep, Octets objectsize, const Properties & props)
+: Object(object)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+, input(sourcep)
+, taken(sourcep)
+, size(objectsize)
+{
+	initialize(props.getMetadata());
+	execute();
+}
+ObjectPut::ObjectPut(const Object & object, const Multiplex & multiplex, Input & source, Octets objectsize, const Properties & props)
+: Object(object, multiplex)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+, input(&source)
+, taken(0)
+, size(objectsize)
+{
+	initialize(props.getMetadata());
+}
+
+ObjectPut::ObjectPut(const Object & object, const Multiplex & multiplex, Input * sourcep, Octets objectsize, const Properties & props)
+: Object(object, multiplex)
+, type(props.getType())
+, checksum(props.getChecksum())
+, control(props.getControl())
+, filename(props.getFilename())
+, encoding(props.getEncoding())
+, expires(props.getExpires())
+, access(props.getAccess())
+, input(sourcep)
+, taken(sourcep)
+, size(objectsize)
+{
+	initialize(props.getMetadata());
+}
+
 ObjectPut::~ObjectPut() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

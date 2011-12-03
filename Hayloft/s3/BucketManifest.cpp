@@ -101,6 +101,31 @@ BucketManifest::BucketManifest(const char * bucketname, const Multiplex & multip
 	initialize();
 }
 
+BucketManifest::BucketManifest(const Bucket & bucket, const Selection & selection)
+: Bucket(bucket)
+, prefix(selection.getPrefix())
+, marker(selection.getMarker())
+, nextmarker(selection.getMarker())
+, delimiter(selection.getDelimiter())
+, maximum(selection.getMaximum())
+, truncated(false)
+{
+	initialize();
+	execute();
+}
+
+BucketManifest::BucketManifest(const Bucket & bucket, const Multiplex & multiplex, const Selection & selection)
+: Bucket(bucket, multiplex)
+, prefix(selection.getPrefix())
+, marker(selection.getMarker())
+, nextmarker(selection.getMarker())
+, delimiter(selection.getDelimiter())
+, maximum(selection.getMaximum())
+, truncated(false)
+{
+	initialize();
+}
+
 BucketManifest::~BucketManifest() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

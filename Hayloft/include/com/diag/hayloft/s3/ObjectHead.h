@@ -63,6 +63,30 @@ public:
 	);
 
 	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 */
+	explicit ObjectHead(
+		const Object & object
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 */
+	explicit ObjectHead(
+		const Object & object,
+		const Multiplex & multiplex
+	);
+
+	/**
 	 * Dtor.
 	 */
 	virtual ~ObjectHead();

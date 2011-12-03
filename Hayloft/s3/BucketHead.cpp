@@ -35,6 +35,19 @@ BucketHead::BucketHead(const char * bucketname, const Multiplex & multiplex, con
 	initialize();
 }
 
+BucketHead::BucketHead(const Bucket & bucket)
+: Bucket(bucket)
+{
+	initialize();
+	execute();
+}
+
+BucketHead::BucketHead(const Bucket & bucket, const Multiplex & multiplex)
+: Bucket(bucket, multiplex)
+{
+	initialize();
+}
+
 BucketHead::~BucketHead() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

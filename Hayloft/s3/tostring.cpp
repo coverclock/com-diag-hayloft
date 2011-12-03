@@ -100,7 +100,8 @@ const char * tostring(const Container & container, std::string & uri) {
 }
 
 const char * tostring(const Object & object, std::string & uri) {
-	tostring(static_cast<Container>(object), uri);
+	const Container & container = object;
+	tostring(container, uri);
 	uri += '/';
 	uri += object.getKey();
 	return uri.c_str();

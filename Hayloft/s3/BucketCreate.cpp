@@ -28,6 +28,19 @@ BucketCreate::BucketCreate(const char * bucketname, const Multiplex & multiplex,
 	initialize();
 }
 
+BucketCreate::BucketCreate(const Bucket & bucket)
+: Bucket(bucket)
+{
+	initialize();
+	execute();
+}
+
+BucketCreate::BucketCreate(const Bucket & bucket, const Multiplex & multiplex)
+: Bucket(bucket, multiplex)
+{
+	initialize();
+}
+
 BucketCreate::~BucketCreate() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);

@@ -178,6 +178,88 @@ public:
 	);
 
 	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param source refers to an Input functor.
+	 * @param objectsize is the size of the data source in eight-bit bytes. S3
+	 *        requires this and does not support partial uploads.
+	 * @param props refers to the Properties to be associated with the object.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectPut(
+		const Object & object,
+		Input & source,
+		Octets objectsize,
+		const Properties & props = Properties()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param sourcep points to an Input functor which is TAKEN and deleted when
+	 *        the Action completes.
+	 * @param objectsize is the size of the data source in eight-bit bytes. S3
+	 *        requires this and does not support partial uploads.
+	 * @param props refers to the Properties to be associated with the object.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectPut(
+		const Object & object,
+		Input * sourcep = 0, /* TAKEN */
+		Octets objectsize = 0,
+		const Properties & props = Properties()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param source refers to an Input functor.
+	 * @param objectsize is the size of the data source in eight-bit bytes. S3
+	 *        requires this and does not support partial uploads.
+	 * @param props refers to the Properties to be associated with the object.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectPut(
+		const Object & object,
+		const Multiplex & multiplex,
+		Input & source,
+		Octets objectsize,
+		const Properties & props = Properties()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param sourcep points to an Input functor which is TAKEN and deleted when
+	 *        the Action completes.
+	 * @param objectsize is the size of the data source in eight-bit bytes. S3
+	 *        requires this and does not support partial uploads.
+	 * @param props refers to the Properties to be associated with the object.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectPut(
+		const Object & object,
+		const Multiplex & multiplex,
+		Input * sourcep = 0, /* TAKEN */
+		Octets objectsize = 0,
+		const Properties & props = Properties()
+	);
+
+	/**
 	 * Dtor.
 	 */
 	virtual ~ObjectPut();

@@ -259,6 +259,20 @@ private:
 
 	void initialize();
 
+    /**
+     *  Copy constructor. POISONED.
+     *
+     *  @param that refers to an R-value object of this type.
+     */
+	Action(const Action& that);
+
+    /**
+     *  Assignment operator. POISONED.
+     *
+     *  @param that refers to an R-value object of this type.
+     */
+	Action& operator=(const Action& that);
+
 };
 
 }

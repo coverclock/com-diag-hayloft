@@ -183,6 +183,100 @@ public:
 	);
 
 	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param sink refers to an Output functor.
+	 * @param objectoffset is the offset in eight-bit bytes from the beginning
+	 *        of the object at which the get begins.
+	 * @param objectsize is the size of the data source in eight-bit bytes to
+	 *        be retrieved or zero to retrieve the entire object.
+	 * @param conds refers to the Conditions associated with this get.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectGet(
+		const Object & object,
+		Output & sink,
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param sinkp points to an Output functor which is TAKEN and deleted when
+	 *        the Action completes.
+	 * @param objectoffset is the offset in eight-bit bytes from the beginning
+	 *        of the object at which the get begins.
+	 * @param objectsize is the size of the data source in eight-bit bytes to
+	 *        be retrieved or zero to retrieve the entire object.
+	 * @param conds refers to the Conditions associated with this get.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectGet(
+		const Object & object,
+		Output * sinkp, /* TAKEN */
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param sink refers to an Output functor.
+	 * @param objectoffset is the offset in eight-bit bytes from the beginning
+	 *        of the object at which the get begins.
+	 * @param objectsize is the size of the data source in eight-bit bytes to
+	 *        be retrieved or zero to retrieve the entire object.
+	 * @param conds refers to the Conditions associated with this get.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectGet(
+		const Object & object,
+		const Multiplex & multiplex,
+		Output & sink,
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
+	 * @param object refers to a Object Action from which this Object Action
+	 *        is configured. This reference is only used during construction.
+	 * @param multiplex refers to the Multiplex responsible for executing this
+	 *        Action asynchronously. This reference is only used during
+	 *        construction.
+	 * @param sinkp points to an Output functor which is TAKEN and deleted when
+	 *        the Action completes.
+	 * @param objectoffset is the offset in eight-bit bytes from the beginning
+	 *        of the object at which the get begins.
+	 * @param objectsize is the size of the data source in eight-bit bytes to
+	 *        be retrieved or zero to retrieve the entire object.
+	 * @param conds refers to the Conditions associated with this get.
+	 *        This reference is only used during construction.
+	 */
+	explicit ObjectGet(
+		const Object & object,
+		const Multiplex & multiplex,
+		Output * sinkp, /* TAKEN */
+		Octets objectoffset = 0,
+		Octets objectsize = 0,
+		const Conditions & conds = Conditions()
+	);
+
+	/**
 	 * Dtor.
 	 */
 	virtual ~ObjectGet();
