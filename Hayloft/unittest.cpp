@@ -58,7 +58,7 @@
 #include "com/diag/unittest/s3/convergence.h"
 #endif
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Grant.h"
 #endif
 

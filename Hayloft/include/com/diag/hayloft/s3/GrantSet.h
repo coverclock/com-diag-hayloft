@@ -54,12 +54,9 @@ public:
 	 *
 	 * @param object refers to the Object associated with this object. This
 	 *        reference is only used during construction.
-	 * @param bucket refers to the Bucket associated with this object. This
-	 *        reference is only used during construction.
 	 */
 	explicit GrantSet(
-		const Object & object,
-		const Bucket & bucket
+		const Object & object
 	);
 
 	/**
@@ -67,15 +64,12 @@ public:
 	 *
 	 * @param object refers to the Object associated with this object. This
 	 *        reference is only used during construction.
-	 * @param bucket refers to the Bucket associated with this object. This
-	 *        reference is only used during construction.
 	 * @param grant refers to another grant whose access control list is to be
 	 *        associated with this object. This reference is only used during
 	 *        construction.
 	 */
 	explicit GrantSet(
 		const Object & object,
-		const Bucket & bucket,
 		const Grant & grant
 	);
 
@@ -116,15 +110,12 @@ public:
 	 *
 	 * @param object refers to the Object associated with this object. This
 	 *        reference is only used during construction.
-	 * @param bucket refers to the Bucket associated with this object. This
-	 *        reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
 	explicit GrantSet(
 		const Object & object,
-		const Bucket & bucket,
 		const Multiplex & multiplex
 	);
 
@@ -132,8 +123,6 @@ public:
 	 * Ctor. Use this for the synchronous interface.
 	 *
 	 * @param object refers to the Object associated with this object. This
-	 *        reference is only used during construction.
-	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param grant refers to another grant whose access control list is to be
 	 *        associated with this object. This reference is only used during
@@ -144,7 +133,6 @@ public:
 	 */
 	explicit GrantSet(
 		const Object & object,
-		const Bucket & bucket,
 		const Grant & grant,
 		const Multiplex & multiplex
 	);

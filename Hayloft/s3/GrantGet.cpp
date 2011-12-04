@@ -32,8 +32,8 @@ GrantGet::GrantGet(const Bucket & bucket)
 	execute();
 }
 
-GrantGet::GrantGet(const Object & object, const Bucket & bucket)
-: Grant(object, bucket)
+GrantGet::GrantGet(const Object & object)
+: Grant(object)
 {
 	initialize();
 	execute();
@@ -45,8 +45,8 @@ GrantGet::GrantGet(const Bucket & bucket, const Multiplex & multiplex)
 	initialize();
 }
 
-GrantGet::GrantGet(const Object & object, const Bucket & bucket, const Multiplex & multiplex)
-: Grant(object, bucket, multiplex)
+GrantGet::GrantGet(const Object & object, const Multiplex & multiplex)
+: Grant(object, multiplex)
 {
 	initialize();
 }

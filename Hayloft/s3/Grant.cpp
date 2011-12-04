@@ -46,8 +46,8 @@ Grant::Grant(const Bucket & bucket, const Grant & grant)
 	initialize(&grant);
 }
 
-Grant::Grant(const Object & object, const Bucket & bucket)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
+Grant::Grant(const Object & object)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle())
 , key(object.getKey())
 , keypointer(key.c_str())
 , count(0)
@@ -56,8 +56,8 @@ Grant::Grant(const Object & object, const Bucket & bucket)
 	initialize(0);
 }
 
-Grant::Grant(const Object & object, const Bucket & bucket, const Grant & grant)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
+Grant::Grant(const Object & object, const Grant & grant)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle())
 , key(object.getKey())
 , keypointer(key.c_str())
 , count(0)
@@ -84,8 +84,8 @@ Grant::Grant(const Bucket & bucket, const Grant & grant, const Multiplex & multi
 	initialize(&grant);
 }
 
-Grant::Grant(const Object & object, const Bucket & bucket, const Multiplex & multiplex)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+Grant::Grant(const Object & object, const Multiplex & multiplex)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
 , key(object.getKey())
 , keypointer(key.c_str())
 , count(0)
@@ -94,8 +94,8 @@ Grant::Grant(const Object & object, const Bucket & bucket, const Multiplex & mul
 	initialize(0);
 }
 
-Grant::Grant(const Object & object, const Bucket & bucket, const Grant & grant, const Multiplex & multiplex)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+Grant::Grant(const Object & object, const Grant & grant, const Multiplex & multiplex)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
 , key(object.getKey())
 , keypointer(key.c_str())
 , count(0)
@@ -114,8 +114,6 @@ void Grant::initialize(const Grant * that) {
 		if (keypointer != 0) { logger.debug("Grant@%p: key=\"%s\"\n", this, key.c_str()); }
 	}
 	if ((that != 0) && (that != this)) {
-		this->key = that->key;
-		this->keypointer = that->keypointer;
 		this->owner = that->owner;
 		this->display = that->display;
 		this->count = that->count;
@@ -157,29 +155,29 @@ bool Grant::add(::S3GranteeType type, ::S3Permission permission, const char * ad
 		switch (type) {
 		case ::S3GranteeTypeAmazonCustomerByEmail:
 			if (addressOrOwnerId != 0) {
-				grants->granteeType = type;
-				grants->permission = permission;
-				std::strncpy(grants->grantee.amazonCustomerByEmail.emailAddress, addressOrOwnerId, sizeof(grants->grantee.amazonCustomerByEmail.emailAddress));
-				grants->grantee.amazonCustomerByEmail.emailAddress[sizeof(grants->grantee.amazonCustomerByEmail.emailAddress) - 1] = '\0';
+				grants[count].granteeType = type;
+				grants[count].permission = permission;
+				std::strncpy(grants[count].grantee.amazonCustomerByEmail.emailAddress, addressOrOwnerId, sizeof(grants[count].grantee.amazonCustomerByEmail.emailAddress));
+				grants[count].grantee.amazonCustomerByEmail.emailAddress[sizeof(grants[count].grantee.amazonCustomerByEmail.emailAddress) - 1] = '\0';
 				++count;
 				result = true;
 			}
 			break;
 		case ::S3GranteeTypeCanonicalUser:
 			if ((addressOrOwnerId != 0) && (ownerDisplayName != 0)) {
-				grants->granteeType = type;
-				grants->permission = permission;
-				std::strncpy(grants->grantee.canonicalUser.id, addressOrOwnerId, sizeof(grants->grantee.canonicalUser.id));
-				this->grants->grantee.canonicalUser.id[sizeof(grants->grantee.canonicalUser.id) - 1] = '\0';
-				std::strncpy(grants->grantee.canonicalUser.displayName, ownerDisplayName, sizeof(grants->grantee.canonicalUser.displayName));
-				grants->grantee.canonicalUser.displayName[sizeof(grants->grantee.canonicalUser.displayName) - 1] = '\0';
+				grants[count].granteeType = type;
+				grants[count].permission = permission;
+				std::strncpy(grants[count].grantee.canonicalUser.id, addressOrOwnerId, sizeof(grants[count].grantee.canonicalUser.id));
+				grants[count].grantee.canonicalUser.id[sizeof(grants[count].grantee.canonicalUser.id) - 1] = '\0';
+				std::strncpy(grants[count].grantee.canonicalUser.displayName, ownerDisplayName, sizeof(grants[count].grantee.canonicalUser.displayName));
+				grants[count].grantee.canonicalUser.displayName[sizeof(grants[count].grantee.canonicalUser.displayName) - 1] = '\0';
 				++count;
 				result = true;
 			}
 			break;
 		default:
-			grants->granteeType = type;
-			grants->permission = permission;
+			grants[count].granteeType = type;
+			grants[count].permission = permission;
 			++count;
 			result = true;
 			break;
