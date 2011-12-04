@@ -19,11 +19,17 @@ namespace s3 {
 
 int Grant::dontcare = 0;
 
+Grant::Entry::Entry(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress, const char * ownerDisplayName)
+: type(granteeType)
+, permission(permissionType)
+, owner(((granteeType == ::S3GranteeTypeAmazonCustomerByEmail) || (granteeType == ::S3GranteeTypeCanonicalUser)) ? ((ownerIdOrEmailAddress != 0) ? ownerIdOrEmailAddress : "") : "")
+, display((granteeType == ::S3GranteeTypeCanonicalUser) ? ((ownerDisplayName != 0) ? ownerDisplayName : "") : "")
+{}
+
+
 Grant::Grant()
 : Container("", "", "", "", Protocol::DEFAULT, Style::DEFAULT)
 , keypointer(0)
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(0);
 }
@@ -31,8 +37,6 @@ Grant::Grant()
 Grant::Grant(const Bucket & bucket)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , keypointer(0)
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(0);
 }
@@ -40,8 +44,6 @@ Grant::Grant(const Bucket & bucket)
 Grant::Grant(const Bucket & bucket, const Grant & grant)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , keypointer(0)
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(&grant);
 }
@@ -50,8 +52,6 @@ Grant::Grant(const Object & object)
 : Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle())
 , key(object.getKey())
 , keypointer(key.c_str())
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(0);
 }
@@ -60,8 +60,6 @@ Grant::Grant(const Object & object, const Grant & grant)
 : Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle())
 , key(object.getKey())
 , keypointer(key.c_str())
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(&grant);
 }
@@ -69,8 +67,6 @@ Grant::Grant(const Object & object, const Grant & grant)
 Grant::Grant(const Bucket & bucket, const Multiplex & multiplex)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , keypointer(0)
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(0);
 }
@@ -78,8 +74,6 @@ Grant::Grant(const Bucket & bucket, const Multiplex & multiplex)
 Grant::Grant(const Bucket & bucket, const Grant & grant, const Multiplex & multiplex)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , keypointer(0)
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(&grant);
 }
@@ -88,8 +82,6 @@ Grant::Grant(const Object & object, const Multiplex & multiplex)
 : Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
 , key(object.getKey())
 , keypointer(key.c_str())
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(0);
 }
@@ -98,14 +90,11 @@ Grant::Grant(const Object & object, const Grant & grant, const Multiplex & multi
 : Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
 , key(object.getKey())
 , keypointer(key.c_str())
-, count(0)
-, grants(new ::S3AclGrant [COUNT])
 {
 	initialize(&grant);
 }
 
 Grant::~Grant() {
-	delete [] grants;
 }
 
 void Grant::initialize(const Grant * that) {
@@ -116,9 +105,40 @@ void Grant::initialize(const Grant * that) {
 	if ((that != 0) && (that != this)) {
 		this->owner = that->owner;
 		this->display = that->display;
-		this->count = that->count;
-		if (this->count > COUNT) { this->count = COUNT; }
-		std:memcpy(this->grants, that->grants, sizeof(that->grants[0]) * this->count);
+		List::const_iterator here = that->list.begin();
+		List::const_iterator there = that->list.end();
+		while (here != there) {
+			Entry entry(here->getGranteeType(), here->getPermission(), here->getOwnerIdOrEmailAddress(), here->getOwnerDisplayName());
+			list.push_back(entry);
+			++here;
+		}
+	}
+}
+
+void Grant::import(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress, const char * ownerDisplayName) {
+	Entry entry(granteeType, permissionType, ownerIdOrEmailAddress, ownerDisplayName);
+	list.push_back(entry);
+}
+
+void Grant::import(int count, ::S3AclGrant * grants) {
+	for (int ii = 0; ii < count; ++ii) {
+		switch (grants[ii].granteeType) {
+			case ::S3GranteeTypeAmazonCustomerByEmail: {
+				grants[ii].grantee.amazonCustomerByEmail.emailAddress[sizeof(grants[ii].grantee.amazonCustomerByEmail.emailAddress) - 1] = '\0';
+				Entry entry(grants[ii].granteeType, grants[ii].permission, grants[ii].grantee.amazonCustomerByEmail.emailAddress, "");
+				list.push_back(entry);
+			} break;
+			case ::S3GranteeTypeCanonicalUser: {
+				grants[ii].grantee.canonicalUser.id[sizeof(grants[ii].grantee.canonicalUser.id) - 1] = '\0';
+				grants[ii].grantee.canonicalUser.displayName[sizeof(grants[ii].grantee.canonicalUser.displayName) - 1] = '\0';
+				Entry entry(grants[ii].granteeType, grants[ii].permission, grants[ii].grantee.canonicalUser.id, grants[ii].grantee.canonicalUser.displayName);
+				list.push_back(entry);
+			} break;
+			default: {
+				Entry entry(grants[ii].granteeType, grants[ii].permission, "", "");
+				list.push_back(entry);
+			} break;
+		}
 	}
 }
 
@@ -126,6 +146,8 @@ bool Grant::import(const char * xml) {
 	bool result = false;
 	char ownerid[OWNER_LEN];
 	char ownerdisplayname[DISPLAY_LEN];
+	int count;
+	::S3AclGrant * grants = new ::S3AclGrant [COUNT];
 	// libs3 has a minor flaw (the only one I've found): S3_convert_acl()
 	// doesn't declare the XML string const. But it can be const, because
 	// it is merely passed to XML2's simplexml_add() which _does_ declare it
@@ -144,45 +166,10 @@ bool Grant::import(const char * xml) {
 		owner = ownerid;
 		ownerdisplayname[sizeof(ownerdisplayname) - 1] = '\0';
 		display = ownerdisplayname;
+		import(count, grants);
 		result = true;
 	}
-	return result;
-}
-
-bool Grant::add(::S3GranteeType type, ::S3Permission permission, const char * addressOrOwnerId, const char * ownerDisplayName) {
-	bool result = false;
-	if (count < COUNT) {
-		switch (type) {
-		case ::S3GranteeTypeAmazonCustomerByEmail:
-			if (addressOrOwnerId != 0) {
-				grants[count].granteeType = type;
-				grants[count].permission = permission;
-				std::strncpy(grants[count].grantee.amazonCustomerByEmail.emailAddress, addressOrOwnerId, sizeof(grants[count].grantee.amazonCustomerByEmail.emailAddress));
-				grants[count].grantee.amazonCustomerByEmail.emailAddress[sizeof(grants[count].grantee.amazonCustomerByEmail.emailAddress) - 1] = '\0';
-				++count;
-				result = true;
-			}
-			break;
-		case ::S3GranteeTypeCanonicalUser:
-			if ((addressOrOwnerId != 0) && (ownerDisplayName != 0)) {
-				grants[count].granteeType = type;
-				grants[count].permission = permission;
-				std::strncpy(grants[count].grantee.canonicalUser.id, addressOrOwnerId, sizeof(grants[count].grantee.canonicalUser.id));
-				grants[count].grantee.canonicalUser.id[sizeof(grants[count].grantee.canonicalUser.id) - 1] = '\0';
-				std::strncpy(grants[count].grantee.canonicalUser.displayName, ownerDisplayName, sizeof(grants[count].grantee.canonicalUser.displayName));
-				grants[count].grantee.canonicalUser.displayName[sizeof(grants[count].grantee.canonicalUser.displayName) - 1] = '\0';
-				++count;
-				result = true;
-			}
-			break;
-		default:
-			grants[count].granteeType = type;
-			grants[count].permission = permission;
-			++count;
-			result = true;
-			break;
-		}
-	}
+	delete grants;
 	return result;
 }
 

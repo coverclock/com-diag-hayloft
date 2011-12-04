@@ -48,7 +48,7 @@ public:
 
 	public:
 
-		Entry(
+		explicit Entry(
 			const char * bucketname,
 			const char * ownerId,
 			const char * ownerDisplayName,

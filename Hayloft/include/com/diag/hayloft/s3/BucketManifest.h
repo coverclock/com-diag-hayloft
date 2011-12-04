@@ -51,7 +51,7 @@ public:
 
 	public:
 
-		Entry(
+		explicit Entry(
 			const char * objectname,
 			Epochalseconds lastModified,
 			const char * eTag,

@@ -253,7 +253,7 @@ void show(const ServiceManifest & manifest, Logger::Level level) {
 			ticks = (created * numerator) / denominator;
 			commonera.fromTicks(ticks);
 			stamp = timestamp.iso8601(commonera);
-			logger.log(level, "ServiceManifest%p: canonical=\"%s\" owner=\"%s\" display=\"%s\" created=%lld=\"%s\"\n", &manifest, canonical, owner, display, created, stamp);
+			logger.log(level, "ServiceManifest@%p: canonical=\"%s\" owner=\"%s\" display=\"%s\" created=%lld=\"%s\"\n", &manifest, canonical, owner, display, created, stamp);
 			++here;
 		}
 	}
@@ -266,30 +266,40 @@ void show(const BucketManifest & manifest, Logger::Level level) {
 		ticks_t numerator;
 		ticks_t denominator;
 		platform.frequency(numerator, denominator);
-		BucketManifest::Manifest::const_iterator here = manifest.getManifest().begin();
-		BucketManifest::Manifest::const_iterator there = manifest.getManifest().end();
-		const char * key;
-		Epochalseconds modified;
-		const char * etag;
-		Octets size;
-		const char * owner;
-		const char * display;
-		ticks_t ticks;
-		::com::diag::desperado::CommonEra commonera;
-		::com::diag::desperado::TimeStamp timestamp;
-		const char * stamp;
-		while (here != there) {
-			key = here->second.getKey();
-			modified = here->second.getModified();
-			ticks = (modified * numerator) / denominator;
-			commonera.fromTicks(ticks);
-			stamp = timestamp.iso8601(commonera);
-			etag = here->second.getETag();
-			size = here->second.getSize();;
-			owner = here->second.getOwnerId();
-			display = here->second.getOwnerDisplayName();
-			logger.log(level, "BucketManifest%p: key=\"%s\" etag=\"%s\" size=%llu owner=\"%s\" display=\"%s\" modified=%lld=\"%s\"\n", &manifest, key, etag, size, owner, display, modified, stamp);
-			++here;
+		{
+			BucketManifest::Manifest::const_iterator here = manifest.getManifest().begin();
+			BucketManifest::Manifest::const_iterator there = manifest.getManifest().end();
+			const char * key;
+			Epochalseconds modified;
+			const char * etag;
+			Octets size;
+			const char * owner;
+			const char * display;
+			ticks_t ticks;
+			::com::diag::desperado::CommonEra commonera;
+			::com::diag::desperado::TimeStamp timestamp;
+			const char * stamp;
+			while (here != there) {
+				key = here->second.getKey();
+				modified = here->second.getModified();
+				ticks = (modified * numerator) / denominator;
+				commonera.fromTicks(ticks);
+				stamp = timestamp.iso8601(commonera);
+				etag = here->second.getETag();
+				size = here->second.getSize();;
+				owner = here->second.getOwnerId();
+				display = here->second.getOwnerDisplayName();
+				logger.log(level, "BucketManifest@%p: key=\"%s\" etag=\"%s\" size=%llu owner=\"%s\" display=\"%s\" modified=%lld=\"%s\"\n", &manifest, key, etag, size, owner, display, modified, stamp);
+				++here;
+			}
+		}
+		{
+			BucketManifest::Common::const_iterator here = manifest.getCommon().begin();
+			BucketManifest::Common::const_iterator there = manifest.getCommon().begin();
+			while (here != there) {
+				logger.log(level, "BucketManifest@%p: common=\"%s\"\n", here->c_str());
+				++here;
+			}
 		}
 	}
 }
@@ -301,10 +311,24 @@ void show(const Grant & grant, Logger::Level level) {
 		logger.log(level, "Grant@%p: canonical=\"%s\"\n", &grant, grant.getCanonical());
 		logger.log(level, "Grant@%p: owner=\"%s\"\n", &grant, grant.getOwnerId());
 		logger.log(level, "Grant@%p: display=\"%s\"\n", &grant, grant.getOwnerDisplayName());
-		int count;
-		const ::S3AclGrant * grants = grant.getGrants(count);
-		logger.log(level, "Grant@%p: count=%d\n", &grant, count);
-		show(grants, count, level);
+		Grant::List::const_iterator here = grant.getAccessControlList().begin();
+		Grant::List::const_iterator there = grant.getAccessControlList().end();
+		while (here != there) {
+			::S3GranteeType granteeType = here->getGranteeType();
+			::S3Permission permission = here->getPermission();
+			switch (granteeType) {
+			case ::S3GranteeTypeAmazonCustomerByEmail:
+				logger.log(level, "Grant@%p: type=%d=\"%s\" permission=%d=\"%s\" email=\"%s\"\n", &grant, granteeType, tostring(granteeType), permission, tostring(permission), here->getOwnerIdOrEmailAddress());
+				break;
+			case ::S3GranteeTypeCanonicalUser:
+				logger.log(level, "Grant@%p: type=%d=\"%s\" permission=%d=\"%s\" owner=\"%s\" display=\"%s\"\n", &grant, granteeType, tostring(granteeType), permission, tostring(permission), here->getOwnerIdOrEmailAddress(), here->getOwnerDisplayName());
+				break;
+			default:
+				logger.log(level, "Grant@%p: type=%d=\"%s\" permission=%d=\"%s\"\n", &grant, granteeType, tostring(granteeType), permission, tostring(permission));
+				break;
+			}
+			++here;
+		}
 	}
 }
 

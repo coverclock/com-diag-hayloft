@@ -23,6 +23,18 @@ namespace s3 {
  */
 class GrantSet : public Grant {
 
+private:
+
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+
+protected:
+
+	int count;
+
+	::S3AclGrant * grants;
+
+	::S3ResponseHandler handler;
+
 public:
 
 	/**
