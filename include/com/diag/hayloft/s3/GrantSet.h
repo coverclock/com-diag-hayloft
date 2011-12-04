@@ -19,7 +19,7 @@ namespace hayloft {
 namespace s3 {
 
 /**
- *
+ * GrantSet establishes a new access control list for an S3 bucket or object.
  */
 class GrantSet : public Grant {
 

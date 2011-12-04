@@ -73,6 +73,17 @@ public:
 
 	public:
 
+		/**
+		 * Ctor.
+		 *
+		 * @param granteeType is the libs3 grantee type.
+		 * @param permissionType is the libs3 permission.
+		 * @param ownerIdOrEmailAddress is null or a C string that is an owner
+		 *        ID or an electronic mail address, depending on the grantee
+		 *        type.
+		 * @param ownerDisplayName is the null or a C string that is an owner
+		 *        display name, depending on the grantee type.
+		 */
 		explicit Entry(
 			::S3GranteeType granteeType,
 			::S3Permission permissionType,
@@ -80,18 +91,40 @@ public:
 			const char * ownerDisplayName
 		);
 
+		/**
+		 * Get the grantee type.
+		 *
+		 * @return the grantee type.
+		 */
 		::S3GranteeType getGranteeType() const { return type; }
 
+		/**
+		 * Get the permission.
+		 *
+		 * @return the permission.
+		 */
 		::S3Permission getPermission() const { return permission; }
 
+		/**
+		 * Get the C string that is the owner ID, electronic mail address, or
+		 * empty, dpending on the grantee type.
+		 *
+		 * @return the owner ID or email address.
+		 */
 		const char * getOwnerIdOrEmailAddress() const { return ((type == ::S3GranteeTypeCanonicalUser) || (type == ::S3GranteeTypeAmazonCustomerByEmail)) ? owner.c_str() : ""; }
 
+		/**
+		 * Get the C string that is the owner display name or empty, depending
+		 * on the grantee type.
+		 *
+		 * @return the owner display name.
+		 */
 		const char * getOwnerDisplayName() const { return (type == ::S3GranteeTypeCanonicalUser) ?  display.c_str() : ""; }
 
 	};
 
 	/**
-	 * The Common list contains strings of common Object name prefixes.
+	 * The list contains each individual entry in the access control list.
 	 */
 	typedef std::list<Entry> List;
 
@@ -262,16 +295,56 @@ public:
 	 */
 	const char * getOwnerDisplayName() const { return display.c_str(); }
 
+	/**
+	 * Set the owner ID for this Grant. S3 requires this and that it be valid.
+	 *
+	 * @param ownerId is a C string that is the owner ID.
+	 * @return a reference to this object.
+	 */
 	Grant & setOwnerId(const char * ownerId) { owner = ownerId; return *this; }
 
+	/**
+	 * Set the owner display name for this Grant. S3 requires this and that it
+	 * be valid.
+	 */
 	Grant & setOwnerDisplayName(const char * ownerDisplayName) { display = ownerDisplayName; return *this; }
 
+	/**
+	 * Get a const reference to the access control list.
+	 *
+	 * @return a const reference ot the access control list.
+	 */
 	const List & getAccessControlList() const { return list; }
 
+	/**
+	 * Import (add) a new access control list entry.
+	 *
+	 * @param granteeType is the libs3 grantee type.
+	 * @param permissionType is the libs3 permission.
+	 * @param ownerIdOrEmailAddress is null or a C string that is an owner
+	 *        ID or an electronic mail address, depending on the grantee
+	 *        type.
+	 * @param ownerDisplayName is the null or a C string that is an owner
+	 *        display name, depending on the grantee type.
+	 */
 	void import(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress = 0, const char * ownerDisplayName = 0);
 
+	/**
+	 * Import (add) new access control list entries from a C string containing
+	 * XML.
+	 *
+	 * @param xml points to the XML C string.
+	 * @return true of the XML parsed successfully, false otherwise.
+	 */
 	bool import(const char * xml);
 
+	/**
+	 * Import (add) new access control list entries from a libs3 ACL grant
+	 * structure array.
+	 *
+	 * @param count is the number of entries in the array.
+	 * @param grants points to the array.
+	 */
 	void import(int count, ::S3AclGrant * grants);
 
 private:
