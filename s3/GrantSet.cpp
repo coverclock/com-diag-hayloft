@@ -30,15 +30,15 @@ GrantSet::GrantSet(const Bucket & bucket, const Grant & grant)
 	execute();
 }
 
-GrantSet::GrantSet(const Object & object, const Bucket & bucket)
-: Grant(object, bucket)
+GrantSet::GrantSet(const Object & object)
+: Grant(object)
 {
 	initialize();
 	execute();
 }
 
-GrantSet::GrantSet(const Object & object, const Bucket & bucket, const Grant & grant)
-: Grant(object, bucket, grant)
+GrantSet::GrantSet(const Object & object, const Grant & grant)
+: Grant(object, grant)
 {
 	initialize();
 	execute();
@@ -56,14 +56,14 @@ GrantSet::GrantSet(const Bucket & bucket, const Grant & grant, const Multiplex &
 	initialize();
 }
 
-GrantSet::GrantSet(const Object & object, const Bucket & bucket, const Multiplex & multiplex)
-: Grant(object, bucket, multiplex)
+GrantSet::GrantSet(const Object & object, const Multiplex & multiplex)
+: Grant(object, multiplex)
 {
 	initialize();
 }
 
-GrantSet::GrantSet(const Object & object, const Bucket & bucket, const Grant & grant, const Multiplex & multiplex)
-: Grant(object, bucket, grant, multiplex)
+GrantSet::GrantSet(const Object & object, const Grant & grant, const Multiplex & multiplex)
+: Grant(object, grant, multiplex)
 {
 	initialize();
 }

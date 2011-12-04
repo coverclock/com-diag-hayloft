@@ -43,9 +43,9 @@ TEST_F(GrantTest, GetSynchronous) {
 	static const char OBJECT[] = "Object.txt";
 	static const Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate(BUCKET);
-	ASSERT_TRUE(complete_until_successful(bucketcreate));
+	ASSERT_TRUE(complete(bucketcreate));
 	GrantGet grantgetbucket(bucketcreate);
-	ASSERT_TRUE(complete_until_successful(grantgetbucket));
+	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket, LEVEL);
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
@@ -60,13 +60,13 @@ TEST_F(GrantTest, GetSynchronous) {
 		objectput.start();
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
-	GrantGet grantgetobject(objectput, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(grantgetobject));
+	GrantGet grantgetobject(objectput);
+	ASSERT_TRUE(complete(grantgetobject));
 	show(grantgetobject, LEVEL);
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(objectdelete));
+	ASSERT_TRUE(complete(objectdelete));
 	BucketDelete bucketdelete(BUCKET);
-	ASSERT_TRUE(complete_until_successful(bucketdelete));
+	ASSERT_TRUE(complete(bucketdelete));
 }
 
 TEST_F(GrantTest, GetAsynchronous) {
@@ -76,9 +76,9 @@ TEST_F(GrantTest, GetAsynchronous) {
 	static const Logger::Level LEVEL = Logger::PRINT;
 	Multiplex multiplex;
 	BucketCreate bucketcreate(BUCKET, multiplex);
-	ASSERT_TRUE(complete_until_successful(bucketcreate));
+	ASSERT_TRUE(complete(bucketcreate));
 	GrantGet grantgetbucket(bucketcreate, multiplex);
-	ASSERT_TRUE(complete_until_successful(grantgetbucket));
+	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket, LEVEL);
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
@@ -95,13 +95,13 @@ TEST_F(GrantTest, GetAsynchronous) {
 		objectput.start();
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
-	GrantGet grantgetobject(objectput, bucketcreate, multiplex);
-	ASSERT_TRUE(complete_until_successful(grantgetobject));
+	GrantGet grantgetobject(objectput, multiplex);
+	ASSERT_TRUE(complete(grantgetobject));
 	show(grantgetobject, LEVEL);
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
-	ASSERT_TRUE(complete_until_successful(objectdelete));
+	ASSERT_TRUE(complete(objectdelete));
 	BucketDelete bucketdelete(BUCKET, multiplex);
-	ASSERT_TRUE(complete_until_successful(bucketdelete));
+	ASSERT_TRUE(complete(bucketdelete));
 }
 
 TEST_F(GrantTest, GetPublicRead) {
@@ -113,9 +113,9 @@ TEST_F(GrantTest, GetPublicRead) {
 	Context context;
 	context.setAccess(access);
 	BucketCreate bucketcreate(BUCKET);
-	ASSERT_TRUE(complete_until_successful(bucketcreate));
+	ASSERT_TRUE(complete(bucketcreate));
 	GrantGet grantgetbucket(bucketcreate);
-	ASSERT_TRUE(complete_until_successful(grantgetbucket));
+	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket, LEVEL);
 	Properties properties;
 	properties.setAccess(access);
@@ -132,13 +132,13 @@ TEST_F(GrantTest, GetPublicRead) {
 		objectput.start();
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
-	GrantGet grantgetobject(objectput, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(grantgetobject));
+	GrantGet grantgetobject(objectput);
+	ASSERT_TRUE(complete(grantgetobject));
 	show(grantgetobject, LEVEL);
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(objectdelete));
+	ASSERT_TRUE(complete(objectdelete));
 	BucketDelete bucketdelete(BUCKET);
-	ASSERT_TRUE(complete_until_successful(bucketdelete));
+	ASSERT_TRUE(complete(bucketdelete));
 }
 
 TEST_F(GrantTest, GetSet) {
@@ -148,7 +148,7 @@ TEST_F(GrantTest, GetSet) {
 	static const Logger::Level LEVEL = Logger::PRINT;
 	/**/
 	BucketCreate bucketcreate(BUCKET);
-	ASSERT_TRUE(complete_until_successful(bucketcreate));
+	ASSERT_TRUE(complete(bucketcreate));
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
@@ -164,8 +164,8 @@ TEST_F(GrantTest, GetSet) {
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
-	GrantGet grantgetobject1(objectput, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(grantgetobject1));
+	GrantGet grantgetobject1(objectput);
+	ASSERT_TRUE(complete(grantgetobject1));
 	show(grantgetobject1, LEVEL);
 	int count = -1;
 	EXPECT_NE(grantgetobject1.getGrants(count), (::S3AclGrant*)0);
@@ -174,25 +174,26 @@ TEST_F(GrantTest, GetSet) {
 	Grant grant;
 	grant.setOwnerId(grantgetobject1.getOwnerId());
 	grant.setOwnerDisplayName(grantgetobject1.getOwnerDisplayName());
-	grant.add(::S3GranteeTypeAllUsers, ::S3PermissionRead, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
+	grant.add(::S3GranteeTypeCanonicalUser, ::S3PermissionFullControl, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
+	grant.add(::S3GranteeTypeAllUsers, ::S3PermissionRead);
 	show(grant, LEVEL);
 	/**/
-	GrantSet grantsetobject(objectput, bucketcreate, grant);
-	ASSERT_TRUE(complete_until_successful(grantsetobject));
+	GrantSet grantsetobject(objectput, grant);
+	EXPECT_TRUE(complete(grantsetobject));
 	show(grantsetobject, LEVEL);
 	/**/
-	GrantGet grantgetobject2(objectput, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(grantgetobject2));
+	GrantGet grantgetobject2(objectput);
+	EXPECT_TRUE(complete(grantgetobject2));
 	show(grantgetobject2, LEVEL);
 	count = -1;
 	EXPECT_NE(grantgetobject2.getGrants(count), (::S3AclGrant*)0);
 	EXPECT_EQ(count, 2);
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
-	ASSERT_TRUE(complete_until_successful(objectdelete));
+	EXPECT_TRUE(complete(objectdelete));
 	/**/
 	BucketDelete bucketdelete(BUCKET);
-	ASSERT_TRUE(complete_until_successful(bucketdelete));
+	EXPECT_TRUE(complete(bucketdelete));
 }
 
 }
