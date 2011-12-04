@@ -33,6 +33,10 @@ protected:
 
 	char ownerdisplayname[DISPLAY_LEN];
 
+	int count;
+
+	::S3AclGrant * grants;
+
 	::S3ResponseHandler handler;
 
 public:

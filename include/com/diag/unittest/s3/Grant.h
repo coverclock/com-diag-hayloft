@@ -167,16 +167,17 @@ TEST_F(GrantTest, GetSet) {
 	GrantGet grantgetobject1(objectput);
 	ASSERT_TRUE(complete(grantgetobject1));
 	show(grantgetobject1, LEVEL);
-	int count = -1;
-	EXPECT_NE(grantgetobject1.getGrants(count), (::S3AclGrant*)0);
-	EXPECT_EQ(count, 1);
+	EXPECT_EQ(grantgetobject1.getAccessControlList().size(), 1);
 	/**/
 	Grant grant;
 	grant.setOwnerId(grantgetobject1.getOwnerId());
 	grant.setOwnerDisplayName(grantgetobject1.getOwnerDisplayName());
-	grant.add(::S3GranteeTypeCanonicalUser, ::S3PermissionFullControl, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
-	grant.add(::S3GranteeTypeAllUsers, ::S3PermissionRead);
+	grant.import(::S3GranteeTypeCanonicalUser, ::S3PermissionFullControl, grantgetobject1.getOwnerId(), grantgetobject1.getOwnerDisplayName());
+	grant.import(::S3GranteeTypeAmazonCustomerByEmail, ::S3PermissionRead, "jsloan@diag.com");
+	grant.import(::S3GranteeTypeAllUsers, ::S3PermissionRead);
+	grant.import(::S3GranteeTypeAllAwsUsers, ::S3PermissionRead);
 	show(grant, LEVEL);
+	EXPECT_EQ(grant.getAccessControlList().size(), 4);
 	/**/
 	GrantSet grantsetobject(objectput, grant);
 	EXPECT_TRUE(complete(grantsetobject));
@@ -185,9 +186,7 @@ TEST_F(GrantTest, GetSet) {
 	GrantGet grantgetobject2(objectput);
 	EXPECT_TRUE(complete(grantgetobject2));
 	show(grantgetobject2, LEVEL);
-	count = -1;
-	EXPECT_NE(grantgetobject2.getGrants(count), (::S3AclGrant*)0);
-	EXPECT_EQ(count, 2);
+	EXPECT_EQ(grantgetobject2.getAccessControlList().size(), 4);
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
 	EXPECT_TRUE(complete(objectdelete));
