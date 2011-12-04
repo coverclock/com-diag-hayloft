@@ -48,6 +48,16 @@ public:
 
 	public:
 
+		/**
+		 * Ctor.
+		 *
+		 * @param bucketname is the canonical bucket name.
+		 * @param ownerId is the ID of the owner of the bucket.
+		 * @param ownerDisplayName is the display name of the owner of the
+		 *        bucket.
+		 * @param creationDateSeconds is the date and time of creation in
+		 *        seconds since the UNIX epoch.
+		 */
 		explicit Entry(
 			const char * bucketname,
 			const char * ownerId,
@@ -55,12 +65,32 @@ public:
 			Epochalseconds creationDateSeconds
 		);
 
+		/**
+		 * Get the canonical bucket name.
+		 *
+		 * @return the canonical bucket name.
+		 */
 		const char * getCanonical() const { return canonical.c_str(); }
 
+		/**
+		 * Get the owner ID.
+		 *
+		 * @return the owner ID.
+		 */
 		const char * getOwnerId() const { return owner.c_str(); }
 
+		/**
+		 * Get the owner display name.
+		 *
+		 * @return the owner display name.
+		 */
 		const char * getOwnerDisplayName() const { return display.c_str(); }
 
+		/**
+		 * Get the date and time of creation in seconds since the UNIX epoch.
+		 *
+		 * @return the date and time of creation.
+		 */
 		Epochalseconds getCreated() const { return created; }
 
 	};

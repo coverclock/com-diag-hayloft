@@ -51,6 +51,19 @@ public:
 
 	public:
 
+		/**
+		 * Ctor.
+		 *
+		 * @param objectname is the name of the S3 object in the S3 bucket.
+		 * @param lastModified is the date and time of last modification in
+		 *        seconds since the UNIX Epoch.
+		 * @param eTag is a C string that is the entity tag.
+		 * @param objectsize is the object size in bytes (octets).
+		 * @param ownerId is a C string that is the ID of the owner of the
+		 *        S3 object.
+		 * @param ownerDisplayName is a C string that is the display name of
+		 *        the owner of the S3 object.
+		 */
 		explicit Entry(
 			const char * objectname,
 			Epochalseconds lastModified,
@@ -60,16 +73,47 @@ public:
 			const char * ownerDisplayName
 		);
 
+		/**
+		 * Get the key (object name).
+		 *
+		 * @return the key.
+		 */
 		const char * getKey() const { return key.c_str(); }
 
+		/**
+		 * Get the date and time of last modification in seconds since the UNIX
+		 * Epoch.
+		 *
+		 * @return the date and time of last modification.
+		 */
 		Epochalseconds getModified() const { return modified; }
 
+		/**
+		 * Get the entity tag.
+		 *
+		 * @return the entity tag.
+		 */
 		const char * getETag() const { return etag.c_str(); }
 
+		/**
+		 * Get the size in bytes (octets).
+		 *
+		 * @return the size.
+		 */
 		Octets getSize() const { return size; }
 
+		/**
+		 * Get the owner ID.
+		 *
+		 * @return the owner ID.
+		 */
 		const char * getOwnerId() const { return owner.c_str(); }
 
+		/**
+		 * Get the owner display name.
+		 *
+		 * @return the owner display name.
+		 */
 		const char * getOwnerDisplayName() const { return display.c_str(); }
 
 	};

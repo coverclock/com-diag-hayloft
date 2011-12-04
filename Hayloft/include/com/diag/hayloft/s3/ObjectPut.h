@@ -92,7 +92,8 @@ public:
 	 *        reference is only used during construction.
 	 * @param source refers to an Input functor.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */
@@ -114,7 +115,8 @@ public:
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
 	 *        the Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */
@@ -138,7 +140,8 @@ public:
 	 *        construction.
 	 * @param source refers to an Input functor.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */
@@ -164,7 +167,8 @@ public:
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
 	 *        the Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */
@@ -184,7 +188,8 @@ public:
 	 *        is configured. This reference is only used during construction.
 	 * @param source refers to an Input functor.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */
@@ -203,7 +208,8 @@ public:
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
 	 *        the Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */
@@ -247,7 +253,8 @@ public:
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
 	 *        the Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
-	 *        requires this and does not support partial uploads.
+	 *        requires this and does not support partial uploads (or at least
+	 *        not when libs3 was written).
 	 * @param props refers to the Properties to be associated with the object.
 	 *        This reference is only used during construction.
 	 */

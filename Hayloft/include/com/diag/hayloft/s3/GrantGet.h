@@ -19,7 +19,7 @@ namespace hayloft {
 namespace s3 {
 
 /**
- *
+ * GrantGet retrieves the access control list for an S3 bucket or object.
  */
 class GrantGet : public Grant {
 

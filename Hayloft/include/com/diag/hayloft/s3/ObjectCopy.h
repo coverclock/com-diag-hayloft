@@ -143,7 +143,7 @@ public:
 	 */
 	explicit ObjectCopy(
 			const Object & fromobject,
-			const Object & tofromobject,
+			const Object & toobject,
 			const Properties & props = Properties()
 	);
 
@@ -163,7 +163,7 @@ public:
 	 */
 	explicit ObjectCopy(
 		const Object & fromobject,
-		const Object & tofromobject,
+		const Object & toobject,
 		const Multiplex & multiplex,
 		const Properties & props = Properties()
 	);
