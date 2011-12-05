@@ -55,6 +55,7 @@ TEST_F(SecondsTest, Seconds) {
 	EXPECT_NE(minute, BAD);
 	EXPECT_NE(second, BAD);
 	printf("ZULU=<%4.4u-%2.2u-%2.2u %2.2u:%2.2u:%2.2u>\n", year, month, day, hour, minute, second);
+	ASSERT_EQ(std::system("date -u"), 0);
 	const char * juliet = seconds.juliet(now);
 	ASSERT_NE(juliet, (char *)0);
 	printf("JULIET=\"%s\"\n", juliet);

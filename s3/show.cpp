@@ -15,10 +15,9 @@
 #include "com/diag/hayloft/s3/ServiceManifest.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/s3/Grant.h"
+#include "com/diag/hayloft/Seconds.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
-#include "com/diag/desperado/CommonEra.h"
-#include "com/diag/desperado/TimeStamp.h"
 #include "libs3.h"
 
 namespace com {
@@ -169,15 +168,8 @@ void show(const Object & object, Logger::Level level) {
 		logger.log(level, "Object@%p: contentLength=%llu\n", &object, object.getContentLength());
 		Epochalseconds modified = object.getModificationTime();
 		if (modified >= 0) {
-			ticks_t numerator;
-			ticks_t denominator;
-			::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
-			ticks_t ticks = (modified * numerator) / denominator;
-			::com::diag::desperado::CommonEra commonera;
-			commonera.fromTicks(ticks);
-			::com::diag::desperado::TimeStamp timestamp;
-			const char * stamp = timestamp.iso8601(commonera);
-			logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, modified, stamp);
+			Seconds seconds;
+			logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, modified, seconds.zulu(modified));
 		} else {
 			logger.log(level, "Object@%p: modificationTime=%lld\n", &object, modified);
 		}
@@ -231,29 +223,19 @@ void show(const Bucket & bucket, Logger::Level level) {
 void show(const ServiceManifest & manifest, Logger::Level level) {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(level)) {
-		::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
-		ticks_t numerator;
-		ticks_t denominator;
-		platform.frequency(numerator, denominator);
 		ServiceManifest::Manifest::const_iterator here = manifest.getManifest().begin();
 		ServiceManifest::Manifest::const_iterator there = manifest.getManifest().end();
 		const char * canonical;
 		const char * owner;
 		const char * display;
 		Epochalseconds created;
-		ticks_t ticks;
-		::com::diag::desperado::CommonEra commonera;
-		::com::diag::desperado::TimeStamp timestamp;
-		const char * stamp;
+		Seconds seconds;
 		while (here != there) {
 			canonical = here->second.getCanonical();
 			owner = here->second.getOwnerId();
 			display = here->second.getOwnerDisplayName();
 			created = here->second.getCreated();
-			ticks = (created * numerator) / denominator;
-			commonera.fromTicks(ticks);
-			stamp = timestamp.iso8601(commonera);
-			logger.log(level, "ServiceManifest@%p: canonical=\"%s\" owner=\"%s\" display=\"%s\" created=%lld=\"%s\"\n", &manifest, canonical, owner, display, created, stamp);
+			logger.log(level, "ServiceManifest@%p: canonical=\"%s\" owner=\"%s\" display=\"%s\" created=%lld=\"%s\"\n", &manifest, canonical, owner, display, created, seconds.zulu(created));
 			++here;
 		}
 	}
@@ -262,10 +244,6 @@ void show(const ServiceManifest & manifest, Logger::Level level) {
 void show(const BucketManifest & manifest, Logger::Level level) {
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(level)) {
-		::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
-		ticks_t numerator;
-		ticks_t denominator;
-		platform.frequency(numerator, denominator);
 		{
 			BucketManifest::Manifest::const_iterator here = manifest.getManifest().begin();
 			BucketManifest::Manifest::const_iterator there = manifest.getManifest().end();
@@ -275,21 +253,15 @@ void show(const BucketManifest & manifest, Logger::Level level) {
 			Octets size;
 			const char * owner;
 			const char * display;
-			ticks_t ticks;
-			::com::diag::desperado::CommonEra commonera;
-			::com::diag::desperado::TimeStamp timestamp;
-			const char * stamp;
+			Seconds seconds;
 			while (here != there) {
 				key = here->second.getKey();
 				modified = here->second.getModified();
-				ticks = (modified * numerator) / denominator;
-				commonera.fromTicks(ticks);
-				stamp = timestamp.iso8601(commonera);
 				etag = here->second.getETag();
 				size = here->second.getSize();;
 				owner = here->second.getOwnerId();
 				display = here->second.getOwnerDisplayName();
-				logger.log(level, "BucketManifest@%p: key=\"%s\" etag=\"%s\" size=%llu owner=\"%s\" display=\"%s\" modified=%lld=\"%s\"\n", &manifest, key, etag, size, owner, display, modified, stamp);
+				logger.log(level, "BucketManifest@%p: key=\"%s\" etag=\"%s\" size=%llu owner=\"%s\" display=\"%s\" modified=%lld=\"%s\"\n", &manifest, key, etag, size, owner, display, modified, seconds.zulu(modified));
 				++here;
 			}
 		}

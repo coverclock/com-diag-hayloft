@@ -71,7 +71,7 @@ public:
 	 *
 	 * @return the current time in seconds since the UNIX epoch.
 	 */
-	Epochalseconds now();
+	Epochalseconds now() const;
 
 	/**
 	 * Compute the time in units of seconds since the UNIX Epoch for an
@@ -93,7 +93,7 @@ public:
 	 *        first second of the minute is 0.
 	 * @return the date and time in seconds since the UNIX epoch.
 	 */
-	Epochalseconds then(unsigned int year = 1970, unsigned int month = 1, unsigned int day = 1, unsigned int hour = 0, unsigned int minute = 0, unsigned int second = 0);
+	Epochalseconds then(unsigned int year = 1970, unsigned int month = 1, unsigned int day = 1, unsigned int hour = 0, unsigned int minute = 0, unsigned int second = 0) const;
 
 	/**
 	 * Generate a C string that is a ISO8601-ish timestamp for Common Era date
