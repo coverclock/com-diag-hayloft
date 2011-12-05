@@ -19,22 +19,25 @@ namespace s3 {
 
 ::S3Status Object::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
-	if ((responseProperties->contentType != 0) && (responseProperties->contentType[0] != '\0')) { that->type = responseProperties->contentType; }
-	that->length = responseProperties->contentLength;
-	if ((responseProperties->eTag != 0) && (responseProperties->eTag[0] != '\0')) { that->etag = responseProperties->eTag; }
-	that->modified = responseProperties->lastModified;
-	if (responseProperties->metaData != 0) {
-		for (int ii = 0; ii < responseProperties->metaDataCount; ++ii) {
-			if (
-				(responseProperties->metaData[ii].name != 0) &&
-				(responseProperties->metaData[ii].name[0] != '\0') &&
-				(responseProperties->metaData[ii].value != 0)
-			) {
-				that->metadata.insert(Pair(responseProperties->metaData[ii].name, responseProperties->metaData[ii].value));
+	::S3Status status = (*that->Container::handler.propertiesCallback)(responseProperties, callbackData);
+	if (status == ::S3StatusOK) {
+		if ((responseProperties->contentType != 0) && (responseProperties->contentType[0] != '\0')) { that->type = responseProperties->contentType; }
+		that->length = responseProperties->contentLength;
+		if ((responseProperties->eTag != 0) && (responseProperties->eTag[0] != '\0')) { that->etag = responseProperties->eTag; }
+		that->modified = responseProperties->lastModified;
+		if (responseProperties->metaData != 0) {
+			for (int ii = 0; ii < responseProperties->metaDataCount; ++ii) {
+				if (
+					(responseProperties->metaData[ii].name != 0) &&
+					(responseProperties->metaData[ii].name[0] != '\0') &&
+					(responseProperties->metaData[ii].value != 0)
+				) {
+					that->metadata.insert(Pair(responseProperties->metaData[ii].name, responseProperties->metaData[ii].value));
+				}
 			}
 		}
 	}
-	return (*that->Container::handler.propertiesCallback)(responseProperties, callbackData);
+	return status;
 }
 
 Object::Object(const char * keyname, const Bucket & bucket)
