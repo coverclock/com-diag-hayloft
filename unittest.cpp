@@ -16,6 +16,7 @@
 // Unit Tests that stand alone.
 
 #if 1
+#include "com/diag/unittest/Seconds.h"
 #include "com/diag/unittest/Logger.h"
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/Parameter.h"
@@ -46,19 +47,19 @@
 
 // Unit tests that use S3.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/convergence.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Grant.h"
 #endif
 

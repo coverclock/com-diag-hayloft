@@ -12,7 +12,7 @@
  */
 
 #include <sys/select.h>
-#include "com/diag/hayloft/s3/types.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/desperado/generics.h"
 #include "libs3.h"
 

@@ -13,7 +13,7 @@
 
 #include <list>
 #include <string>
-#include "com/diag/hayloft/s3/types.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/s3/Container.h"
 #include "libs3.h"
 

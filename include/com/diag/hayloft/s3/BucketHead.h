@@ -12,7 +12,6 @@
  */
 
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/types.h"
 
 namespace com {
 namespace diag {

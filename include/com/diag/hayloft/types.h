@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_TYPES_
-#define _H_COM_DIAG_HAYLOFT_S3_TYPES_
+#ifndef _H_COM_DIAG_HAYLOFT_TYPES_
+#define _H_COM_DIAG_HAYLOFT_TYPES_
 
 /**
  * @file
@@ -16,7 +16,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Date and time of day in seconds past the UNIX Epoch.
@@ -33,7 +32,6 @@ typedef uint64_t Octets;
  */
 typedef int64_t Milliseconds;
 
-}
 }
 }
 }

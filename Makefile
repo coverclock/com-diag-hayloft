@@ -162,41 +162,42 @@ MANIFEST_O=\
  hayloft/Logger.o \
  hayloft/Packet.o \
  hayloft/Parameter.o \
- hayloft/size.o \
+ hayloft/Seconds.o \
  hayloft/set.o \
- s3/Endpoint.o \
- s3/Session.o \
- s3/Credentials.o \
- s3/Region.o \
- s3/Protocol.o \
- s3/Style.o \
+ hayloft/size.o \
  s3/Access.o \
- s3/Context.o \
- s3/Multiplex.o \
- s3/convergence.o \
- s3/show.o \
- s3/tostring.o \
- s3/Properties.o \
- s3/Conditions.o \
- s3/Selection.o \
  s3/Action.o \
- s3/Container.o \
- s3/Service.o \
  s3/Bucket.o \
- s3/BucketHead.o \
  s3/BucketCreate.o \
  s3/BucketDelete.o \
- s3/ServiceManifest.o \
- s3/Object.o \
- s3/ObjectPut.o \
- s3/ObjectGet.o \
- s3/ObjectDelete.o \
- s3/ObjectHead.o \
- s3/ObjectCopy.o \
+ s3/BucketHead.o \
  s3/BucketManifest.o \
+ s3/Conditions.o \
+ s3/Container.o \
+ s3/Context.o \
+ s3/Credentials.o \
+ s3/Endpoint.o \
  s3/Grant.o \
  s3/GrantGet.o \
- s3/GrantSet.o
+ s3/GrantSet.o \
+ s3/Multiplex.o \
+ s3/Object.o \
+ s3/ObjectCopy.o \
+ s3/ObjectDelete.o \
+ s3/ObjectGet.o \
+ s3/ObjectHead.o \
+ s3/ObjectPut.o \
+ s3/Properties.o \
+ s3/Protocol.o \
+ s3/Region.o \
+ s3/Selection.o \
+ s3/Service.o \
+ s3/ServiceManifest.o \
+ s3/Session.o \
+ s3/Style.o \
+ s3/convergence.o \
+ s3/show.o \
+ s3/tostring.o
 
 ################################################################################
 # BUILD

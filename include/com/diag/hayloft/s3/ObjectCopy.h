@@ -12,7 +12,6 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
 #include "libs3.h"

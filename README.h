@@ -25,6 +25,10 @@
     You should have received a copy of the GNU General Public License
     along with Hayloft.  If not, see <http://www.gnu.org/licenses/>.
 
+    Documentation for Hayloft is licensed under the Creative Commons
+    Attribution-Noncommercial-Share Alike 3.0 United States License.
+    See <http://creativecommons.org/licenses/by-nc-sa/3.0/us/>.
+
 	Alternative commercial licensing terms are available from the copyright
 	holder.
 
@@ -42,7 +46,10 @@
 	which, among other things, presents a C++-based abstraction around Bryan
 	Ischo's excellent C-based libs3 interface to Amazon Web Service (AWS)
 	Simple Storage Service (S3). It is built on top of the Digital Aggregates
-	Corporation Desperadito package, a C++ systems programming library.
+	Corporation Desperadito package, a C++ systems programming library that is
+	a subset of the much larger Desperado package. libs3 is built on top of the
+	CURL, Open SSL, and XML2 libraries, which I acquired through the normal
+	package manager on my server.
 
 	This software is an original work of its author.
 
@@ -56,19 +63,18 @@
 		http://libs3.ischo.com/index.html
 		http://libs3.ischo.com.s3.amazonaws.com/dox/index.html
 
-	Information regarding Desperado can be found here:
+	Information regarding Desperadito and Desperado can be found here:
 
 		http://www.diag.com/navigation/downloads/Desperadito
 		http://www.diag.com/navigation/downloads/Desperado
 
 	Contact:
 
-		Chip Overclock
-		mailto:coverclock@diag.com
 		Digital Aggregates Corporation
 		3440 Youngfield Street, #209
 		Wheat Ridge CO 80033 USA
 		http://www.diag.com
+		mailto:coverclock@diag.com
 
 --------------------------------------------------------------------------------
 
@@ -81,7 +87,7 @@
 		Linux 2.6.32
 		GCC 4.4.3
 		libs3 2.0
-		Desperadito 6.4.0 (Desperado "Empire")
+		Desperadito 6.6.0 (Desperado "Globe")
 		AWS S3 API 2006-03-01
 
 	See the Makefile for more information.
@@ -89,6 +95,12 @@
 --------------------------------------------------------------------------------
 
 	REFERENCES
+
+	C. Overclock, "Amazon.com's Simple Storage Service and Hayloft",
+	http://coverclock.blogspot.com/2011/12/amazons-simple-storage-service-and.html
+
+	C. Overclock, "Abstraction in C++ using I/O Functors",
+	http://coverclock.blogspot.com/2011/11/abstraction-in-c-using-io-functors.html
 
 	Amazon.com, Amazon Simple Storage Service, Getting Started Guide (GSG),
 	API Version 2006-03-01, Amazon Web Services
@@ -111,7 +123,7 @@
 
 	J. Sloan, Hayloft, http://www.diag.com/navigation/downloads/Hayloft
 
-	J. Sloan, Desperado, http://www.diag.com/navigation/downloads/Desperado
+	J. Sloan, Desperadito, http://www.diag.com/navigation/downloads/Desperadito
 
 --------------------------------------------------------------------------------
 
@@ -138,9 +150,17 @@
 
 		If specified, this string is is appended without further punctuation
 		to each bucket name specified in any of the Bucket* constructors
-		(BucketCreate, etc.). Bucket names have to be globally unique. I
-		recommend using your DNS domain name with a leading dot, for example
-		".foo.bar.com".
+		(BucketCreate, etc.) prior to the bucket name being canonicalized by
+		Hayloft. Canonicalized bucket names have to be globally unique and
+		form a legal internet Domain Name Service (DNS) domain name. Although
+		domain names are case insensitive, S3 requires that they be all lower
+		case. I recommend using your DNS domain name with a leading dot as a
+		bucket suffix, for example ".foo.bar.com". An application creating a
+		bucket using BucketCreate("MyBucket") and using the default end point
+		name and the default virtual path style URL will hence see the name
+		canonicalized into an S3 bucket name
+		"mybucket.foo.bar.com.s3.amazonaws.com". Canonicalized bucket names are
+		what you will see in a ServiceManifest.
 
 	COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT
 

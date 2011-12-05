@@ -18,7 +18,7 @@
  * derive from the various Action classes and override the complete() method.
  */
 
-#include "com/diag/hayloft/s3/types.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
