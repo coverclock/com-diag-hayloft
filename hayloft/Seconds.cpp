@@ -17,6 +17,8 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
+unsigned int Seconds::dontcare;
+
 Seconds::Seconds()
 : numerator(0)
 , denominator(0)
@@ -27,19 +29,31 @@ Seconds::Seconds()
 Seconds::~Seconds()
 {}
 
-const char * Seconds::zulu(Epochalseconds seconds) {
+const char * Seconds::zulu(Epochalseconds seconds, unsigned int & year, unsigned int & month, unsigned int & day, unsigned int & hour, unsigned int & minute, unsigned int & second) {
 	ticks_t ticks = (seconds * numerator) / denominator;
 	::com::diag::desperado::CommonEra commonera(0);
 	commonera.fromTicks(ticks);
+	year = commonera.getYear();
+	month = commonera.getMonth();
+	day = commonera.getDay();
+	hour = commonera.getHour();
+	minute = commonera.getMinute();
+	second = commonera.getSecond();
 	return timestamp.iso8601(commonera);
 }
 
-const char * Seconds::juliet(Epochalseconds seconds) {
+const char * Seconds::juliet(Epochalseconds seconds, unsigned int & year, unsigned int & month, unsigned int & day, unsigned int & hour, unsigned int & minute, unsigned int & second) {
 	ticks_t ticks = (seconds * numerator) / denominator;
 	::com::diag::desperado::CommonEra commonera(0);
 	commonera.fromTicks(ticks);
 	::com::diag::desperado::LocalTime localtime;
 	localtime.fromCommonEra(commonera);
+	year = localtime.getYear();
+	month = localtime.getMonth();
+	day = localtime.getDay();
+	hour = localtime.getHour();
+	minute = localtime.getMinute();
+	second = localtime.getSecond();
 	return timestamp.iso8601(localtime);
 }
 
