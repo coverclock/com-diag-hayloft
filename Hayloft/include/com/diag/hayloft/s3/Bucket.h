@@ -144,6 +144,14 @@ public:
 	 */
 	::S3CannedAcl getAccess() const { return access; }
 
+	/**
+	 * Return true if libs3 thinks the canonical bucket name is valid,
+	 * false otherwise.
+	 *
+	 * @return true if the canonical bucket name is valid.
+	 */
+	bool isValid() const;
+
 private:
 
 	void initialize();

@@ -71,6 +71,8 @@ protected:
 
 	std::string etag;
 
+	std::string authentic;
+
 	Octets length;
 
 	Epochalseconds modified;
@@ -186,6 +188,18 @@ public:
 	 * @return a metadata value for the key or null.
 	 */
 	const char * find(const char * key) const;
+
+	/**
+	 * Generate an authenticated GET query string that can be used by a web
+	 * browser until the specified expiration date has passed.
+	 *
+	 * @param expires is the expiration date in seconds since the UNIX Epoch or
+	 *        -1 for the longest possible expiration date.
+	 * @param resource is a C string that identifies the sub-resource (e.g.
+	 *        libs3 offers the example "?torrent") or NULL for none.
+	 * @return an authenticated query string or NULL if an error occurred.
+	 */
+	const char * authenticated(Epochalseconds expires = -1, const char * resource = 0);
 
 private:
 

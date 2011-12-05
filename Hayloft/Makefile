@@ -183,7 +183,6 @@ MANIFEST_O=\
  s3/Container.o \
  s3/Service.o \
  s3/Bucket.o \
- s3/BucketValid.o \
  s3/BucketHead.o \
  s3/BucketCreate.o \
  s3/BucketDelete.o \
