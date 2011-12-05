@@ -42,6 +42,10 @@ namespace hayloft {
  */
 class Seconds {
 
+private:
+
+	static unsigned int dontcare;
+
 protected:
 
 	ticks_t numerator;
@@ -89,27 +93,41 @@ public:
 	 *        first second of the minute is 0.
 	 * @return the date and time in seconds since the UNIX epoch.
 	 */
-	Epochalseconds then(unsigned int year, unsigned int month, unsigned int day, unsigned int hour = 0, unsigned int minute = 0, unsigned int second = 0);
+	Epochalseconds then(unsigned int year = 1970, unsigned int month = 1, unsigned int day = 1, unsigned int hour = 0, unsigned int minute = 0, unsigned int second = 0);
 
 	/**
 	 * Generate a C string that is a ISO8601-ish timestamp for Common Era date
 	 * and Universal Coordinated Time for a CE date and UTC time expressed in
-	 * seconds since the UNIX Epoch.
+	 * seconds since the UNIX Epoch. The individual date and time values are
+	 * optionally returned as well.
 	 *
 	 * @param seconds is seconds since the UNIX Epoch.
+	 * @param year refers to a variable into which the year is returned.
+	 * @param month refers to a variable into which the month is returned.
+	 * @param day refers to a variable into which the day is returned.
+	 * @param hour refers to a variable into which the hour is returned.
+	 * @param minute refers to a variable into which the minute is returned.
+	 * @param seconds refers to a variable into which the second is returned.
 	 * @return a CE/UTC timestamp.
 	 */
-	const char * zulu(Epochalseconds seconds);
+	const char * zulu(Epochalseconds seconds, unsigned int & year = dontcare, unsigned int & month = dontcare, unsigned int & day = dontcare, unsigned int & hour = dontcare, unsigned int & minute  = dontcare, unsigned int & second = dontcare);
 
 	/**
 	 * Generate a C string that is a ISO8601-ish timestamp for Common Era date
 	 * and Local Time for a CE date and UTC time expressed in seconds since the
-	 * UNIX Epoch.
+	 * UNIX Epoch. The individual date and time values are optionally returned
+	 * as well.
 	 *
 	 * @param seconds is seconds since the UNIX Epoch.
+	 * @param year refers to a variable into which the year is returned.
+	 * @param month refers to a variable into which the month is returned.
+	 * @param day refers to a variable into which the day is returned.
+	 * @param hour refers to a variable into which the hour is returned.
+	 * @param minute refers to a variable into which the minute is returned.
+	 * @param seconds refers to a variable into which the second is returned.
 	 * @return a CE/Local timestamp.
 	 */
-	const char * juliet(Epochalseconds seconds);
+	const char * juliet(Epochalseconds seconds, unsigned int & year = dontcare, unsigned int & month = dontcare, unsigned int & day = dontcare, unsigned int & hour = dontcare, unsigned int & minute  = dontcare, unsigned int & second = dontcare);
 
 };
 
