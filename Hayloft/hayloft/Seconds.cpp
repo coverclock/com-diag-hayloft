@@ -57,7 +57,7 @@ const char * Seconds::juliet(Epochalseconds seconds, unsigned int & year, unsign
 	return timestamp.iso8601(localtime);
 }
 
-Epochalseconds Seconds::now() {
+Epochalseconds Seconds::now() const {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	::com::diag::desperado::CommonEra commonera(0);
 	commonera.fromNow();
@@ -66,7 +66,7 @@ Epochalseconds Seconds::now() {
 	return commoneraseconds - epoch.seconds;
 }
 
-Epochalseconds Seconds::then(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute, unsigned int seconds) {
+Epochalseconds Seconds::then(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute, unsigned int seconds) const {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	::com::diag::desperado::CommonEra commonera(year, month, day, hour, minute, seconds);
 	seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
