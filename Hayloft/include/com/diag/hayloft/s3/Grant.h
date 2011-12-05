@@ -347,6 +347,21 @@ public:
 	 */
 	void import(int count, ::S3AclGrant * grants);
 
+	/**
+	 * Generate an array of libs3 ACL grant structures and return the number
+	 * of structures in the array.
+	 *
+	 * Note that "export" remains a reserved word in C++ (having to do with
+	 * templates) even though it's functionality has been removed from the ISO
+	 * C++0x version standard.
+	 *
+	 * @param count refers to a variable into which the number of structures in
+	 *        the array is returned.
+	 * @return a pointer to a dynamically acquired array of grant structures
+	 *         for which the caller is responsible for deleting.
+	 */
+	::S3AclGrant * generate(int & count = dontcare) const;
+
 private:
 
 	void initialize(const Grant * that);
