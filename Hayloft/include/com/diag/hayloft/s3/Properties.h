@@ -14,7 +14,7 @@
 #include <map>
 #include <string>
 #include "com/diag/hayloft/set.h"
-#include "com/diag/hayloft/s3/types.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/s3/Access.h"
 #include "libs3.h"
 

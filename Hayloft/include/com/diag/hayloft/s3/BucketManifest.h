@@ -13,7 +13,6 @@
 
 #include <map>
 #include <list>
-#include "com/diag/hayloft/s3/types.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Selection.h"
 

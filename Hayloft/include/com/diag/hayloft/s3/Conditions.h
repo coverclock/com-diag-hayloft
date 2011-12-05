@@ -12,7 +12,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/types.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/set.h"
 
 namespace com {

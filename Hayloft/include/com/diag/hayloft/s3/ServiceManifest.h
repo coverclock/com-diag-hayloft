@@ -13,7 +13,7 @@
 
 #include <map>
 #include <string>
-#include "com/diag/hayloft/s3/types.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/s3/Service.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Session.h"
