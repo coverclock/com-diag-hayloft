@@ -107,7 +107,7 @@ public:
 	 * @param day refers to a variable into which the day is returned.
 	 * @param hour refers to a variable into which the hour is returned.
 	 * @param minute refers to a variable into which the minute is returned.
-	 * @param seconds refers to a variable into which the second is returned.
+	 * @param second refers to a variable into which the second is returned.
 	 * @return a CE/UTC timestamp.
 	 */
 	const char * zulu(Epochalseconds seconds, unsigned int & year = dontcare, unsigned int & month = dontcare, unsigned int & day = dontcare, unsigned int & hour = dontcare, unsigned int & minute  = dontcare, unsigned int & second = dontcare);
@@ -124,7 +124,7 @@ public:
 	 * @param day refers to a variable into which the day is returned.
 	 * @param hour refers to a variable into which the hour is returned.
 	 * @param minute refers to a variable into which the minute is returned.
-	 * @param seconds refers to a variable into which the second is returned.
+	 * @param second refers to a variable into which the second is returned.
 	 * @return a CE/Local timestamp.
 	 */
 	const char * juliet(Epochalseconds seconds, unsigned int & year = dontcare, unsigned int & month = dontcare, unsigned int & day = dontcare, unsigned int & hour = dontcare, unsigned int & minute  = dontcare, unsigned int & second = dontcare);
