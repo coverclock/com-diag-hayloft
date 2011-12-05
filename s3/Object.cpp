@@ -9,6 +9,7 @@
 
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -95,6 +96,20 @@ const char * Object::find(const char * key) const {
 		value = (here->second).c_str();
 	}
 	return value;
+}
+
+const char * Object::authenticated(Epochalseconds expires, const char * resource) {
+	const char * result = 0;
+	char buffer[S3_MAX_AUTHENTICATED_QUERY_STRING_SIZE];
+	::S3Status status = S3_generate_authenticated_query_string(buffer, &context, key.c_str(), expires, resource);
+	if (status == ::S3StatusOK) {
+		buffer[sizeof(buffer) - 1] = '\0';
+		authentic = buffer;
+		result = authentic.c_str();
+	} else {
+		Logger::instance().error("Object@%p: S3_generate_authenticated_query_string failed! status=%d=\"%s\"\n", this, status, tostring(status));
+	}
+	return result;
 }
 
 }

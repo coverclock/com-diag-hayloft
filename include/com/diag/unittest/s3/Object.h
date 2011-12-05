@@ -187,6 +187,8 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(objecthead->isInaccessible());
 	EXPECT_FALSE(objecthead->isNonexistent());
 	ASSERT_TRUE(objecthead->isSuccessful());
+	ASSERT_NE(objecthead->authenticated(), (char *)0);
+	printf("URL=\"%s\"\n", objecthead->authenticated());
 	delete objecthead;
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/SynchronousHeap.txt */
 	ObjectGet * objectget = 0;
@@ -546,6 +548,8 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
+	ASSERT_NE(objecthead.authenticated(), (char *)0);
+	printf("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -1005,6 +1009,8 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
+	ASSERT_NE(objecthead.authenticated(), (char *)0);
+	printf("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);

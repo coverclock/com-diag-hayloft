@@ -18,8 +18,8 @@
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/BucketHead.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/BucketValid.h"
+#include "com/diag/hayloft/s3/GrantGet.h"
+#include "com/diag/hayloft/s3/GrantSet.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/ObjectCopy.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
@@ -48,12 +48,14 @@ TEST_F(SizeofTest, Sizeof) {
 	PRINT_SIZEOF(BucketDelete);
 	PRINT_SIZEOF(BucketHead);
 	PRINT_SIZEOF(BucketManifest);
-	PRINT_SIZEOF(BucketValid);
 	PRINT_SIZEOF(Conditions);
 	PRINT_SIZEOF(Container);
 	PRINT_SIZEOF(Context);
 	PRINT_SIZEOF(Credentials);
 	PRINT_SIZEOF(Endpoint);
+	PRINT_SIZEOF(Grant);
+	PRINT_SIZEOF(GrantGet);
+	PRINT_SIZEOF(GrantSet);
 	PRINT_SIZEOF(Multiplex);
 	PRINT_SIZEOF(Object);
 	PRINT_SIZEOF(ObjectCopy);

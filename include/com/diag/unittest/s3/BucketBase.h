@@ -15,7 +15,6 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/BucketValid.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/desperado/string.h"
 #include "libs3.h"
@@ -39,6 +38,7 @@ TEST_F(BucketBaseTest, Heap) {
 	EXPECT_FALSE(bucket->isRetryable());
 	EXPECT_EQ(bucket->getStatus(), ::S3StatusOK);
 	EXPECT_NE(bucket->getName(), (char *)0);
+	EXPECT_TRUE(bucket->isValid());
 	delete bucket;
 }
 
@@ -50,6 +50,7 @@ TEST_F(BucketBaseTest, Stack) {
 	EXPECT_FALSE(bucket.isRetryable());
 	EXPECT_EQ(bucket.getStatus(), ::S3StatusOK);
 	EXPECT_NE(bucket.getName(), (char *)0);
+	EXPECT_TRUE(bucket.isValid());
 }
 
 TEST_F(BucketBaseTest, Temporary) {
@@ -132,22 +133,6 @@ TEST_F(BucketBaseTest, CopyConstructor) {
 	EXPECT_NE(source.getSecret(), sink.getSecret());
 	EXPECT_EQ(std::strcmp(source.getEndpoint(), sink.getEndpoint()), 0);
 	EXPECT_EQ(source.getProtocol(), sink.getProtocol());
-}
-
-typedef Fixture BucketValidTest;
-
-TEST_F(BucketValidTest, Heap) {
-	BucketValid * valid = new BucketValid("BucketValidTestHeap");
-	ASSERT_NE(valid, (BucketValid*)0);
-	EXPECT_TRUE((*valid) == true);
-	EXPECT_TRUE(valid->isSuccessful());
-	delete valid;
-}
-
-TEST_F(BucketValidTest, Stack) {
-	BucketValid valid("BucketValidTestStack");
-	EXPECT_TRUE(valid == true);
-	EXPECT_TRUE(valid.isSuccessful());
 }
 
 }
