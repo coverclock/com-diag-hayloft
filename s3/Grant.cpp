@@ -169,8 +169,37 @@ bool Grant::import(const char * xml) {
 		import(count, grants);
 		result = true;
 	}
-	delete grants;
+	delete [] grants;
 	return result;
+}
+
+::S3AclGrant * Grant::generate(int & count /* static int dontcare */) const {
+	::S3AclGrant * grants = new ::S3AclGrant [list.size()];
+	int index = 0;
+	List::const_iterator here = list.begin();
+	List::const_iterator there = list.end();
+	while (here != there) {
+		grants[index].granteeType = here->getGranteeType();
+		grants[index].permission = here->getPermission();
+		switch (here->getGranteeType()) {
+		case ::S3GranteeTypeAmazonCustomerByEmail:
+			std::strncpy(grants[index].grantee.amazonCustomerByEmail.emailAddress, here->getOwnerIdOrEmailAddress(), sizeof(grants[index].grantee.amazonCustomerByEmail.emailAddress));
+			grants[index].grantee.amazonCustomerByEmail.emailAddress[sizeof(grants[index].grantee.amazonCustomerByEmail.emailAddress) - 1] = '\0';
+			break;
+		case ::S3GranteeTypeCanonicalUser:
+			std::strncpy(grants[index].grantee.canonicalUser.id, here->getOwnerIdOrEmailAddress(), sizeof(grants[index].grantee.canonicalUser.id));
+			grants[index].grantee.canonicalUser.id[sizeof(grants[index].grantee.canonicalUser.id) - 1] = '\0';
+			std::strncpy(grants[index].grantee.canonicalUser.displayName, here->getOwnerDisplayName(), sizeof(grants[index].grantee.canonicalUser.displayName));
+			grants[index].grantee.canonicalUser.displayName[sizeof(grants[index].grantee.canonicalUser.displayName) - 1] = '\0';
+			break;
+		default:
+			break;
+		}
+		++here;
+		++index;
+	}
+	count = index;
+	return grants;
 }
 
 }

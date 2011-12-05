@@ -26,7 +26,7 @@ void GrantGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetail
 	that->import(that->count, that->grants);
 	show(that->grants, that->count);
 	that->count = 0;
-	delete that->grants;
+	delete [] that->grants;
 	that->grants = 0;
 	(*that->Grant::handler.completeCallback)(status, errorDetails, callbackData);
 }
@@ -69,7 +69,7 @@ GrantGet::~GrantGet() {
 	if ((state() == BUSY) && (requests != 0)) {
 		(void)S3_runall_request_context(requests);
 	}
-	delete grants;
+	delete [] grants;
 }
 
 void GrantGet::start() {
@@ -89,7 +89,7 @@ void GrantGet::initialize() {
 void GrantGet::execute() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
 	count = 0;
-	delete grants;
+	delete [] grants;
 	grants = new ::S3AclGrant [COUNT];
 	Logger::instance().debug("GrantGet@%p: begin\n", this);
 	S3_get_acl(
