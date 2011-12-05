@@ -284,6 +284,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(objecthead->isNonexistent());
 	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
+	delete bucketcreate;
 	/**/
 	BucketDelete * bucketdelete = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {

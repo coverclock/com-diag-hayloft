@@ -47,19 +47,19 @@
 
 // Unit tests that use S3.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Object.h"
 #endif
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/convergence.h"
 #endif
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Grant.h"
 #endif
 
