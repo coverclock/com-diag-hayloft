@@ -43,6 +43,7 @@
 #include "com/diag/unittest/s3/Selection.h"
 #include "com/diag/unittest/s3/BucketBase.h"
 #include "com/diag/unittest/s3/ObjectBase.h"
+#include "com/diag/unittest/s3/GrantBase.h"
 #endif
 
 // Unit tests that use S3.
