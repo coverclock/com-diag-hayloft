@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/ServiceManifest.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -19,8 +20,8 @@ namespace s3 {
 
 ServiceManifest::Entry::Entry(const char * bucketname, const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
 : canonical(bucketname)
-, owner((ownerId != 0) ? ownerId : "")
-, display((ownerDisplayName != 0) ? ownerDisplayName : "")
+, owner(set(ownerId))
+, display(set(ownerDisplayName))
 , created(creationDateSeconds)
 {}
 

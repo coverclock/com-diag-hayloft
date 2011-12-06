@@ -124,7 +124,7 @@ public:
 	 *        condition is not used.
 	 * @return a reference to this object.
 	 */
-	Conditions & setMatch(const char * ifMatchETag = 0) { match = set(ifMatchETag, 0, ""); return *this; }
+	Conditions & setMatch(const char * ifMatchETag = 0) { match = set(ifMatchETag); return *this; }
 
 	/**
 	 * Set the ifNotMatchETag condition.
@@ -134,7 +134,7 @@ public:
 	 *        this condition is not used.
 	 * @return a reference to this object.
 	 */
-	Conditions & setNotMatch(const char * ifNotMatchETag = 0) { notmatch = set(ifNotMatchETag, 0, ""); return *this; }
+	Conditions & setNotMatch(const char * ifNotMatchETag = 0) { notmatch = set(ifNotMatchETag); return *this; }
 
 };
 

@@ -15,8 +15,6 @@
 #include "com/diag/desperado/errno.h"
 #include "com/diag/desperado/ready.h"
 #include "com/diag/desperado/Platform.h"
-#include <curl/curl.h>
-#include "request_context.h"
 #include <sys/select.h>
 
 namespace com {

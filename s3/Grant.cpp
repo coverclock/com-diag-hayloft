@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/Grant.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -22,8 +23,8 @@ int Grant::dontcare = 0;
 Grant::Entry::Entry(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress, const char * ownerDisplayName)
 : type(granteeType)
 , permission(permissionType)
-, owner(((granteeType == ::S3GranteeTypeAmazonCustomerByEmail) || (granteeType == ::S3GranteeTypeCanonicalUser)) ? ((ownerIdOrEmailAddress != 0) ? ownerIdOrEmailAddress : "") : "")
-, display((granteeType == ::S3GranteeTypeCanonicalUser) ? ((ownerDisplayName != 0) ? ownerDisplayName : "") : "")
+, owner(((granteeType == ::S3GranteeTypeAmazonCustomerByEmail) || (granteeType == ::S3GranteeTypeCanonicalUser)) ? set(ownerIdOrEmailAddress) : "")
+, display((granteeType == ::S3GranteeTypeCanonicalUser) ? set(ownerDisplayName) : "")
 {}
 
 

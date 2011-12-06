@@ -153,7 +153,7 @@ public:
 	 *        "binary/octet-stream".
 	 * @return a reference to this object.
 	 */
-	Properties & setType(const char * contentType = 0) { type = set(contentType, 0, ""); return *this; }
+	Properties & setType(const char * contentType = 0) { type = set(contentType); return *this; }
 
 	/**
 	 * Set the MD5 checksum.
@@ -162,7 +162,7 @@ public:
 	 *        key or as a checksum.
 	 * @return a reference to this object.
 	 */
-	Properties & setChecksum(const char * md5 = 0) { checksum = set(md5, 0, ""); return *this; }
+	Properties & setChecksum(const char * md5 = 0) { checksum = set(md5); return *this; }
 
 	/**
 	 * Set the cache control.
@@ -170,7 +170,7 @@ public:
 	 * @param cacheControl provides a cache control HTTP header.
 	 * @return a reference to this object.
 	 */
-	Properties & setControl(const char * cacheControl = 0) { control = set(cacheControl, 0, ""); return *this; }
+	Properties & setControl(const char * cacheControl = 0) { control = set(cacheControl); return *this; }
 
 	/**
 	 * Set the content disposition filename.
@@ -179,7 +179,7 @@ public:
 	 *        downloaded to when accessed by a web browser.
 	 * @return a reference to this object.
 	 */
-	Properties & setFilename(const char * contentDispositionFilename = 0) { filename = set(contentDispositionFilename, 0, ""); return *this; }
+	Properties & setFilename(const char * contentDispositionFilename = 0) { filename = set(contentDispositionFilename); return *this; }
 
 	/**
 	 * Set the content encoding.
@@ -188,7 +188,7 @@ public:
 	 *        so that it can (for example) decompress a compressed file.
 	 * @return a reference to this object.
 	 */
-	Properties & setEncoding(const char * contentEncoding = 0) { encoding = set(contentEncoding, 0, ""); return *this; }
+	Properties & setEncoding(const char * contentEncoding = 0) { encoding = set(contentEncoding); return *this; }
 
 	/**
 	 * Set the expiration date and time.
