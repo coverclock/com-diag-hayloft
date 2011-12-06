@@ -154,6 +154,17 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
+	 * @param grant refers to another grant whose access control list is to be
+	 *        associated with this object. This reference is only used during
+	 *        construction.
+	 */
+	explicit Grant(
+		const Grant & grant
+	);
+
+	/**
+	 * Ctor. Use this for the synchronous interface.
+	 *
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 */
@@ -326,17 +337,19 @@ public:
 	 *        type.
 	 * @param ownerDisplayName is the null or a C string that is an owner
 	 *        display name, depending on the grantee type.
+	 * @return the number of grant entries imported (nominally one).
 	 */
-	void import(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress = 0, const char * ownerDisplayName = 0);
+	int import(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress = 0, const char * ownerDisplayName = 0);
 
 	/**
 	 * Import (add) new access control list entries from a C string containing
 	 * XML.
 	 *
 	 * @param xml points to the XML C string.
-	 * @return true of the XML parsed successfully, false otherwise.
+	 * @return the number of grant entries imported (zero likely implies a
+	 *         syntax error in the XML file).
 	 */
-	bool import(const char * xml);
+	int import(const char * xml);
 
 	/**
 	 * Import (add) new access control list entries from a libs3 ACL grant
@@ -344,8 +357,20 @@ public:
 	 *
 	 * @param count is the number of entries in the array.
 	 * @param grants points to the array.
+	 * @return the number of grant entries imported (anything less than count
+	 *         likely implies an error).
 	 */
-	void import(int count, ::S3AclGrant * grants);
+	int import(int count, ::S3AclGrant * grants);
+
+	/**
+	 * Import (add) new access control list entries from an existing Grant
+	 * object.
+	 *
+	 * @param grant refers to an existing Grant object.
+	 * @param grants points to the array.
+	 * @return the number of grant entries imported.
+	 */
+	int import(const Grant & grant);
 
 	/**
 	 * Generate an array of libs3 ACL grant structures and return the number

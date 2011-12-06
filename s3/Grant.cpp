@@ -27,12 +27,18 @@ Grant::Entry::Entry(::S3GranteeType granteeType, ::S3Permission permissionType, 
 , display((granteeType == ::S3GranteeTypeCanonicalUser) ? set(ownerDisplayName) : "")
 {}
 
-
 Grant::Grant()
 : Container("", "", "", "", Protocol::DEFAULT, Style::DEFAULT)
 , keypointer(0)
 {
 	initialize(0);
+}
+
+Grant::Grant(const Grant & grant)
+: Container("", "", "", "", Protocol::DEFAULT, Style::DEFAULT)
+, keypointer(0)
+{
+	initialize(&grant);
 }
 
 Grant::Grant(const Bucket & bucket)
@@ -106,22 +112,17 @@ void Grant::initialize(const Grant * that) {
 	if ((that != 0) && (that != this)) {
 		this->owner = that->owner;
 		this->display = that->display;
-		List::const_iterator here = that->list.begin();
-		List::const_iterator there = that->list.end();
-		while (here != there) {
-			Entry entry(here->getGranteeType(), here->getPermission(), here->getOwnerIdOrEmailAddress(), here->getOwnerDisplayName());
-			list.push_back(entry);
-			++here;
-		}
+		import(*that);
 	}
 }
 
-void Grant::import(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress, const char * ownerDisplayName) {
+int Grant::import(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress, const char * ownerDisplayName) {
 	Entry entry(granteeType, permissionType, ownerIdOrEmailAddress, ownerDisplayName);
 	list.push_back(entry);
+	return 1;
 }
 
-void Grant::import(int count, ::S3AclGrant * grants) {
+int Grant::import(int count, ::S3AclGrant * grants) {
 	for (int ii = 0; ii < count; ++ii) {
 		switch (grants[ii].granteeType) {
 			case ::S3GranteeTypeAmazonCustomerByEmail: {
@@ -141,10 +142,11 @@ void Grant::import(int count, ::S3AclGrant * grants) {
 			} break;
 		}
 	}
+	return count;
 }
 
-bool Grant::import(const char * xml) {
-	bool result = false;
+int Grant::import(const char * xml) {
+	int result = 0;
 	char ownerid[OWNER_LEN];
 	char ownerdisplayname[DISPLAY_LEN];
 	int count;
@@ -167,10 +169,24 @@ bool Grant::import(const char * xml) {
 		owner = ownerid;
 		ownerdisplayname[sizeof(ownerdisplayname) - 1] = '\0';
 		display = ownerdisplayname;
-		import(count, grants);
-		result = true;
+		result = import(count, grants);
 	}
 	delete [] grants;
+	return result;
+}
+
+int Grant::import(const Grant & grant) {
+	int result = 0;
+	if (&grant != this) {
+		List::const_iterator here = grant.list.begin();
+		List::const_iterator there = grant.list.end();
+		while (here != there) {
+			Entry entry(here->getGranteeType(), here->getPermission(), here->getOwnerIdOrEmailAddress(), here->getOwnerDisplayName());
+			list.push_back(entry);
+			++here;
+			++result;
+		}
+	}
 	return result;
 }
 
