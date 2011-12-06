@@ -63,19 +63,27 @@
 #include "com/diag/unittest/s3/Grant.h"
 #endif
 
+// Hooks to clean up singletons just for valgrind.
+
+class Platform : public ::com::diag::desperado::Platform {
+public:
+	static void finalize() { delete singleton; singleton = 0; }
+};
+
 class Logger : public ::com::diag::hayloft::Logger {
 public:
-	static void cleanup() { delete singleton; singleton = 0; }
+	static void finalize() { delete singleton; singleton = 0; }
 };
 
 class Session : public ::com::diag::hayloft::s3::Session {
 public:
-	static void cleanup() { delete singleton; singleton = 0; }
+	static void finalize() { delete singleton; singleton = 0; }
 };
 
 int main(int argc, char ** argv, char **envp) {
 	int rc = ::com::diag::lariat::main(argc, argv, envp);
-	Logger::cleanup(); // For valgrind.
-	Session::cleanup(); // For valgrind.
+	Session::finalize();
+	Logger::finalize();
+	Platform::finalize();
 	return rc;
 }
