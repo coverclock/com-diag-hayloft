@@ -163,7 +163,6 @@ MANIFEST_O=\
  hayloft/Packet.o \
  hayloft/Parameter.o \
  hayloft/Seconds.o \
- hayloft/set.o \
  hayloft/size.o \
  s3/Access.o \
  s3/Action.o \

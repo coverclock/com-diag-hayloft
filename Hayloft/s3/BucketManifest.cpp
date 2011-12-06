@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/generics.h"
 
@@ -21,10 +22,10 @@ namespace s3 {
 BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModified, const char * eTag, Octets objectsize, const char * ownerId, const char * ownerDisplayName)
 : key(objectname)
 , modified(lastModified)
-, etag((eTag != 0) ? eTag : "")
+, etag(set(eTag))
 , size(objectsize)
-, owner((ownerId != 0) ? ownerId : "")
-, display((ownerDisplayName != 0) ? ownerDisplayName : "")
+, owner(set(ownerId))
+, display(set(ownerDisplayName))
 {}
 
 ::S3Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData) {

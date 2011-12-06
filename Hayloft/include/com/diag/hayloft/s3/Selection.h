@@ -105,7 +105,7 @@ public:
 	 *        or empty value means this selection criteria isn't used.
 	 * @return a reference to this object.
 	 */
-	Selection & setPrefix(const char * namePrefix = 0) { prefix = set(namePrefix, 0, ""); return *this; }
+	Selection & setPrefix(const char * namePrefix = 0) { prefix = set(namePrefix); return *this; }
 
 	/**
 	 * Set the nextMarker.
@@ -116,7 +116,7 @@ public:
 	 *        used.
 	 * @return a reference to this object.
 	 */
-	Selection & setMarker(const char * nextMarker = 0) { marker = set(nextMarker, 0, ""); return *this; }
+	Selection & setMarker(const char * nextMarker = 0) { marker = set(nextMarker); return *this; }
 
 	/**
 	 * Set the nameDelimiter.
@@ -128,7 +128,7 @@ public:
 	 *        selection criteria isn't used.
 	 * @return a reference to this object.
 	 */
-	Selection & setDelimiter(const char * nameDelimiter = 0) { delimiter = set(nameDelimiter, 0, ""); return *this; }
+	Selection & setDelimiter(const char * nameDelimiter = 0) { delimiter = set(nameDelimiter); return *this; }
 
 	/**
 	 * Set the maxkeys.

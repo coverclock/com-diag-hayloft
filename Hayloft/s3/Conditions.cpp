@@ -17,8 +17,8 @@ namespace s3 {
 Conditions::Conditions(Epochalseconds ifModifiedSince, Epochalseconds ifNotModifiedSince, const char * ifMatchETag, const char * ifNotMatchETag)
 : since(ifModifiedSince)
 , notsince(ifNotModifiedSince)
-, match(set(ifMatchETag, 0, ""))
-, notmatch(set(ifNotMatchETag, 0, ""))
+, match(set(ifMatchETag))
+, notmatch(set(ifNotMatchETag))
 {}
 
 }

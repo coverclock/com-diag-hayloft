@@ -15,9 +15,9 @@ namespace hayloft {
 namespace s3 {
 
 Selection::Selection(const char * namePrefix, const char * nextMarker, const char * nameDelimiter, int maxkeys)
-: prefix(set(namePrefix, 0, ""))
-, marker(set(nextMarker, 0, ""))
-, delimiter(set(nameDelimiter, 0, ""))
+: prefix(set(namePrefix))
+, marker(set(nextMarker))
+, delimiter(set(nameDelimiter))
 , maximum(maxkeys)
 {}
 

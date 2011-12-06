@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/Properties.h"
+#include "com/diag/hayloft/set.h"
 
 namespace com {
 namespace diag {
@@ -15,11 +16,11 @@ namespace hayloft {
 namespace s3 {
 
 Properties::Properties(const char * contentType, const char * md5, const char * cacheControl, const char * contentDispositionFilename, const char * contentEncoding, const Epochalseconds expires, const Access & cannedAcl)
-: type(set(contentType, 0, ""))
-, checksum(set(md5, 0, ""))
-, control(set(cacheControl, 0, ""))
-, filename(set(contentDispositionFilename, 0, ""))
-, encoding(set(contentEncoding, 0, ""))
+: type(set(contentType))
+, checksum(set(md5))
+, control(set(cacheControl))
+, filename(set(contentDispositionFilename))
+, encoding(set(contentEncoding))
 , expiration(expires)
 , access(cannedAcl.getAccess())
 {}
