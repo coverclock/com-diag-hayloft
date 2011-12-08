@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_LOG_
-#define _H_COM_DIAG_HAYLOFT_S3_LOG_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_LOGSET_
+#define _H_COM_DIAG_HAYLOFT_S3_LOGSET_
 
 /**
  * @file
@@ -12,28 +12,30 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/Grant.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/hayloft/s3/Log.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Bucket;
-class Multiplex;
-class Grant;
-
 /**
  *
  */
-class Log : public Grant {
+class LogSet : public Log {
+
+private:
+
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 
-	std::string target;
+	int count;
 
-	std::string prefix;
+	::S3AclGrant * grants;
+
+	::S3ResponseHandler handler;
 
 public:
 
@@ -50,7 +52,7 @@ public:
 	 *        to any of the logs generated. This reference is only used during
 	 *        construction.
 	 */
-	explicit Log(
+	explicit LogSet(
 		const Bucket & bucket,
 		const Bucket & log,
 		const char * keyprefix = 0,
@@ -73,7 +75,7 @@ public:
 	 *        to any of the logs generated. This reference is only used during
 	 *        construction.
 	 */
-	explicit Log(
+	explicit LogSet(
 		const Bucket & bucket,
 		const Bucket & log,
 		const Multiplex & multiplex,
@@ -84,15 +86,19 @@ public:
 	/**
 	 * Dtor.
 	 */
-	virtual ~Log();
+	virtual ~LogSet();
 
-	const char * getTarget() const { return target.c_str(); }
-
-	const char * getPrefix() const { return prefix.c_str(); }
+	/**
+	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
+	 * BUSY.
+	 */
+	virtual void start();
 
 private:
 
 	void initialize();
+
+	void execute();
 
 };
 

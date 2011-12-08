@@ -32,6 +32,7 @@
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Bucket.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -105,7 +106,7 @@ public:
 		if ((env = std::getenv(Session::USER_AGENT_ENV())) != 0) {
 			user_agent = env;
 		} else {
-			char val[Bucket::LENGTH + sizeof("\n")];
+			char val[S3_MAX_BUCKET_NAME_SIZE + sizeof("\n")];
 			::com::diag::desperado::PathInput input(USER_AGENT_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
@@ -120,7 +121,7 @@ public:
 		if ((env = std::getenv(Session::BUCKET_SUFFIX_ENV())) != 0) {
 			bucket_suffix = env;
 		} else {
-			char val[Bucket::LENGTH + sizeof("\n")];
+			char val[S3_MAX_BUCKET_NAME_SIZE + sizeof("\n")];
 			::com::diag::desperado::PathInput input(BUCKET_SUFFIX_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {

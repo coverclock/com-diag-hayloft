@@ -13,9 +13,8 @@
 
 #include <list>
 #include <string>
-#include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/s3/Container.h"
-#include "libs3.h"
+#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {
@@ -38,23 +37,6 @@ class Object;
 class Grant : public Container {
 
 public:
-
-	/**
-	 * libs3 requires that an owner identifier of at least this length
-	 * (including the trailing NUL) be supported.
-	 */
-	static const size_t OWNER_LEN = S3_MAX_GRANTEE_USER_ID_SIZE;
-
-	/**
-	 * libs3 requires that an owner display name of at least this length
-	 * (including the trailing NUL) be supported.
-	 */
-	static const size_t DISPLAY_LEN = S3_MAX_GRANTEE_DISPLAY_NAME_SIZE;
-
-	/**
-	 * This is the maximum number of individual grants a Grant can contain.
-	 */
-	static const size_t COUNT = S3_MAX_ACL_GRANT_COUNT;
 
 	/**
 	 * Entry describes an entry in the access control list.
