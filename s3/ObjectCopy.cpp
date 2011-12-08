@@ -123,7 +123,7 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 			pair->value = (here->second).c_str();
 		}
 	}
-	show(&properties);
+	show(&properties, Logger::DEBUG);
 	handler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;;
 }

@@ -195,7 +195,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 			pair->value = (here->second).c_str();
 		}
 	}
-	show(&properties);
+	show(&properties, Logger::DEBUG);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = &responseCompleteCallback;;

@@ -164,7 +164,7 @@ void ObjectGet::initialize() {
 	conditions.ifNotModifiedSince = notsince;
 	conditions.ifMatchETag = match.empty() ? 0 : match.c_str();
 	conditions.ifNotMatchETag = notmatch.empty() ? 0 : notmatch.c_str();
-	show(&conditions);
+	show(&conditions, Logger::DEBUG);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = &responseCompleteCallback;

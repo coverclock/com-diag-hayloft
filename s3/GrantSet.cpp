@@ -82,7 +82,7 @@ void GrantSet::execute() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
 	delete [] grants;
 	grants = generate(count);
-	show(grants, count);
+	show(grants, count, Logger::DEBUG);
 	Logger::instance().debug("GrantSet@%p: begin\n", this);
 	S3_set_acl(
 		&context,
