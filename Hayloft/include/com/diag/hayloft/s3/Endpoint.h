@@ -60,12 +60,6 @@ public:
 	 */
 	static const char * DEFAULT() { return UNITED_STATES_STANDARD(); }
 
-	/**
-	 * AWS S3 places a limit of this many characters on the end point name
-	 * (a.k.a. the host name).
-	 */
-	static const size_t LENGTH = S3_MAX_HOSTNAME_SIZE;
-
 protected:
 
 	std::string endpoint;

@@ -12,6 +12,7 @@
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -116,10 +117,10 @@ int Grant::import(int count, ::S3AclGrant * grants) {
 
 int Grant::import(const char * xml) {
 	int result = 0;
-	char ownerid[OWNER_LEN];
-	char ownerdisplayname[DISPLAY_LEN];
+	char ownerid[S3_MAX_GRANTEE_USER_ID_SIZE + 1];
+	char ownerdisplayname[S3_MAX_GRANTEE_DISPLAY_NAME_SIZE + 1];
 	int count;
-	::S3AclGrant * grants = new ::S3AclGrant [COUNT];
+	::S3AclGrant * grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];
 	// libs3 has a minor flaw (the only one I've found): S3_convert_acl()
 	// doesn't declare the XML string const. But it can be const, because
 	// it is merely passed to XML2's simplexml_add() which _does_ declare it

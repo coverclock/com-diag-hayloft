@@ -103,7 +103,7 @@ const char * Object::find(const char * key) const {
 
 const char * Object::authenticated(Epochalseconds expires, const char * resource) {
 	const char * result = 0;
-	char buffer[S3_MAX_AUTHENTICATED_QUERY_STRING_SIZE];
+	char buffer[S3_MAX_AUTHENTICATED_QUERY_STRING_SIZE + 1];
 	::S3Status status = S3_generate_authenticated_query_string(buffer, &context, key.c_str(), expires, resource);
 	if (status == ::S3StatusOK) {
 		buffer[sizeof(buffer) - 1] = '\0';

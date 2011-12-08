@@ -213,6 +213,10 @@
         EMERGENCY       14		0x4000
         PRINT           15		0x8000
 
+        0xff80 prints minimal output as unit tests run.
+        0xffe0 prints shown output as unit tests run.
+        0xfff0 prints debug output as unit tests run.
+
 *******************************************************************************/
 
 /**

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_LOG_
-#define _H_COM_DIAG_HAYLOFT_S3_LOG_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_LOGGET_
+#define _H_COM_DIAG_HAYLOFT_S3_LOGGET_
 
 /**
  * @file
@@ -12,28 +12,34 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/Grant.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/hayloft/s3/Log.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Bucket;
-class Multiplex;
-class Grant;
-
 /**
  *
  */
-class Log : public Grant {
+class LogGet : public Log {
+
+private:
+
+	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 
-	std::string target;
+	char targetbucket[S3_MAX_BUCKET_NAME_SIZE + 1];
 
-	std::string prefix;
+	char targetprefix[S3_MAX_KEY_SIZE + 1];
+
+	int count;
+
+	::S3AclGrant * grants;
+
+	::S3ResponseHandler handler;
 
 public:
 
@@ -46,15 +52,11 @@ public:
 	 *        This reference is only used during construction.
 	 * @param keyprefix is an optional C string that is a key (object name)
 	 *        prefix used for any logs generated.
-	 * @param grant refers to a Grant whose access control list will be applied
-	 *        to any of the logs generated. This reference is only used during
-	 *        construction.
 	 */
-	explicit Log(
+	explicit LogGet(
 		const Bucket & bucket,
 		const Bucket & log,
-		const char * keyprefix = 0,
-		const Grant & grant = Grant()
+		const char * keyprefix = 0
 	);
 
 	/**
@@ -69,30 +71,30 @@ public:
 	 *        construction.
 	 * @param keyprefix is an optional C string that is a key (object name)
 	 *        prefix used for any logs generated.
-	 * @param grant refers to a Grant whose access control list will be applied
-	 *        to any of the logs generated. This reference is only used during
-	 *        construction.
 	 */
-	explicit Log(
+	explicit LogGet(
 		const Bucket & bucket,
 		const Bucket & log,
 		const Multiplex & multiplex,
-		const char * keyprefix = 0,
-		const Grant & grant = Grant()
+		const char * keyprefix = 0
 	);
 
 	/**
 	 * Dtor.
 	 */
-	virtual ~Log();
+	virtual ~LogGet();
 
-	const char * getTarget() const { return target.c_str(); }
-
-	const char * getPrefix() const { return prefix.c_str(); }
+	/**
+	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
+	 * BUSY.
+	 */
+	virtual void start();
 
 private:
 
 	void initialize();
+
+	void execute();
 
 };
 

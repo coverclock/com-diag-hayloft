@@ -24,7 +24,12 @@ void GrantGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetail
 	that->ownerdisplayname[sizeof(that->ownerdisplayname) - 1] = '\0';
 	that->display = that->ownerdisplayname;
 	that->import(that->count, that->grants);
-	show(that->grants, that->count, Logger::DEBUG);
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(Logger::DEBUG)) {
+		logger.debug("GrantGet@%p: owner=\"%s\"\n", that, that->owner.c_str());
+		logger.debug("GrantGet@%p: display=\"%s\"\n", that, that->display.c_str());
+		show(that->grants, that->count, Logger::DEBUG);
+	}
 	that->count = 0;
 	delete [] that->grants;
 	that->grants = 0;
@@ -90,7 +95,7 @@ void GrantGet::execute() {
 	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
 	count = 0;
 	delete [] grants;
-	grants = new ::S3AclGrant [COUNT];
+	grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];
 	Logger::instance().debug("GrantGet@%p: begin\n", this);
 	S3_get_acl(
 		&context,

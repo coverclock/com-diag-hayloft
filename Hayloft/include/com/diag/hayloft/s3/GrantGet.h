@@ -12,6 +12,7 @@
  */
 
 #include "com/diag/hayloft/s3/Grant.h"
+#include "libs3.h"
 
 namespace com {
 namespace diag {
@@ -29,9 +30,9 @@ private:
 
 protected:
 
-	char ownerid[OWNER_LEN];
+	char ownerid[S3_MAX_GRANTEE_USER_ID_SIZE + 1];
 
-	char ownerdisplayname[DISPLAY_LEN];
+	char ownerdisplayname[S3_MAX_GRANTEE_DISPLAY_NAME_SIZE + 1];
 
 	int count;
 
