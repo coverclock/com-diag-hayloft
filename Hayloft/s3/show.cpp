@@ -15,6 +15,7 @@
 #include "com/diag/hayloft/s3/ServiceManifest.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/s3/Grant.h"
+#include "com/diag/hayloft/s3/Log.h"
 #include "com/diag/hayloft/Seconds.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
@@ -301,6 +302,16 @@ void show(const Grant & grant, Logger::Level level) {
 			}
 			++here;
 		}
+	}
+}
+
+void show(const Log & log, Logger::Level level) {
+	Logger & logger = Logger::instance();
+	if (logger.isEnabled(level)) {
+		logger.log(level, "Log@%p: target=\"%s\"\n", &log, log.getTarget());
+		logger.log(level, "Log@%p: prefix=\"%s\"\n", &log, log.getPrefix());
+		const Grant & grant = log;
+		show(grant);
 	}
 }
 

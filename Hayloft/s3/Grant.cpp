@@ -75,9 +75,8 @@ Grant::~Grant() {
 }
 
 void Grant::initialize(const Grant * that) {
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
-		if (keypointer != 0) { logger.debug("Grant@%p: key=\"%s\"\n", this, key.c_str()); }
+	if (keypointer != 0) {
+		Logger::instance().debug("Grant@%p: key=\"%s\"\n", this, key.c_str());
 	}
 	if (that != 0) {
 		this->owner = that->owner;

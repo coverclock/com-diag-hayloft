@@ -47,6 +47,7 @@
 #include "com/diag/unittest/s3/BucketBase.h"
 #include "com/diag/unittest/s3/ObjectBase.h"
 #include "com/diag/unittest/s3/GrantBase.h"
+#include "com/diag/unittest/s3/LogBase.h"
 #endif
 
 // Unit tests that use S3, perhaps more properly called functional tests.
