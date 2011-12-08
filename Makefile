@@ -179,6 +179,7 @@ MANIFEST_O=\
  s3/Grant.o \
  s3/GrantGet.o \
  s3/GrantSet.o \
+ s3/Log.o \
  s3/Multiplex.o \
  s3/Object.o \
  s3/ObjectCopy.o \
