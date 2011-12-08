@@ -11,6 +11,7 @@
 #include "com/diag/hayloft/s3/Action.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/Fibbonacci.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
 #include "libs3.h"
@@ -30,9 +31,7 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 	if (action.isIdle()) {
 		action.start();
 	}
-	int fibbonacci = 1;
-	int ofibbonacci = 1;
-	int nfibbonacci;
+	Fibbonacci factor;
 	::S3RequestContext * requests;
 	int rc;
 	Milliseconds effective;
@@ -56,12 +55,9 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 		} else {
 			break;
 		}
-		effective = fibbonacci * delay;
+		effective = factor * delay;
 		logger.log(level, "%s@%p: %lldms\n", &action, label, effective);
 		platform.yield(effective);
-		nfibbonacci = fibbonacci + ofibbonacci;
-		ofibbonacci = fibbonacci;
-		fibbonacci = nfibbonacci;
 		action.start();
 		continue;
 	}
@@ -82,9 +78,7 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 	if (action.isIdle()) {
 		action.start();
 	}
-	int fibbonacci = 1;
-	int ofibbonacci = 1;
-	int nfibbonacci;
+	Fibbonacci factor;
 	::S3RequestContext * requests;
 	int rc;
 	Milliseconds effective;
@@ -147,12 +141,9 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 			// We're done.
 			break;
 		}
-		effective = fibbonacci * pause;
+		effective = factor * pause;
 		logger.log(level, "%s@%p: %lldms\n", &action, label, effective);
 		platform.yield(effective);
-		nfibbonacci = fibbonacci + ofibbonacci;
-		ofibbonacci = fibbonacci;
-		fibbonacci = nfibbonacci;
 		action.start();
 		continue;
 	}

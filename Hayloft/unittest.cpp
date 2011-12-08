@@ -21,6 +21,7 @@
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/Parameter.h"
 #include "com/diag/unittest/size.h"
+#include "com/diag/unittest/Fibbonacci.h"
 #endif
 
 // Unit tests that also use libs3, libcurl, libssl, and libcrypto. Running
