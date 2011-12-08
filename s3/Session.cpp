@@ -14,6 +14,7 @@
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/CriticalSection.h"
+#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {
@@ -26,6 +27,24 @@ static ::com::diag::desperado::Mutex initializationmutex;
 static Session * instant = 0;
 
 Session * Session::singleton = 0;
+
+/*
+ * References:
+ *
+ * Amazon Web Services, AMAZON SIMPLE STORAGE SERVICE DEVELOPER GUIDE,
+ * API Version 2006-03-01, "Bucket Restrictions and Limitations", p. 83
+ *
+ * Amazon Simple Storage Service Team, BEST PRACTICES FOR USING AMAZON S3,
+ * 2008-11-10
+ */
+static void convert_to_lower_case(std::string & upper) {
+	size_t length = upper.length();
+	for (int ii = 0; ii < length; ++ii) {
+		if (isupper(upper[ii])) {
+			upper.replace(ii, 1, 1, tolower(upper[ii]));
+		}
+	}
+}
 
 Session & Session::factory() {
     return (*(new Session));
@@ -56,6 +75,9 @@ Session::Session(const char * bucketSuffix, const char * userAgentInfo, const En
 		::com::diag::desperado::CriticalSection guard(initializationmutex);
 		status = ::S3_initialize(useragent.c_str(), flags, endpoint.c_str());
 	}
+	convert_to_lower_case(bucketsuffix);
+	convert_to_lower_case(useragent);
+	convert_to_lower_case(endpoint);
 	Logger & logger = Logger::instance();
 	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
@@ -71,17 +93,24 @@ Session::~Session() {
 }
 
 const char * Session::canonicalize(std::string & canonical) const {
-	if ((!canonical.empty()) && (!bucketsuffix.empty())) {
-		canonical += bucketsuffix;
-	}
-	// Ref: Amazon Web Services, AMAZON SIMPLE STORAGE SERVICE DEVELOPER GUIDE,
-	// API Version 2006-03-01, "Bucket Restrictions and Limitations", p. 83
-	for (int ii = 0; ii < canonical.length(); ++ii) {
-		if (isupper(canonical[ii])) {
-			canonical.replace(ii, 1, 1, tolower(canonical[ii]));
+	if (!canonical.empty()) {
+		convert_to_lower_case(canonical);
+		if (!bucketsuffix.empty()) {
+			canonical += bucketsuffix;
 		}
 	}
 	return canonical.c_str();
+}
+
+const char * Session::decanonicalize(std::string & decanonical) const {
+	size_t dlength = decanonical.length();
+	size_t slength = bucketsuffix.length();
+	if ((dlength > slength) && (slength > 0)) {
+		if (decanonical.compare(dlength - slength, slength, bucketsuffix) == 0) {
+			decanonical.erase(dlength - slength, slength);
+		}
+	}
+	return decanonical.c_str();
 }
 
 }

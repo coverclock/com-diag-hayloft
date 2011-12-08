@@ -30,8 +30,13 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 	if (action.isIdle()) {
 		action.start();
 	}
+	int fibbonacci = 1;
+	int ofibbonacci = 1;
+	int nfibbonacci;
 	::S3RequestContext * requests;
 	int rc;
+	Milliseconds effective;
+	const char * label = "";
 	for (int ii = 0; ii < tries; ++ii) {
 		requests = action.getRequests();
 		if (requests != 0) {
@@ -43,15 +48,20 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 			}
 		}
 		if (action.isRetryable()) {
-			logger.log(level, "retrying@%p\n", &action);
+			label = "retrying";
 		} else if (converge && (!invert) && (!action.isSuccessful())) {
-			logger.log(level, "converging@%p\n", &action);
+			label = "converging";
 		} else if (converge && invert && (!action.isNonexistent())) {
-			logger.log(level, "converging@%p\n", &action);
+			label = "converging";
 		} else {
 			break;
 		}
-		platform.yield(delay);
+		effective = fibbonacci * delay;
+		logger.log(level, "%s@%p: %lldms\n", &action, label, effective);
+		platform.yield(effective);
+		nfibbonacci = fibbonacci + ofibbonacci;
+		ofibbonacci = fibbonacci;
+		fibbonacci = nfibbonacci;
 		action.start();
 		continue;
 	}
@@ -72,8 +82,13 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 	if (action.isIdle()) {
 		action.start();
 	}
+	int fibbonacci = 1;
+	int ofibbonacci = 1;
+	int nfibbonacci;
 	::S3RequestContext * requests;
 	int rc;
+	Milliseconds effective;
+	const char * label = "";
 	for (int ii = 0; ii < tries; ++ii) {
 		requests = action.getRequests();
 		if (requests != 0) {
@@ -106,7 +121,9 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 					// Action we care about. Still selfish bastards.
 				}
 				if (action.isBusy()) {
-					// This Action is still BUSY. Keep processing.
+					// This Action is still BUSY. Keep processing. We don't have
+					// to code a delay here since the service() method itself
+					// has a built-in delay.
 					continue;
 				}
 			}
@@ -117,20 +134,25 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 		if (action.isRetryable()) {
 			// The Action completed but unsuccessfully with a status that libs3
 			// thinks might work if we try it again.
-			logger.log(level, "retrying@%p\n", &action);
+			label = "retrying";
 		} else if (converge && (!invert) && (!action.isSuccessful())) {
 			// The Action completed but hasn't yet converged to Success.
 			// The application thinks it might if we try again.
-			logger.log(level, "converging@%p\n", &action);
+			label = "converging";
 		} else if (converge && invert && (!action.isNonexistent())) {
 			// The Action completed but hasn't yet converged to Non-existence.
 			// The application thinks it might if we try again.
-			logger.log(level, "converging@%p\n", &action);
+			label = "converging";
 		} else {
 			// We're done.
 			break;
 		}
-		platform.yield(pause);
+		effective = fibbonacci * pause;
+		logger.log(level, "%s@%p: %lldms\n", &action, label, effective);
+		platform.yield(effective);
+		nfibbonacci = fibbonacci + ofibbonacci;
+		ofibbonacci = fibbonacci;
+		fibbonacci = nfibbonacci;
 		action.start();
 		continue;
 	}

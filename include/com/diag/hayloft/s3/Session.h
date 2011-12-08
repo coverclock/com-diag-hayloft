@@ -184,6 +184,20 @@ public:
 	 */
 	virtual const char * canonicalize(std::string & canonical) const;
 
+	/**
+	 * Deanonicalize a name (typically an S3 bucket name) by stripping
+	 * the bucket suffix (if it exists) from the name. Derived classes may
+	 * replace this function with one more to their liking. Since the method
+	 * has no way of knowing the capitalization of the original application
+	 * bucket name, the result is still in all lower case alphas. This can be
+	 * used to (try to) match application bucket names against the canonical
+	 * bucket names returned by ServiceManifest.
+	 *
+	 * @param decanonical is the as yet canonicalized application bucket name.
+	 * @return a C string from the input string.
+	 */
+	virtual const char * decanonicalize(std::string & decanonical) const;
+
 private:
 
     /**
