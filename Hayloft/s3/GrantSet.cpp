@@ -26,26 +26,8 @@ void GrantSet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetail
 	(*that->Grant::handler.completeCallback)(status, errorDetails, callbackData);
 }
 
-GrantSet::GrantSet(const Bucket & bucket)
-: Grant(bucket)
-, count(0)
-, grants(0)
-{
-	initialize();
-	execute();
-}
-
 GrantSet::GrantSet(const Bucket & bucket, const Grant & grant)
 : Grant(bucket, grant)
-, count(0)
-, grants(0)
-{
-	initialize();
-	execute();
-}
-
-GrantSet::GrantSet(const Object & object)
-: Grant(object)
 , count(0)
 , grants(0)
 {
@@ -62,32 +44,16 @@ GrantSet::GrantSet(const Object & object, const Grant & grant)
 	execute();
 }
 
-GrantSet::GrantSet(const Bucket & bucket, const Multiplex & multiplex)
-: Grant(bucket, multiplex)
+GrantSet::GrantSet(const Bucket & bucket, const Multiplex & multiplex, const Grant & grant)
+: Grant(bucket, multiplex, grant)
 , count(0)
 , grants(0)
 {
 	initialize();
 }
 
-GrantSet::GrantSet(const Bucket & bucket, const Grant & grant, const Multiplex & multiplex)
-: Grant(bucket, grant, multiplex)
-, count(0)
-, grants(0)
-{
-	initialize();
-}
-
-GrantSet::GrantSet(const Object & object, const Multiplex & multiplex)
-: Grant(object, multiplex)
-, count(0)
-, grants(0)
-{
-	initialize();
-}
-
-GrantSet::GrantSet(const Object & object, const Grant & grant, const Multiplex & multiplex)
-: Grant(object, grant, multiplex)
+GrantSet::GrantSet(const Object & object, const Multiplex & multiplex, const Grant & grant)
+: Grant(object, multiplex, grant)
 , count(0)
 , grants(0)
 {
