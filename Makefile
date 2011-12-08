@@ -6,8 +6,8 @@
 ################################################################################
 
 PROJECT=hayloft
-MAJOR=1
-MINOR=5
+MAJOR=2
+MINOR=0
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft

@@ -41,26 +41,11 @@ Grant::Grant(const Grant & grant)
 	initialize(&grant);
 }
 
-Grant::Grant(const Bucket & bucket)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
-, keypointer(0)
-{
-	initialize(0);
-}
-
 Grant::Grant(const Bucket & bucket, const Grant & grant)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , keypointer(0)
 {
 	initialize(&grant);
-}
-
-Grant::Grant(const Object & object)
-: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle())
-, key(object.getKey())
-, keypointer(key.c_str())
-{
-	initialize(0);
 }
 
 Grant::Grant(const Object & object, const Grant & grant)
@@ -71,29 +56,14 @@ Grant::Grant(const Object & object, const Grant & grant)
 	initialize(&grant);
 }
 
-Grant::Grant(const Bucket & bucket, const Multiplex & multiplex)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
-, keypointer(0)
-{
-	initialize(0);
-}
-
-Grant::Grant(const Bucket & bucket, const Grant & grant, const Multiplex & multiplex)
+Grant::Grant(const Bucket & bucket, const Multiplex & multiplex, const Grant & grant)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
 , keypointer(0)
 {
 	initialize(&grant);
 }
 
-Grant::Grant(const Object & object, const Multiplex & multiplex)
-: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
-, key(object.getKey())
-, keypointer(key.c_str())
-{
-	initialize(0);
-}
-
-Grant::Grant(const Object & object, const Grant & grant, const Multiplex & multiplex)
+Grant::Grant(const Object & object, const Multiplex & multiplex, const Grant & grant)
 : Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
 , key(object.getKey())
 , keypointer(key.c_str())
@@ -109,7 +79,7 @@ void Grant::initialize(const Grant * that) {
 	if (logger.isEnabled(Logger::DEBUG)) {
 		if (keypointer != 0) { logger.debug("Grant@%p: key=\"%s\"\n", this, key.c_str()); }
 	}
-	if ((that != 0) && (that != this)) {
+	if (that != 0) {
 		this->owner = that->owner;
 		this->display = that->display;
 		import(*that);
