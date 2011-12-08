@@ -24,7 +24,7 @@ void GrantGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetail
 	that->ownerdisplayname[sizeof(that->ownerdisplayname) - 1] = '\0';
 	that->display = that->ownerdisplayname;
 	that->import(that->count, that->grants);
-	show(that->grants, that->count);
+	show(that->grants, that->count, Logger::DEBUG);
 	that->count = 0;
 	delete [] that->grants;
 	that->grants = 0;

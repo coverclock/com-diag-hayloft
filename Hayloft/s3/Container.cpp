@@ -51,7 +51,7 @@ void Container::initialize() {
 	context.uriStyle = style;
 	context.accessKeyId = id.c_str();
 	context.secretAccessKey = secret.c_str();
-	show(&context);
+	show(&context, Logger::DEBUG);
 }
 
 }

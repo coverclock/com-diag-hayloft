@@ -196,22 +196,22 @@
 		underlying logging mechanism; for example, SYSLOG has eight log levels.
 		If not specified, the default logger mask is used, for example 0xff80.
 
-		FINEST          =   0,
-        FINER           =   1,
-        FINE            =   2,
-        TRACE           =   3,
-        DEBUG           =   4,
-        INFORMATION     =   5,
-        CONFIGURATION   =   6,
-        NOTICE          =   7,
-        WARNING         =   8,
-        ERROR           =   9,
-        SEVERE          =   10,
-        CRITICAL        =   11,
-        ALERT           =   12,
-        FATAL           =   13,
-        EMERGENCY       =   14,
-        PRINT           =   15
+		FINEST           0		0x0001
+        FINER            1		0x0002
+        FINE             2		0x0004
+        TRACE            3		0x0008
+        DEBUG            4		0x0010
+        INFORMATION      5		0x0020
+        CONFIGURATION    6		0x0040
+        NOTICE           7		0x0080
+        WARNING          8		0x0100
+        ERROR            9		0x0200
+        SEVERE          10		0x0400
+        CRITICAL        11		0x0800
+        ALERT           12		0x1000
+        FATAL           13		0x2000
+        EMERGENCY       14		0x4000
+        PRINT           15		0x8000
 
 *******************************************************************************/
 

@@ -41,12 +41,11 @@ TEST_F(GrantTest, GetSynchronous) {
 	static const int LIMIT = 10;
 	static const char BUCKET[] = "GrantTestGetSynchronous";
 	static const char OBJECT[] = "Object.txt";
-	static const Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate(BUCKET);
 	ASSERT_TRUE(complete(bucketcreate));
 	GrantGet grantgetbucket(bucketcreate);
 	ASSERT_TRUE(complete(grantgetbucket));
-	show(grantgetbucket, LEVEL);
+	show(grantgetbucket);
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
@@ -62,7 +61,7 @@ TEST_F(GrantTest, GetSynchronous) {
 	ASSERT_TRUE(objectput.isSuccessful());
 	GrantGet grantgetobject(objectput);
 	ASSERT_TRUE(complete(grantgetobject));
-	show(grantgetobject, LEVEL);
+	show(grantgetobject);
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
 	ASSERT_TRUE(complete(objectdelete));
 	BucketDelete bucketdelete(BUCKET);
@@ -73,13 +72,12 @@ TEST_F(GrantTest, GetAsynchronous) {
 	static const int LIMIT = 10;
 	static const char BUCKET[] = "GrantTestGetAsynchronous";
 	static const char OBJECT[] = "Object.txt";
-	static const Logger::Level LEVEL = Logger::PRINT;
 	Multiplex multiplex;
 	BucketCreate bucketcreate(BUCKET, multiplex);
 	ASSERT_TRUE(complete(bucketcreate));
 	GrantGet grantgetbucket(bucketcreate, multiplex);
 	ASSERT_TRUE(complete(grantgetbucket));
-	show(grantgetbucket, LEVEL);
+	show(grantgetbucket);
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize);
@@ -97,7 +95,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 	ASSERT_TRUE(objectput.isSuccessful());
 	GrantGet grantgetobject(objectput, multiplex);
 	ASSERT_TRUE(complete(grantgetobject));
-	show(grantgetobject, LEVEL);
+	show(grantgetobject);
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	ASSERT_TRUE(complete(objectdelete));
 	BucketDelete bucketdelete(BUCKET, multiplex);
@@ -108,7 +106,6 @@ TEST_F(GrantTest, GetPublicRead) {
 	static const int LIMIT = 10;
 	static const char BUCKET[] = "GrantTestGetPublicRead";
 	static const char OBJECT[] = "Object.txt";
-	static const Logger::Level LEVEL = Logger::PRINT;
 	AccessPublicRead access;
 	Context context;
 	context.setAccess(access);
@@ -116,7 +113,7 @@ TEST_F(GrantTest, GetPublicRead) {
 	ASSERT_TRUE(complete(bucketcreate));
 	GrantGet grantgetbucket(bucketcreate);
 	ASSERT_TRUE(complete(grantgetbucket));
-	show(grantgetbucket, LEVEL);
+	show(grantgetbucket);
 	Properties properties;
 	properties.setAccess(access);
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
@@ -134,7 +131,7 @@ TEST_F(GrantTest, GetPublicRead) {
 	ASSERT_TRUE(objectput.isSuccessful());
 	GrantGet grantgetobject(objectput);
 	ASSERT_TRUE(complete(grantgetobject));
-	show(grantgetobject, LEVEL);
+	show(grantgetobject);
 	ObjectDelete objectdelete(OBJECT, bucketcreate);
 	ASSERT_TRUE(complete(objectdelete));
 	BucketDelete bucketdelete(BUCKET);
@@ -145,7 +142,6 @@ TEST_F(GrantTest, GetSet) {
 	static const int LIMIT = 10;
 	static const char BUCKET[] = "GrantTestGetSet";
 	static const char OBJECT[] = "Object.txt";
-	static const Logger::Level LEVEL = Logger::PRINT;
 	/**/
 	BucketCreate bucketcreate(BUCKET);
 	ASSERT_TRUE(complete(bucketcreate));
@@ -166,7 +162,7 @@ TEST_F(GrantTest, GetSet) {
 	/**/
 	GrantGet grantgetobject1(objectput);
 	ASSERT_TRUE(complete(grantgetobject1));
-	show(grantgetobject1, LEVEL);
+	show(grantgetobject1);
 	EXPECT_EQ(grantgetobject1.getAccessControlList().size(), 1);
 	/**/
 	Grant grant;
@@ -176,16 +172,16 @@ TEST_F(GrantTest, GetSet) {
 	grant.import(::S3GranteeTypeAmazonCustomerByEmail, ::S3PermissionRead, "jsloan@diag.com");
 	grant.import(::S3GranteeTypeAllUsers, ::S3PermissionRead);
 	grant.import(::S3GranteeTypeAllAwsUsers, ::S3PermissionRead);
-	show(grant, LEVEL);
+	show(grant);
 	EXPECT_EQ(grant.getAccessControlList().size(), 4);
 	/**/
 	GrantSet grantsetobject(objectput, grant);
 	EXPECT_TRUE(complete(grantsetobject));
-	show(grantsetobject, LEVEL);
+	show(grantsetobject);
 	/**/
 	GrantGet grantgetobject2(objectput);
 	EXPECT_TRUE(complete(grantgetobject2));
-	show(grantgetobject2, LEVEL);
+	show(grantgetobject2);
 	EXPECT_EQ(grantgetobject2.getAccessControlList().size(), 4);
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate);

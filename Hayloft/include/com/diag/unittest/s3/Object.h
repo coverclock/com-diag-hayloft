@@ -1269,7 +1269,6 @@ TEST_F(ObjectTest, Manifest) {
 	static const char BUCKET[] = "ObjectTestManifest";
 	static const char OBJECT1[] = "Object1.txt";
 	static const char OBJECT2[] = "Object2.txt";
-	Logger::Level LEVEL = Logger::PRINT;
 	BucketCreate bucketcreate(BUCKET);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -1356,7 +1355,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 2);
 	EXPECT_NE(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
-	show(bucketmanifest3, LEVEL);
+	show(bucketmanifest3);
 	bucketmanifest3.reset();
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 0);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
@@ -1517,7 +1516,6 @@ TEST_F(ObjectTest, Copy) {
 	static const char BUCKET2[] = "ObjectTestCopy2";
 	static const char OBJECT1[] = "Object1.txt";
 	static const char OBJECT2[] = "Object2.txt";
-	static const Logger::Level LEVEL = Logger::PRINT;
 	static const int LIMIT = 10;
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
@@ -1534,7 +1532,7 @@ TEST_F(ObjectTest, Copy) {
 		bucketcreate2.start();
 	}
 	ASSERT_TRUE(bucketcreate2.isSuccessful());
-	show(bucketcreate1, LEVEL);
+	show(bucketcreate1);
 	/**/
 	Properties properties;
 	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");
@@ -1550,7 +1548,7 @@ TEST_F(ObjectTest, Copy) {
 		objectput1.start();
 	}
 	ASSERT_TRUE(objectput1.isSuccessful());
-	show(objectput1, LEVEL);
+	show(objectput1);
 	/**/
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
 	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
@@ -1563,7 +1561,7 @@ TEST_F(ObjectTest, Copy) {
 		objecthead1.start();
 	}
 	ASSERT_TRUE(objecthead1.isSuccessful());
-	show(objecthead1, LEVEL);
+	show(objecthead1);
 	// Note that S3 converts the keyword strings to lower case. That's because
 	// they actually become part of HTTP message header field names whose
 	// prefixes libs3 strips off.
@@ -1601,7 +1599,7 @@ TEST_F(ObjectTest, Copy) {
 		objecthead2.start();
 	}
 	ASSERT_TRUE(objecthead2.isSuccessful());
-	show(objecthead2, LEVEL);
+	show(objecthead2);
 	// Note that S3 does not copy the metadata from the source object to the
 	// sink object.
 	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
@@ -1623,7 +1621,7 @@ TEST_F(ObjectTest, Copy) {
 	ASSERT_TRUE(objectget2.isSuccessful());
 	EXPECT_EQ(objectget2.find("keyworda"), (char *)0);
 	EXPECT_EQ(objectget2.find("keywordb"), (char *)0);
-	show(objectget2, LEVEL);
+	show(objectget2);
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucket1);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
