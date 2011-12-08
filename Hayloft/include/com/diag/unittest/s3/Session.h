@@ -126,12 +126,18 @@ TEST_F(SessionTest, Canonicalization) {
 	EXPECT_TRUE(session1 == true);
 	std::string name1 = session1.canonicalize(canonical = "");
 	EXPECT_EQ(name1, "");
+	std::string namea = session1.decanonicalize(name1);
+	EXPECT_EQ(namea, "");
 	std::string name2 = session1.canonicalize(canonical = "AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz");
 	EXPECT_EQ(name2, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz.can.hayloft.diag.com");
+	std::string nameb = session1.decanonicalize(name2);
+	EXPECT_EQ(nameb,"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
 	Session session2("");
 	EXPECT_TRUE(session2 == true);
 	std::string name3 = session2.canonicalize(canonical = "AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKl");
 	EXPECT_EQ(name3, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl");
+	std::string namec = session2.decanonicalize(name3);
+	EXPECT_EQ(namec, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl");
 }
 
 }

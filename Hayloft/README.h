@@ -99,20 +99,31 @@
 	C. Overclock, "Amazon.com's Simple Storage Service and Hayloft",
 	http://coverclock.blogspot.com/2011/12/amazons-simple-storage-service-and.html
 
+	C. Overclock, "Eventual Consistency and Hayloft",
+	http://coverclock.blogspot.com/2011/12/eventual-consistency-and-hayloft.html
+
 	C. Overclock, "Abstraction in C++ using I/O Functors",
 	http://coverclock.blogspot.com/2011/11/abstraction-in-c-using-io-functors.html
 
-	Amazon.com, Amazon Simple Storage Service, Getting Started Guide (GSG),
+	Amazon.com, Amazon Simple Storage Service, "Getting Started Guide (GSG)",
 	API Version 2006-03-01, Amazon Web Services
 
-	Amazon.com, Amazon Simple Storage Service, Developer Guide (DG),
+	Amazon.com, Amazon Simple Storage Service, "Developer Guide (DG)",
 	API Version 2006-03-01, Amazon Web Services
 
-	Amazon.com, Amazon Simple Storage Service, API Reference (AR),
+	Amazon.com, Amazon Simple Storage Service, "API Reference (AR)",
 	API Version 2006-03-01, Amazon Web Services
 
-	Amazon.com, Amazon Simple Storage Service, Console User Guide,
+	Amazon.com, Amazon Simple Storage Service, "Console User Guide",
 	API Version 2006-03-01, Amazon Web Services
+
+	Amazon Simple Storage Service Team, "Best Practices for Using Amazon S3",
+	2008-11-10, Amazon Web Services
+
+	Jinesh Varia, "Cloud Architectures", 2008-06, Amazon Web Services
+
+	Jinesh Varia, "Architecting for the Cloud: Best Practices", 2010-01,
+	Amazon Web Services
 
 	R. Fielding et al., "Hypertext Transfer Protocol -- HTTP/1.1", RFC2616,
 	The Internet Society, June 1999

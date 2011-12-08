@@ -23,9 +23,11 @@
 #include "com/diag/unittest/size.h"
 #endif
 
-// Unit tests that also use LIBS3, CURL, SSL, and CRYPTO. Running valgrind, my
-// favorite tool, reveals that some of these libraries are not so well behaved.
-// (Maybe this is a latent issue in my code, but so far I don't think so.)
+// Unit tests that also use libs3, libcurl, libssl, and libcrypto. Running
+// valgrind reveals that some of these libraries are not so well behaved.
+// Maybe this is a latent issue in my code, but so far I don't think so. It
+// appears to be a known issue in libcrypto in which uninitialized memory is
+// deliberately used while trying to increase the size of the entropy pool.
 
 #if 1
 #include "com/diag/unittest/s3/sizeof.h"
@@ -46,7 +48,7 @@
 #include "com/diag/unittest/s3/GrantBase.h"
 #endif
 
-// Unit tests that use S3.
+// Unit tests that use S3, perhaps more properly called functional tests.
 
 #if 1
 #include "com/diag/unittest/s3/Bucket.h"
