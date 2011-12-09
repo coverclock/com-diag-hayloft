@@ -155,9 +155,9 @@ void BucketManifest::execute() {
 		Logger::instance().debug("BucketManifest@%p: %s\n", this, (size == 0) ? "begin" : "continue");
 		::S3_list_bucket(
 			&context,
-			prefix.empty() ? 0 : prefix.c_str(),
-			nextmarker.empty() ? 0 : nextmarker.c_str(),
-			delimiter.empty() ? 0 : delimiter.c_str(),
+			set(prefix),
+			set(nextmarker),
+			set(delimiter),
 			maximum - size,
 			requests,
 			&handler,

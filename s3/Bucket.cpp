@@ -26,6 +26,15 @@ static const char * canonicalize(const char * name, std::string ** canonical, co
 	return (*canonical)->c_str();
 }
 
+Bucket::Bucket()
+: Container("", "", "", "", Protocol::DEFAULT, Style::DEFAULT)
+, region(Region::DEFAULT())
+, access(Access::DEFAULT)
+, temporary(0)
+{
+	initialize();
+}
+
 Bucket::Bucket(const char * bucketname, const Context & context, const Session & session)
 : Container(context.getId(), context.getSecret(), session.getEndpoint(), canonicalize(bucketname, &temporary, session), context.getProtocol(), context.getStyle())
 , name(bucketname)

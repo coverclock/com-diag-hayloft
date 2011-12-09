@@ -33,7 +33,8 @@ TEST_F(LogBaseTest, Sanity) {
 	static const char PREFIX[] = "Prefix";
 	Bucket bucket("Bucket");
 	Bucket log("Log");
-	Log log1(bucket, log, PREFIX);
+	Grant grant;
+	Log log1(bucket, log, grant, PREFIX);
 	ASSERT_NE(log1.getCanonical(), (char *)0);
 	ASSERT_NE(bucket.getCanonical(), (char *)0);
 	EXPECT_EQ(std::strcmp(log1.getCanonical(), bucket.getCanonical()), 0);
@@ -49,10 +50,10 @@ TEST_F(LogBaseTest, Sanity) {
 	EXPECT_EQ(log1.import(::S3GranteeTypeAllAwsUsers, ::S3PermissionRead), 1);
 	EXPECT_EQ(log1.getAccessControlList().size(), 4);
 	show(log1);
-	Log log2(bucket, log, PREFIX, log1);
+	Log log2(bucket, log, log1, PREFIX);
 	EXPECT_EQ(log2.getAccessControlList().size(), 4);
 	show(log2);
-	Log log3(bucket, log, PREFIX);
+	Log log3(bucket, log, grant, PREFIX);
 	EXPECT_EQ(log3.getAccessControlList().size(), 0);
 	EXPECT_EQ(log3.import(log1), 4);
 	show(log3);
@@ -61,7 +62,7 @@ TEST_F(LogBaseTest, Sanity) {
 	::S3AclGrant * grants = log1.generate(count);
 	EXPECT_EQ(count, 4);
 	ASSERT_NE(grants, (::S3AclGrant*)0);
-	Log log4(bucket, log, PREFIX);
+	Log log4(bucket, log, grant, PREFIX);
 	EXPECT_EQ(log4.getAccessControlList().size(), 0);
 	EXPECT_EQ(log4.import(count, grants), 4);
 	EXPECT_EQ(log4.getAccessControlList().size(), 4);

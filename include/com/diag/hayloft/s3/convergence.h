@@ -28,6 +28,8 @@ namespace s3 {
 
 class Action;
 
+static const Logger::Level CONVERGENCE_LOG_LEVEL = Logger::INFORMATION;
+
 /**
  * Handle the error recovery and consistency convergence logic for an Action
  * by blocking until it is complete. Both synchronous and asynchronous Actions
@@ -44,7 +46,7 @@ class Action;
  * @param level is the logging level.
  * @return true if the desired state was achieved.
  */
-extern bool complete_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, Logger::Level level = Logger::DEBUG);
+extern bool complete_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, Logger::Level level = CONVERGENCE_LOG_LEVEL);
 
 /**
  * Complete until the state of the Action converges to any non-retryable state.
@@ -55,7 +57,7 @@ extern bool complete_generic(Action & action, bool converge = true, bool invert 
  * @param level is the logging level.
  * @return true any non-retryable state was achieved.
  */
-inline bool complete(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool complete(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return complete_generic(action, false, false, 20, 1000, level);
 }
 
@@ -68,7 +70,7 @@ inline bool complete(Action & action, Logger::Level level = Logger::DEBUG) {
  * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool complete_until_successful(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool complete_until_successful(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return complete_generic(action, true, false, 20, 1000, level);
 }
 
@@ -81,7 +83,7 @@ inline bool complete_until_successful(Action & action, Logger::Level level = Log
  * @param level is the logging level.
  * @return true if a Non-existence state was achieved.
  */
-inline bool complete_until_nonexistent(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool complete_until_nonexistent(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return complete_generic(action, true, true, 20, 1000, level);
 }
 
@@ -111,7 +113,7 @@ inline bool complete_until_nonexistent(Action & action, Logger::Level level = Lo
  * @param level is the logging level.
  * @return true if the desired state was achieved.
  */
-extern bool service_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, int iterations = 100, Milliseconds timeout = 100, Logger::Level level = Logger::DEBUG);
+extern bool service_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, int iterations = 100, Milliseconds timeout = 100, Logger::Level level = CONVERGENCE_LOG_LEVEL);
 
 /**
  * Service until the state of the Action converges to any non-retryable state.
@@ -122,7 +124,7 @@ extern bool service_generic(Action & action, bool converge = true, bool invert =
  * @param level is the logging level.
  * @return true any non-retryable state was achieved.
  */
-inline bool service(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool service(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return service_generic(action, false, false, 20, 1000, 100, 1000, level);
 }
 
@@ -135,7 +137,7 @@ inline bool service(Action & action, Logger::Level level = Logger::DEBUG) {
  * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool service_until_successful(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool service_until_successful(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return service_generic(action, true, false, 20, 1000, 100, 1000, level);
 }
 
@@ -148,7 +150,7 @@ inline bool service_until_successful(Action & action, Logger::Level level = Logg
  * @param level is the logging level.
  * @return true if a Non-existence state was achieved.
  */
-inline bool service_until_nonexistent(Action & action, Logger::Level level = Logger::DEBUG) {
+inline bool service_until_nonexistent(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return service_generic(action, true, true, 20, 1000, 100, 1000, level);
 }
 

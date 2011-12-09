@@ -11,7 +11,7 @@
 #include "com/diag/hayloft/s3/Action.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/hayloft/Fibbonacci.h"
+#include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
 #include "libs3.h"
@@ -31,7 +31,7 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 	if (action.isIdle()) {
 		action.start();
 	}
-	Fibbonacci factor;
+	Fibonacci factor;
 	::S3RequestContext * requests;
 	int rc;
 	Milliseconds effective;
@@ -78,7 +78,7 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 	if (action.isIdle()) {
 		action.start();
 	}
-	Fibbonacci factor;
+	Fibonacci factor;
 	::S3RequestContext * requests;
 	int rc;
 	Milliseconds effective;

@@ -55,6 +55,17 @@ inline const char * set(const char * arg, const char * nam, const char * def) {
 	return (arg != 0) ? arg : ((nam != 0) && ((val = std::getenv(nam)) != 0)) ? val : (def != 0) ? def : "";
 }
 
+/**
+ * Gets a C string from a C++ string is the latter is not empty, NULL otherwise.
+ * Typically used in translating C++ strings to C strings for libs3 functions.
+ *
+ * @param str refers to a C++ string.
+ * @return a C string or NULL.
+ */
+inline const char * set(const std::string & str) {
+	return str.empty() ? 0 : str.c_str();
+}
+
 }
 }
 }

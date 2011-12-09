@@ -48,15 +48,9 @@ public:
 	 *
 	 * @param bucket refers about to the bucket whose access is to be logged.
 	 *        This reference is only used during construction.
-	 * @param log refers to the bucket into which the logs are to be written.
-	 *        This reference is only used during construction.
-	 * @param keyprefix is an optional C string that is a key (object name)
-	 *        prefix used for any logs generated.
 	 */
 	explicit LogGet(
-		const Bucket & bucket,
-		const Bucket & log,
-		const char * keyprefix = 0
+		const Bucket & bucket
 	);
 
 	/**
@@ -64,19 +58,13 @@ public:
 	 *
 	 * @param bucket refers about to the bucket whose access is to be logged.
 	 *        This reference is only used during construction.
-	 * @param log refers to the bucket into which the logs are to be written.
-	 *        This reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
-	 * @param keyprefix is an optional C string that is a key (object name)
-	 *        prefix used for any logs generated.
 	 */
 	explicit LogGet(
 		const Bucket & bucket,
-		const Bucket & log,
-		const Multiplex & multiplex,
-		const char * keyprefix = 0
+		const Multiplex & multiplex
 	);
 
 	/**

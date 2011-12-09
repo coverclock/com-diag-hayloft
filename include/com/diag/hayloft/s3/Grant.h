@@ -129,7 +129,7 @@ protected:
 public:
 
 	/**
-	 * Ctor. Use this for the synchronous interface.
+	 * Ctor. Use this for don't care.
 	 */
 	explicit Grant();
 
