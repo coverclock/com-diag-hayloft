@@ -46,17 +46,17 @@ public:
 	 *        This reference is only used during construction.
 	 * @param log refers to the bucket into which the logs are to be written.
 	 *        This reference is only used during construction.
+	 * @param keyprefix is an optional C string that is a key (object name)
+	 *        prefix used for any logs generated.
 	 * @param grant refers to a Grant whose access control list will be applied
 	 *        to any of the logs generated. This reference is only used during
 	 *        construction.
-	 * @param keyprefix is an optional C string that is a key (object name)
-	 *        prefix used for any logs generated.
 	 */
 	explicit LogSet(
 		const Bucket & bucket,
 		const Bucket & log,
-		const Grant & grant = Grant(),
-		const char * keyprefix = 0
+		const char * keyprefix = 0,
+		const Grant & grant = Grant()
 	);
 
 	/**
@@ -69,18 +69,18 @@ public:
 	 *        construction.
 	 * @param log refers to the bucket into which the logs are to be written.
 	 *        This reference is only used during construction.
+	 * @param keyprefix is an optional C string that is a key (object name)
+	 *        prefix used for any logs generated.
 	 * @param grant refers to a Grant whose access control list will be applied
 	 *        to any of the logs generated. This reference is only used during
 	 *        construction.
-	 * @param keyprefix is an optional C string that is a key (object name)
-	 *        prefix used for any logs generated.
 	 */
 	explicit LogSet(
 		const Bucket & bucket,
 		const Multiplex & multiplex,
 		const Bucket & log,
-		const Grant & grant = Grant(),
-		const char * keyprefix = 0
+		const char * keyprefix = 0,
+		const Grant & grant = Grant()
 	);
 
 	/**

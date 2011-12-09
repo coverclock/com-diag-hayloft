@@ -28,8 +28,8 @@ void LogSet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 }
 
 
-LogSet::LogSet(const Bucket & bucket, const Bucket & log, const Grant & grant, const char * keyprefix)
-: Log(bucket, log, grant, keyprefix)
+LogSet::LogSet(const Bucket & bucket, const Bucket & log, const char * keyprefix, const Grant & grant)
+: Log(bucket, log, keyprefix, grant)
 , count(0)
 , grants(0)
 {
@@ -37,8 +37,8 @@ LogSet::LogSet(const Bucket & bucket, const Bucket & log, const Grant & grant, c
 	execute();
 }
 
-LogSet::LogSet(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const Grant & grant, const char * keyprefix)
-: Log(bucket, multiplex, log, grant, keyprefix)
+LogSet::LogSet(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const char * keyprefix, const Grant & grant)
+: Log(bucket, multiplex, log, keyprefix, grant)
 , count(0)
 , grants(0)
 {
