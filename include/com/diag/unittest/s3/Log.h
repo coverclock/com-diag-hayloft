@@ -107,6 +107,49 @@ TEST_F(LogTest, SetGet) {
 	ASSERT_TRUE(complete(logdelete));
 }
 
+TEST_F(LogTest, SetGetPrefix) {
+	static const char BUCKET[] = "LogTestSetGetPrefixBucket";
+	static const char LOG[] = "LogTestSetGetPrefixLog";
+	static const char PREFIX[] = "Prefix";
+	Multiplex multiplex;
+	BucketCreate bucket(BUCKET, multiplex);
+	ASSERT_TRUE(complete(bucket));
+	LogGet logget1(bucket, multiplex);
+	ASSERT_TRUE(complete(logget1));
+	ASSERT_NE(logget1.getTarget(), (char *)0);
+	EXPECT_EQ(*logget1.getTarget(), '\0');
+	ASSERT_NE(logget1.getPrefix(), (char *)0);
+	EXPECT_EQ(*logget1.getPrefix(), '\0');
+	show(logget1);
+	GrantGet grantget(bucket, multiplex);
+	ASSERT_TRUE(complete(grantget));
+	show(grantget);
+	BucketCreate log(LOG, multiplex);
+	ASSERT_TRUE(complete(log));
+	GrantSet grant(log, multiplex, grantget);
+	grant.import(::S3GranteeTypeLogDelivery, ::S3PermissionWrite);
+	grant.import(::S3GranteeTypeLogDelivery, ::S3PermissionReadACP);
+	show(grant);
+	ASSERT_TRUE(complete(grant));
+	LogSet logset(bucket, multiplex, log, PREFIX);
+	ASSERT_NE(logset.getTarget(), (char *)0);
+	EXPECT_EQ(std::strcmp(logset.getTarget(), log.getCanonical()), 0);
+	ASSERT_NE(logset.getPrefix(), (char *)0);
+	EXPECT_EQ(std::strcmp(logset.getPrefix(), PREFIX), 0);
+	ASSERT_TRUE(complete(logset));
+	LogGet logget2(bucket, multiplex);
+	ASSERT_TRUE(complete(logget2));
+	ASSERT_NE(logget2.getTarget(), (char *)0);
+	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
+	ASSERT_NE(logget2.getPrefix(), (char *)0);
+	EXPECT_EQ(std::strcmp(logget2.getPrefix(), PREFIX), 0);
+	show(logget2);
+	BucketDelete bucketdelete(bucket, multiplex);
+	ASSERT_TRUE(complete(bucketdelete));
+	BucketDelete logdelete(log, multiplex);
+	ASSERT_TRUE(complete(logdelete));
+}
+
 }
 }
 }

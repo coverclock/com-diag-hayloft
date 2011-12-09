@@ -17,7 +17,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-Log::Log(const Bucket & bucket, const Bucket & log, const Grant & grant, const char * keyprefix)
+Log::Log(const Bucket & bucket, const Bucket & log, const char * keyprefix, const Grant & grant)
 : Grant(bucket, grant)
 , target(log.getCanonical())
 , prefix(set(keyprefix))
@@ -25,7 +25,7 @@ Log::Log(const Bucket & bucket, const Bucket & log, const Grant & grant, const c
 	initialize();
 }
 
-Log::Log(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const Grant & grant, const char * keyprefix)
+Log::Log(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const char * keyprefix, const Grant & grant)
 : Grant(bucket, multiplex, grant)
 , target(log.getCanonical())
 , prefix(set(keyprefix))
