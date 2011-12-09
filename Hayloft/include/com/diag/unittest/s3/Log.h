@@ -19,8 +19,15 @@
 #include "com/diag/hayloft/s3/GrantSet.h"
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
+#include "com/diag/hayloft/s3/ObjectPut.h"
+#include "com/diag/desperado/PathInput.h"
+#include "com/diag/hayloft/s3/ObjectGet.h"
+#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/hayloft/s3/BucketManifest.h"
+#include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/convergence.h"
+#include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/desperado/string.h"
 #include "libs3.h"
 
@@ -144,6 +151,57 @@ TEST_F(LogTest, SetGetPrefix) {
 	ASSERT_NE(logget2.getPrefix(), (char *)0);
 	EXPECT_EQ(std::strcmp(logget2.getPrefix(), PREFIX), 0);
 	show(logget2);
+	BucketDelete bucketdelete(bucket, multiplex);
+	ASSERT_TRUE(complete(bucketdelete));
+	BucketDelete logdelete(log, multiplex);
+	ASSERT_TRUE(complete(logdelete));
+}
+
+// There's no good way I know of to functionally test this within this suite,
+// since S3 will write the logs asynchronously at some point in the future.
+// I pretend to test it here, but it would be a miracle if this unit test just
+// happen to run as S3 is writing the logs so that the second Bucket Manifest
+// Action saw them.
+TEST_F(LogTest, SetGetApplication) {
+	static const char BUCKET[] = "LogTestSetGetApplicationBucket";
+	static const char LOG[] = "LogTestSetGetApplicationLog";
+	static const char PREFIX[] = "Prefix";
+	static const char OBJECT[] = "Object.txt";
+	Multiplex multiplex;
+	BucketCreate bucket(BUCKET, multiplex);
+	ASSERT_TRUE(complete(bucket));
+	GrantGet grantget(bucket, multiplex);
+	ASSERT_TRUE(complete(grantget));
+	BucketCreate log(LOG, multiplex);
+	ASSERT_TRUE(complete(log));
+	GrantSet grant(log, multiplex, grantget);
+	grant.import(::S3GranteeTypeLogDelivery, ::S3PermissionWrite);
+	grant.import(::S3GranteeTypeLogDelivery, ::S3PermissionReadACP);
+	ASSERT_TRUE(complete(grant));
+	LogSet logset(bucket, multiplex, log, PREFIX);
+	ASSERT_TRUE(complete(logset));
+	Fibonacci factor;
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	Size inputsize = size(*input);
+	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
+	for (int ii = 0; ii < 10; ++ii) {
+		put.start();
+		multiplex.complete();
+		if (!put.isRetryable()) { break; }
+		platform.yield(factor * platform.frequency());
+		input = new ::com::diag::desperado::PathInput(__FILE__);
+		inputsize = size(*input);
+		put.reset(input, inputsize);
+	}
+	ASSERT_TRUE(put.isSuccessful());
+	BucketManifest manifest1(bucket, multiplex);
+	ASSERT_TRUE(complete(manifest1));
+	show(manifest1);
+	ObjectDelete objectdelete(put, multiplex);
+	ASSERT_TRUE(complete(objectdelete));
+	BucketManifest manifest2(log, multiplex);
+	ASSERT_TRUE(complete(manifest2));
+	show(manifest2);
 	BucketDelete bucketdelete(bucket, multiplex);
 	ASSERT_TRUE(complete(bucketdelete));
 	BucketDelete logdelete(log, multiplex);
