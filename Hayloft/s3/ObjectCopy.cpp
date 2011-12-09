@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/ObjectCopy.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
 
@@ -102,11 +103,11 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 	}
 	entitytag[0] = '\0';
 	std::memset(&properties, 0, sizeof(properties));
-	properties.contentType = type.empty() ? 0 : type.c_str();
-	properties.md5 = checksum.empty() ? 0 : checksum.c_str();
-	properties.cacheControl = control.empty() ? 0 : control.c_str();
-	properties.contentDispositionFilename = filename.empty() ? 0 : filename.c_str();
-	properties.contentEncoding = encoding.empty() ? 0 : encoding.c_str();
+	properties.contentType = set(type);
+	properties.md5 = set(checksum);
+	properties.cacheControl = set(control);
+	properties.contentDispositionFilename = set(filename);
+	properties.contentEncoding = set(encoding);
 	properties.expires = expires;
 	properties.cannedAcl = access;
 	properties.metaDataCount = settings.size();

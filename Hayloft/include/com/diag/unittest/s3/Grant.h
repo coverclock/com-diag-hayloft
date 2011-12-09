@@ -138,9 +138,9 @@ TEST_F(GrantTest, GetPublicRead) {
 	ASSERT_TRUE(complete(bucketdelete));
 }
 
-TEST_F(GrantTest, GetSet) {
+TEST_F(GrantTest, SetGet) {
 	static const int LIMIT = 10;
-	static const char BUCKET[] = "GrantTestGetSet";
+	static const char BUCKET[] = "GrantTestSetGet";
 	static const char OBJECT[] = "Object.txt";
 	/**/
 	BucketCreate bucketcreate(BUCKET);

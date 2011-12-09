@@ -40,6 +40,14 @@ namespace s3 {
 	return status;
 }
 
+Object::Object()
+: Container("", "", "", "", Protocol::DEFAULT, Style::DEFAULT)
+, length(0)
+, modified(-1)
+{
+	initialize();
+}
+
 Object::Object(const char * keyname, const Bucket & bucket)
 : Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle())
 , key(keyname)

@@ -10,6 +10,7 @@
 #include "com/diag/hayloft/s3/ObjectGet.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Output.h"
 #include "com/diag/desperado/string.h"
@@ -162,8 +163,8 @@ void ObjectGet::initialize() {
 	std::memset(&conditions, 0, sizeof(conditions));
 	conditions.ifModifiedSince = since;
 	conditions.ifNotModifiedSince = notsince;
-	conditions.ifMatchETag = match.empty() ? 0 : match.c_str();
-	conditions.ifNotMatchETag = notmatch.empty() ? 0 : notmatch.c_str();
+	conditions.ifMatchETag = set(match);
+	conditions.ifNotMatchETag = set(notmatch);
 	show(&conditions, Logger::DEBUG);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;

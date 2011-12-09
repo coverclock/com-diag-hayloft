@@ -36,15 +36,19 @@ void LogGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 	(*that->Log::handler.completeCallback)(status, errorDetails, callbackData);
 }
 
-LogGet::LogGet(const Bucket & bucket, const Bucket & log, const char * keyprefix)
-: Log(bucket, log, keyprefix)
+LogGet::LogGet(const Bucket & bucket)
+: Log(bucket)
+, count(0)
+, grants(0)
 {
 	initialize();
 	execute();
 }
 
-LogGet::LogGet(const Bucket & bucket, const Bucket & log, const Multiplex & multiplex, const char * keyprefix)
-: Log(bucket, log, multiplex, keyprefix)
+LogGet::LogGet(const Bucket & bucket, const Multiplex & multiplex)
+: Log(bucket, multiplex)
+, count(0)
+, grants(0)
 {
 	initialize();
 }

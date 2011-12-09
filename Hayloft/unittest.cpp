@@ -21,7 +21,7 @@
 #include "com/diag/unittest/Packet.h"
 #include "com/diag/unittest/Parameter.h"
 #include "com/diag/unittest/size.h"
-#include "com/diag/unittest/Fibbonacci.h"
+#include "com/diag/unittest/Fibonacci.h"
 #endif
 
 // Unit tests that also use libs3, libcurl, libssl, and libcrypto. Running
@@ -52,20 +52,24 @@
 
 // Unit tests that use S3, perhaps more properly called functional tests.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Object.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/convergence.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Grant.h"
+#endif
+
+#if 1
+#include "com/diag/unittest/s3/Log.h"
 #endif
 
 // Hooks to clean up singletons just for valgrind.

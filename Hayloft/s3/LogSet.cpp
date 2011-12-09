@@ -11,6 +11,7 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
 
 namespace com {
@@ -27,15 +28,19 @@ void LogSet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails 
 }
 
 
-LogSet::LogSet(const Bucket & bucket, const Bucket & log, const char * keyprefix, const Grant & grant)
-: Log(bucket, log, keyprefix, grant)
+LogSet::LogSet(const Bucket & bucket, const Bucket & log, const Grant & grant, const char * keyprefix)
+: Log(bucket, log, grant, keyprefix)
+, count(0)
+, grants(0)
 {
 	initialize();
 	execute();
 }
 
-LogSet::LogSet(const Bucket & bucket, const Bucket & log, const Multiplex & multiplex, const char * keyprefix, const Grant & grant)
-: Log(bucket, log, multiplex, keyprefix, grant)
+LogSet::LogSet(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const Grant & grant, const char * keyprefix)
+: Log(bucket, multiplex, log, grant, keyprefix)
+, count(0)
+, grants(0)
 {
 	initialize();
 }
@@ -73,7 +78,7 @@ void LogSet::execute() {
 	S3_set_server_access_logging(
 		&context,
 		target.c_str(),
-		prefix.empty() ? 0 : prefix.c_str(),
+		set(prefix),
 		count,
 		grants,
 		requests,

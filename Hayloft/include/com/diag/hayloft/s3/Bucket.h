@@ -48,6 +48,11 @@ protected:
 public:
 
 	/**
+	 * Ctor. Use this for don't care.
+	 */
+	explicit Bucket();
+
+	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
 	 * @param bucketname is the non-canonical (application) bucket name. A copy

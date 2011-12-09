@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_FIBBONACCI_
-#define _H_COM_DIAG_HAYLOFT_FIBBONACCI_
+#ifndef _H_COM_DIAG_HAYLOFT_FIBONACCI_
+#define _H_COM_DIAG_HAYLOFT_FIBONACCI_
 
 /**
  * @file
@@ -16,11 +16,11 @@ namespace diag {
 namespace hayloft {
 
 /**
- * Fibbonacci implements the Fibbonacci sequence for use in back off during
+ * Fibonacci implements the Fibonacci sequence for use in back off during
  * error recovery and retry. There is no provision for handling integer
  * overflow.
  */
-class Fibbonacci {
+class Fibonacci {
 
 private:
 
@@ -33,7 +33,7 @@ public:
 	/**
 	 * Ctor.
 	 */
-	Fibbonacci()
+	Fibonacci()
 	: was(0)
 	, now(1)
 	{}

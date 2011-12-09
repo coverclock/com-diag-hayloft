@@ -84,6 +84,12 @@ protected:
 public:
 
 	/**
+	 * Ctor. Use this for don't care.
+	 *
+	 */
+	explicit Object();
+
+	/**
 	 * Ctor. Use this for the synchronous interface.
 	 *
 	 * @param keyname is the name of this Object. A copy is made of this C

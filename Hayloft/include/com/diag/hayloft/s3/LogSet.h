@@ -46,17 +46,17 @@ public:
 	 *        This reference is only used during construction.
 	 * @param log refers to the bucket into which the logs are to be written.
 	 *        This reference is only used during construction.
-	 * @param keyprefix is an optional C string that is a key (object name)
-	 *        prefix used for any logs generated.
 	 * @param grant refers to a Grant whose access control list will be applied
 	 *        to any of the logs generated. This reference is only used during
 	 *        construction.
+	 * @param keyprefix is an optional C string that is a key (object name)
+	 *        prefix used for any logs generated.
 	 */
 	explicit LogSet(
 		const Bucket & bucket,
 		const Bucket & log,
-		const char * keyprefix = 0,
-		const Grant & grant = Grant()
+		const Grant & grant = Grant(),
+		const char * keyprefix = 0
 	);
 
 	/**
@@ -64,23 +64,23 @@ public:
 	 *
 	 * @param bucket refers about to the bucket whose access is to be logged.
 	 *        This reference is only used during construction.
-	 * @param log refers to the bucket into which the logs are to be written.
-	 *        This reference is only used during construction.
 	 * @param multiplex refers to the Multiplex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
-	 * @param keyprefix is an optional C string that is a key (object name)
-	 *        prefix used for any logs generated.
+	 * @param log refers to the bucket into which the logs are to be written.
+	 *        This reference is only used during construction.
 	 * @param grant refers to a Grant whose access control list will be applied
 	 *        to any of the logs generated. This reference is only used during
 	 *        construction.
+	 * @param keyprefix is an optional C string that is a key (object name)
+	 *        prefix used for any logs generated.
 	 */
 	explicit LogSet(
 		const Bucket & bucket,
-		const Bucket & log,
 		const Multiplex & multiplex,
-		const char * keyprefix = 0,
-		const Grant & grant = Grant()
+		const Bucket & log,
+		const Grant & grant = Grant(),
+		const char * keyprefix = 0
 	);
 
 	/**

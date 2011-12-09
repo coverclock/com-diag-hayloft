@@ -9,6 +9,7 @@
 
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/desperado/string.h"
@@ -174,11 +175,11 @@ ObjectPut::~ObjectPut() {
 void ObjectPut::initialize(const Properties::Metadata & settings) {
 	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&properties, 0, sizeof(properties));
-	properties.contentType = type.empty() ? 0 : type.c_str();
-	properties.md5 = checksum.empty() ? 0 : checksum.c_str();
-	properties.cacheControl = control.empty() ? 0 : control.c_str();
-	properties.contentDispositionFilename = filename.empty() ? 0 : filename.c_str();
-	properties.contentEncoding = encoding.empty() ? 0 : encoding.c_str();
+	properties.contentType = set(type);
+	properties.md5 = set(checksum);
+	properties.cacheControl = set(control);
+	properties.contentDispositionFilename = set(filename);
+	properties.contentEncoding = set(encoding);
 	properties.expires = expires;
 	properties.cannedAcl = access;
 	properties.metaDataCount = settings.size();
