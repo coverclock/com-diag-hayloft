@@ -9,7 +9,7 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
+#include "com/diag/hayloft/s3/Plex.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
@@ -44,8 +44,8 @@ Bucket::Bucket(const char * bucketname, const Context & context, const Session &
 	initialize();
 }
 
-Bucket::Bucket(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
-: Container(context.getId(), context.getSecret(), session.getEndpoint(), canonicalize(bucketname, &temporary, session), context.getProtocol(), context.getStyle(), multiplex)
+Bucket::Bucket(const char * bucketname, const Plex & plex, const Context & context, const Session & session)
+: Container(context.getId(), context.getSecret(), session.getEndpoint(), canonicalize(bucketname, &temporary, session), context.getProtocol(), context.getStyle(), plex)
 , name(bucketname)
 , region(context.getRegion())
 , access(context.getAccess())
@@ -63,8 +63,8 @@ Bucket::Bucket(const Bucket & bucket)
 	initialize();
 }
 
-Bucket::Bucket(const Bucket & bucket, const Multiplex & multiplex)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+Bucket::Bucket(const Bucket & bucket, const Plex & plex)
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), plex)
 , name(bucket.getName())
 , region(bucket.getRegion())
 , access(bucket.getAccess())

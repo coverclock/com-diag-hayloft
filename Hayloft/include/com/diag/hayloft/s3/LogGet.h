@@ -58,13 +58,13 @@ public:
 	 *
 	 * @param bucket refers about to the bucket whose access is to be logged.
 	 *        This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
 	explicit LogGet(
 		const Bucket & bucket,
-		const Multiplex & multiplex
+		const Plex & plex
 	);
 
 	/**

@@ -70,7 +70,7 @@ public:
 	 *        Container.
 	 * @param httpProtocol is the HTTP protocol, Secure or Unsecure, used to
 	 *        access this Container.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
@@ -79,7 +79,7 @@ public:
 		const char * secretAccessKey,
 		const char * endPoint,
 		::S3Protocol httpProtocol,
-		const Multiplex & multiplex
+		const Plex & plex
 	);
 
 	/**

@@ -131,7 +131,7 @@ public:
 	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sink refers to an Output functor.
@@ -145,7 +145,7 @@ public:
 	explicit ObjectGet(
 		const char * keyname,
 		const Bucket & bucket,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		Output & sink,
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
@@ -159,7 +159,7 @@ public:
 	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
@@ -174,7 +174,7 @@ public:
 	explicit ObjectGet(
 		const char * keyname,
 		const Bucket & bucket,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		Output * sinkp, /* TAKEN */
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
@@ -229,7 +229,7 @@ public:
 	 *
 	 * @param object refers to a Object Action from which this Object Action
 	 *        is configured. This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sink refers to an Output functor.
@@ -242,7 +242,7 @@ public:
 	 */
 	explicit ObjectGet(
 		const Object & object,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		Output & sink,
 		Octets objectoffset = 0,
 		Octets objectsize = 0,
@@ -254,7 +254,7 @@ public:
 	 *
 	 * @param object refers to a Object Action from which this Object Action
 	 *        is configured. This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
@@ -268,7 +268,7 @@ public:
 	 */
 	explicit ObjectGet(
 		const Object & object,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		Output * sinkp, /* TAKEN */
 		Octets objectoffset = 0,
 		Octets objectsize = 0,

@@ -37,8 +37,8 @@ LogSet::LogSet(const Bucket & bucket, const Bucket & log, const char * keyprefix
 	execute();
 }
 
-LogSet::LogSet(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const char * keyprefix, const Grant & grant)
-: Log(bucket, multiplex, log, keyprefix, grant)
+LogSet::LogSet(const Bucket & bucket, const Plex & plex, const Bucket & log, const char * keyprefix, const Grant & grant)
+: Log(bucket, plex, log, keyprefix, grant)
 , count(0)
 , grants(0)
 {

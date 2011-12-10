@@ -22,8 +22,8 @@ BucketCreate::BucketCreate(const char * bucketname, const Context & context, con
 	execute();
 }
 
-BucketCreate::BucketCreate(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
-: Bucket(bucketname, multiplex, context, session)
+BucketCreate::BucketCreate(const char * bucketname, const Plex & plex, const Context & context, const Session & session)
+: Bucket(bucketname, plex, context, session)
 {
 	initialize();
 }
@@ -35,8 +35,8 @@ BucketCreate::BucketCreate(const Bucket & bucket)
 	execute();
 }
 
-BucketCreate::BucketCreate(const Bucket & bucket, const Multiplex & multiplex)
-: Bucket(bucket, multiplex)
+BucketCreate::BucketCreate(const Bucket & bucket, const Plex & plex)
+: Bucket(bucket, plex)
 {
 	initialize();
 }

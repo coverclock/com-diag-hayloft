@@ -29,8 +29,8 @@ BucketHead::BucketHead(const char * bucketname, const Context & context, const S
 	execute();
 }
 
-BucketHead::BucketHead(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
-: Bucket(bucketname, multiplex, context, session)
+BucketHead::BucketHead(const char * bucketname, const Plex & plex, const Context & context, const Session & session)
+: Bucket(bucketname, plex, context, session)
 {
 	initialize();
 }
@@ -42,8 +42,8 @@ BucketHead::BucketHead(const Bucket & bucket)
 	execute();
 }
 
-BucketHead::BucketHead(const Bucket & bucket, const Multiplex & multiplex)
-: Bucket(bucket, multiplex)
+BucketHead::BucketHead(const Bucket & bucket, const Plex & plex)
+: Bucket(bucket, plex)
 {
 	initialize();
 }

@@ -22,8 +22,8 @@ ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket)
 	execute();
 }
 
-ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, const Multiplex & multiplex)
-: Object(keyname, bucket, multiplex)
+ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket, const Plex & plex)
+: Object(keyname, bucket, plex)
 {
 	initialize();
 }
@@ -35,8 +35,8 @@ ObjectDelete::ObjectDelete(const Object & object)
 	execute();
 }
 
-ObjectDelete::ObjectDelete(const Object & object, const Multiplex & multiplex)
-: Object(object, multiplex)
+ObjectDelete::ObjectDelete(const Object & object, const Plex & plex)
+: Object(object, plex)
 {
 	initialize();
 }

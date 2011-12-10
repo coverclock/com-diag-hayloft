@@ -45,8 +45,8 @@ LogGet::LogGet(const Bucket & bucket)
 	execute();
 }
 
-LogGet::LogGet(const Bucket & bucket, const Multiplex & multiplex)
-: Log(bucket, multiplex)
+LogGet::LogGet(const Bucket & bucket, const Plex & plex)
+: Log(bucket, plex)
 , count(0)
 , grants(0)
 {

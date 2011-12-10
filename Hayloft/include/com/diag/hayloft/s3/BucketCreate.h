@@ -47,7 +47,7 @@ public:
 	 *
 	 * @param bucketname is the non-canonical (application) bucket name. A copy
 	 *        is made of this C string.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param context refers to a Context object which provides the Credentials,
@@ -57,7 +57,7 @@ public:
 	 */
 	explicit BucketCreate(
 		const char * bucketname,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
@@ -77,18 +77,18 @@ public:
 	 *
 	 * @param bucket refers to a Bucket Action from which this Bucket Action
 	 *        is configured. This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
 	explicit BucketCreate(
 		const Bucket & bucket,
-		const Multiplex & multiplex
+		const Plex & plex
 	);
 
 	/**
 	 * Dtor. If the Action is in the BUSY state this forces the execution of
-	 * all Actions on the same Multiplex and blocks until they all complete.
+	 * all Actions on the same Plex and blocks until they all complete.
 	 */
 	virtual ~BucketCreate();
 

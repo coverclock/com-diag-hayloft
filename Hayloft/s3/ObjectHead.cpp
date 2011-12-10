@@ -22,8 +22,8 @@ ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket)
 	execute();
 }
 
-ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, const Multiplex & multiplex)
-: Object(keyname, bucket, multiplex)
+ObjectHead::ObjectHead(const char * keyname, const Bucket & bucket, const Plex & plex)
+: Object(keyname, bucket, plex)
 {
 	initialize();
 }
@@ -35,8 +35,8 @@ ObjectHead::ObjectHead(const Object & object)
 	execute();
 }
 
-ObjectHead::ObjectHead(const Object & object, const Multiplex & multiplex)
-: Object(object, multiplex)
+ObjectHead::ObjectHead(const Object & object, const Plex & plex)
+: Object(object, plex)
 {
 	initialize();
 }

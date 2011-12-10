@@ -177,7 +177,7 @@ public:
 	 *
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param grant refers to another grant whose access control list is to be
@@ -186,7 +186,7 @@ public:
 	 */
 	explicit Grant(
 		const Bucket & bucket,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Grant & grant = Grant()
 	);
 
@@ -195,7 +195,7 @@ public:
 	 *
 	 * @param object refers to the Object associated with this object. This
 	 *        reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param grant refers to another grant whose access control list is to be
@@ -204,7 +204,7 @@ public:
 	 */
 	explicit Grant(
 		const Object & object,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Grant & grant = Grant()
 	);
 

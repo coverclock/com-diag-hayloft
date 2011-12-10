@@ -28,8 +28,8 @@ Container::Container(const char * accessKeyId, const char * secretAccessKey, con
 	initialize();
 }
 
-Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uriStyle, const Multiplex & multiplex)
-: Service(accessKeyId, secretAccessKey, endPoint, httpProtocol, multiplex)
+Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uriStyle, const Plex & plex)
+: Service(accessKeyId, secretAccessKey, endPoint, httpProtocol, plex)
 , canonical(canonicalBucketName)
 , style(uriStyle)
 {
