@@ -83,7 +83,8 @@ protected:
 public:
 
 	/**
-	 * Ctor.
+	 * Ctor. Specifying a NULL S3RequestContext, which is the default, results
+	 * in Actions that are synchronous.
 	 *
 	 * @param requestContext is the S3RequestContext. It is UNTAKEN and must
 	 *        be deallocated by the application.
