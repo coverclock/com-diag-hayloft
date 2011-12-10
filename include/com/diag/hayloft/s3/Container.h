@@ -81,7 +81,7 @@ public:
 	 *        access this Container.
 	 * @param uriStyle is the URI style, Virtual Host or Path, used to access
 	 *        this Container.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
@@ -92,7 +92,7 @@ public:
 		const char * canonicalBucketName,
 		::S3Protocol httpProtocol,
 		::S3UriStyle uriStyle,
-		 const Multiplex & multiplex
+		 const Plex & plex
 	);
 
 	/**

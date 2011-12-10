@@ -57,15 +57,15 @@ Grant::Grant(const Object & object, const Grant & grant)
 	initialize(&grant);
 }
 
-Grant::Grant(const Bucket & bucket, const Multiplex & multiplex, const Grant & grant)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+Grant::Grant(const Bucket & bucket, const Plex & plex, const Grant & grant)
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), plex)
 , keypointer(0)
 {
 	initialize(&grant);
 }
 
-Grant::Grant(const Object & object, const Multiplex & multiplex, const Grant & grant)
-: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
+Grant::Grant(const Object & object, const Plex & plex, const Grant & grant)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), plex)
 , key(object.getKey())
 , keypointer(key.c_str())
 {

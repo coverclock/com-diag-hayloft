@@ -60,6 +60,15 @@ TEST_F(MultiplexTest, Ready) {
 	EXPECT_EQ(multiplex.ready(), 0);
 }
 
+TEST_F(MultiplexTest, Plex) {
+	Multiplex multiplex;
+	EXPECT_TRUE(multiplex == true);
+	EXPECT_NE(multiplex.getRequests(), (S3RequestContext *)0);
+	Plex plex(multiplex.getRequests());
+	EXPECT_NE(plex.getRequests(), (S3RequestContext *)0);
+	EXPECT_EQ(multiplex.getRequests(), plex.getRequests());
+}
+
 }
 }
 }

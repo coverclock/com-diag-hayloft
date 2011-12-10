@@ -90,8 +90,8 @@ BucketManifest::BucketManifest(const char * bucketname, const Selection & select
 	execute();
 }
 
-BucketManifest::BucketManifest(const char * bucketname, const Multiplex & multiplex, const Selection & selection, const Context & context, const Session & session)
-: Bucket(bucketname, multiplex, context, session)
+BucketManifest::BucketManifest(const char * bucketname, const Plex & plex, const Selection & selection, const Context & context, const Session & session)
+: Bucket(bucketname, plex, context, session)
 , prefix(selection.getPrefix())
 , marker(selection.getMarker())
 , nextmarker(selection.getMarker())
@@ -115,8 +115,8 @@ BucketManifest::BucketManifest(const Bucket & bucket, const Selection & selectio
 	execute();
 }
 
-BucketManifest::BucketManifest(const Bucket & bucket, const Multiplex & multiplex, const Selection & selection)
-: Bucket(bucket, multiplex)
+BucketManifest::BucketManifest(const Bucket & bucket, const Plex & plex, const Selection & selection)
+: Bucket(bucket, plex)
 , prefix(selection.getPrefix())
 , marker(selection.getMarker())
 , nextmarker(selection.getMarker())

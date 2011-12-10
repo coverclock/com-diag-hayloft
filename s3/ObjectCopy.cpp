@@ -41,8 +41,8 @@ ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, cons
 	execute();
 }
 
-ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, const char * tokeyname, const Bucket & tobucket, const Multiplex & multiplex, const Properties & props)
-: Object(fromkeyname, frombucket, multiplex)
+ObjectCopy::ObjectCopy(const char * fromkeyname, const Bucket & frombucket, const char * tokeyname, const Bucket & tobucket, const Plex & plex, const Properties & props)
+: Object(fromkeyname, frombucket, plex)
 , tocanonical(tobucket.getCanonical())
 , tokey(tokeyname)
 , type(props.getType())
@@ -72,8 +72,8 @@ ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const
 	execute();
 }
 
-ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const Multiplex & multiplex, const Properties & props)
-: Object(fromobject, multiplex)
+ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const Plex & plex, const Properties & props)
+: Object(fromobject, plex)
 , tocanonical(toobject.getCanonical())
 , tokey(toobject.getKey())
 , type(props.getType())

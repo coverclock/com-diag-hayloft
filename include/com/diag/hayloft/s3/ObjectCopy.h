@@ -113,7 +113,7 @@ public:
 	 *        A copy is made of this C string.
 	 * @param tobucket refers to the Bucket to which the copy is made. This
 	 *        reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param props refers to the Properties to be associated with the object
@@ -125,7 +125,7 @@ public:
 		const Bucket & frombucket,
 		const char * tokeyname,
 		const Bucket & tobucket,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Properties & props = Properties()
 	);
 
@@ -153,7 +153,7 @@ public:
 	 *        made. This reference is only used during construction.
 	 * @param toobject refers to a Object Action to which this copy is made.
 	 *        This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param props refers to the Properties to be associated with the object
@@ -163,7 +163,7 @@ public:
 	explicit ObjectCopy(
 		const Object & fromobject,
 		const Object & toobject,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Properties & props = Properties()
 	);
 

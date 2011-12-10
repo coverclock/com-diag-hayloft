@@ -22,8 +22,8 @@ BucketDelete::BucketDelete(const char * bucketname, const Context & context, con
 	execute();
 }
 
-BucketDelete::BucketDelete(const char * bucketname, const Multiplex & multiplex, const Context & context, const Session & session)
-: Bucket(bucketname, multiplex, context, session)
+BucketDelete::BucketDelete(const char * bucketname, const Plex & plex, const Context & context, const Session & session)
+: Bucket(bucketname, plex, context, session)
 {
 	initialize();
 }
@@ -35,8 +35,8 @@ BucketDelete::BucketDelete(const Bucket & bucket)
 	execute();
 }
 
-BucketDelete::BucketDelete(const Bucket & bucket, const Multiplex & multiplex)
-: Bucket(bucket, multiplex)
+BucketDelete::BucketDelete(const Bucket & bucket, const Plex & plex)
+: Bucket(bucket, plex)
 {
 	initialize();
 }

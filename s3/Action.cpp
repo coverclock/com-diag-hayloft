@@ -8,7 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/Action.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
+#include "com/diag/hayloft/s3/Plex.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
@@ -66,8 +66,8 @@ Action::Action()
 	initialize();
 }
 
-Action::Action(const Multiplex & multiplex)
-: requests(multiplex.getRequests())
+Action::Action(const Plex & plex)
+: requests(plex.getRequests())
 , status(::S3StatusOK)
 {
 	initialize();

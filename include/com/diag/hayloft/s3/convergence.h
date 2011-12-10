@@ -12,7 +12,7 @@
  * These functions represent my attempts to figure out the error recovery and
  * consistency convergence logic of dealing with S3. A real application
  * architecture will probably choose to start many (possible unrelated)
- * asynchronous Actions in parallel on a single Multiplex and handle all of
+ * asynchronous Actions in parallel on a single Plex and handle all of
  * those Actions in parallel, possibly doing so through a single service
  * thread. Rather than polling for completion, an application will probably
  * derive from the various Action classes and override the complete() method.
@@ -92,8 +92,8 @@ inline bool complete_until_nonexistent(Action & action, Logger::Level level = CO
  * by iteratively servicing it until it is complete. Both synchronous and
  * asynchronous Actions are handled. When the Action is asynchronous, this
  * mechanism is really only useful when that Action is the only one on the
- * Multiplex, since it only checks the one Action for completion. Truly
- * multiplexing multiple asynchronous Actions will require a more application
+ * Plex, since it only checks the one Action for completion. Truly
+ * plexing multiple asynchronous Actions will require a more application
  * level approach. But this function can serve as a model for such an
  * implementation.
  *

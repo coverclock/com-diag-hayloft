@@ -54,16 +54,16 @@ GrantGet::GrantGet(const Object & object)
 	execute();
 }
 
-GrantGet::GrantGet(const Bucket & bucket, const Multiplex & multiplex)
-: Grant(bucket, multiplex)
+GrantGet::GrantGet(const Bucket & bucket, const Plex & plex)
+: Grant(bucket, plex)
 , count(0)
 , grants(0)
 {
 	initialize();
 }
 
-GrantGet::GrantGet(const Object & object, const Multiplex & multiplex)
-: Grant(object, multiplex)
+GrantGet::GrantGet(const Object & object, const Plex & plex)
+: Grant(object, plex)
 , count(0)
 , grants(0)
 {

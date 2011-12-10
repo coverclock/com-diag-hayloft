@@ -135,7 +135,7 @@ public:
 	/**
 	 * Ctor. Use this for the asynchronous interface.
 	 *
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param context refers to a Context object which provides the Credentials,
@@ -144,14 +144,14 @@ public:
 	 * @param session refers to a Session object associated with this Service.
 	 */
 	explicit ServiceManifest(
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Context & context = Context(),
 		const Session & session = Session::instance()
 	);
 
 	/**
 	 * Dtor. If the Action is in the BUSY state this forces the execution of
-	 * all Actions on the same Multiplex and blocks until they all complete.
+	 * all Actions on the same Plex and blocks until they all complete.
 	 */
 	virtual ~ServiceManifest();
 

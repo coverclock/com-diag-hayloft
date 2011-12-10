@@ -21,7 +21,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Multiplex;
+class Plex;
 
 /**
  * Action is a C++ object whose state may be altered in the background by a
@@ -91,20 +91,20 @@ public:
 
 	/**
 	 * Ctor. Use this for the asynchronous interface. The application is
-	 * responsible for starting the Action, and for insuring that the Multiplex
+	 * responsible for starting the Action, and for insuring that the Plex
 	 * associated with the Action is serviced until the Action completes.
 	 * Asynchronous Actions can be restarted and re-executed asynchronously.
 	 *
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
-	 *        construction. However the Multiplex dtor will force all Actions
-	 *        pending on the Multiplex to complete.
+	 *        construction. However the Plex dtor will force all Actions
+	 *        pending on the Plex to complete.
 	 */
-	explicit Action(const Multiplex & multiplex);
+	explicit Action(const Plex & plex);
 
 	/**
 	 * Dtor. If called while the Action is BUSY, the dtor will block until all
-	 * Actions pending on the same Multiplex have completed. This prevents this
+	 * Actions pending on the same Plex have completed. This prevents this
 	 * Action from being deallocated while it is executing. (There is no
 	 * mechanism to complete just this Action.)
 	 */
@@ -168,7 +168,7 @@ public:
 
 	/**
 	 * Return the libs3 ::S3RequestContext associated with this Action. This
-	 * value is derived from the Multiplex used during construction.
+	 * value is derived from the Plex used during construction.
 	 *
 	 * @return the libs3 ::S3RequestContext associated with this Action.
 	 */
@@ -262,8 +262,8 @@ private:
     /**
      *  Copy constructor. POISONED.
      *
-     *  It isn't safe to sythetically copy an Action (on either the LHS or the
-     *  RHS) while it may be being modified by a background thread.
+     *  It isn't safe to sythetically copy an Action (for either the L-value or
+     *  the R-value) while it may be being modified by a background thread.
      *  Subclasses such as Object and Bucket provide their own copy ctors.
      *
      *  @param that refers to an R-value object of this type.
@@ -273,8 +273,8 @@ private:
     /**
      *  Assignment operator. POISONED.
      *
-     *  It isn't safe to sythetically assign an Action (on either the LHS or
-     *  the RHS) while it may be being modified by a background thread.
+     *  It isn't safe to sythetically copy an Action (for either the L-value or
+     *  the R-value) while it may be being modified by a background thread.
      *
      *  @param that refers to an R-value object of this type.
      */

@@ -189,6 +189,7 @@ MANIFEST_O=\
  s3/ObjectGet.o \
  s3/ObjectHead.o \
  s3/ObjectPut.o \
+ s3/Plex.o \
  s3/Properties.o \
  s3/Protocol.o \
  s3/Region.o \

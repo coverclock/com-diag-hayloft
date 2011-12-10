@@ -57,8 +57,8 @@ Object::Object(const char * keyname, const Bucket & bucket)
 	initialize();
 }
 
-Object::Object(const char * keyname, const Bucket & bucket, const Multiplex & multiplex)
-: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), multiplex)
+Object::Object(const char * keyname, const Bucket & bucket, const Plex & plex)
+: Container(bucket.getId(), bucket.getSecret(), bucket.getEndpoint(), bucket.getCanonical(), bucket.getProtocol(), bucket.getStyle(), plex)
 , key(keyname)
 , length(0)
 , modified(-1)
@@ -77,8 +77,8 @@ Object::Object(const Object & object)
 	initialize();
 }
 
-Object::Object(const Object & object, const Multiplex & multiplex)
-: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), multiplex)
+Object::Object(const Object & object, const Plex & plex)
+: Container(object.getId(), object.getSecret(), object.getEndpoint(), object.getCanonical(), object.getProtocol(), object.getStyle(), plex)
 , key(object.getKey())
 , type(object.getContentType())
 , etag(object.getETag())

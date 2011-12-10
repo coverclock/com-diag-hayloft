@@ -67,8 +67,8 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input * source
 	initialize(props.getMetadata());
 	execute();
 }
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Multiplex & multiplex, Input & source, Octets objectsize, const Properties & props)
-: Object(keyname, bucket, multiplex)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Plex & plex, Input & source, Octets objectsize, const Properties & props)
+: Object(keyname, bucket, plex)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
@@ -83,8 +83,8 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Multiple
 	initialize(props.getMetadata());
 }
 
-ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Multiplex & multiplex, Input * sourcep, Octets objectsize, const Properties & props)
-: Object(keyname, bucket, multiplex)
+ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Plex & plex, Input * sourcep, Octets objectsize, const Properties & props)
+: Object(keyname, bucket, plex)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
@@ -132,8 +132,8 @@ ObjectPut::ObjectPut(const Object & object, Input * sourcep, Octets objectsize, 
 	initialize(props.getMetadata());
 	execute();
 }
-ObjectPut::ObjectPut(const Object & object, const Multiplex & multiplex, Input & source, Octets objectsize, const Properties & props)
-: Object(object, multiplex)
+ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input & source, Octets objectsize, const Properties & props)
+: Object(object, plex)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())
@@ -148,8 +148,8 @@ ObjectPut::ObjectPut(const Object & object, const Multiplex & multiplex, Input &
 	initialize(props.getMetadata());
 }
 
-ObjectPut::ObjectPut(const Object & object, const Multiplex & multiplex, Input * sourcep, Octets objectsize, const Properties & props)
-: Object(object, multiplex)
+ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input * sourcep, Octets objectsize, const Properties & props)
+: Object(object, plex)
 , type(props.getType())
 , checksum(props.getChecksum())
 , control(props.getControl())

@@ -21,7 +21,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-class Multiplex;
+class Plex;
 
 /**
  *
@@ -61,7 +61,7 @@ public:
 	 *
 	 * @param bucket refers about to the bucket whose access is to be logged.
 	 *        This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param log refers to the bucket into which the logs are to be written.
@@ -74,7 +74,7 @@ public:
 	 */
 	explicit Log(
 		const Bucket & bucket,
-		const Multiplex & multiplex,
+		const Plex & plex,
 		const Bucket & log = Bucket(),
 		const char * keyprefix = 0,
 		const Grant & grant = Grant()

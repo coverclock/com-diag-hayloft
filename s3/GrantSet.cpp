@@ -44,16 +44,16 @@ GrantSet::GrantSet(const Object & object, const Grant & grant)
 	execute();
 }
 
-GrantSet::GrantSet(const Bucket & bucket, const Multiplex & multiplex, const Grant & grant)
-: Grant(bucket, multiplex, grant)
+GrantSet::GrantSet(const Bucket & bucket, const Plex & plex, const Grant & grant)
+: Grant(bucket, plex, grant)
 , count(0)
 , grants(0)
 {
 	initialize();
 }
 
-GrantSet::GrantSet(const Object & object, const Multiplex & multiplex, const Grant & grant)
-: Grant(object, multiplex, grant)
+GrantSet::GrantSet(const Object & object, const Plex & plex, const Grant & grant)
+: Grant(object, plex, grant)
 , count(0)
 , grants(0)
 {

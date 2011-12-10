@@ -25,8 +25,8 @@ Log::Log(const Bucket & bucket, const Bucket & log, const char * keyprefix, cons
 	initialize();
 }
 
-Log::Log(const Bucket & bucket, const Multiplex & multiplex, const Bucket & log, const char * keyprefix, const Grant & grant)
-: Grant(bucket, multiplex, grant)
+Log::Log(const Bucket & bucket, const Plex & plex, const Bucket & log, const char * keyprefix, const Grant & grant)
+: Grant(bucket, plex, grant)
 , target(log.getCanonical())
 , prefix(set(keyprefix))
 {

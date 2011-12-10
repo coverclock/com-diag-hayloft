@@ -47,8 +47,8 @@ ServiceManifest::ServiceManifest(const Context & context, const Session & sessio
 	execute();
 }
 
-ServiceManifest::ServiceManifest(const Multiplex & multiplex, const Context & context, const Session & session)
-: Service(context.getId(), context.getSecret(), session.getEndpoint(), context.getProtocol(), multiplex)
+ServiceManifest::ServiceManifest(const Plex & plex, const Context & context, const Session & session)
+: Service(context.getId(), context.getSecret(), session.getEndpoint(), context.getProtocol(), plex)
 {
 	initialize();
 }

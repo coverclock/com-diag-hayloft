@@ -52,14 +52,14 @@ public:
 	 *        string.
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
 	explicit ObjectHead(
 		const char * keyname,
 		const Bucket & bucket,
-		const Multiplex & multiplex
+		const Plex & plex
 	);
 
 	/**
@@ -77,13 +77,13 @@ public:
 	 *
 	 * @param object refers to a Object Action from which this Object Action
 	 *        is configured. This reference is only used during construction.
-	 * @param multiplex refers to the Multiplex responsible for executing this
+	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 */
 	explicit ObjectHead(
 		const Object & object,
-		const Multiplex & multiplex
+		const Plex & plex
 	);
 
 	/**
