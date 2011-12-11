@@ -15,6 +15,7 @@
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Multiplex.h"
+#include "com/diag/hayloft/s3/Simplex.h"
 
 namespace com {
 namespace diag {
@@ -67,6 +68,11 @@ TEST_F(MultiplexTest, Plex) {
 	Plex plex(multiplex.getRequests());
 	EXPECT_NE(plex.getRequests(), (S3RequestContext *)0);
 	EXPECT_EQ(multiplex.getRequests(), plex.getRequests());
+}
+
+TEST_F(MultiplexTest, Simplex) {
+	Simplex simplex;
+	EXPECT_EQ(simplex.getRequests(), (S3RequestContext *)0);
 }
 
 }
