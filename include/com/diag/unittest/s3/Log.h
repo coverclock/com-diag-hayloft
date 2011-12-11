@@ -29,6 +29,7 @@
 #include "com/diag/hayloft/s3/convergence.h"
 #include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/desperado/string.h"
+#include "com/diag/desperado/Platform.h"
 #include "libs3.h"
 
 namespace com {
@@ -101,9 +102,15 @@ TEST_F(LogTest, SetGet) {
 	ASSERT_NE(logset.getPrefix(), (char *)0);
 	EXPECT_EQ(*logset.getPrefix(), '\0');
 	ASSERT_TRUE(complete(logset));
+	Fibonacci fibonacci;
 	LogGet logget2(bucket, multiplex);
-	ASSERT_TRUE(complete(logget2));
-	ASSERT_NE(logget2.getTarget(), (char *)0);
+	for (int ii = 0; ii < 10; ++ii) {
+		ASSERT_TRUE(complete(logget2));
+		ASSERT_NE(logget2.getTarget(), (char *)0);
+		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
+		::com::diag::desperado::Platform::instance().yield(fibonacci * ::com::diag::desperado::Platform::instance().frequency());
+		logget2.start();
+	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
 	ASSERT_NE(logget2.getPrefix(), (char *)0);
 	EXPECT_EQ(*logget2.getPrefix(), '\0');
@@ -144,9 +151,15 @@ TEST_F(LogTest, SetGetPrefix) {
 	ASSERT_NE(logset.getPrefix(), (char *)0);
 	EXPECT_EQ(std::strcmp(logset.getPrefix(), PREFIX), 0);
 	ASSERT_TRUE(complete(logset));
+	Fibonacci fibonacci;
 	LogGet logget2(bucket, multiplex);
-	ASSERT_TRUE(complete(logget2));
-	ASSERT_NE(logget2.getTarget(), (char *)0);
+	for (int ii = 0; ii < 10; ++ii) {
+		ASSERT_TRUE(complete(logget2));
+		ASSERT_NE(logget2.getTarget(), (char *)0);
+		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
+		::com::diag::desperado::Platform::instance().yield(fibonacci * ::com::diag::desperado::Platform::instance().frequency());
+		logget2.start();
+	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
 	ASSERT_NE(logget2.getPrefix(), (char *)0);
 	EXPECT_EQ(std::strcmp(logget2.getPrefix(), PREFIX), 0);
