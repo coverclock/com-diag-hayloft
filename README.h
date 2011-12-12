@@ -48,8 +48,10 @@
 	Simple Storage Service (S3). It is built on top of the Digital Aggregates
 	Corporation Desperadito package, a C++ systems programming library that is
 	a subset of the much larger Desperado package. libs3 is built on top of the
-	CURL, Open SSL, and XML2 libraries, which I acquired through the normal
-	package manager on my server.
+	cURL, Open SSL, and XML2 libraries, which I acquired through the normal
+	package manager on my server. I've also made patches to libs3 to support the
+	use of the Charles Web Debugging Proxy application by Karl von Randow and
+	cCURL verbosity.
 
 	This software is an original work of its author.
 
@@ -67,6 +69,10 @@
 
 		http://www.diag.com/navigation/downloads/Desperadito
 		http://www.diag.com/navigation/downloads/Desperado
+
+	Information regarding the Charles Web Debugging Proxy can be found here:
+
+		http://www.charlesproxy.com/
 
 	Contact:
 
@@ -167,15 +173,14 @@
 		domain names are case insensitive, S3 requires that they be all lower
 		case. I recommend using your DNS domain name with a leading dot as a
 		bucket suffix, for example ".foo.bar.com". An application creating a
-		bucket using BucketCreate("MyBucket") and using the default end point
+		bucket using BucketCreate("Me") and using the default end point
 		name and the default virtual path style URL will hence see the name
-		canonicalized into an S3 bucket name
-		"mybucket.foo.bar.com.s3.amazonaws.com". Canonicalized bucket names are
-		what you will see in a ServiceManifest.
+		canonicalized into an S3 bucket name "me.foo.bar.com.s3.amazonaws.com".
+		Canonicalized bucket names are what you will see in a ServiceManifest.
 
 	COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT
 
-		If specified, this string is passed to S3 as the User Agent meta-data
+		If specified, this string is passed to S3 in the User-Agent HTTP header
 		to identify your application.
 
 	COM_DIAG_HAYLOFT_S3_REGION_NAME
@@ -191,10 +196,17 @@
 		to specify a sixteen bit logging mask at run time. The bits in the mask
 		which of the sixteen log levels are enabled via the expression
 		(1 << LEVEL) where LEVEL is one of the following log levels. So for
-		example the DEBUG level is enabled if bit (1 << DEBUG) or 0x10 is set.
+		example the DEBUG level is enabled if bit (1 << DEBUG) or 0x0010 is set.
 		The different log levels are mapped to appropriate log levels in the
 		underlying logging mechanism; for example, SYSLOG has eight log levels.
 		If not specified, the default logger mask is used, for example 0xff80.
+        Some useful masks: 0xff80 prints minimal output as unit tests run but
+        emits errors and warnings; 0xffe0 prints show() output as unit tests
+        run; 0xfff0 prints debug output as unit tests run. The different log
+        levels found in com/diag/desperado/Log.h are the transitive closure of
+        common logging mechanisms from GNU/Linux, Apache, Java, etc.
+
+        ENUMERATION		VALUE	BIT MASK
 
 		FINEST           0		0x0001
         FINER            1		0x0002
@@ -213,9 +225,22 @@
         EMERGENCY       14		0x4000
         PRINT           15		0x8000
 
-        0xff80 prints minimal output as unit tests run.
-        0xffe0 prints shown output as unit tests run.
-        0xfff0 prints debug output as unit tests run.
+	COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY
+
+		This string specifies the IP address and port used for the cURL PROXY
+		option used in conjunction with the Charles Web Debugging Proxy
+		application. Typically this will be the local host address and Charles
+		port "127.0.0.1:8888". This capability is only available if your libs3
+		sources have been patched with the patch file in the Hayloft
+		distribution, and is only necessary if you are using Charles to spy
+		on the communication between your system and S3. This might be useful
+		for debugging.
+
+	COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE
+
+		This string, if it is equal to "1", turns on the cURL VERBOSE option.
+		This causes CURL, the URL library used by libs3, to log just about
+		everything it does. This might be useful for debugging.
 
 *******************************************************************************/
 
