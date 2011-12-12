@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=2
-MINOR=0
+MINOR=1
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -28,14 +28,17 @@ DESPERADO_DIR=$(HOME)/src/Desperadito#http://www.diag.com/navigation/downloads/D
 DESPERADO_LIBS=$(DESPERADO_DIR)
 DESPERADO_INC=$(DESPERADO_DIR)/include#/desperado
 
-# This is Bryan Ischo's excellent C-based LIBS3 package. Excellent as in I so
-# far haven't found a bug in it or had any issue using it.
+# This is Bryan Ischo's excellent C-based LIBS3 package. I built it using the
+# following command and then access the build artifacts directly from its
+# build directories:
+# make deb
 
 S3_DIR=$(HOME)/src/libs3-2.0#http://libs3.ischo.com.s3.amazonaws.com/libs3-2.0.tar.gz
 S3_LIBS=$(S3_DIR)/build/deb/usr/lib
 S3_INC=$(S3_DIR)/inc
 
-# LIBS3 uses OPENSSL, CURL, and XML2.
+# LIBS3 uses OPENSSL, CURL, and XML2. I installed these using my server's
+# standard package manager.
 
 OPENSSL_DIR=#Downloaded via Synaptic Package Manager
 OPENSSL_LIBS=/lib
@@ -54,6 +57,10 @@ XML2_INC=/usr/include#/libxml2
 # use the ldconfig utility to tell the system about the shared objects it
 # doesn't already know about (for this application, typically DESPERADITO and
 # LIBS3).
+# To display the shared objects used by the unittest executable:
+# ldd unittest
+# To configure the DESPERADITO and LIBS3 shared objects for use (adjust paths):
+# sudo ldconfig ${HOME}/src/Desperadito ${HOME}/src/libs3-2.0/build/deb/usr/lib
 
 APPLICATION_CPPFLAGS=-I$(DESPERADO_INC) -I$(S3_INC)
 APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperadito -L$(S3_LIBS) -ls3 -L$(LIBXML2_LIBS) -lxml2 -L$(CURL_LIBS) -lcurl -L$(OPENSSL_LIBS) -lssl -lcrypto

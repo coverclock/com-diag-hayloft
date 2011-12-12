@@ -56,7 +56,7 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 			break;
 		}
 		effective = factor * delay;
-		logger.log(level, "%s@%p: %lldms\n", &action, label, effective);
+		logger.log(level, "%s@%p: %lldms\n", label, &action, effective);
 		platform.yield(effective);
 		action.start();
 		continue;
@@ -142,7 +142,7 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 			break;
 		}
 		effective = factor * pause;
-		logger.log(level, "%s@%p: %lldms\n", &action, label, effective);
+		logger.log(level, "%s@%p: %lldms\n", label, &action, effective);
 		platform.yield(effective);
 		action.start();
 		continue;
