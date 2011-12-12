@@ -1,5 +1,5 @@
---- libs3-2.0-org/src/request.c	2011-09-28 02:16:09.000000000 -0600
-+++ libs3-2.0/src/request.c	2011-12-12 11:11:41.218842857 -0700
+--- /home/jsloan/src/libs3-2.0-org/src/request.c	2011-09-28 02:16:09.000000000 -0600
++++ /home/jsloan/src/libs3-2.0/src/request.c	2011-12-12 11:11:41.218842857 -0700
 @@ -28,6 +28,7 @@
  #include <pthread.h>
  #include <stdlib.h>
