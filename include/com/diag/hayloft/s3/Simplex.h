@@ -20,7 +20,10 @@ namespace s3 {
 
 /**
  * Simplex is a Plex that uses the default constructor. This results in a
- * Plex that causes an Action to be synchronous.
+ * Plex that causes an Action to be synchronous (because the S3RequestContext
+ * pointer that Simplex provides is NULL) but which is not started automatically
+ * during construction (because it uses the constructor that takes a Plex
+ * reference).
  */
 class Simplex : public Plex {
 
