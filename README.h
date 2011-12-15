@@ -236,6 +236,15 @@
 		on the communication between your system and S3. This might be useful
 		for debugging.
 
+		libcurl and Charles don't seem to play well together when switching
+		back and forth between HTTP and HTTPS. HTTPS is the default. Running
+		the entire unit test suite with proxying enabled seems to cause Charles
+		to break the BucketTest.Explicit unit test, which is the only unit test
+		that uses HTTP. Running that unit test all by itself works fine. Running
+		all unit tests without Charles works fine. As far as I can tell, libcurl
+		is not reusing an existing HTTPS socket connection when switching to
+		HTTP for BucketTest.Explicit, which I thought might be the problem.
+
 	COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE
 
 		This string, if it is equal to "1", turns on the cURL VERBOSE option.

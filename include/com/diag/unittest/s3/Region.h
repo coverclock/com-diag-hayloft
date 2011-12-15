@@ -84,6 +84,12 @@ TEST_F(RegionTest, Oregon) {
 	EXPECT_EQ(std::strcmp(region.getRegion(), Region::UNITED_STATES_WEST_2()), 0);
 }
 
+TEST_F(RegionTest, SaoPaulo) {
+	RegionSaoPaulo region;
+	ASSERT_NE(region.getRegion(), (char *)0);
+	EXPECT_EQ(std::strcmp(region.getRegion(), Region::SOUTH_AMERICA_EAST_1()), 0);
+}
+
 TEST_F(RegionTest, Environment) {
 	const char * hostname = std::getenv(Region::REGION_ENV());
 	static const char * REGION_VAL = "babylon-5";

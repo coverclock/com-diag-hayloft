@@ -53,7 +53,7 @@ TEST_F(GrantBaseTest, Sanity) {
 	EXPECT_EQ(grant4.import(count, grants), 4);
 	EXPECT_EQ(grant4.getAccessControlList().size(), 4);
 	show(grant4);
-	delete grants;
+	delete [] grants;
 }
 
 

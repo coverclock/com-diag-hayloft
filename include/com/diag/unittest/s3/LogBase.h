@@ -65,7 +65,7 @@ TEST_F(LogBaseTest, NoPrefix) {
 	EXPECT_EQ(log4.import(count, grants), 4);
 	EXPECT_EQ(log4.getAccessControlList().size(), 4);
 	show(log4);
-	delete grants;
+	delete [] grants;
 }
 
 TEST_F(LogBaseTest, Prefix) {
@@ -105,7 +105,7 @@ TEST_F(LogBaseTest, Prefix) {
 	EXPECT_EQ(log4.import(count, grants), 4);
 	EXPECT_EQ(log4.getAccessControlList().size(), 4);
 	show(log4);
-	delete grants;
+	delete [] grants;
 }
 
 }

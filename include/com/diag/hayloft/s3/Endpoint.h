@@ -54,6 +54,8 @@ public:
 
 	static const char * UNITED_STATES_WEST_2() { return "s3-us-west-2.amazonaws.com"; }
 
+	static const char * SOUTH_AMERICA_EAST_1() { return "s3-sa-east-1.amazonaws.com"; }
+
 	/**
 	 * This is the name of the default end point if you don't specify one
 	 * otherwise.
@@ -208,6 +210,22 @@ public:
 	{}
 
 	virtual ~EndpointUnitedStates() {}
+
+};
+
+/**
+ * EndpointSaoPaulo is an Endpoint that represents the Sao Paulo (a.k.a.
+ * SOUTH AMERICA EAST 1) AWS region.
+ */
+class EndpointSaoPaulo : public Endpoint {
+
+public:
+
+	explicit EndpointSaoPaulo()
+	: Endpoint(SOUTH_AMERICA_EAST_1())
+	{}
+
+	virtual ~EndpointSaoPaulo() {}
 
 };
 
