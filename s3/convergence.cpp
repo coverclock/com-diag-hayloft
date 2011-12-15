@@ -24,8 +24,8 @@ namespace s3 {
 bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, Logger::Level level) {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	Logger & logger = Logger::instance();
-	ticks_t numerator;
-	ticks_t denominator;
+	::com::diag::desperado::ticks_t numerator;
+	::com::diag::desperado::ticks_t denominator;
 	platform.frequency(numerator, denominator);
 	delay = ((delay * numerator) / denominator) / 1000;
 	if (action.isIdle()) {
@@ -71,10 +71,10 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 bool service_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, int iterations, Milliseconds timeout, Logger::Level level) {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	Logger & logger = Logger::instance();
-	ticks_t numerator;
-	ticks_t denominator;
+	::com::diag::desperado::ticks_t numerator;
+	::com::diag::desperado::ticks_t denominator;
 	platform.frequency(numerator, denominator);
-	ticks_t pause = ((delay * numerator) / denominator) / 1000;
+	::com::diag::desperado::ticks_t pause = ((delay * numerator) / denominator) / 1000;
 	if (action.isIdle()) {
 		action.start();
 	}

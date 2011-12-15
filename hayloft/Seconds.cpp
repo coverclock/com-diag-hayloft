@@ -30,7 +30,7 @@ Seconds::~Seconds()
 {}
 
 const char * Seconds::zulu(Epochalseconds seconds, unsigned int & year, unsigned int & month, unsigned int & day, unsigned int & hour, unsigned int & minute, unsigned int & second) {
-	ticks_t ticks = (seconds * numerator) / denominator;
+	::com::diag::desperado::ticks_t ticks = (seconds * numerator) / denominator;
 	::com::diag::desperado::CommonEra commonera(0);
 	commonera.fromTicks(ticks);
 	year = commonera.getYear();
@@ -43,7 +43,7 @@ const char * Seconds::zulu(Epochalseconds seconds, unsigned int & year, unsigned
 }
 
 const char * Seconds::juliet(Epochalseconds seconds, unsigned int & year, unsigned int & month, unsigned int & day, unsigned int & hour, unsigned int & minute, unsigned int & second) {
-	ticks_t ticks = (seconds * numerator) / denominator;
+	::com::diag::desperado::ticks_t ticks = (seconds * numerator) / denominator;
 	::com::diag::desperado::CommonEra commonera(0);
 	commonera.fromTicks(ticks);
 	::com::diag::desperado::LocalTime localtime;
@@ -61,7 +61,7 @@ Epochalseconds Seconds::now() const {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	::com::diag::desperado::CommonEra commonera(0);
 	commonera.fromNow();
-	seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
+	::com::diag::desperado::seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
 	const ::com::diag::desperado::Epoch & epoch = platform.getEpoch();
 	return commoneraseconds - epoch.seconds;
 }
@@ -69,7 +69,7 @@ Epochalseconds Seconds::now() const {
 Epochalseconds Seconds::then(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute, unsigned int seconds) const {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
 	::com::diag::desperado::CommonEra commonera(year, month, day, hour, minute, seconds);
-	seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
+	::com::diag::desperado::seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
 	const ::com::diag::desperado::Epoch & epoch = platform.getEpoch();
 	return (commoneraseconds > epoch.seconds) ? commoneraseconds - epoch.seconds : 0;
 }
