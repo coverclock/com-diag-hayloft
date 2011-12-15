@@ -9,7 +9,7 @@
 
 #include "com/diag/hayloft/s3/convergence.h"
 #include "com/diag/hayloft/s3/Action.h"
-#include "com/diag/hayloft/s3/Plex.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/desperado/Platform.h"
@@ -39,9 +39,9 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 	for (int ii = 0; ii < tries; ++ii) {
 		requests = action.getRequests();
 		if (requests != 0) {
-			Plex plex(requests);
-			rc = plex.complete();
-			if ((rc & Plex::ERROR) != 0) {
+			Multiplex multiplex(requests);
+			rc = multiplex.complete();
+			if ((rc & Multiplex::ERROR) != 0) {
 				logger.log(level, "failing@%p\n", &action);
 				break;
 			}
@@ -87,22 +87,22 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 		requests = action.getRequests();
 		if (requests != 0) {
 			if (action.isBusy()) {
-				Plex plex(requests);
-				rc = plex.service(timeout, iterations);
-				if ((rc & Plex::ERROR) != 0) {
+				Multiplex multiplex(requests);
+				rc = multiplex.service(timeout, iterations);
+				if ((rc & Multiplex::ERROR) != 0) {
 					// Uh oh. No point in proceeding any further.
 					logger.log(level, "failing@%p\n", &action);
 					break;
-				} else if ((rc & Plex::RETRY) != 0) {
+				} else if ((rc & Multiplex::RETRY) != 0) {
 					// Still uh oh. But libs3 thinks it might work if we RETRY.
 					logger.log(level, "repeating@%p\n", &action);
 					continue;
-				} else if ((rc & Plex::PENDING) == 0) {
+				} else if ((rc & Multiplex::PENDING) == 0) {
 					// There are no PENDING Actions. Either all PENDING Actions
 					// have completed, successfully or not, or something is
 					// seriously amiss. Fall through to the checks below that
 					// figure our what to do for this specific Action.
-				} else if ((rc & Plex::READY) == 0) {
+				} else if ((rc & Multiplex::READY) == 0) {
 					// We have Actions PENDING but there is no READY responses
 					// from S3. That work may be PENDING Actions other than the
 					// only Action we care about. Selfish bastards we are.
