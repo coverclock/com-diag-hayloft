@@ -48,9 +48,9 @@ private:
 
 protected:
 
-	ticks_t numerator;
+	::com::diag::desperado::ticks_t numerator;
 
-	ticks_t denominator;
+	::com::diag::desperado::ticks_t denominator;
 
 	::com::diag::desperado::TimeStamp timestamp;
 
