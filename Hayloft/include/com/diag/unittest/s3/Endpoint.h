@@ -84,6 +84,12 @@ TEST_F(EndpointTest, Oregon) {
 	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), Endpoint::UNITED_STATES_WEST_2()), 0);
 }
 
+TEST_F(EndpointTest, SaoPaulo) {
+	EndpointSaoPaulo endpoint;
+	ASSERT_NE(endpoint.getEndpoint(), (char *)0);
+	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), Endpoint::SOUTH_AMERICA_EAST_1()), 0);
+}
+
 TEST_F(EndpointTest, Environment) {
 	const char * hostname = std::getenv(Endpoint::ENDPOINT_ENV());
 	static const char * ENDPOINT_VAL = "s4.amazonaws.com";

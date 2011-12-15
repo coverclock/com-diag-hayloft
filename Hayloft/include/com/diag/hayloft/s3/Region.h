@@ -66,6 +66,8 @@ public:
 
 	static const char * UNITED_STATES_WEST_2() { return "us-west-2"; }
 
+	static const char * SOUTH_AMERICA_EAST_1() { return "sa-east-1"; }
+
 	/**
 	 * This is the name of the default region if you don't specify one
 	 * otherwise. UNITED STATES STANDARD is chosen as the default because it
@@ -222,6 +224,22 @@ public:
 	{}
 
 	virtual ~RegionUnitedStates() {}
+
+};
+
+/**
+ * RegionSaoPaulo is a Region that represents the Sao Paulo (a.k.a.
+ * SOUTH AMERICA EAST 1) AWS region.
+ */
+class RegionSaoPaulo : public Region {
+
+public:
+
+	explicit RegionSaoPaulo()
+	: Region(SOUTH_AMERICA_EAST_1())
+	{}
+
+	virtual ~RegionSaoPaulo() {}
 
 };
 

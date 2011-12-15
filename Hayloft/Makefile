@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=2
-MINOR=1
+MINOR=2
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -228,32 +228,17 @@ lib$(PROJECT).a:	$(ARCHIVABLE)
 	$(AR) $(ARFLAGS) lib$(PROJECT).a $(ARCHIVABLE)
 	$(RANLIB) lib$(PROJECT).a
 
-TARGETS+=lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD)
-DELIVERABLES+=lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD)
+TARGETS+=lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR).$(MINOR) lib$(PROJECT).so.$(MAJOR) lib$(PROJECT).so
+DELIVERABLES+=lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR).$(MINOR) lib$(PROJECT).so.$(MAJOR) lib$(PROJECT).so
 
-lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD):	lib$(PROJECT).a
+lib$(PROJECT).so lib$(PROJECT).so.$(MAJOR) lib$(PROJECT).so.$(MAJOR).$(MINOR) lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD):	lib$(PROJECT).a
 	HERE="`pwd`"; \
 	THERE="`mktemp -d $(TMP)/$(PROJECT).XXXXXXXXXX`"; \
 	( cd $$THERE; $(AR) $(SOFLAGS) $$HERE/lib$(PROJECT).a ); \
 	$(CC) $(CARCH) -shared -Wl,-soname,lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) -o lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) $$THERE/*.o; \
 	rm -rf $$THERE
-
-TARGETS+=lib$(PROJECT).so.$(MAJOR).$(MINOR)
-DELIVERABLES+=lib$(PROJECT).so.$(MAJOR).$(MINOR)
-
-lib$(PROJECT).so.$(MAJOR).$(MINOR):	lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR).$(MINOR)
-
-TARGETS+=lib$(PROJECT).so.$(MAJOR)
-DELIVERABLES+=lib$(PROJECT).so.$(MAJOR)
-
-lib$(PROJECT).so.$(MAJOR):	lib$(PROJECT).so.$(MAJOR).$(MINOR)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR)
-
-TARGETS+=lib$(PROJECT).so
-DELIVERABLES+=lib$(PROJECT).so
-
-lib$(PROJECT).so:	lib$(PROJECT).so.$(MAJOR)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so
 
 ################################################################################
@@ -271,6 +256,22 @@ PHONY+=test
 
 test:	unittest
 	./unittest && echo "PASSED all"
+
+unittest.txt:	unittest
+	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY="127.0.0.1:8888"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
+	script -c "./unittest --gtest_color=no 2>&1" unittest.txt
+
+PHONY+=debug
+
+# E.g. make debug FILTER=BucketFilter.Explicit
+
+debug:	unittest
+	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY="127.0.0.1:8888"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
+	./unittest --gtest_filter=$(FILTER)
 
 ################################################################################
 # PATTERNS
