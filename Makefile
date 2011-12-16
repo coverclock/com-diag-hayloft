@@ -114,11 +114,10 @@ UNITTEST_LDFLAGS=$(LARIAT_LIB) $(GTEST_LIBS)
 # PROJECT
 ################################################################################
 
-CWD:=$(shell pwd)
-PROJECT_DIR=$(CWD)
+PROJECT_DIR:=$(shell pwd)
 
-HAYLOFT_DIR=.
-HAYLOFT_LIBS=.
+HAYLOFT_DIR=$(PROJECT_DIR)
+HAYLOFT_LIBS=$(HAYLOFT_DIR)
 HAYLOFT_LIB=lib$(PROJECT).so
 HAYLOFT_INC=include
 
@@ -252,26 +251,42 @@ DELIVERABLES+=unittest
 unittest:	unittest.o $(HAYLOFT_LIB) $(LARIAT_LIB) $(GMOCK_LIB) $(GTEST_LIB) $(DESPERADO_LIB) $(S3_LIB) $(XML2_LIB) $(CURL_LIB) $(OPENSSL_LIB) $(CRYPTO_LIB)
 	$(CXX) -o unittest unittest.o $(LDFLAGS)
 
+PHONY+=run
+
+run:	unittest
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	./unittest
+
+PHONY+=capture
+
+capture:	unittest
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "./unittest --gtest_color=no" capture.log
+
 PHONY+=test
 
 test:	unittest
-	./unittest && echo "PASSED all"
-
-unittest.txt:	unittest
 	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
-	export COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY="127.0.0.1:8888"; \
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
-	script -c "./unittest --gtest_color=no 2>&1" unittest.txt
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "./unittest --gtest_color=no --gtest_filter=$(FILTER)" test.log # e.g. FILTER=BucketFilter.Explicit
+		
+PHONY+=suite
 
-PHONY+=debug
-
-# E.g. make debug FILTER=BucketFilter.Explicit
-
-debug:	unittest
+suite:	unittest
 	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
-	export COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY="127.0.0.1:8888"; \
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
-	./unittest --gtest_filter=$(FILTER)
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "./unittest --gtest_color=no" suite.log
+	
+PHONY+=proxy
+
+proxy:	unittest
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY="127.0.0.1:8888"; \
+	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "./unittest --gtest_color=no" proxy.log
 
 ################################################################################
 # PATTERNS

@@ -206,7 +206,7 @@
         levels found in com/diag/desperado/Log.h are the transitive closure of
         common logging mechanisms from GNU/Linux, Apache, Java, etc.
 
-        ENUMERATION		VALUE	BIT MASK
+        ENUMERATION		VALUE	MASK
 
 		FINEST           0		0x0001
         FINER            1		0x0002
