@@ -17,7 +17,7 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/desperado/string.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -101,7 +101,7 @@ TEST_F(BucketBaseTest, CopyConstructor) {
 	AccessPublicRead access;
 	Context context(credentials, region, protocol, style, access);
 	Bucket source("CopyConstructor", context, session);
-	ASSERT_EQ(source.getRequests(), (::S3RequestContext*)0);
+	ASSERT_EQ(source.getPending(), (::S3RequestContext*)0);
 	EXPECT_TRUE(source == true);
 	EXPECT_FALSE(source.isIdle());
 	EXPECT_FALSE(source.isBusy());
@@ -118,7 +118,7 @@ TEST_F(BucketBaseTest, CopyConstructor) {
 	EXPECT_EQ(source.getProtocol(), ::S3ProtocolHTTP);
 	Multiplex multiplex;
 	Bucket sink(source, multiplex);
-	ASSERT_NE(sink.getRequests(), (::S3RequestContext*)0);
+	ASSERT_NE(sink.getPending(), (::S3RequestContext*)0);
 	EXPECT_TRUE(sink == true);
 	EXPECT_FALSE(sink.isIdle());
 	EXPECT_FALSE(sink.isBusy());

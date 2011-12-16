@@ -25,9 +25,9 @@ ServiceManifest::Entry::Entry(const char * bucketname, const char * ownerId, con
 , created(creationDateSeconds)
 {}
 
-::S3Status ServiceManifest::listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData) {
+Status ServiceManifest::listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData) {
 	ServiceManifest * that = static_cast<ServiceManifest*>(callbackData);
-	::S3Status status = that->entry(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
+	Status status = that->entry(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
 	if ((bucketName != 0) && (bucketName != '\0')) {
 		Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 		Entry entry(bucketName, ownerId, ownerDisplayName, creationDateSeconds);
@@ -57,7 +57,7 @@ ServiceManifest::~ServiceManifest() {
 }
 
 void ServiceManifest::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Service::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = Service::handler.completeCallback;
@@ -65,21 +65,21 @@ void ServiceManifest::initialize() {
 }
 
 void ServiceManifest::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ServiceManifest@%p: begin\n", this);
 	::S3_list_service(
 		protocol,
 		id.c_str(),
 		secret.c_str(),
 		endpoint.c_str(),
-		requests,
+		pending,
 		&handler,
 		this
 	);
 }
 
 void ServiceManifest::start() {
-	if ((state() == BUSY) && (requests != 0)) {
+	if ((state() == BUSY) && (pending != 0)) {
 		execute();
 	}
 }
@@ -99,7 +99,7 @@ void ServiceManifest::reset() {
 	}
 }
 
-::S3Status ServiceManifest::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
+Status ServiceManifest::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
 	Logger::instance().debug("ServiceManifest%p: entry\n", this);
 	return ::S3StatusOK;
 }

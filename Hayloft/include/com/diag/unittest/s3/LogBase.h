@@ -17,7 +17,7 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/desperado/string.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {

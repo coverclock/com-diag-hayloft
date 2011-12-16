@@ -42,17 +42,17 @@ BucketCreate::BucketCreate(const Bucket & bucket, const Plex & plex)
 }
 
 BucketCreate::~BucketCreate() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 }
 
 void BucketCreate::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 }
 
 void BucketCreate::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketCreate@%p: begin\n", this);
 	::S3_create_bucket(
 		protocol,
@@ -62,7 +62,7 @@ void BucketCreate::execute() {
 		canonical.c_str(),
 		access,
 		(region.length() > 0) ? region.c_str() : 0,
-		requests,
+		pending,
 		&handler,
 		this
 	);

@@ -20,9 +20,9 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-::S3Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData) {
+Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData) {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
-	::S3Status status = that->get(bufferSize, buffer);
+	Status status = that->get(bufferSize, buffer);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "ObjectGet@%p: bufferSize=%d\n", that, bufferSize);
 	Logger::instance().log(level, "ObjectGet@%p: status=%d=\"%s\"\n", that, status, tostring(status));
@@ -152,14 +152,14 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output * sinkp, /
 }
 
 ObjectGet::~ObjectGet() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 	finalize();
 }
 
 void ObjectGet::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	std::memset(&conditions, 0, sizeof(conditions));
 	conditions.ifModifiedSince = since;
 	conditions.ifNotModifiedSince = notsince;
@@ -173,7 +173,7 @@ void ObjectGet::initialize() {
 }
 
 void ObjectGet::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectGet@%p: begin\n", this);
 	::S3_get_object(
 		&context,
@@ -181,7 +181,7 @@ void ObjectGet::execute() {
 		&conditions,
 		offset,
 		size,
-		requests,
+		pending,
 		&handler,
 		this
 	);
@@ -223,7 +223,7 @@ void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 	}
 }
 
-::S3Status ObjectGet::get(int bufferSize, const void * buffer) {
+Status ObjectGet::get(int bufferSize, const void * buffer) {
 	ssize_t produced = 0;
 	if (output != 0) {
 		produced = (*output)(buffer, bufferSize, bufferSize);

@@ -14,7 +14,7 @@
 #include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -32,14 +32,14 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 		action.start();
 	}
 	Fibonacci factor;
-	::S3RequestContext * requests;
+	Pending * pending;
 	int rc;
 	Milliseconds effective;
 	const char * label = "";
 	for (int ii = 0; ii < tries; ++ii) {
-		requests = action.getRequests();
-		if (requests != 0) {
-			Multiplex multiplex(requests);
+		pending = action.getPending();
+		if (pending != 0) {
+			Multiplex multiplex(pending);
 			rc = multiplex.complete();
 			if ((rc & Multiplex::ERROR) != 0) {
 				logger.log(level, "failing@%p\n", &action);
@@ -79,15 +79,15 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 		action.start();
 	}
 	Fibonacci factor;
-	::S3RequestContext * requests;
+	Pending * pending;
 	int rc;
 	Milliseconds effective;
 	const char * label = "";
 	for (int ii = 0; ii < tries; ++ii) {
-		requests = action.getRequests();
-		if (requests != 0) {
+		pending = action.getPending();
+		if (pending != 0) {
 			if (action.isBusy()) {
-				Multiplex multiplex(requests);
+				Multiplex multiplex(pending);
 				rc = multiplex.service(timeout, iterations);
 				if ((rc & Multiplex::ERROR) != 0) {
 					// Uh oh. No point in proceeding any further.

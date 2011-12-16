@@ -16,7 +16,7 @@
 #include "com/diag/hayloft/s3/Selection.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/generics.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {

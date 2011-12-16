@@ -35,7 +35,7 @@ public:
 
 private:
 
-	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 

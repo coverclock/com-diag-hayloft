@@ -19,7 +19,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-void ObjectCopy::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void ObjectCopy::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectCopy * that = static_cast<ObjectCopy*>(callbackData);
 	if (that->entitytag[0] != '\0') { that->entitytag[sizeof(that->entitytag) - 1] = '\0'; that->etag = that->entitytag; }
 	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
@@ -88,14 +88,14 @@ ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const
 }
 
 ObjectCopy::~ObjectCopy() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 	delete [] properties.metaData;
 }
 
 void ObjectCopy::initialize(const Properties::Metadata & settings) {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("ObjectCopy@%p: tocanonical=\"%s\"\n", this, tocanonical.c_str());
@@ -130,7 +130,7 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 }
 
 void ObjectCopy::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectCopy@%p: begin\n", this);
 	::S3_copy_object(
 		&context,
@@ -140,7 +140,7 @@ void ObjectCopy::execute() {
 		&properties,
 		&modified,
 		sizeof(entitytag), entitytag,
-		requests,
+		pending,
 		&handler,
 		this
 	);

@@ -31,14 +31,14 @@ TEST_F(MultiplexTest, Heap) {
 	Multiplex * multiplex = new Multiplex;
 	EXPECT_NE(multiplex, (Multiplex*)0);
 	EXPECT_TRUE((*multiplex) == true);
-	EXPECT_NE(multiplex->getRequests(), (S3RequestContext *)0);
+	EXPECT_NE(multiplex->getPending(), (S3RequestContext *)0);
 	delete multiplex;
 }
 
 TEST_F(MultiplexTest, Stack) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_NE(multiplex.getRequests(), (S3RequestContext *)0);
+	EXPECT_NE(multiplex.getPending(), (S3RequestContext *)0);
 }
 
 TEST_F(MultiplexTest, Complete) {
@@ -50,9 +50,9 @@ TEST_F(MultiplexTest, Complete) {
 TEST_F(MultiplexTest, Iterate) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	int pending;
-	EXPECT_EQ(multiplex.iterate(pending), 0);
-	EXPECT_EQ(pending, 0);
+	int actions;
+	EXPECT_EQ(multiplex.iterate(actions), 0);
+	EXPECT_EQ(actions, 0);
 }
 
 TEST_F(MultiplexTest, Ready) {
@@ -64,15 +64,15 @@ TEST_F(MultiplexTest, Ready) {
 TEST_F(MultiplexTest, Plex) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_NE(multiplex.getRequests(), (S3RequestContext *)0);
-	Plex plex(multiplex.getRequests());
-	EXPECT_NE(plex.getRequests(), (S3RequestContext *)0);
-	EXPECT_EQ(multiplex.getRequests(), plex.getRequests());
+	EXPECT_NE(multiplex.getPending(), (S3RequestContext *)0);
+	Plex plex(multiplex.getPending());
+	EXPECT_NE(plex.getPending(), (S3RequestContext *)0);
+	EXPECT_EQ(multiplex.getPending(), plex.getPending());
 }
 
 TEST_F(MultiplexTest, Simplex) {
 	Simplex simplex;
-	EXPECT_EQ(simplex.getRequests(), (S3RequestContext *)0);
+	EXPECT_EQ(simplex.getPending(), (S3RequestContext *)0);
 }
 
 }

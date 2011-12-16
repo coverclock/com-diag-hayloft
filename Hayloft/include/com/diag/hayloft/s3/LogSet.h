@@ -13,7 +13,7 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/Log.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -27,7 +27,7 @@ class LogSet : public Log {
 
 private:
 
-	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 

@@ -12,7 +12,7 @@
  */
 
 #include <string>
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -28,7 +28,7 @@ class Object;
  * @param status is an ::S3Status.
  * @return a C string representation.
  */
-extern const char * tostring(::S3Status status);
+extern const char * tostring(Status status);
 
 /**
  * Convert an ::S3Protocol to its C string representation.

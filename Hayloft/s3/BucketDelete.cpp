@@ -42,17 +42,17 @@ BucketDelete::BucketDelete(const Bucket & bucket, const Plex & plex)
 }
 
 BucketDelete::~BucketDelete() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 }
 
 void BucketDelete::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 }
 
 void BucketDelete::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	::S3_delete_bucket(
 		protocol,
@@ -61,7 +61,7 @@ void BucketDelete::execute() {
 		secret.c_str(),
 		endpoint.c_str(),
 		canonical.c_str(),
-		requests,
+		pending,
 		&handler,
 		this
 	);

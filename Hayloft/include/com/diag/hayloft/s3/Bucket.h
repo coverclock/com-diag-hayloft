@@ -16,7 +16,7 @@
 #include "com/diag/hayloft/s3/Session.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/desperado/MemoryBarrier.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {

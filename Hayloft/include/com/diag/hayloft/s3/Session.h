@@ -14,7 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/s3/Endpoint.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -106,7 +106,7 @@ protected:
 
 	std::string endpoint;
 
-	::S3Status status;
+	Status status;
 
 public:
 
@@ -150,7 +150,7 @@ public:
 	 *
 	 * @return the status.
 	 */
-	::S3Status getStatus() const { return status; }
+	Status getStatus() const { return status; }
 
 	/**
 	 * Get the bucket suffix.
