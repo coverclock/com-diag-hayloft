@@ -12,6 +12,7 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/s3/Reaction.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/MemoryBarrier.h"
 #include "com/diag/hayloft/s3/S3.h"
@@ -22,6 +23,7 @@ namespace hayloft {
 namespace s3 {
 
 class Plex;
+class Reaction;
 
 /**
  * Action is a C++ object whose state may be altered in the background by a
@@ -48,6 +50,12 @@ public:
 	 */
 	static const int IDLE = intmaxof(Status) - 1;
 
+	/**
+	 * This is the Reaction used to manage the life cycle of Actions if no
+	 * other Reaction dependency is injected.
+	 */
+	static Reaction nominal;
+
 private:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
@@ -63,6 +71,8 @@ protected:
 	std::string requestid2;
 
 	Pending * pending;
+
+	Reaction * reaction;
 
 	Status status;
 
@@ -208,11 +218,16 @@ public:
 	const char * getRequestId2() const { return requestid2.c_str(); }
 
 	/**
-	 * Start the Action. If the Action is BUSY, this does nothing. If the
-	 * asynchronous constructor was used, this executes the Action for the
-	 * first time, or re-executes it, placing it into the BUSY state. If the
-	 * synchronous constructor was used, this re-executes the action and blocks
-	 * until it completes.
+	 * Set a Reaction to be used to manage the life cycle of this Action.
+	 *
+	 * @param react refers to a Reaction.
+	 * @return a reference to this object.
+	 */
+	Action & setReaction(Reaction & react) { reaction = &react; return *this; }
+
+	/**
+	 * Start the Action. The default implementation of this method does
+	 * nothing.
 	 */
 	virtual void start();
 
@@ -220,28 +235,30 @@ protected:
 
 	/**
 	 * This method is called when a Properties response is returned from S3.
-	 * Hayloft guarantees that this method does nothing except return
-	 * ::S3StatusOK to indicate success. It can be safely overridden by the
-	 * application for its own purposes. The overriding method does not need to
-	 * call this method.
+	 * The default implementation of this method calls the corresponding
+	 * Reaction call back method. If the call back is not being used by the
+	 * application, this method can be overridden. The overriding method can
+	 * delete itself providing it returns a status to terminate the Action and
+	 * if the application is designed to do so.
 	 *
 	 * @param properties points to a libs3 ::S3ResponseProperties structure.
 	 * @return a status that if ::S3StatusOK allows the Action to continue or
-	 *         if anything else (like ::S3StatusAbortedByCallback) immediates
+	 *         if anything else such as ::S3StatusAbortedByCallback immediately
 	 *         aborts the Action.
 	 */
 	virtual Status properties(const ::S3ResponseProperties * properties);
 
 	/**
 	 * This method is called when libs3 completes executing the Action.
-	 * Hayloft guarantees that this method does nothing. It can be safely
-	 * overridden by the application for its own purposes. The overridding
-	 * method does not need to call this method.
+	 * The default implementation of this method calls the corresponding
+	 * Reaction call back method. If the call back is not being used by the
+	 * application, this method can be overridden. The overriding method can
+	 * delete itself providing the application is designed to do so. The
+	 * current status can be retrieved using the getStatus() method.
 	 *
-	 * @param status is the completion status.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
-	virtual void complete(Status status, const ::S3ErrorDetails * errorDetails);
+	virtual void complete(const ::S3ErrorDetails * errorDetails);
 
 private:
 

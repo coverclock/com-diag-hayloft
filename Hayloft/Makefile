@@ -198,6 +198,7 @@ MANIFEST_O=\
  s3/Plex.o \
  s3/Properties.o \
  s3/Protocol.o \
+ s3/Reaction.o \
  s3/Region.o \
  s3/Selection.o \
  s3/Service.o \
