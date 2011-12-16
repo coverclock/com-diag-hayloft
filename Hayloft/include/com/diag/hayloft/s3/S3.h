@@ -22,13 +22,14 @@ namespace s3 {
 
 /**
  * This type exists mostly because g++ 4.4.3 seems to have issues with
- * name space syntax inside template argument lists.
+ * name space syntax inside template argument lists including C++ casts.
  */
 typedef ::S3Status Status;
 
 /**
  * This type exists mostly because g++ 4.4.3 seems to have issues with
- * name space syntax inside template argument lists.
+ * name space syntax inside template argument lists including C++ casts.
+ * Note that ::S3RequestContext is an opaque type in libs3.h.
  */
 typedef ::S3RequestContext Pending;
 
