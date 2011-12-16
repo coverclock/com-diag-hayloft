@@ -13,7 +13,7 @@
 
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {

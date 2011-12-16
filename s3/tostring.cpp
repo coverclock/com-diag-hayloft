@@ -16,9 +16,10 @@ namespace hayloft {
 namespace s3 {
 
 const char * tostring(::S3Status status) {
+	typedef ::S3Status Status;
 	const char * result;
-	if      (status == static_cast<S3Status>(Action::BUSY))	{ result = "BUSY"; }
-	else if (status == static_cast<S3Status>(Action::IDLE))	{ result = "IDLE"; }
+	if      (status == static_cast<Status>(Action::BUSY))	{ result = "BUSY"; }
+	else if (status == static_cast<Status>(Action::IDLE))	{ result = "IDLE"; }
 	else													{ result = ::S3_get_status_name(status); }
 	return result;
 }

@@ -15,7 +15,7 @@
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Grant.h"
 #include "com/diag/hayloft/s3/show.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {

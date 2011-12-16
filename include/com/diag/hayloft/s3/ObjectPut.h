@@ -14,7 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -52,7 +52,7 @@ private:
 
 	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
 
-	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 

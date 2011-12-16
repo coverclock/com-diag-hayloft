@@ -15,7 +15,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-void BucketHead::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void BucketHead::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	BucketHead * that = static_cast<BucketHead*>(callbackData);
 	that->constraint[sizeof(constraint) - 1] = '\0';
 	that->region = that->constraint;
@@ -49,20 +49,20 @@ BucketHead::BucketHead(const Bucket & bucket, const Plex & plex)
 }
 
 BucketHead::~BucketHead() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 }
 
 void BucketHead::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	constraint[0] = '\0';
 	handler.propertiesCallback = Bucket::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;;
 }
 
 void BucketHead::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketHead@%p: begin\n", this);
 	::S3_test_bucket(
 		protocol,
@@ -72,7 +72,7 @@ void BucketHead::execute() {
 		endpoint.c_str(),
 		canonical.c_str(),
 		sizeof(constraint) - 1, constraint,
-		requests,
+		pending,
 		&handler,
 		this
 	);

@@ -61,7 +61,7 @@ public:
 
 private:
 
-	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
+	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
 protected:
 

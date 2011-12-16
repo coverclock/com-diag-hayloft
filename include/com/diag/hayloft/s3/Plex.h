@@ -11,17 +11,14 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include <sys/select.h>
-#include "com/diag/hayloft/types.h"
-#include "com/diag/desperado/generics.h"
-#include "libs3.h"
-
-struct S3RequestContext;
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
+
+class Action;
 
 /**
  * Plex is how asynchronous Actions are managed. All Actions that use the
@@ -36,7 +33,7 @@ class Plex {
 
 protected:
 
-	::S3RequestContext * requests;
+	Pending * pending;
 
 public:
 
@@ -47,7 +44,7 @@ public:
 	 * @param untaken is the S3RequestContext. It is UNTAKEN and must be
 	 *        destroyed by the application.
 	 */
-	explicit Plex(::S3RequestContext * untaken = 0 /* UNTAKEN */);
+	explicit Plex(Pending * untaken = 0 /* UNTAKEN */);
 
 	/**
 	 * Dtor. If there are pending Actions, the dtor blocks and they are all
@@ -60,7 +57,7 @@ public:
 	 *
 	 * @return the S3RequestContext.
 	 */
-	::S3RequestContext * getRequests() const { return requests; }
+	Pending * getPending() const { return pending; }
 
 private:
 

@@ -108,7 +108,7 @@ public:
 
 private:
 
-	static ::S3Status listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData);
+	static Status listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData);
 
 protected:
 
@@ -198,7 +198,7 @@ protected:
 	 * @param creationDateSeconds is the time and date when the bucket was
 	 *        created represented as seconds since the UNIX epoch.
 	 */
-	virtual ::S3Status entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds);
+	virtual Status entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds);
 
 private:
 

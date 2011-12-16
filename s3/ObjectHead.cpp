@@ -42,22 +42,22 @@ ObjectHead::ObjectHead(const Object & object, const Plex & plex)
 }
 
 ObjectHead::~ObjectHead() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 }
 
 void ObjectHead::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 }
 
 void ObjectHead::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectHead@%p: begin\n", this);
 	::S3_head_object(
 		&context,
 		key.c_str(),
-		requests,
+		pending,
 		&handler,
 		this
 	);

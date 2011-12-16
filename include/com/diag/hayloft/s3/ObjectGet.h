@@ -14,7 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Conditions.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -49,9 +49,9 @@ public:
 
 protected:
 
-	static ::S3Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
+	static Status getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData);
 
-	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 	Epochalseconds since;
 
@@ -325,7 +325,7 @@ protected:
 	 * @return ::S3StatusOK to continue or any other libs3 ::S3Status value to
 	 *         immediately abort the operation.
 	 */
-	virtual ::S3Status get(int bufferSize, const void * buffer);
+	virtual Status get(int bufferSize, const void * buffer);
 
 	/**
 	 * Handle the close processing of the underlying data sink. A derived class

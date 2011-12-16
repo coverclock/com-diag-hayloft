@@ -87,7 +87,7 @@ void Bucket::initialize() {
 
 bool Bucket::isValid() const {
 	bool result = true;
-	::S3Status status = ::S3_validate_bucket_name(canonical.c_str(), style);
+	Status status = ::S3_validate_bucket_name(canonical.c_str(), style);
 	if (status != ::S3StatusOK) {
 		Logger::instance().warning("Bucket@%p: S3_validate_bucket_name failed! name=\"%s\"[%zu] status=%d=\"%s\"\n", this, name.c_str(), name.length(), status, tostring(status));
 		result = false;

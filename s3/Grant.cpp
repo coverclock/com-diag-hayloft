@@ -12,7 +12,7 @@
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/desperado/string.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -127,7 +127,7 @@ int Grant::import(const char * xml) {
 	// const. So I cheat here and hope it never comes back to bite me. I
 	// control my risk somewhat by making a local copy of the XML string.
 	std::string xmlstring = xml;
-	::S3Status status = S3_convert_acl(
+	Status status = S3_convert_acl(
 		const_cast<char *>(xmlstring.c_str()),
 		ownerid,
 		ownerdisplayname,

@@ -28,9 +28,9 @@ BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModifie
 , display(set(ownerDisplayName))
 {}
 
-::S3Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData) {
+Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData) {
 	BucketManifest * that = static_cast<BucketManifest*>(callbackData);
-	::S3Status status = that->entry(isTruncated, nextMarker, contentsCount, contents, commonPrefixesCount, commonPrefixes);
+	Status status = that->entry(isTruncated, nextMarker, contentsCount, contents, commonPrefixesCount, commonPrefixes);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	// See listBucketCallback() in s3.c from libs3 for Bryan's comments on how
 	// S3 doesn't return nextMarker when there is no delimiter. I've modeled
@@ -67,7 +67,7 @@ BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModifie
 	return status;
 }
 
-void BucketManifest::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void BucketManifest::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	BucketManifest * that = static_cast<BucketManifest*>(callbackData);
 	if ((status == ::S3StatusOK) && that->truncated && (that->maximum > that->manifest.size())) {
 		that->truncated = false;
@@ -128,13 +128,13 @@ BucketManifest::BucketManifest(const Bucket & bucket, const Plex & plex, const S
 }
 
 BucketManifest::~BucketManifest() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 }
 
 void BucketManifest::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Bucket@%p: prefix=\"%s\"\n", this, prefix.c_str());
@@ -151,7 +151,7 @@ void BucketManifest::initialize() {
 void BucketManifest::execute() {
 	Manifest::size_type size = manifest.size();
 	if (maximum > size) {
-		status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+		status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 		Logger::instance().debug("BucketManifest@%p: %s\n", this, (size == 0) ? "begin" : "continue");
 		::S3_list_bucket(
 			&context,
@@ -159,7 +159,7 @@ void BucketManifest::execute() {
 			set(nextmarker),
 			set(delimiter),
 			maximum - size,
-			requests,
+			pending,
 			&handler,
 			this
 		);
@@ -190,7 +190,7 @@ void BucketManifest::reset() {
 	}
 }
 
-::S3Status BucketManifest::entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes) {
+Status BucketManifest::entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes) {
 	Logger::instance().debug("BucketManifest%p: entry\n", this);
 	return ::S3StatusOK;
 }

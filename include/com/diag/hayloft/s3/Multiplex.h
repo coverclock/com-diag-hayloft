@@ -12,6 +12,8 @@
  */
 
 #include "com/diag/hayloft/s3/Plex.h"
+#include "com/diag/hayloft/types.h"
+#include "com/diag/desperado/generics.h"
 
 namespace com {
 namespace diag {
@@ -76,7 +78,7 @@ public:
 
 protected:
 
-	::S3RequestContext * taken;
+	Pending * taken;
 
 	::S3Status status;
 
@@ -95,7 +97,7 @@ public:
 	 * @param untaken is the S3RequestContext. It is UNTAKEN and must be
 	 *        be destroyed by the application.
 	 */
-	explicit Multiplex(::S3RequestContext * untaken /* UNTAKEN */);
+	explicit Multiplex(Pending * untaken /* UNTAKEN */);
 
 	/**
 	 * Dtor. If there are pending Actions, the dtor blocks and they are all
@@ -128,11 +130,11 @@ public:
 	/**
 	 * Perform a single iteration of all Actions on this Multiplex
 	 *
-	 * @param pending refers to a variable into which the number of pending
+	 * @param actions refers to a variable into which the number of pending
 	 *        Actions is stored.
 	 * @return a mask of Ready bits containing ERROR, RETRY, or PENDING.
 	 */
-	virtual int iterate(int & pending = dontcare);
+	virtual int iterate(int & actions = dontcare);
 
 	/**
 	 * Perform a select(2) system call on any sockets being mananged by libs3

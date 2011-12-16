@@ -19,7 +19,7 @@
 #include "com/diag/hayloft/Seconds.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/types.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {

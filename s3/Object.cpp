@@ -17,9 +17,9 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-::S3Status Object::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
+Status Object::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
-	::S3Status status = (*that->Container::handler.propertiesCallback)(responseProperties, callbackData);
+	Status status = (*that->Container::handler.propertiesCallback)(responseProperties, callbackData);
 	if (status == ::S3StatusOK) {
 		if ((responseProperties->contentType != 0) && (responseProperties->contentType[0] != '\0')) { that->type = responseProperties->contentType; }
 		that->length = responseProperties->contentLength;
@@ -112,7 +112,7 @@ const char * Object::find(const char * key) const {
 const char * Object::authenticated(Epochalseconds expires, const char * resource) {
 	const char * result = 0;
 	char buffer[S3_MAX_AUTHENTICATED_QUERY_STRING_SIZE + 1];
-	::S3Status status = S3_generate_authenticated_query_string(buffer, &context, key.c_str(), expires, resource);
+	Status status = S3_generate_authenticated_query_string(buffer, &context, key.c_str(), expires, resource);
 	if (status == ::S3StatusOK) {
 		buffer[sizeof(buffer) - 1] = '\0';
 		authentic = buffer;

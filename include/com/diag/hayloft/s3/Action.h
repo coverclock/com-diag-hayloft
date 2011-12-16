@@ -14,7 +14,7 @@
 #include <string>
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/MemoryBarrier.h"
-#include "libs3.h"
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -40,19 +40,19 @@ public:
 	 * thread. Most methods which mutate an Action are ignored when the Action
 	 * is in this state.
 	 */
-	static const int BUSY = intmaxof(::S3Status);
+	static const int BUSY = intmaxof(Status);
 
 	/**
 	 * This is a fake libs3 ::S3Status value that means the Action has been
 	 * constructed but has never been started.
 	 */
-	static const int IDLE = intmaxof(::S3Status) - 1;
+	static const int IDLE = intmaxof(Status) - 1;
 
 private:
 
-	static ::S3Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
+	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
-	static void responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 
@@ -62,9 +62,9 @@ protected:
 
 	std::string requestid2;
 
-	::S3RequestContext * requests;
+	Pending * pending;
 
-	::S3Status status;
+	Status status;
 
 	::S3ResponseHandler handler;
 
@@ -77,7 +77,7 @@ protected:
 	 *
 	 * @return	the current status value.
 	 */
-	::S3Status state() const { ::com::diag::desperado::MemoryBarrier barrier; return status; }
+	Status state() const { ::com::diag::desperado::MemoryBarrier barrier; return status; }
 
 public:
 
@@ -114,7 +114,7 @@ public:
 	 * Return true if this Action is neither IDLE nor BUSY.
 	 * @return true if this Action is neither IDLE nor BUSY.
 	 */
-	operator bool() const { ::S3Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY)); }
+	operator bool() const { Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY)); }
 
 	/**
 	 * Return true if this Action is IDLE.
@@ -156,7 +156,7 @@ public:
 	 *
 	 * @return true if this Action indicates inaccessibility.
 	 */
-	bool isInaccessible() const { ::S3Status temporary = state(); return ((temporary == ::S3StatusHttpErrorForbidden) || (temporary == ::S3StatusErrorAccessDenied)); }
+	bool isInaccessible() const { Status temporary = state(); return ((temporary == ::S3StatusHttpErrorForbidden) || (temporary == ::S3StatusErrorAccessDenied)); }
 
 	/**
 	 * Return true if this Action has a status that indicates the requested
@@ -164,27 +164,15 @@ public:
 	 *
 	 * @return true if this Action indicates nonexistence.
 	 */
-	bool isNonexistent() const { ::S3Status temporary = state(); return ((temporary == ::S3StatusHttpErrorNotFound) || (temporary == ::S3StatusErrorNoSuchKey) || (temporary == ::S3StatusErrorNoSuchBucket)); }
+	bool isNonexistent() const { Status temporary = state(); return ((temporary == ::S3StatusHttpErrorNotFound) || (temporary == ::S3StatusErrorNoSuchKey) || (temporary == ::S3StatusErrorNoSuchBucket)); }
 
 	/**
-	 * Return the libs3 ::S3RequestContext associated with this Action. This
+	 * Get the libs3 ::S3RequestContext associated with this Action. This
 	 * value is derived from the Plex used during construction.
 	 *
 	 * @return the libs3 ::S3RequestContext associated with this Action.
 	 */
-	::S3RequestContext * getRequests() const { return requests; }
-
-	/**
-	 * Set the ::S3RequestContext associated with this Action. If null, this
-	 * turns this object in a synchronous Action, otherwise into an asynchronous
-	 * action. This can be used for certain error recover strategies, for
-	 * example running the Action in the foreground initially, than in the
-	 * background to retry it if necessary.
-	 *
-	 * @param req if non-null points to an libs3 ::S3RequestContext.
-	 * @return a reference to this object.
-	 */
-	Action & setRequests(::S3RequestContext * req);
+	Pending * getPending() const { return pending; }
 
 	/**
 	 * Get the status for this Action. A pointer to a C string describing the
@@ -194,7 +182,7 @@ public:
 	 *        to a C string describing the status is returned.
 	 * @return the status.
 	 */
-	::S3Status getStatus(const char ** description = 0) const;
+	Status getStatus(const char ** description = 0) const;
 
 	/**
 	 * Get the name of the S3 server used to execute this Action. This is
@@ -242,7 +230,7 @@ protected:
 	 *         if anything else (like ::S3StatusAbortedByCallback) immediates
 	 *         aborts the Action.
 	 */
-	virtual ::S3Status properties(const ::S3ResponseProperties * properties);
+	virtual Status properties(const ::S3ResponseProperties * properties);
 
 	/**
 	 * This method is called when libs3 completes executing the Action.
@@ -253,7 +241,7 @@ protected:
 	 * @param status is the completion status.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
-	virtual void complete(::S3Status status, const ::S3ErrorDetails * errorDetails);
+	virtual void complete(Status status, const ::S3ErrorDetails * errorDetails);
 
 private:
 

@@ -29,11 +29,11 @@ Multiplex::Multiplex()
 , taken(0)
 , status(::S3_create_request_context(&taken))
 {
-	requests = taken;
+	pending = taken;
 	initialize();
 }
 
-Multiplex::Multiplex(::S3RequestContext * untaken)
+Multiplex::Multiplex(Pending * untaken)
 : Plex(untaken)
 , taken(0)
 , status(::S3StatusOK)
@@ -55,7 +55,7 @@ void Multiplex::initialize() {
 
 int Multiplex::complete() {
 	int rc = 0;
-	::S3Status status = ::S3_runall_request_context(requests);
+	::S3Status status = ::S3_runall_request_context(pending);
 	if (status != S3StatusOK) {
 		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 		rc = (::S3_status_is_retryable(status) != 0) ? RETRY : ERROR;
@@ -63,11 +63,11 @@ int Multiplex::complete() {
 	return rc;
 }
 
-int Multiplex::iterate(int & pending /* static dontcare */) {
+int Multiplex::iterate(int & actions /* static dontcare */) {
 	Logger & logger = Logger::instance();
 	int rc = 0;
 	int count = 0;
-	::S3Status status = ::S3_runonce_request_context(requests, &count);
+	::S3Status status = ::S3_runonce_request_context(pending, &count);
 	if (status != S3StatusOK) {
 		logger.error("Multiplex@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 		rc |= (::S3_status_is_retryable(status) != 0) ? RETRY : ERROR;
@@ -76,7 +76,7 @@ int Multiplex::iterate(int & pending /* static dontcare */) {
 		logger.debug("Multiplex@%p: pending=%d\n", this, count);
 		rc |= PENDING;
 	}
-	pending = count;
+	actions = count;
 	return rc;
 }
 
@@ -93,7 +93,7 @@ int Multiplex::ready(Milliseconds timeout) {
 		fd_set exceptions;
 		FD_ZERO(&exceptions);
 		int maxfd = -1;
-		::S3Status status = ::S3_get_request_context_fdsets(requests, &reads, &writes, &exceptions, &maxfd);
+		::S3Status status = ::S3_get_request_context_fdsets(pending, &reads, &writes, &exceptions, &maxfd);
 		if (status != ::S3StatusOK) {
 			logger.error("Multiplex@%p: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", this, status, tostring(status));
 			rc |= (::S3_status_is_retryable(status) != 0) ? RETRY : ERROR;
@@ -103,7 +103,7 @@ int Multiplex::ready(Milliseconds timeout) {
 		if (maxfd < 0) {
 			break;
 		}
-		Milliseconds maximum = ::S3_get_request_context_timeout(requests);
+		Milliseconds maximum = ::S3_get_request_context_timeout(pending);
 		if (timeout > maximum) { timeout = maximum; }
 		if (timeout < 0) { timeout = DEFAULT; } // ::S3_get_request_context_timeout() can return -1 indicating no suggested value.
 		logger.debug("Multiplex@%p: milliseconds=%lld\n", this, timeout);

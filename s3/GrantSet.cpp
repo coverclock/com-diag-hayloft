@@ -18,7 +18,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-void GrantSet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void GrantSet::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	GrantSet * that = static_cast<GrantSet*>(callbackData);
 	delete [] that->grants;
 	that->count = 0;
@@ -61,8 +61,8 @@ GrantSet::GrantSet(const Object & object, const Plex & plex, const Grant & grant
 }
 
 GrantSet::~GrantSet() {
-	if ((state() == BUSY) && (requests != 0)) {
-		(void)S3_runall_request_context(requests);
+	if ((state() == BUSY) && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
 	}
 	delete [] grants;
 }
@@ -74,7 +74,7 @@ void GrantSet::start() {
 }
 
 void GrantSet::initialize() {
-	status = static_cast<S3Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	handler.propertiesCallback = Grant::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
 	Logger & logger = Logger::instance();
@@ -85,7 +85,7 @@ void GrantSet::initialize() {
 }
 
 void GrantSet::execute() {
-	status = static_cast<S3Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
 	delete [] grants;
 	grants = generate(count);
 	show(grants, count, Logger::DEBUG);
@@ -97,7 +97,7 @@ void GrantSet::execute() {
 		display.c_str(),
 		count,
 		grants,
-		requests,
+		pending,
 		&handler,
 		this
 	);
