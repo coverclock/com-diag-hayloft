@@ -21,7 +21,9 @@ namespace hayloft {
 namespace s3 {
 
 /**
- *
+ * LogSet establishes a relationship between two S3 buckets, one that is used to
+ * store S3 objects, the other used to store log files automatically generated
+ * by S3 to record the actions on the first bucket.
  */
 class LogSet : public Log {
 

@@ -301,7 +301,6 @@ public:
 	 * object.
 	 *
 	 * @param grant refers to an existing Grant object.
-	 * @param grants points to the array.
 	 * @return the number of grant entries imported.
 	 */
 	int import(const Grant & grant);

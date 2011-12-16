@@ -219,11 +219,14 @@ public:
 
 	/**
 	 * Set a Reaction to be used to manage the life cycle of this Action.
+	 * Contrary to how most of the rest of Hayloft works, a pointer to the
+	 * Reaction is cached in the Action. The Reaction is UNTAKEN and must not
+	 * be deleted until after the Action is deleted.
 	 *
 	 * @param react refers to a Reaction.
 	 * @return a reference to this object.
 	 */
-	Action & setReaction(Reaction & react) { reaction = &react; return *this; }
+	Action & setReaction(Reaction & react /* UNTAKEN */) { reaction = &react; return *this; }
 
 	/**
 	 * Start the Action. The default implementation of this method does
