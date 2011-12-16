@@ -24,7 +24,10 @@ namespace s3 {
 class Plex;
 
 /**
- *
+ * Log describes the relationship between two S3 buckets, one that is used to
+ * store S3 objects, the other used to store log files automatically generated
+ * by S3 to record the actions on the first bucket. Log is a type of Grant
+ * because the relationship can have its own access control list.
  */
 class Log : public Grant {
 
@@ -85,8 +88,19 @@ public:
 	 */
 	virtual ~Log();
 
+	/**
+	 * Get the canonical bucket name associated with the S3 bucket in which the
+	 * log files are stored.
+	 *
+	 * @return a canonical bucket name where the log files are stored.
+	 */
 	const char * getTarget() const { return target.c_str(); }
 
+	/**
+	 * Get the object name prefix that will be applied to log files.
+	 *
+	 * @return the object name prefix applied to log files.
+	 */
 	const char * getPrefix() const { return prefix.c_str(); }
 
 private:
