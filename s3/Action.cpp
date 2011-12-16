@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/Action.h"
+#include "com/diag/hayloft/s3/Reaction.h"
 #include "com/diag/hayloft/s3/Plex.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
@@ -19,12 +20,16 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+Reaction Action::nominal;
+
 Status Action::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
 	if ((responseProperties->requestId != 0) && (responseProperties->requestId[0] != '\0')) { that->requestid = responseProperties->requestId; }
 	if ((responseProperties->requestId2 != 0) && (responseProperties->requestId2[0] != '\0')) { that->requestid2 = responseProperties->requestId2; }
 	if ((responseProperties->server != 0) && (responseProperties->server[0] != '\0')) { that->server = responseProperties->server; }
 	Status status = that->properties(responseProperties);
+	// Not safe to reference object fields or methods after this point.
+	// Application is permitted to delete object.
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(responseProperties, level);
@@ -33,6 +38,10 @@ Status Action::responsePropertiesCallback(const ::S3ResponseProperties * respons
 
 void Action::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
+	that->status = status;
+	// An ::S3StatusInterrupted means someone destroyed our request context.
+	// We are now a synchronous Action.
+	if (status == ::S3StatusInterrupted) { that->pending = 0; }
 	Logger::Level level;
 	// I've never seen ::S3StatusErrorNoSuchKey in response to a GET or a HEAD
 	// so I'm not sure under what circumstances it occurs. A missing OBJECT
@@ -51,16 +60,15 @@ void Action::responseCompleteCallback(Status status, const ::S3ErrorDetails * er
 	}
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(errorDetails, level);
-	that->complete(status, errorDetails);
-	that->status = status;
-	// An ::S3StatusInterrupted means someone destroyed our request context.
-	// We are now a synchronous Action.
-	if (status == ::S3StatusInterrupted) { that->pending = 0; }
+	that->complete(errorDetails);
+	// Not safe to reference object fields or methods after this point.
+	// Application is permitted to delete object.
 	Logger::instance().log(level, "Action@%p: end\n", that);
 }
 
 Action::Action()
 : pending(0)
+, reaction(&nominal)
 , status(::S3StatusOK)
 {
 	initialize();
@@ -68,6 +76,7 @@ Action::Action()
 
 Action::Action(const Plex & plex)
 : pending(plex.getPending())
+, reaction(&nominal)
 , status(::S3StatusOK)
 {
 	initialize();
@@ -79,6 +88,7 @@ Action::~Action() {
 	// already been invoked. Only those derived classes which actually implement
 	// a start() method that enqueues a request on the request context should
 	// call S3_runall_request_context() in their destructor.
+	reaction->destructor(*this);
 }
 
 void Action::initialize() {
@@ -94,17 +104,14 @@ Status Action::getStatus(const char ** description) const {
 }
 
 void Action::start() {
-	return;
 }
 
 Status Action::properties(const ::S3ResponseProperties * properties) {
-	Logger::instance().debug("Action%p: properties\n", this);
-	return ::S3StatusOK;
+	return reaction->properties(*this, properties);
 }
 
-void Action::complete(Status status, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("Action%p: complete\n", this);
-	return;
+void Action::complete(const ::S3ErrorDetails * errorDetails) {
+	reaction->complete(*this, errorDetails);
 }
 
 }
