@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/GrantGet.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -77,12 +78,6 @@ GrantGet::~GrantGet() {
 	delete [] grants;
 }
 
-void GrantGet::start() {
-	if (state() != BUSY) {
-		execute();
-	}
-}
-
 void GrantGet::initialize() {
 	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	ownerid[0] = '\0';
@@ -97,6 +92,7 @@ void GrantGet::execute() {
 	delete [] grants;
 	grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];
 	Logger::instance().debug("GrantGet@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	S3_get_acl(
 		&context,
 		keypointer,
@@ -108,6 +104,12 @@ void GrantGet::execute() {
 		&handler,
 		this
 	);
+}
+
+void GrantGet::start() {
+	if (state() != BUSY) {
+		execute();
+	}
 }
 
 }

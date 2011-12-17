@@ -12,7 +12,6 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/Reaction.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/desperado/MemoryBarrier.h"
 #include "com/diag/hayloft/s3/S3.h"
@@ -50,12 +49,6 @@ public:
 	 */
 	static const int IDLE = intmaxof(Status) - 1;
 
-	/**
-	 * This is the Reaction used to manage the life cycle of Actions if no
-	 * other Reaction dependency is injected.
-	 */
-	static Reaction nominal;
-
 private:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
@@ -71,8 +64,6 @@ protected:
 	std::string requestid2;
 
 	Pending * pending;
-
-	Reaction * reaction;
 
 	Status status;
 
@@ -94,8 +85,10 @@ public:
 	/**
 	 * Ctor. Use this for the synchronous interface. The Action will be
 	 * automatically started in the ctor, and the ctor will block until the
-	 * Action completes. Synchronous Actions can be restarted and re-executed
-	 * synchronously.
+	 * Action completes. Synchronous Actions can be re-started and will
+	 * re-execute synchronously.
+	 *
+	 * This constructor calls the corresponding LifeCycle method.
 	 */
 	explicit Action();
 
@@ -105,6 +98,8 @@ public:
 	 * associated with the Action is serviced until the Action completes.
 	 * Asynchronous Actions can be restarted and re-executed asynchronously.
 	 *
+	 * This constructor calls the corresponding LifeCycle method.
+	 *
 	 * @param plex refers to the Plex responsible for executing this
 	 *        Action asynchronously. This reference is only used during
 	 *        construction. However the Plex dtor will force all Actions
@@ -113,10 +108,9 @@ public:
 	explicit Action(const Plex & plex);
 
 	/**
-	 * Dtor. If called while the Action is BUSY, the dtor will block until all
-	 * Actions pending on the same Plex have completed. This prevents this
-	 * Action from being deallocated while it is executing. (There is no
-	 * mechanism to complete just this Action.)
+	 * Dtor.
+	 *
+	 * This destructor calls the corresponding LifeCycle method.
 	 */
 	virtual ~Action();
 
@@ -218,19 +212,12 @@ public:
 	const char * getRequestId2() const { return requestid2.c_str(); }
 
 	/**
-	 * Set a Reaction to be used to manage the life cycle of this Action.
-	 * Contrary to how most of the rest of Hayloft works, a pointer to the
-	 * Reaction is cached in the Action. The Reaction is UNTAKEN and must not
-	 * be deleted until after the Action is deleted.
+	 * Start the Action.
 	 *
-	 * @param react refers to a Reaction.
-	 * @return a reference to this object.
-	 */
-	Action & setReaction(Reaction & react /* UNTAKEN */) { reaction = &react; return *this; }
-
-	/**
-	 * Start the Action. The default implementation of this method does
-	 * nothing.
+	 * The default implementation in the base class does nothing. It is the
+	 * responsibility of the derived classes to call the appropriate LifeCycle
+	 * method when an Action is actually started. (As a point of design, you
+	 * should call it just before the Action is actually started.)
 	 */
 	virtual void start();
 
@@ -238,26 +225,45 @@ protected:
 
 	/**
 	 * This method is called when a Properties response is returned from S3.
-	 * The default implementation of this method calls the corresponding
-	 * Reaction call back method. If the call back is not being used by the
-	 * application, this method can be overridden. The overriding method can
-	 * delete itself providing it returns a status to terminate the Action and
-	 * if the application is designed to do so.
+	 *
+	 * The default implementation in the base class calls the corresponding
+	 * LifeCycle method. The default implementation of the corresponding
+	 * LifeCycle method does nothing, but the default implementation may be
+	 * replaced in order to implement more complex Action life cycle policies.
+	 * Derived classes may override this method but is so doing the designer
+	 * must decide whether to call this base class method thereby calling the
+	 * LifeCycle method implicitly, call the LifeCycle method explicitly, or
+	 * not call the LifeCycle method at all.
+	 *
+	 * The overriding method can delete itself, providing it returns a status
+	 * other than ::S3StatusOK (like ::S3StatusAbortedByCallback) to terminate
+	 * the Action, and providing if the application is otherwise designed for
+	 * it to do so.
 	 *
 	 * @param properties points to a libs3 ::S3ResponseProperties structure.
 	 * @return a status that if ::S3StatusOK allows the Action to continue or
 	 *         if anything else such as ::S3StatusAbortedByCallback immediately
-	 *         aborts the Action.
+	 *         terminates the Action.
 	 */
 	virtual Status properties(const ::S3ResponseProperties * properties);
 
 	/**
 	 * This method is called when libs3 completes executing the Action.
-	 * The default implementation of this method calls the corresponding
-	 * Reaction call back method. If the call back is not being used by the
-	 * application, this method can be overridden. The overriding method can
-	 * delete itself providing the application is designed to do so. The
-	 * current status can be retrieved using the getStatus() method.
+	 *
+	 * The default implementation in the base class calls the corresponding
+	 * LifeCycle method. The default implementation of the corresponding
+	 * LifeCycle method does nothing, but the default implementation may be
+	 * replaced in order to implement more complex Action life cycle policies.
+	 * Derived classes may override this method but is so doing the designer
+	 * must decide whether to call this base class method thereby calling the
+	 * LifeCycle method implicitly, call the LifeCycle method explicitly, or
+	 * not call the LifeCycle method at all.
+	 *
+	 * The overriding method can delete itself providing the application is
+	 * otherwise designed for it to do so.
+	 *
+	 * The current Action status is not passed to this method but can be
+	 * retrieved using the getStatus() method.
 	 *
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */

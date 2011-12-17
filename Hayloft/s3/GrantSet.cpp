@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/GrantSet.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -67,12 +68,6 @@ GrantSet::~GrantSet() {
 	delete [] grants;
 }
 
-void GrantSet::start() {
-	if (state() != BUSY) {
-		execute();
-	}
-}
-
 void GrantSet::initialize() {
 	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	handler.propertiesCallback = Grant::handler.propertiesCallback;
@@ -90,6 +85,7 @@ void GrantSet::execute() {
 	grants = generate(count);
 	show(grants, count, Logger::DEBUG);
 	Logger::instance().debug("GrantSet@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	S3_set_acl(
 		&context,
 		keypointer,
@@ -101,6 +97,12 @@ void GrantSet::execute() {
 		&handler,
 		this
 	);
+}
+
+void GrantSet::start() {
+	if (state() != BUSY) {
+		execute();
+	}
 }
 
 }

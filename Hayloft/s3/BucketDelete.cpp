@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/BucketDelete.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -54,6 +55,7 @@ void BucketDelete::initialize() {
 void BucketDelete::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketDelete@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	::S3_delete_bucket(
 		protocol,
 		style,

@@ -8,7 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/Action.h"
-#include "com/diag/hayloft/s3/Reaction.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Plex.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
@@ -19,8 +19,6 @@ namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
-
-Reaction Action::nominal;
 
 Status Action::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
@@ -68,7 +66,6 @@ void Action::responseCompleteCallback(Status status, const ::S3ErrorDetails * er
 
 Action::Action()
 : pending(0)
-, reaction(&nominal)
 , status(::S3StatusOK)
 {
 	initialize();
@@ -76,7 +73,6 @@ Action::Action()
 
 Action::Action(const Plex & plex)
 : pending(plex.getPending())
-, reaction(&nominal)
 , status(::S3StatusOK)
 {
 	initialize();
@@ -88,7 +84,7 @@ Action::~Action() {
 	// already been invoked. Only those derived classes which actually implement
 	// a start() method that enqueues a request on the request context should
 	// call S3_runall_request_context() in their destructor.
-	reaction->destructor(*this);
+	LifeCycle::instance().destructor(*this);
 }
 
 void Action::initialize() {
@@ -96,6 +92,7 @@ void Action::initialize() {
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
+	LifeCycle::instance().constructor(*this);
 }
 
 Status Action::getStatus(const char ** description) const {
@@ -104,14 +101,20 @@ Status Action::getStatus(const char ** description) const {
 }
 
 void Action::start() {
+	// It is the responsibility of the derived classes to call the
+	// corresponding LifeCycle method when they actually start. This isn't
+	// always done in their overriding start method but instead in a non-virtual
+	// method, typically called execute, that may be called from their
+	// constructor for the synchronous interface.
 }
 
 Status Action::properties(const ::S3ResponseProperties * properties) {
-	return reaction->properties(*this, properties);
+	LifeCycle::instance().properties(*this, properties);
+	return ::S3StatusOK;
 }
 
 void Action::complete(const ::S3ErrorDetails * errorDetails) {
-	reaction->complete(*this, errorDetails);
+	LifeCycle::instance().complete(*this, errorDetails);
 }
 
 }

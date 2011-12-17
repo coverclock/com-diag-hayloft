@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectGet.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/set.h"
@@ -175,6 +176,7 @@ void ObjectGet::initialize() {
 void ObjectGet::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectGet@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	::S3_get_object(
 		&context,
 		key.c_str(),
@@ -185,7 +187,6 @@ void ObjectGet::execute() {
 		&handler,
 		this
 	);
-
 }
 
 void ObjectGet::finalize() {
