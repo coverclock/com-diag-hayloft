@@ -185,6 +185,7 @@ MANIFEST_O=\
  s3/Grant.o \
  s3/GrantGet.o \
  s3/GrantSet.o \
+ s3/LifeCycle.o \
  s3/Log.o \
  s3/LogGet.o \
  s3/LogSet.o \
@@ -198,7 +199,6 @@ MANIFEST_O=\
  s3/Plex.o \
  s3/Properties.o \
  s3/Protocol.o \
- s3/Reaction.o \
  s3/Region.o \
  s3/Selection.o \
  s3/Service.o \

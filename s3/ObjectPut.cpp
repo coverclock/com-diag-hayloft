@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectPut.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
@@ -206,6 +207,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 void ObjectPut::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectPut@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	::S3_put_object(
 		&context,
 		key.c_str(),

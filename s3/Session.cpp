@@ -22,6 +22,7 @@ namespace hayloft {
 namespace s3 {
 
 static ::com::diag::desperado::Mutex instancemutex;
+
 static ::com::diag::desperado::Mutex initializationmutex;
 
 static Session * instant = 0;
@@ -52,7 +53,7 @@ Session & Session::factory() {
 
 Session & Session::instance(Session & that) {
 	::com::diag::desperado::CriticalSection guard(instancemutex);
-	Session::singleton = &that;
+	singleton = &that;
     return *singleton;
 }
 

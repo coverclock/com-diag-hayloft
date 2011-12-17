@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/LogGet.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -60,12 +61,6 @@ LogGet::~LogGet() {
 	delete [] grants;
 }
 
-void LogGet::start() {
-	if (state() != BUSY) {
-		execute();
-	}
-}
-
 void LogGet::initialize() {
 	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	targetbucket[0] = '\0';
@@ -80,6 +75,7 @@ void LogGet::execute() {
 	delete [] grants;
 	grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];
 	Logger::instance().debug("LogGet@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	S3_get_server_access_logging(
 		&context,
 		targetbucket,
@@ -90,6 +86,12 @@ void LogGet::execute() {
 		&handler,
 		this
 	);
+}
+
+void LogGet::start() {
+	if (state() != BUSY) {
+		execute();
+	}
 }
 
 }

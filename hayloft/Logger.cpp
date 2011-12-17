@@ -46,7 +46,7 @@ Logger & Logger::factory() {
 
 Logger & Logger::instance(Logger & that) {
 	::com::diag::desperado::CriticalSection guard(mutex);
-	Logger::singleton = &that;
+	singleton = &that;
 	return *singleton;
 }
 

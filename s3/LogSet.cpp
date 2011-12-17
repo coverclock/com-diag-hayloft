@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/s3/LogSet.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -52,12 +53,6 @@ LogSet::~LogSet() {
 	delete [] grants;
 }
 
-void LogSet::start() {
-	if (state() != BUSY) {
-		execute();
-	}
-}
-
 void LogSet::initialize() {
 	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
 	handler.propertiesCallback = Grant::handler.propertiesCallback;
@@ -75,6 +70,7 @@ void LogSet::execute() {
 	grants = generate(count);
 	show(grants, count, Logger::DEBUG);
 	Logger::instance().debug("LogSet@%p: begin\n", this);
+	LifeCycle::instance().start(*this);
 	S3_set_server_access_logging(
 		&context,
 		target.c_str(),
@@ -85,6 +81,12 @@ void LogSet::execute() {
 		&handler,
 		this
 	);
+}
+
+void LogSet::start() {
+	if (state() != BUSY) {
+		execute();
+	}
 }
 
 }
