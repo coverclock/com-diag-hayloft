@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/GrantSet.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -85,7 +84,7 @@ void GrantSet::execute() {
 	grants = generate(count);
 	show(grants, count, Logger::DEBUG);
 	Logger::instance().debug("GrantSet@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Grant::execute();
 	S3_set_acl(
 		&context,
 		keypointer,

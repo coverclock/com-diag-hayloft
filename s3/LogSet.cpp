@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/LogSet.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -70,7 +69,7 @@ void LogSet::execute() {
 	grants = generate(count);
 	show(grants, count, Logger::DEBUG);
 	Logger::instance().debug("LogSet@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Log::execute();
 	S3_set_server_access_logging(
 		&context,
 		target.c_str(),

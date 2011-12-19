@@ -10,11 +10,11 @@
 #include <new>
 #include <cstdio>
 #include <cstring>
-#include <cerrno>
 #include "com/diag/hayloft/Packet.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/Print.h"
 #include "com/diag/desperado/Dump.h"
+#include "com/diag/desperado/errno.h"
 
 namespace com {
 namespace diag {

@@ -8,12 +8,12 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Input.h"
 #include "com/diag/desperado/string.h"
+#include "com/diag/desperado/errno.h"
 
 namespace com {
 namespace diag {
@@ -22,11 +22,16 @@ namespace s3 {
 
 int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callbackData) {
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
+	// Remember, this is actually a read; put is the S3 operation in progress.
 	int rc = that->put(bufferSize, buffer);
-	Logger::Level level = (rc >= 0) ? Logger::DEBUG : Logger::NOTICE;
-	Logger::instance().log(level, "ObjectPut@%p: bufferSize=%d\n", that, bufferSize);
-	Logger::instance().log(level, "ObjectPut@%p: return=%d\n", that, rc);
-	return (rc < 0) ? 0 : rc;
+	if (rc >= 0) {
+		that->consumed += rc;
+		Logger::instance().debug("ObjectPut@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->consumed);
+	} else {
+		Logger::instance().notice("ObjectPut@%p: requested=%d returned=%d total=%d errno=%d=\"%s\"\n", that, bufferSize, rc, that->consumed, errno, ::strerror(errno));
+		rc = 0;
+	}
+	return (rc > 0) ? rc : 0;
 }
 
 void ObjectPut::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
@@ -47,6 +52,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input & source
 , input(&source)
 , taken(0)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -64,6 +70,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input * source
 , input(sourcep)
 , taken(sourcep)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -80,6 +87,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Plex & p
 , input(&source)
 , taken(0)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 }
@@ -96,6 +104,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Plex & p
 , input(sourcep)
 , taken(sourcep)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 }
@@ -112,6 +121,7 @@ ObjectPut::ObjectPut(const Object & object, Input & source, Octets objectsize, c
 , input(&source)
 , taken(0)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -129,6 +139,7 @@ ObjectPut::ObjectPut(const Object & object, Input * sourcep, Octets objectsize, 
 , input(sourcep)
 , taken(sourcep)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 	execute();
@@ -145,6 +156,7 @@ ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input & source, O
 , input(&source)
 , taken(0)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 }
@@ -161,6 +173,7 @@ ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input * sourcep, 
 , input(sourcep)
 , taken(sourcep)
 , size(objectsize)
+, consumed(0)
 {
 	initialize(props.getMetadata());
 }
@@ -207,7 +220,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 void ObjectPut::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectPut@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Object::execute();
 	::S3_put_object(
 		&context,
 		key.c_str(),
@@ -223,6 +236,8 @@ void ObjectPut::finalize() {
 	if (input != 0) {
 		input = 0;
 	}
+	// For some input functors, the delete performs the close on the underlying
+	// operating system data source.
 	delete taken;
 	taken = 0;
 }
@@ -239,6 +254,7 @@ void ObjectPut::reset(Input & source, Octets objectsize) {
 		input = &source;
 		taken = 0;
 		size = objectsize;
+		consumed = 0;
 	}
 }
 
@@ -248,19 +264,20 @@ void ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
 		input = sourcep;
 		taken = sourcep;
 		size = objectsize;
+		consumed = 0;
 	}
 }
 
 int ObjectPut::put(int bufferSize, void * buffer) {
-	ssize_t consumed = 0;
+	ssize_t octets = 0;
 	if (input != 0) {
-		consumed = (*input)(buffer, 1, bufferSize);
-		if (consumed == EOF) {
+		octets = (*input)(buffer, 1, bufferSize);
+		if (octets == EOF) {
 			finalize();
-			consumed = 0;
+			octets = 0;
 		}
 	}
-	return consumed;
+	return octets;
 }
 
 }

@@ -217,9 +217,26 @@ public:
 	 * The default implementation in the base class does nothing. It is the
 	 * responsibility of the derived classes to call the appropriate LifeCycle
 	 * method when an Action is actually started. (As a point of design, you
-	 * should call it just before the Action is actually started.)
+	 * should call it just before the Action is actually started.) In practice,
+	 * they can call the non-virtual execute function in this base class to
+	 * accomplish this. The execute function is non-virtual since it may be
+	 * called from a constructor when the synchronous interface is used, at
+	 * which time construction of the object may not be complete (depending on
+	 * the C++ implementation).
 	 */
 	virtual void start();
+
+	/**
+	 * Reset the action.
+	 *
+	 * The default implementation in the base class does nothing. Derived
+	 * classes may use this to perform some recovery or reinitialization action
+	 * when signaled by a management entity that calls this method before
+	 * restarting the Action. Typically, actions that use input or output
+	 * functors will do whatever is necessary to rewind the input or output
+	 * stream.
+	 */
+	virtual void reset();
 
 protected:
 
@@ -235,10 +252,9 @@ protected:
 	 * LifeCycle method implicitly, call the LifeCycle method explicitly, or
 	 * not call the LifeCycle method at all.
 	 *
-	 * The overriding method can delete itself, providing it returns a status
-	 * other than ::S3StatusOK (like ::S3StatusAbortedByCallback) to terminate
-	 * the Action, and providing if the application is otherwise designed for
-	 * it to do so.
+	 * If the overriding method returns a status other than ::S3StatusOK (like
+	 * ::S3StatusAbortedByCallback) this Action will be immediately terminated
+	 * and completed with that status.
 	 *
 	 * @param properties points to a libs3 ::S3ResponseProperties structure.
 	 * @return a status that if ::S3StatusOK allows the Action to continue or
@@ -259,8 +275,9 @@ protected:
 	 * LifeCycle method implicitly, call the LifeCycle method explicitly, or
 	 * not call the LifeCycle method at all.
 	 *
-	 * The overriding method can delete itself providing the application is
-	 * otherwise designed for it to do so.
+	 * The overriding method can delete this Action providing the application
+	 * is otherwise designed for it to do so. The default behavior of Hayloft
+	 * is to not reference this Action following this call.
 	 *
 	 * The current Action status is not passed to this method but can be
 	 * retrieved using the getStatus() method.
@@ -272,6 +289,12 @@ protected:
 private:
 
 	void initialize();
+
+protected:
+
+	void execute();
+
+private:
 
     /**
      *  Copy constructor. POISONED.
