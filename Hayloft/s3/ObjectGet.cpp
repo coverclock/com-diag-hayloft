@@ -8,13 +8,13 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/Output.h"
 #include "com/diag/desperado/string.h"
+#include "com/diag/desperado/errno.h"
 
 namespace com {
 namespace diag {
@@ -23,11 +23,16 @@ namespace s3 {
 
 Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData) {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
-	Status status = that->get(bufferSize, buffer);
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
-	Logger::instance().log(level, "ObjectGet@%p: bufferSize=%d\n", that, bufferSize);
-	Logger::instance().log(level, "ObjectGet@%p: status=%d=\"%s\"\n", that, status, tostring(status));
-	return status;
+	// Remember, this is actually a write; get is the S3 operation in progress.
+	int rc = that->get(bufferSize, buffer);
+	if (rc >= 0) {
+		that->produced += rc;
+		Logger::instance().debug("ObjectGet@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->produced);
+	} else {
+		Logger::instance().notice("ObjectGet@%p: requested=%d returned=%d total=%d errno=%d=\"%s\"\n", that, bufferSize, rc, that->produced, errno, ::strerror(errno));
+		rc = 0;
+	}
+	return (rc > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
 }
 
 void ObjectGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
@@ -46,6 +51,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output & sink,
 , taken(0)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 	execute();
@@ -61,6 +67,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output * sinkp
 , taken(sinkp)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 	execute();
@@ -76,6 +83,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Plex & p
 , taken(0)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 }
@@ -90,6 +98,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Plex & p
 , taken(sinkp)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 }
@@ -104,6 +113,7 @@ ObjectGet::ObjectGet(const Object & object, Output & sink, Octets objectoffset, 
 , taken(0)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 	execute();
@@ -119,6 +129,7 @@ ObjectGet::ObjectGet(const Object & object, Output * sinkp, /* TAKEN */ Octets o
 , taken(sinkp)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 	execute();
@@ -134,6 +145,7 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output & sink, Oc
 , taken(0)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 }
@@ -148,6 +160,7 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output * sinkp, /
 , taken(sinkp)
 , offset(objectoffset)
 , size(objectsize)
+, produced(0)
 {
 	initialize();
 }
@@ -176,7 +189,7 @@ void ObjectGet::initialize() {
 void ObjectGet::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectGet@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Object::execute();
 	::S3_get_object(
 		&context,
 		key.c_str(),
@@ -194,6 +207,8 @@ void ObjectGet::finalize() {
 		(*output)();
 		output = 0;
 	}
+	// For some output functors, the delete performs the close on the underlying
+	// operating system data sink.
 	delete taken;
 	taken = 0;
 }
@@ -211,6 +226,7 @@ void ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
 		taken = 0;
 		offset = objectoffset;
 		size = objectsize;
+		produced = 0;
 	}
 }
 
@@ -221,19 +237,20 @@ void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 		taken = sinkp;
 		offset = objectoffset;
 		size = objectsize;
+		produced = 0;
 	}
 }
 
-Status ObjectGet::get(int bufferSize, const void * buffer) {
-	ssize_t produced = 0;
+int ObjectGet::get(int bufferSize, const void * buffer) {
+	ssize_t octets = 0;
 	if (output != 0) {
-		produced = (*output)(buffer, bufferSize, bufferSize);
-		if (produced == EOF) {
+		octets = (*output)(buffer, bufferSize, bufferSize);
+		if (octets == EOF) {
 			finalize();
-			produced = 0;
+			octets = 0;
 		}
 	}
-	return (produced > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
+	return octets;
 }
 
 }

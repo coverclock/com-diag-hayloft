@@ -26,8 +26,6 @@ Status Action::responsePropertiesCallback(const ::S3ResponseProperties * respons
 	if ((responseProperties->requestId2 != 0) && (responseProperties->requestId2[0] != '\0')) { that->requestid2 = responseProperties->requestId2; }
 	if ((responseProperties->server != 0) && (responseProperties->server[0] != '\0')) { that->server = responseProperties->server; }
 	Status status = that->properties(responseProperties);
-	// Not safe to reference object fields or methods after this point.
-	// Application is permitted to delete object.
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(responseProperties, level);
@@ -58,9 +56,9 @@ void Action::responseCompleteCallback(Status status, const ::S3ErrorDetails * er
 	}
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(errorDetails, level);
+	// Application is permitted to delete that object in the following method.
 	that->complete(errorDetails);
 	// Not safe to reference object fields or methods after this point.
-	// Application is permitted to delete object.
 	Logger::instance().log(level, "Action@%p: end\n", that);
 }
 
@@ -95,6 +93,10 @@ void Action::initialize() {
 	LifeCycle::instance().constructor(*this);
 }
 
+void Action::execute() {
+	LifeCycle::instance().start(*this);
+}
+
 Status Action::getStatus(const char ** description) const {
 	if (description != 0) { *description = tostring(status); }
 	return status;
@@ -106,6 +108,9 @@ void Action::start() {
 	// always done in their overriding start method but instead in a non-virtual
 	// method, typically called execute, that may be called from their
 	// constructor for the synchronous interface.
+}
+
+void Action::reset() {
 }
 
 Status Action::properties(const ::S3ResponseProperties * properties) {

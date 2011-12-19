@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectCopy.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/set.h"
@@ -133,7 +132,7 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 void ObjectCopy::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectCopy@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Object::execute();
 	::S3_copy_object(
 		&context,
 		key.c_str(),

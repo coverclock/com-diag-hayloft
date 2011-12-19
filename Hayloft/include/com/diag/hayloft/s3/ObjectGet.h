@@ -69,6 +69,8 @@ protected:
 
 	Octets size;
 
+	Octets produced;
+
 	::S3GetConditions conditions;
 
 	::S3GetObjectHandler handler;
@@ -281,6 +283,14 @@ public:
 	virtual ~ObjectGet();
 
 	/**
+	 * Gets the number of octets produced so far to the output functor.
+	 * Used to determine of the output functor is soiled.
+	 *
+	 * @return the number of octets produced.
+	 */
+	Octets getProduced() const { return produced; }
+
+	/**
 	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
 	 * BUSY.
 	 */
@@ -322,10 +332,10 @@ protected:
 	 * @param bufferSize is the amount of data to output. The output is expected
 	 *        to be atomic (that is, no partial writes).
 	 * @param buffer points to the data to write.
-	 * @return ::S3StatusOK to continue or any other libs3 ::S3Status value to
-	 *         immediately abort the operation.
+	 * @return the number of bytes actually written, zero for End Of File, or
+	 *         negative with an error number set for an error.
 	 */
-	virtual Status get(int bufferSize, const void * buffer);
+	virtual int get(int bufferSize, const void * buffer);
 
 	/**
 	 * Handle the close processing of the underlying data sink. A derived class

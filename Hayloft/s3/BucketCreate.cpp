@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/BucketCreate.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -55,7 +54,7 @@ void BucketCreate::initialize() {
 void BucketCreate::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("BucketCreate@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Bucket::execute();
 	::S3_create_bucket(
 		protocol,
 		id.c_str(),

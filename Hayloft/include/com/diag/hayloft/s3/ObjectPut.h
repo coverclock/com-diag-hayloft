@@ -15,6 +15,7 @@
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
 #include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/desperado/target.h"
 
 namespace com {
 namespace diag {
@@ -75,6 +76,8 @@ protected:
 	Input * taken;
 
 	Octets size;
+
+	Octets consumed;
 
 	::S3PutProperties properties;
 
@@ -271,6 +274,14 @@ public:
 	virtual ~ObjectPut();
 
 	/**
+	 * Gets the number of octets consumed so far from the input functor.
+	 * Used to determine if the input functor is soiled.
+	 *
+	 * @return the number of octets consumed.
+	 */
+	Octets getConsumed() const { return consumed; }
+
+	/**
 	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
 	 * BUSY.
 	 */
@@ -307,7 +318,8 @@ protected:
 	 *
 	 * @param bufferSize is the amount of data to input. Partial reads are okay.
 	 * @param buffer points to the buffer into which data is read.
-	 * @return the actual number of bytes actually read or zero for End Of File.
+	 * @return the number of bytes actually read, zero for End Of File, or
+	 *         negative with an error number set for an error.
 	 */
 	virtual int put(int bufferSize, void * buffer);
 

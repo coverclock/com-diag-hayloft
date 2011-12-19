@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/ObjectDelete.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {
@@ -55,7 +54,7 @@ void ObjectDelete::initialize() {
 void ObjectDelete::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ObjectDelete@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Object::execute();
 	::S3_delete_object(
 		&context,
 		key.c_str(),

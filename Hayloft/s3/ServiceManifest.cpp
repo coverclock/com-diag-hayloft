@@ -8,7 +8,6 @@
  */
 
 #include "com/diag/hayloft/s3/ServiceManifest.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
@@ -68,7 +67,7 @@ void ServiceManifest::initialize() {
 void ServiceManifest::execute() {
 	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
 	Logger::instance().debug("ServiceManifest@%p: begin\n", this);
-	LifeCycle::instance().start(*this);
+	Service::execute();
 	::S3_list_service(
 		protocol,
 		id.c_str(),
