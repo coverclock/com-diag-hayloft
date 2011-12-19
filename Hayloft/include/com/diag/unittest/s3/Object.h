@@ -28,6 +28,8 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
+#include "com/diag/hayloft/s3/Multiplex.h"
+#include "com/diag/hayloft/s3/Simplex.h"
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Access.h"
 #include "com/diag/hayloft/s3/show.h"
@@ -746,6 +748,340 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_FALSE(buckethead.isNonexistent());
 			EXPECT_FALSE(buckethead.isSuccessful());
 			EXPECT_EQ(multiplex.complete(), 0);
+			EXPECT_EQ(buckethead, true);
+			if (!buckethead.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (!buckethead.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(buckethead.isIdle());
+	EXPECT_FALSE(buckethead.isBusy());
+	EXPECT_FALSE(buckethead.isRetryable());
+	EXPECT_FALSE(buckethead.isInaccessible());
+	EXPECT_TRUE(buckethead.isNonexistent());
+	ASSERT_FALSE(buckethead.isSuccessful());
+	/**/
+	Size outputsize = size(OBJECT);
+	EXPECT_EQ(inputsize, outputsize);
+	std::string command = "diff ";
+	command += __FILE__;
+	command += " ";
+	command += OBJECT;
+	ASSERT_EQ(std::system(command.c_str()), 0);
+	/**/
+	EXPECT_EQ(::unlink(OBJECT), 0);
+}
+
+TEST_F(ObjectTest, Simplex) {
+	static const int LIMIT = 10;
+	static const char BUCKET[] = "ObjectTestSimplex";
+	static const char OBJECT[] = "Object.txt";
+	AccessPublicRead access;
+	Context context;
+	context.setAccess(access);
+	Properties properties;
+	properties.setAccess(access);
+	Simplex simplex;
+	/**/
+	BucketHead buckethead(BUCKET, simplex, context);
+	EXPECT_EQ(buckethead, false);
+	EXPECT_TRUE(buckethead.isIdle());
+	EXPECT_FALSE(buckethead.isBusy());
+	EXPECT_FALSE(buckethead.isRetryable());
+	EXPECT_FALSE(buckethead.isInaccessible());
+	EXPECT_FALSE(buckethead.isNonexistent());
+	EXPECT_FALSE(buckethead.isSuccessful());
+	for (int ii = 0; ii < LIMIT; ++ii) {
+		buckethead.start();
+		EXPECT_EQ(buckethead, true);
+		if (!buckethead.isRetryable()) { break; }
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(buckethead.isIdle());
+	EXPECT_FALSE(buckethead.isBusy());
+	EXPECT_FALSE(buckethead.isRetryable());
+	EXPECT_FALSE(buckethead.isInaccessible());
+	EXPECT_TRUE(buckethead.isNonexistent());
+	ASSERT_FALSE(buckethead.isSuccessful());
+	/**/
+	BucketCreate bucketcreate(BUCKET, simplex, context);
+	EXPECT_EQ(bucketcreate, false);
+	EXPECT_TRUE(bucketcreate.isIdle());
+	EXPECT_FALSE(bucketcreate.isBusy());
+	EXPECT_FALSE(bucketcreate.isRetryable());
+	EXPECT_FALSE(bucketcreate.isInaccessible());
+	EXPECT_FALSE(bucketcreate.isNonexistent());
+	EXPECT_FALSE(bucketcreate.isSuccessful());
+	for (int ii = 0; ii < LIMIT; ++ii) {
+		bucketcreate.start();
+		EXPECT_EQ(bucketcreate, true);
+		if (!bucketcreate.isRetryable()) { break; }
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(bucketcreate.isIdle());
+	EXPECT_FALSE(bucketcreate.isBusy());
+	EXPECT_FALSE(bucketcreate.isRetryable());
+	EXPECT_FALSE(bucketcreate.isInaccessible());
+	ASSERT_TRUE(bucketcreate.isSuccessful());
+	/**/
+	EXPECT_EQ(buckethead, true);
+	EXPECT_FALSE(buckethead.isIdle());
+	EXPECT_FALSE(buckethead.isBusy());
+	EXPECT_FALSE(buckethead.isRetryable());
+	EXPECT_FALSE(buckethead.isInaccessible());
+	EXPECT_TRUE(buckethead.isNonexistent());
+	EXPECT_FALSE(buckethead.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			buckethead.start();
+			EXPECT_EQ(buckethead, true);
+			if (!buckethead.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (buckethead.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(buckethead.isIdle());
+	EXPECT_FALSE(buckethead.isBusy());
+	EXPECT_FALSE(buckethead.isRetryable());
+	EXPECT_FALSE(buckethead.isInaccessible());
+	EXPECT_FALSE(buckethead.isNonexistent());
+	ASSERT_TRUE(buckethead.isSuccessful());
+	/**/
+	ObjectHead objecthead(OBJECT, bucketcreate, simplex);
+	EXPECT_EQ(objecthead, false);
+	EXPECT_TRUE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isSuccessful());
+	for (int ii = 0; ii < LIMIT; ++ii) {
+		objecthead.start();
+		EXPECT_EQ(objecthead, true);
+		if (!objecthead.isRetryable()) { break; }
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_TRUE(objecthead.isNonexistent());
+	ASSERT_FALSE(objecthead.isSuccessful());
+	/**/
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	Size inputsize = size(*input);
+	EXPECT_TRUE(inputsize > 0);
+	ObjectPut objectput(OBJECT, bucketcreate, simplex, input, inputsize, properties);
+	EXPECT_EQ(objectput, false);
+	EXPECT_TRUE(objectput.isIdle());
+	EXPECT_FALSE(objectput.isBusy());
+	EXPECT_FALSE(objectput.isRetryable());
+	EXPECT_FALSE(objectput.isInaccessible());
+	EXPECT_FALSE(objectput.isNonexistent());
+	EXPECT_FALSE(objectput.isSuccessful());
+	for (int ii = 0; ii < LIMIT; ++ii) {
+		objectput.start();
+		EXPECT_EQ(objectput, true);
+		if (!objectput.isRetryable()) { break; }
+		printf("RETRYING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+		input = new ::com::diag::desperado::PathInput(__FILE__);
+		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		inputsize = size(*input);
+		EXPECT_TRUE(inputsize > 0);
+		objectput.reset(input, inputsize);
+	}
+	EXPECT_FALSE(objectput.isIdle());
+	EXPECT_FALSE(objectput.isBusy());
+	EXPECT_FALSE(objectput.isRetryable());
+	EXPECT_FALSE(objectput.isInaccessible());
+	EXPECT_FALSE(objectput.isNonexistent());
+	ASSERT_TRUE(objectput.isSuccessful());
+	/**/
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_TRUE(objecthead.isNonexistent());
+	EXPECT_FALSE(objecthead.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objecthead.start();
+			EXPECT_EQ(objecthead, true);
+			if (!objecthead.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (objecthead.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	ASSERT_TRUE(objecthead.isSuccessful());
+	ASSERT_NE(objecthead.authenticated(), (char *)0);
+	printf("URL=\"%s\"\n", objecthead.authenticated());
+	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
+	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+	ObjectGet objectget(OBJECT, bucketcreate, simplex, output);
+	EXPECT_EQ(objectget, false);
+	EXPECT_TRUE(objectget.isIdle());
+	EXPECT_FALSE(objectget.isBusy());
+	EXPECT_FALSE(objectget.isRetryable());
+	EXPECT_FALSE(objectget.isInaccessible());
+	EXPECT_FALSE(objectget.isNonexistent());
+	EXPECT_FALSE(objectget.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objectget.start();
+			EXPECT_EQ(objectget, true);
+			if (!objectget.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+			output = new ::com::diag::desperado::PathOutput(OBJECT);
+			objectget.reset(output);
+		}
+		if (objectget.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objectget.isIdle());
+	EXPECT_FALSE(objectget.isBusy());
+	EXPECT_FALSE(objectget.isRetryable());
+	EXPECT_FALSE(objectget.isInaccessible());
+	EXPECT_FALSE(objectget.isNonexistent());
+	EXPECT_TRUE(objectget.isSuccessful());
+	/**/
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_TRUE(objecthead.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objecthead.start();
+			EXPECT_EQ(objecthead, true);
+			if (!objecthead.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (objecthead.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	ASSERT_TRUE(objecthead.isSuccessful());
+	/**/
+	ObjectDelete objectdelete(OBJECT, bucketcreate, simplex);
+	EXPECT_EQ(objectdelete, false);
+	EXPECT_TRUE(objectdelete.isIdle());
+	EXPECT_FALSE(objectdelete.isBusy());
+	EXPECT_FALSE(objectdelete.isRetryable());
+	EXPECT_FALSE(objectdelete.isInaccessible());
+	EXPECT_FALSE(objectdelete.isNonexistent());
+	EXPECT_FALSE(objectdelete.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objectdelete.start();
+			EXPECT_EQ(objectdelete, true);
+			if (!objectdelete.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (!objectdelete.isNonexistent()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objectdelete.isIdle());
+	EXPECT_FALSE(objectdelete.isBusy());
+	EXPECT_FALSE(objectdelete.isRetryable());
+	EXPECT_FALSE(objectdelete.isInaccessible());
+	EXPECT_FALSE(objectdelete.isNonexistent());
+	ASSERT_TRUE(objectdelete.isSuccessful());
+	/**/
+	EXPECT_EQ(objecthead, true);
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_FALSE(objecthead.isNonexistent());
+	EXPECT_TRUE(objecthead.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			objecthead.start();
+			EXPECT_EQ(objecthead, true);
+			if (!objecthead.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (!objecthead.isSuccessful()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(objecthead.isIdle());
+	EXPECT_FALSE(objecthead.isBusy());
+	EXPECT_FALSE(objecthead.isRetryable());
+	EXPECT_FALSE(objecthead.isInaccessible());
+	EXPECT_TRUE(objecthead.isNonexistent());
+	ASSERT_FALSE(objecthead.isSuccessful());
+	/**/
+	BucketDelete bucketdelete(BUCKET, simplex);
+	EXPECT_EQ(bucketdelete, false);
+	EXPECT_TRUE(bucketdelete.isIdle());
+	EXPECT_FALSE(bucketdelete.isBusy());
+	EXPECT_FALSE(bucketdelete.isRetryable());
+	EXPECT_FALSE(bucketdelete.isInaccessible());
+	EXPECT_FALSE(bucketdelete.isNonexistent());
+	EXPECT_FALSE(bucketdelete.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			bucketdelete.start();
+			EXPECT_EQ(bucketdelete, true);
+			if (!bucketdelete.isRetryable()) { break; }
+			printf("RETRYING %d\n", __LINE__);
+			platform.yield(platform.frequency());
+		}
+		if (!bucketdelete.isNonexistent()) { break; }
+		printf("WAITING %d\n", __LINE__);
+		platform.yield(platform.frequency());
+	}
+	EXPECT_FALSE(bucketdelete.isIdle());
+	EXPECT_FALSE(bucketdelete.isBusy());
+	EXPECT_FALSE(bucketdelete.isRetryable());
+	EXPECT_FALSE(bucketdelete.isInaccessible());
+	EXPECT_FALSE(bucketdelete.isNonexistent());
+	ASSERT_TRUE(bucketdelete.isSuccessful());
+	/**/
+	EXPECT_EQ(buckethead, true);
+	EXPECT_FALSE(buckethead.isIdle());
+	EXPECT_FALSE(buckethead.isBusy());
+	EXPECT_FALSE(buckethead.isRetryable());
+	EXPECT_FALSE(buckethead.isInaccessible());
+	EXPECT_FALSE(buckethead.isNonexistent());
+	EXPECT_TRUE(buckethead.isSuccessful());
+	for (int jj = 0; jj < LIMIT; ++jj) {
+		for (int ii = 0; ii < LIMIT; ++ii) {
+			buckethead.start();
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
 			printf("RETRYING %d\n", __LINE__);
