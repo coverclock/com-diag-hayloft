@@ -170,6 +170,7 @@ MANIFEST_O=\
  hayloft/Parameter.o \
  hayloft/Seconds.o \
  hayloft/size.o \
+ hayloft/Thread.o \
  s3/Access.o \
  s3/Action.o \
  s3/Bucket.o \
