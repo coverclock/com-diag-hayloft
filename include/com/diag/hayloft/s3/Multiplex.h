@@ -21,15 +21,15 @@ namespace hayloft {
 namespace s3 {
 
 /**
- * Multiplex is how asynchronous Actions are managed. All Actions that use the
- * same Multiplex are executed in parallel as the Multiplex is serviced until
- * all Actions complete. If a Multiplex is deleted, all pending asynchronous
- * Actions on that Multiplex are immediately aborted and completed with a
- * failure status and are automatically converted into synchronous Actions.
- * Deleting an asynchronous Action that is BUSY and pending on a Multiplex
- * causes it and all other pending Actions on that Multiplex to be forced
- * to complete (there is no mechanism though which a single Action can be
- * forced to complete).
+ * Multiplex is one way in which asynchronous Actions may be managed. All
+ * Actions that use the same Multiplex are executed in parallel as the Multiplex
+ * is serviced until all Actions complete. If a Multiplex is deleted, all
+ * pending asynchronous Actions on that Multiplex are immediately aborted and
+ * completed with a failure status and are automatically converted into
+ * synchronous Actions. Deleting an asynchronous Action that is BUSY and
+ * pending on a Multiplex causes it and all other pending Actions on that
+ * Multiplex to be forced to complete (there is no mechanism though which a
+ * single Action can be forced to complete).
  */
 class Multiplex : public Plex {
 
