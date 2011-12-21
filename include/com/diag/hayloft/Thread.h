@@ -19,6 +19,16 @@ namespace hayloft {
 
 class Thread {
 
+public:
+
+	static pthread_t self();
+
+	static void cancellable();
+
+	static void yield();
+
+	static void exit();
+
 private:
 
 	static void cleanup_mutex(void * arg);
@@ -28,6 +38,8 @@ private:
 	static void * start_routine(void * arg);
 
 	bool running;
+
+	bool canceling;
 
 	pthread_t identity;
 
@@ -39,20 +51,10 @@ protected:
 
 	virtual void run();
 
-	virtual void quiescent();
-
-	virtual void yield();
-
 public:
 
-	/**
-	 * Ctor.
-	 */
 	explicit Thread();
 
-	/**
-	 * Dtor.
-	 */
 	virtual ~Thread();
 
 	virtual int start();
@@ -60,6 +62,30 @@ public:
 	virtual int cancel();
 
 	virtual int join();
+
+	virtual bool cancelled();
+
+	pthread_t getIdentity() { return identity; }
+
+protected:
+
+	explicit Thread(pthread_t id);
+
+private:
+
+    /**
+     *  Copy constructor. POISONED.
+     *
+     *  @param that refers to an R-value object of this type.
+     */
+	Thread(const Thread& that);
+
+    /**
+     *  Assignment operator. POISONED.
+     *
+     *  @param that refers to an R-value object of this type.
+     */
+	Thread& operator=(const Thread& that);
 
 };
 

@@ -14,23 +14,29 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
-void Thread::cleanup_mutex(void * arg) {
-	Thread * that = static_cast<Thread *>(arg);
-	pthread_mutex_unlock(&that->mutex);
+pthread_t Thread::self() {
+	return pthread_self();
 }
 
-// This is the one place we look at a variable that's not protected by our
-// mutex. We do this because if we're not running at this point, then the
-// object has been deleted out from under us and we no longer have a mutex
-// or a condition variable.
+void Thread::cancellable() {
+	pthread_testcancel();
+}
+
+void Thread::yield() {
+	pthread_yield();
+}
+
+void Thread::exit() {
+	pthread_exit(0);
+}
+
 void Thread::cleanup_thread(void * arg) {
 	Thread * that = static_cast<Thread *>(arg);
 	if (that->running) {
 		pthread_mutex_lock(&that->mutex);
-		pthread_cleanup_push(cleanup_mutex, that);
 		that->running = false;
 		pthread_cond_broadcast(&that->condition);
-		pthread_cleanup_pop(!0);
+		pthread_mutex_unlock(&that->mutex);
 	}
 }
 
@@ -44,9 +50,25 @@ void * Thread::start_routine(void * arg) {
 
 Thread::Thread()
 : running(false)
+, canceling(false)
+, identity(0)
 {
     pthread_mutex_init(&mutex, 0);
     pthread_cond_init(&condition, 0);
+}
+
+Thread::Thread(pthread_t id)
+: running(true)
+, canceling(false)
+, identity(id)
+{
+    pthread_mutex_init(&mutex, 0);
+    pthread_cond_init(&condition, 0);
+}
+
+void Thread::cleanup_mutex(void * arg) {
+	Thread * that = static_cast<Thread *>(arg);
+	pthread_mutex_unlock(&that->mutex);
 }
 
 // Unlike Java, there is no way to defer deleting this object if its thread is
@@ -74,7 +96,7 @@ Thread::~Thread() {
 	pthread_cond_destroy(&condition);
 	pthread_mutex_destroy(&mutex);
 	if (self) {
-		pthread_exit(0);
+		pthread_exit(reinterpret_cast<void*>(~0));
 	}
 }
 
@@ -84,6 +106,7 @@ int Thread::start() {
 	pthread_cleanup_push(cleanup_mutex, this);
 	if (!running) {
 		running = true;
+		canceling = false;
 		rc = pthread_create(&identity, 0, start_routine, this);
 		if (rc != 0) { running = false; }
 	} else {
@@ -100,6 +123,7 @@ int Thread::cancel() {
 	if (!running) {
 		rc = 0;
 	} else if (!pthread_equal(pthread_self(), identity)) {
+		canceling = true;
 		rc = pthread_cancel(identity);
 	} else {
 		rc = EBUSY;
@@ -108,13 +132,24 @@ int Thread::cancel() {
 	return rc;
 }
 
+bool Thread::cancelled() {
+	bool result;
+	pthread_mutex_lock(&mutex);
+	pthread_cleanup_push(cleanup_mutex, this);
+	result = canceling;
+	pthread_cleanup_pop(!0);
+	return result;
+}
+
 int Thread::join() {
 	int rc;
 	pthread_mutex_lock(&mutex);
+	pthread_t id;
 	pthread_cleanup_push(cleanup_mutex, this);
+	id = identity;
 	if (!running) {
 		rc = 0;
-	} else if (!pthread_equal(pthread_self(), identity)) {
+	} else if (!pthread_equal(pthread_self(), id)) {
 		rc = pthread_cond_wait(&condition, &mutex); // CANCELLATION POINT
 	} else {
 		rc = EBUSY;
@@ -124,16 +159,6 @@ int Thread::join() {
 }
 
 void Thread::run() {
-}
-
-void Thread::quiescent() {
-	pthread_testcancel();
-}
-
-void Thread::yield() {
-	pthread_testcancel();
-	pthread_yield();
-	pthread_testcancel();
 }
 
 }

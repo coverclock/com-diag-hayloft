@@ -80,7 +80,7 @@ protected:
 
 	Pending * taken;
 
-	::S3Status status;
+	Status status;
 
 public:
 
@@ -118,7 +118,7 @@ public:
 	 *
 	 * @return the status.
 	 */
-	::S3Status getStatus() const { return status; }
+	Status getStatus() const { return status; }
 
 	/**
 	 * Force all Actions on this Multiplex to run to completion.

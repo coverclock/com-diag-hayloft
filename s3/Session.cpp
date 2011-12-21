@@ -13,7 +13,8 @@
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/desperado/CriticalSection.h"
+#include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/desperado/target.h"
 
 namespace com {
@@ -21,9 +22,9 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-static ::com::diag::desperado::Mutex instancemutex;
+static Mutex instancemutex;
 
-static ::com::diag::desperado::Mutex initializationmutex;
+static Mutex initializationmutex;
 
 static Session * instant = 0;
 
@@ -52,13 +53,13 @@ Session & Session::factory() {
 }
 
 Session & Session::instance(Session & that) {
-	::com::diag::desperado::CriticalSection guard(instancemutex);
+	CriticalSection guard(instancemutex);
 	singleton = &that;
     return *singleton;
 }
 
 Session & Session::instance() {
-	::com::diag::desperado::CriticalSection guard(instancemutex);
+	CriticalSection guard(instancemutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());
@@ -73,7 +74,7 @@ Session::Session(const char * bucketSuffix, const char * userAgentInfo, const En
 , status(::S3StatusOK)
 {
 	{
-		::com::diag::desperado::CriticalSection guard(initializationmutex);
+		CriticalSection guard(initializationmutex);
 		status = ::S3_initialize(useragent.c_str(), flags, endpoint.c_str());
 	}
 	convert_to_lower_case(bucketsuffix);

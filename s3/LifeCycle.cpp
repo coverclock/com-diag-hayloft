@@ -9,7 +9,8 @@
 
 #include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/CriticalSection.h"
+#include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -17,7 +18,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-static ::com::diag::desperado::Mutex mutex;
+static Mutex mutex;
 
 static LifeCycle * instant = 0;
 

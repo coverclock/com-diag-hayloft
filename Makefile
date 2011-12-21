@@ -242,6 +242,11 @@ lib$(PROJECT).so lib$(PROJECT).so.$(MAJOR) lib$(PROJECT).so.$(MAJOR).$(MINOR) li
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so.$(MAJOR)
 	ln -s -f lib$(PROJECT).so.$(MAJOR).$(MINOR).$(BUILD) lib$(PROJECT).so
 
+PHONY+=LD_LIBRARY_PATH
+
+LD_LIBRARY_PATH:
+	@echo "export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS)"
+
 ################################################################################
 # UNIT TESTS
 ################################################################################
@@ -256,6 +261,14 @@ unittest:	unittest.o $(HAYLOFT_LIB) $(LARIAT_LIB) $(GMOCK_LIB) $(GTEST_LIB) $(DE
 PHONY+=run
 
 run:	unittest
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	./unittest
+
+PHONY+=debug
+
+debug:	unittest
+	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
 	./unittest
 

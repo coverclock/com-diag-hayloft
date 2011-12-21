@@ -15,8 +15,7 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-const char * tostring(::S3Status status) {
-	typedef ::S3Status Status;
+const char * tostring(Status status) {
 	const char * result;
 	if      (status == static_cast<Status>(Action::BUSY))	{ result = "BUSY"; }
 	else if (status == static_cast<Status>(Action::IDLE))	{ result = "IDLE"; }
