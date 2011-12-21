@@ -35,7 +35,7 @@ Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, voi
 	return (rc > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
 }
 
-void ObjectGet::responseCompleteCallback(::S3Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void ObjectGet::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
 	that->finalize();
 	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);

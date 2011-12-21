@@ -9,16 +9,19 @@
 
 #include "com/diag/desperado/stdlib.h"
 #include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/desperado/LogOutput.h"
 #include "com/diag/desperado/Platform.h"
 #include "com/diag/desperado/uint16_Number.h"
-#include "com/diag/desperado/CriticalSection.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
-static ::com::diag::desperado::Mutex mutex;
+static Mutex mutex;
+
+static Mutex serializer;
 
 static Logger * instant = 0;
 
@@ -45,13 +48,13 @@ Logger & Logger::factory() {
 }
 
 Logger & Logger::instance(Logger & that) {
-	::com::diag::desperado::CriticalSection guard(mutex);
+	CriticalSection guard(mutex);
 	singleton = &that;
 	return *singleton;
 }
 
 Logger & Logger::instance() {
-	::com::diag::desperado::CriticalSection guard(mutex);
+	CriticalSection guard(mutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());
@@ -70,6 +73,13 @@ Logger & Logger::setMask() {
 		}
 	}
 	return *this;
+}
+
+ssize_t Logger::emit(const char* buffer, size_t size) {
+	CriticalSection guard(serializer);
+	ssize_t rc = ::com::diag::desperado::Logger::emit(buffer, size);
+	(output())();
+	return rc;
 }
 
 void Logger::show(int level, ::com::diag::desperado::Output * display, int indent) const {

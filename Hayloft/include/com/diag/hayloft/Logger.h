@@ -208,6 +208,18 @@ public:
     }
 
     /**
+     *  Unconditionally emit a log message using a buffer.
+     *
+     *  @param  buffer  points to the buffer to be emitted.
+     *
+     *  @param  size    is the size of the buffer in bytes.
+     *
+     *  @return the number of characters written to its output
+     *          object, or a negative number if error.
+     */
+    virtual ssize_t emit(const char* buffer, size_t size);
+
+    /**
      *  Displays internal information about this object to the specified
      *  output object. Useful for debugging and troubleshooting.
      *
