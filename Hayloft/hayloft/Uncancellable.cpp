@@ -7,21 +7,21 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/CriticalSection.h"
-#include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/Uncancellable.h"
+#include <pthread.h>
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
-CriticalSection::CriticalSection(Mutex & rm)
-: mutex(rm)
+Uncancellable::Uncancellable()
 {
-    this->mutex.begin(true);
+    ::pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &state);
 }
 
-CriticalSection::~CriticalSection() {
-    this->mutex.end();
+Uncancellable::~Uncancellable() {
+	int dontcare;
+    ::pthread_setcancelstate(state, &dontcare);
 }
 
 }

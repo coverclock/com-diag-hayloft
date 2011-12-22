@@ -165,6 +165,7 @@ default:	all
 ################################################################################
 
 MANIFEST_O=\
+ hayloft/Condition.o \
  hayloft/CriticalSection.o \
  hayloft/Logger.o \
  hayloft/Packet.o \
@@ -172,6 +173,7 @@ MANIFEST_O=\
  hayloft/Seconds.o \
  hayloft/size.o \
  hayloft/Thread.o \
+ hayloft/Uncancellable.o \
  s3/Access.o \
  s3/Action.o \
  s3/Bucket.o \

@@ -33,6 +33,8 @@ public:
 
 protected:
 
+	static void * dontcare;
+
 	static Thread main;
 
 	static ::pthread_key_t key;
@@ -48,6 +50,8 @@ protected:
 	static void * start_routine(void * arg);
 
 	bool running;
+
+	bool interrupting;
 
 	bool canceling;
 
@@ -69,11 +73,17 @@ public:
 
 	virtual int start();
 
+	virtual int wait();
+
+	virtual int interrupt();
+
+	virtual bool interrupted();
+
 	virtual int cancel();
 
-	virtual int join();
-
 	virtual bool cancelled();
+
+	virtual int join(void * & final = dontcare);
 
 	::pthread_t getIdentity() { return identity; }
 
