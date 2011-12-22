@@ -270,6 +270,27 @@ TEST_F(ThreadTest, MutexCancelleable) {
 	EXPECT_FALSE(myMutex.isLocked());
 }
 
+TEST_F(ThreadTest, InstanceMain) {
+	EXPECT_EQ(pthread_self(), Thread::self());
+	EXPECT_EQ(pthread_self(), Thread::instance().getIdentity());
+}
+
+class ThreadEight : public Thread {
+public:
+	Thread ** here;
+	explicit ThreadEight(Thread ** shared) : here(shared) {}
+	virtual void run() { *here = &Thread::instance(); }
+};
+
+TEST_F(ThreadTest, InstanceThread) {
+	Thread * here = 0;
+	ThreadEight thread(&here);
+	EXPECT_EQ(thread.start(), 0);
+	EXPECT_EQ(thread.join(), 0);
+	ASSERT_NE(here, (Thread*)0);
+	EXPECT_EQ(here, &thread);
+}
+
 }
 }
 }
