@@ -70,7 +70,7 @@ void * Thread::start_routine(void * arg) {
 
 Thread::Thread()
 : running(false)
-, interrupting(false)
+, notifying(false)
 , canceling(false)
 , identity(0)
 {
@@ -79,7 +79,7 @@ Thread::Thread()
 
 Thread::Thread(pthread_t id)
 : running(true)
-, interrupting(false)
+, notifying(false)
 , canceling(false)
 , identity(id)
 {
@@ -131,7 +131,7 @@ int Thread::start() {
 	pthread_cleanup_push(cleanup_mutex, this);
 	if (!running) {
 		running = true;
-		interrupting = false;
+		notifying = false;
 		rc = ::pthread_create(&identity, 0, start_routine, this);
 		if (rc != 0) { running = false; }
 	} else {
@@ -141,19 +141,19 @@ int Thread::start() {
 	return rc;
 }
 
-int Thread::interrupt() {
+int Thread::notify() {
 	::pthread_mutex_lock(&mutex);
 	pthread_cleanup_push(cleanup_mutex, this);
-	interrupting = true;
+	notifying = true;
 	pthread_cleanup_pop(!0);
 	return 0;
 }
 
-bool Thread::interrupted() {
+bool Thread::notified() {
 	bool result;
 	::pthread_mutex_lock(&mutex);
 	pthread_cleanup_push(cleanup_mutex, this);
-	result = interrupting;
+	result = notifying;
 	pthread_cleanup_pop(!0);
 	return result;
 }
