@@ -26,6 +26,13 @@ class Mutex;
  */
 class CriticalSection {
 
+protected:
+
+    /**
+     *  This is a reference to the mutex.
+     */
+    Mutex & mutex;
+
 public:
 
     /**
@@ -39,13 +46,6 @@ public:
      *  Destructor.
      */
     virtual ~CriticalSection();
-
-protected:
-
-    /**
-     *  This is a reference to the mutex.
-     */
-    Mutex & mutex;
 
 private:
 

@@ -14,6 +14,8 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
+void * Thread::dontcare = 0;
+
 pthread_key_t Thread::key;
 
 Thread Thread::main(pthread_self());
@@ -32,16 +34,12 @@ Thread & Thread::instance() {
 	return *(static_cast<Thread *>(::pthread_getspecific(key)));
 }
 
-void Thread::cancellable() {
-	::pthread_testcancel();
-}
-
 void Thread::yield() {
 	::pthread_yield();
 }
 
 void Thread::exit() {
-	::pthread_exit(0);
+	::pthread_exit(reinterpret_cast<void*>(1));
 }
 
 ::pthread_t Thread::self() {
@@ -62,6 +60,9 @@ void * Thread::start_routine(void * arg) {
 	Thread * that = static_cast<Thread *>(arg);
 	pthread_cleanup_push(cleanup_thread, that);
 	::pthread_setspecific(key, that);
+	int dontcare;
+	::pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &dontcare);
+	::pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &dontcare);
 	that->run();
 	pthread_cleanup_pop(!0);
 	return 0;
@@ -69,6 +70,7 @@ void * Thread::start_routine(void * arg) {
 
 Thread::Thread()
 : running(false)
+, interrupting(false)
 , canceling(false)
 , identity(0)
 {
@@ -77,6 +79,7 @@ Thread::Thread()
 
 Thread::Thread(pthread_t id)
 : running(true)
+, interrupting(false)
 , canceling(false)
 , identity(id)
 {
@@ -113,7 +116,7 @@ Thread::~Thread() {
 	::pthread_cond_destroy(&condition);
 	::pthread_mutex_destroy(&mutex);
 	if (self) {
-		::pthread_exit(reinterpret_cast<void*>(~0));
+		::pthread_exit(reinterpret_cast<void*>(-1));
 	}
 }
 
@@ -128,7 +131,7 @@ int Thread::start() {
 	pthread_cleanup_push(cleanup_mutex, this);
 	if (!running) {
 		running = true;
-		canceling = false;
+		interrupting = false;
 		rc = ::pthread_create(&identity, 0, start_routine, this);
 		if (rc != 0) { running = false; }
 	} else {
@@ -136,6 +139,57 @@ int Thread::start() {
 	}
 	pthread_cleanup_pop(!0);
 	return rc;
+}
+
+int Thread::interrupt() {
+	::pthread_mutex_lock(&mutex);
+	pthread_cleanup_push(cleanup_mutex, this);
+	interrupting = true;
+	pthread_cleanup_pop(!0);
+	return 0;
+}
+
+bool Thread::interrupted() {
+	bool result;
+	::pthread_mutex_lock(&mutex);
+	pthread_cleanup_push(cleanup_mutex, this);
+	result = interrupting;
+	pthread_cleanup_pop(!0);
+	return result;
+}
+
+int Thread::wait() {
+	int rc;
+	::pthread_mutex_lock(&mutex);
+	pthread_cleanup_push(cleanup_mutex, this);
+	if (!running) {
+		rc = 0;
+	} else if (!::pthread_equal(pthread_self(), identity)) {
+		rc = ::pthread_cond_wait(&condition, &mutex); // CANCELLATION POINT
+	} else {
+		rc = EBUSY;
+	}
+	pthread_cleanup_pop(!0);
+	return rc;
+}
+
+void Thread::run() {
+}
+
+/*******************************************************************************
+ * The methods below are not your friends.
+ * At best they should be unnecessary.
+ * At worst they are dangerous.
+ * They are provided for completeness.
+ * Avoid using them.
+ ******************************************************************************/
+
+int Thread::join(void * & final) {
+	return ::pthread_join(identity, &final);
+}
+
+void Thread::cancellable() {
+	::pthread_testcancel();
 }
 
 int Thread::cancel() {
@@ -161,26 +215,6 @@ bool Thread::cancelled() {
 	result = canceling;
 	pthread_cleanup_pop(!0);
 	return result;
-}
-
-int Thread::join() {
-	int rc;
-	::pthread_mutex_lock(&mutex);
-	::pthread_t id;
-	pthread_cleanup_push(cleanup_mutex, this);
-	id = identity;
-	if (!running) {
-		rc = 0;
-	} else if (!::pthread_equal(pthread_self(), id)) {
-		rc = ::pthread_cond_wait(&condition, &mutex); // CANCELLATION POINT
-	} else {
-		rc = EBUSY;
-	}
-	pthread_cleanup_pop(!0);
-	return rc;
-}
-
-void Thread::run() {
 }
 
 }
