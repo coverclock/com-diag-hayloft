@@ -11,22 +11,59 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/CriticalSection.h"
-
 namespace com {
 namespace diag {
 namespace hayloft {
+
+class Mutex;
 
 /**
  * CriticalSection locks a Mutex in its constructor and unlocks it in its
  * destructor. This allows you to implement a critical section protected by
  * a Mutex using the C++ "Resource Allocation is Initialization" idiom.
- * This class is simply an alias for the Desperado CriticalSection. Note
- * that by default, the Desperado Critical Section does not make the calling
- * Thread uncancellable, depending instead on the destructor to unlock the
- * Mutex.
+ * Unlike the Desperado CriticalSection class, this class does not make the
+ * calling thread uncancellable.
  */
-typedef ::com::diag::desperado::CriticalSection CriticalSection;
+class CriticalSection {
+
+public:
+
+    /**
+     *  Constructor.
+     *
+     *  @param mutexr  refers to a mutex object.
+     */
+    explicit CriticalSection(Mutex & rm);
+
+    /**
+     *  Destructor.
+     */
+    virtual ~CriticalSection();
+
+protected:
+
+    /**
+     *  This is a reference to the mutex.
+     */
+    Mutex & mutex;
+
+private:
+
+    /**
+     *  Copy constructor. POISONED.
+     *
+     *  @param that refers to an R-value object of this type.
+     */
+    CriticalSection(const CriticalSection & that);
+
+    /**
+     *  Assignment operator. POISONED.
+     *
+     *  @param that refers to an R-value object of this type.
+     */
+    CriticalSection& operator=(const CriticalSection & that);
+
+};
 
 }
 }

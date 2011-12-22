@@ -165,6 +165,7 @@ default:	all
 ################################################################################
 
 MANIFEST_O=\
+ hayloft/CriticalSection.o \
  hayloft/Logger.o \
  hayloft/Packet.o \
  hayloft/Parameter.o \
