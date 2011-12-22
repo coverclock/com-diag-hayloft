@@ -23,8 +23,6 @@ public:
 
 	static Thread & instance();
 
-	static void cancellable();
-
 	static void yield();
 
 	static void exit();
@@ -51,7 +49,7 @@ protected:
 
 	bool running;
 
-	bool interrupting;
+	bool notifying;
 
 	bool canceling;
 
@@ -75,15 +73,9 @@ public:
 
 	virtual int wait();
 
-	virtual int interrupt();
+	virtual int notify();
 
-	virtual bool interrupted();
-
-	virtual int cancel();
-
-	virtual bool cancelled();
-
-	virtual int join(void * & final = dontcare);
+	virtual bool notified();
 
 	::pthread_t getIdentity() { return identity; }
 
@@ -104,6 +96,16 @@ private:
      *  @param that refers to an R-value object of this type.
      */
 	Thread& operator=(const Thread& that);
+
+public:
+
+	static void cancellable();
+
+	virtual int cancel();
+
+	virtual bool cancelled();
+
+	virtual int join(void * & final = dontcare);
 
 };
 

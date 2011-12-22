@@ -125,8 +125,8 @@ TEST_F(ThreadTest, Idle) {
 	int variable = 0;
 	ThreadWait thread(variable);
 	EXPECT_EQ(variable, 1);
-	EXPECT_EQ(thread.interrupt(), 0);
-	EXPECT_TRUE(thread.interrupted());
+	EXPECT_EQ(thread.notify(), 0);
+	EXPECT_TRUE(thread.notified());
 	EXPECT_EQ(thread.wait(), 0);
 	EXPECT_EQ(variable, 1);
 	EXPECT_FALSE(myMutex.isLocked());
@@ -221,9 +221,9 @@ TEST_F(ThreadTest, Cancel) {
 	EXPECT_EQ(variable, 4);
 }
 
-struct ThreadInterrupt : public Thread {
+struct ThreadNotify : public Thread {
 	int & variable;
-	explicit ThreadInterrupt(int & shared)
+	explicit ThreadNotify(int & shared)
 	: variable(shared) {
 		variable = 1;
 	}
@@ -231,7 +231,7 @@ struct ThreadInterrupt : public Thread {
 		CriticalSection guard(myMutex);
 		while (true) {
 			variable = 3;
-			if (interrupted()) {
+			if (notified()) {
 				break;
 			}
 			yield();
@@ -239,12 +239,12 @@ struct ThreadInterrupt : public Thread {
 	}
 };
 
-TEST_F(ThreadTest, Interrupt) {
+TEST_F(ThreadTest, Notify) {
 	ASSERT_FALSE(myMutex.isLocked());
 	int variable = 0;
 	EXPECT_EQ(variable, 0);
-	ThreadInterrupt thread(variable);
-	EXPECT_FALSE(thread.interrupted());
+	ThreadNotify thread(variable);
+	EXPECT_FALSE(thread.notified());
 	EXPECT_EQ(variable, 1);
 	variable = 2;
 	EXPECT_EQ(variable, 2);
@@ -252,9 +252,9 @@ TEST_F(ThreadTest, Interrupt) {
 	platform.yield(platform.frequency());
 	EXPECT_EQ(variable, 3);
 	EXPECT_TRUE(myMutex.isLocked());
-	EXPECT_FALSE(thread.interrupted());
-	EXPECT_EQ(thread.interrupt(), 0);
-	EXPECT_TRUE(thread.interrupted());
+	EXPECT_FALSE(thread.notified());
+	EXPECT_EQ(thread.notify(), 0);
+	EXPECT_TRUE(thread.notified());
 	EXPECT_EQ(thread.wait(), 0);
 	EXPECT_EQ(variable, 3);
 	variable = 4;
@@ -341,9 +341,9 @@ TEST_F(ThreadTest, CancelLeavesMutexLocked) {
 	EXPECT_EQ(thread.wait(), 0);
 	EXPECT_EQ(thread.join(), 0);
 	if (badMutex.isLocked()) {
-		logger.notice("This C++ implementation doesn't unwind the stack upon cancel!\n");
+		logger.print("This C++ implementation did NOT unwind the stack upon thread cancel!\n");
 	} else {
-		logger.notice("This C++ implementation appears to unwind the stack upon cancel!\n");
+		logger.print("This C++ implementation did unwind the stack upon thread cancel!\n");
 	}
 }
 
@@ -432,7 +432,7 @@ struct ThreadUncancellable : public Thread {
 	virtual void run() {
 		Uncancellable sentry;
 		MyCriticalSection guard(myMutex);
-		while (!interrupted()) {
+		while (!notified()) {
 			++variable;
 			cancellable();
 			yield();
@@ -455,9 +455,9 @@ TEST_F(ThreadTest, Uncancellable) {
 	platform.yield(platform.frequency());
 	int two = variable;
 	EXPECT_NE(one, two);
-	EXPECT_FALSE(thread.interrupted());
-	EXPECT_EQ(thread.interrupt(), 0);
-	EXPECT_TRUE(thread.interrupted());
+	EXPECT_FALSE(thread.notified());
+	EXPECT_EQ(thread.notify(), 0);
+	EXPECT_TRUE(thread.notified());
 	EXPECT_EQ(thread.wait(), 0);
 	EXPECT_FALSE(myMutex.isLocked());
 }

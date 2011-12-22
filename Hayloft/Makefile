@@ -265,7 +265,7 @@ PHONY+=run
 
 run:	unittest
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	./unittest
+	time ./unittest
 
 PHONY+=debug
 
@@ -273,13 +273,13 @@ debug:	unittest
 	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	./unittest
+	time ./unittest
 
 PHONY+=capture
 
 capture:	unittest
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	script -c "./unittest --gtest_color=no" capture.log
+	script -c "time ./unittest --gtest_color=no" capture.log
 
 PHONY+=test
 
@@ -287,7 +287,7 @@ test:	unittest
 	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	script -c "./unittest --gtest_color=no --gtest_filter=$(FILTER)" test.log # e.g. FILTER=BucketFilter.Explicit
+	script -c "time ./unittest --gtest_color=no --gtest_filter=$(FILTER)" test.log # e.g. FILTER=BucketFilter.Explicit
 		
 PHONY+=suite
 
@@ -295,7 +295,7 @@ suite:	unittest
 	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	script -c "./unittest --gtest_color=no" suite.log
+	script -c "time ./unittest --gtest_color=no" suite.log
 	
 PHONY+=proxy
 
