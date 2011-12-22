@@ -17,13 +17,19 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
+class Condition;
+
 /**
  * Mutex implements mutual exclusion using a POSIX thread mutex.
- * This class is simply an alias for the Desperado Mutex. Note that by
- * default, the Desperado Mutex makes the calling thread uncancellable
- * while the Mutex is locked.
+ * This class is mostly an alias for the Desperado Mutex class with
+ * additional support for the Hayloft Condition class which must
+ * access the POSIX thread mutex in the Mutex object.
  */
-typedef ::com::diag::desperado::Mutex Mutex;
+class Mutex : public ::com::diag::desperado::Mutex {
+
+	friend class Condition;
+
+};
 
 }
 }
