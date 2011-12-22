@@ -21,7 +21,7 @@ class Thread {
 
 public:
 
-	static pthread_t self();
+	static Thread & instance();
 
 	static void cancellable();
 
@@ -29,7 +29,17 @@ public:
 
 	static void exit();
 
-private:
+	static ::pthread_t self();
+
+protected:
+
+	static Thread main;
+
+	static ::pthread_key_t key;
+
+	static int handle;
+
+	static int setup(void);
 
 	static void cleanup_mutex(void * arg);
 
@@ -41,13 +51,13 @@ private:
 
 	bool canceling;
 
-	pthread_t identity;
+	::pthread_t identity;
 
-    pthread_mutex_t mutex;
+	::pthread_mutex_t mutex;
 
-    pthread_cond_t condition;
+	::pthread_cond_t condition;
 
-protected:
+	explicit Thread(::pthread_t id);
 
 	virtual void run();
 
@@ -65,13 +75,11 @@ public:
 
 	virtual bool cancelled();
 
-	pthread_t getIdentity() { return identity; }
-
-protected:
-
-	explicit Thread(pthread_t id);
+	::pthread_t getIdentity() { return identity; }
 
 private:
+
+	void initialize();
 
     /**
      *  Copy constructor. POISONED.
