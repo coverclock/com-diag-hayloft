@@ -18,6 +18,7 @@
 #include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/hayloft/Uncancellable.h"
 #include "com/diag/hayloft/Condition.h"
+#include "com/diag/hayloft/MemoryBarrier.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/errno.h"
 #include <pthread.h>
@@ -29,22 +30,6 @@ namespace unittest {
 using namespace ::com::diag::hayloft;
 
 typedef Fixture ThreadTest;
-
-struct MyClass {
-	explicit MyClass() {
-		Logger::instance().debug("MyClass@%p: ctor\n", this);
-	}
-	virtual ~MyClass() {
-		Logger::instance().debug("MyClass@%p: dtor\n", this);
-	}
-};
-
-TEST_F(ThreadTest, Scope) {
-	MyClass object1;
-	{
-		MyClass object2;
-	}
-}
 
 struct MyMutex : public Mutex {
 	int nesting;
@@ -472,6 +457,10 @@ TEST_F(ThreadTest, Function) {
 	EXPECT_NE(result, (void *)0);
 	EXPECT_EQ(result, &variable);
 	EXPECT_EQ(thread.getFinal(), &variable);
+}
+
+TEST_F(ThreadTest, MemoryBarrier) {
+	MemoryBarrier fence;
 }
 
 }
