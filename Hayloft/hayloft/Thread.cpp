@@ -56,7 +56,7 @@ Thread::Thread()
     initialize();
 }
 
-Thread::Thread(pthread_t id)
+Thread::Thread(::pthread_t id)
 : running(true)
 , notifying(false)
 , canceling(false)

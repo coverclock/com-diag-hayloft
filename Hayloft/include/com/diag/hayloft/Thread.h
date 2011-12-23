@@ -17,6 +17,12 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
+/**
+ * Thread implements a POSIX thread which can be associated with a thread of
+ * control, that is, an independent context via which a processor may execute
+ * instructions with other threads of control on the same processor
+ * (serially via context switching) or on other processors (concurrently).
+ */
 class Thread {
 
 public:

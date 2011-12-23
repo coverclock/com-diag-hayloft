@@ -41,7 +41,7 @@ public:
     /**
      *  Constructor.
      *
-     *  @param mutexr  refers to a mutex object.
+     *  @param rm refers to a mutex object.
      */
     explicit CriticalSection(Mutex & rm);
 
