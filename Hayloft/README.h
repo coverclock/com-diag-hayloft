@@ -197,14 +197,11 @@
 		which of the sixteen log levels are enabled via the expression
 		(1 << LEVEL) where LEVEL is one of the following log levels. So for
 		example the DEBUG level is enabled if bit (1 << DEBUG) or 0x0010 is set.
-		The different log levels are mapped to appropriate log levels in the
-		underlying logging mechanism; for example, SYSLOG has eight log levels.
-		If not specified, the default logger mask is used, for example 0xff80.
-        Some useful masks: 0xff80 prints minimal output as unit tests run but
-        emits errors and warnings; 0xffe0 prints show() output as unit tests
-        run; 0xfff0 prints debug output as unit tests run. The different log
-        levels found in com/diag/desperado/Log.h are the transitive closure of
-        common logging mechanisms from GNU/Linux, Apache, Java, etc.
+		The different log levels found in com/diag/desperado/Log.h are the
+		transitive closure of common logging mechanisms from GNU/Linux, Apache,
+		Java, etc. The Desperado log levels are mapped to the appropriate log
+		levels in the underlying logging mechanism. For example, SYSLOG has
+		eight log levels.
 
         ENUMERATION		VALUE	MASK
 
@@ -224,6 +221,13 @@
         FATAL           13		0x2000
         EMERGENCY       14		0x4000
         PRINT           15		0x8000
+
+        MASK			LOGGING
+
+        0xff80			errors, warnings, notices of unusual events (default)
+        0xffc0			plus convergence and retry events like timeouts
+        0xffe0			plus output from show functions
+        0xfff0			plus debug output
 
 	COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY
 

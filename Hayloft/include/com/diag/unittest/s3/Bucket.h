@@ -53,7 +53,7 @@ TEST_F(BucketTest, Heap) {
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; buckethead->isRetryable() && (ii < LIMIT); ++ii) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 			delete buckethead;
 			buckethead = new BucketHead(BUCKET);
@@ -70,7 +70,7 @@ TEST_F(BucketTest, Heap) {
 	{
 		BucketCreate * bucketcreate = new BucketCreate(BUCKET);
 		for (int ii = 0; bucketcreate->isRetryable() && (ii < LIMIT); ++ii) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 			delete bucketcreate;
 			bucketcreate = new BucketCreate(BUCKET);
@@ -88,9 +88,9 @@ TEST_F(BucketTest, Heap) {
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; (buckethead->isRetryable() || (!buckethead->isSuccessful())) && (ii < LIMIT); ++ii) {
 			if (buckethead->isRetryable()) {
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 			} else if (!buckethead->isSuccessful()) {
-				printf("WAITING %d\n", __LINE__);
+				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
 			delete buckethead;
@@ -109,9 +109,9 @@ TEST_F(BucketTest, Heap) {
 		BucketDelete * bucketdelete = new BucketDelete(BUCKET);
 		for (int ii = 0; (bucketdelete->isRetryable() || bucketdelete->isNonexistent()) && (ii < LIMIT); ++ii) {
 			if (bucketdelete->isRetryable()) {
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 			} else if (bucketdelete->isNonexistent()) {
-				printf("WAITING %d\n", __LINE__);
+				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
 			delete bucketdelete;
@@ -130,9 +130,9 @@ TEST_F(BucketTest, Heap) {
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; (buckethead->isRetryable() || buckethead->isSuccessful()) && (ii < LIMIT); ++ii) {
 			if (buckethead->isRetryable()) {
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 			} else if (buckethead->isSuccessful()) {
-				printf("WAITING %d\n", __LINE__);
+				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
 			delete buckethead;
@@ -155,7 +155,7 @@ TEST_F(BucketTest, Stack) {
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 			buckethead.start();
 		}
@@ -170,7 +170,7 @@ TEST_F(BucketTest, Stack) {
 	{
 		BucketCreate bucketcreate(BUCKET);
 		for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 			bucketcreate.start();
 		}
@@ -186,9 +186,9 @@ TEST_F(BucketTest, Stack) {
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
 			if (buckethead.isRetryable()) {
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 			} else if (!buckethead.isSuccessful()) {
-				printf("WAITING %d\n", __LINE__);
+				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
 			buckethead.start();
@@ -205,9 +205,9 @@ TEST_F(BucketTest, Stack) {
 		BucketDelete bucketdelete(BUCKET);
 		for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
 			if (bucketdelete.isRetryable()) {
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 			} else if (bucketdelete.isNonexistent()) {
-				printf("WAITING %d\n", __LINE__);
+				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
 			bucketdelete.start();
@@ -224,9 +224,9 @@ TEST_F(BucketTest, Stack) {
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
 			if (buckethead.isRetryable()) {
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 			} else if (buckethead.isSuccessful()) {
-				printf("WAITING %d\n", __LINE__);
+				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
 			buckethead.start();
@@ -255,7 +255,7 @@ TEST_F(BucketTest, Explicit) {
 	/**/
 	BucketHead buckethead(BUCKET, context, session);
 	for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		buckethead.start();
 	}
@@ -269,7 +269,7 @@ TEST_F(BucketTest, Explicit) {
 	/**/
 	BucketCreate bucketcreate(BUCKET, context, session);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		bucketcreate.start();
 	}
@@ -284,9 +284,9 @@ TEST_F(BucketTest, Explicit) {
 	buckethead.start();
 	for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 		} else if (!buckethead.isSuccessful()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
 		buckethead.start();
@@ -306,9 +306,9 @@ TEST_F(BucketTest, Explicit) {
 	BucketDelete bucketdelete(BUCKET, context, session);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 		} else if (bucketdelete.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
 		bucketdelete.start();
@@ -324,9 +324,9 @@ TEST_F(BucketTest, Explicit) {
 	buckethead.start();
 	for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 		} else if (buckethead.isSuccessful()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
 		buckethead.start();
@@ -365,7 +365,7 @@ TEST_F(BucketTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -396,7 +396,7 @@ TEST_F(BucketTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -428,11 +428,11 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (buckethead.isSuccessful()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -464,11 +464,11 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!bucketdelete.isNonexistent()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -500,11 +500,11 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!buckethead.isSuccessful()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -533,7 +533,7 @@ TEST_F(BucketTest, Simplex) {
 			buckethead.start();
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -556,7 +556,7 @@ TEST_F(BucketTest, Simplex) {
 			bucketcreate.start();
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -580,11 +580,11 @@ TEST_F(BucketTest, Simplex) {
 				buckethead.start();
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (buckethead.isSuccessful()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -608,11 +608,11 @@ TEST_F(BucketTest, Simplex) {
 				bucketdelete.start();
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!bucketdelete.isNonexistent()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -636,11 +636,11 @@ TEST_F(BucketTest, Simplex) {
 				buckethead.start();
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!buckethead.isSuccessful()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -678,12 +678,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int ll = 0; (buckethead != true) && (ll < LIMIT); ++ll) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT %d\n", __LINE__);
+				logger.configuration("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -714,12 +714,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int ll = 0; (bucketcreate != true) && (ll < LIMIT); ++ll) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				printf("TIMEDOUT %d\n", __LINE__);
+				logger.configuration("TIMEDOUT %d\n", __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -751,16 +751,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int ll = 0; (buckethead != true) && (ll < LIMIT); ++ll) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					printf("TIMEDOUT %d\n", __LINE__);
+					logger.configuration("TIMEDOUT %d\n", __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (buckethead.isSuccessful()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -792,16 +792,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int ll = 0; (bucketdelete != true) && (ll < LIMIT); ++ll) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					printf("TIMEDOUT %d\n", __LINE__);
+					logger.configuration("TIMEDOUT %d\n", __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!bucketdelete.isNonexistent()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -833,16 +833,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int ll = 0; (buckethead != true) && (ll < LIMIT); ++ll) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					printf("TIMEDOUT %d\n", __LINE__);
+					logger.configuration("TIMEDOUT %d\n", __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				printf("RETRYING %d\n", __LINE__);
+				logger.configuration("RETRYING %d\n", __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!buckethead.isSuccessful()) { break; }
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -860,20 +860,20 @@ TEST_F(BucketTest, Manifest) {
 	const char BUCKET2[] = "BucketTestManifest2";
 	ServiceManifest servicemanifest1;
 	for (int ii = 0; servicemanifest1.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		servicemanifest1.start();
 	}
 	EXPECT_EQ(servicemanifest1.getManifest().size(), 0);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		bucketcreate1.start();
 	}
 	ServiceManifest servicemanifest2;
 	for (int ii = 0; servicemanifest2.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		servicemanifest2.start();
 	}
@@ -881,13 +881,13 @@ TEST_F(BucketTest, Manifest) {
 	EXPECT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		bucketcreate2.start();
 	}
 	ServiceManifest servicemanifest3;
 	for (int ii = 0; servicemanifest3.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		servicemanifest3.start();
 	}
@@ -902,16 +902,16 @@ TEST_F(BucketTest, Manifest) {
 	BucketDelete bucketdelete1(BUCKET1);
 	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete1.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 		} else if (bucketdelete1.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
 		bucketdelete1.start();
 	}
 	ServiceManifest servicemanifest4;
 	for (int ii = 0; servicemanifest4.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		servicemanifest4.start();
 	}
@@ -921,16 +921,16 @@ TEST_F(BucketTest, Manifest) {
 	BucketDelete bucketdelete2(BUCKET2);
 	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete2.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.configuration("RETRYING %d\n", __LINE__);
 		} else if (bucketdelete2.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
 		bucketdelete2.start();
 	}
 	ServiceManifest servicemanifest5;
 	for (int ii = 0; servicemanifest5.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
 		servicemanifest5.start();
 	}

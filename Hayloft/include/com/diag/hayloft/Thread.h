@@ -188,8 +188,9 @@ private:
 public:
 
 	/***************************************************************************
-	 * You should endevour not to use methods in this section. They are not your
-	 * friend. Wackiness may ensue. They are provided for completeness.
+	 * You should endeavor not to use methods in this section. They are not your
+	 * friends. Wackiness may ensue. They are provided for completeness. You
+	 * have been warned.
 	 **************************************************************************/
 
 	/**
@@ -222,6 +223,8 @@ public:
 	 * Block the calling thread of control until the thread of control
 	 * associated with this Thread has completed or been canceled. POSIX
 	 * allows only a single thread of control to join with another thread.
+	 * Calling join on a Thread that has never been started is likely to
+	 * crash the application (and there is no reliable way to fix this).
 	 * Some POSIX implementations encourage this call to clean up system
 	 * resources associated with a thread. For others it is merely a
 	 * conveniences. This method is provided for completeness.

@@ -46,7 +46,7 @@ typedef Fixture ConvergenceTest;
 
 TEST_F(ConvergenceTest, Synchronous) {
 	static const int LIMIT = 10;
-	static const Logger::Level LEVEL = Logger::PRINT;
+	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestSynchronous1");
 	Bucket BUCKET2("ConvergenceTestSynchronous2");
 	Object OBJECT1("Object1.txt", BUCKET1);
@@ -124,7 +124,7 @@ TEST_F(ConvergenceTest, Synchronous) {
 
 TEST_F(ConvergenceTest, Complete) {
 	static const int LIMIT = 10;
-	static const Logger::Level LEVEL = Logger::PRINT;
+	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestComplete1");
 	Bucket BUCKET2("ConvergenceTestComplete2");
 	Object OBJECT1("Object1.txt", BUCKET1);
@@ -207,7 +207,7 @@ TEST_F(ConvergenceTest, Service) {
 	Object OBJECT1("Object1.txt", BUCKET1);
 	Object OBJECT2("Object2.txt", BUCKET2);
 	static const int LIMIT = 10;
-	static const Logger::Level LEVEL = Logger::PRINT;
+	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Multiplex multiplex;
 	/**/
 	BucketHead buckethead1(BUCKET1, multiplex);
