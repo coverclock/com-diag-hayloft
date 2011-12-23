@@ -20,9 +20,12 @@ class Mutex;
 /**
  * CriticalSection locks a Mutex in its constructor and unlocks it in its
  * destructor. This allows you to implement a critical section protected by
- * a Mutex using the C++ "Resource Allocation is Initialization" idiom.
- * Unlike the Desperado CriticalSection class, this class does not make the
- * calling thread uncancellable.
+ * a Mutex by using the C++ "Resource Allocation is Initialization" idiom. The
+ * critical section is protected by the associated Mutex while an object of
+ * this type is in scope. This is equivalent to the Desperado CriticalSection
+ * class but uses the Hayloft Mutex, which only differs by the Desperado
+ * Mutex by making Condition a friend.
+ *
  */
 class CriticalSection {
 

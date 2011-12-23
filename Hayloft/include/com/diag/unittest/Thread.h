@@ -114,9 +114,10 @@ struct ThreadWait : public Thread {
 	{
 		variable = 1;
 	}
-	virtual void run() {
+	virtual void * run() {
 		CriticalSection guard(myMutex);
 		variable = 3;
+		return 0;
 	}
 };
 
@@ -191,12 +192,13 @@ struct ThreadCancel : public Thread {
 	{
 		variable = 1;
 	}
-	virtual void run() {
+	virtual void * run() {
 		while (true) {
 			variable = 3;
 			cancellable();
 			yield();
 		}
+		return 0;
 	}
 };
 
@@ -227,7 +229,7 @@ struct ThreadNotify : public Thread {
 	: variable(shared) {
 		variable = 1;
 	}
-	virtual void run() {
+	virtual void * run() {
 		CriticalSection guard(myMutex);
 		while (true) {
 			variable = 3;
@@ -236,6 +238,7 @@ struct ThreadNotify : public Thread {
 			}
 			yield();
 		}
+		return 0;
 	}
 };
 
@@ -264,9 +267,10 @@ TEST_F(ThreadTest, Notify) {
 }
 
 struct ThreadExit : public Thread {
-	virtual void run() {
+	virtual void * run() {
 		CriticalSection guard(myMutex);
 		exit();
+		return 0;
 	}
 };
 
@@ -293,8 +297,9 @@ TEST_F(ThreadTest, ExitWait) {
 }
 
 struct ThreadWaitReturn : public Thread {
-	virtual void run() {
+	virtual void * run() {
 		::com::diag::desperado::Platform::instance().yield(::com::diag::desperado::Platform::instance().frequency());
+		return 0;
 	}
 };
 
@@ -319,12 +324,13 @@ struct MyCriticalSection {
 };
 
 struct ThreadLeavesMutexLocked : public Thread {
-	virtual void run() {
+	virtual void * run() {
 		MyCriticalSection guard(badMutex);
 		while (true) {
 			cancellable();
 			yield();
 		}
+		return 0;
 	}
 };
 
@@ -341,9 +347,9 @@ TEST_F(ThreadTest, CancelLeavesMutexLocked) {
 	EXPECT_EQ(thread.wait(), 0);
 	EXPECT_EQ(thread.join(), 0);
 	if (badMutex.isLocked()) {
-		logger.print("This C++ implementation did NOT unwind the stack upon thread cancel!\n");
+		logger.print("Stack was NOT unwound upon thread cancel!\n");
 	} else {
-		logger.print("This C++ implementation did unwind the stack upon thread cancel!\n");
+		logger.print("Stack WAS unwound upon thread cancel!\n");
 	}
 }
 
@@ -354,9 +360,10 @@ struct ThreadInstance : public Thread {
 	: here(hh)
 	, id(ii)
 	{}
-	virtual void run() {
+	virtual void * run() {
 		*here = &Thread::instance();
 		*id = Thread::self();
+		return 0;
 	}
 };
 
@@ -384,7 +391,7 @@ struct ThreadCondition : public Thread {
 	{
 		variable = 1;
 	}
-	virtual void run() {
+	virtual void * run() {
 		CriticalSection guard(conditionmutex);
 		while (variable < 100) {
 			Logger::instance().debug("Thread: before %d\n", variable);
@@ -395,6 +402,7 @@ struct ThreadCondition : public Thread {
 			++variable;
 			conditioneven.signal();
 		}
+		return 0;
 	}
 };
 
@@ -429,7 +437,7 @@ struct ThreadUncancellable : public Thread {
 	{
 		variable = 1;
 	}
-	virtual void run() {
+	virtual void * run() {
 		Uncancellable sentry;
 		MyCriticalSection guard(myMutex);
 		while (!notified()) {
@@ -437,6 +445,7 @@ struct ThreadUncancellable : public Thread {
 			cancellable();
 			yield();
 		}
+		return 0;
 	}
 };
 
@@ -460,6 +469,24 @@ TEST_F(ThreadTest, Uncancellable) {
 	EXPECT_TRUE(thread.notified());
 	EXPECT_EQ(thread.wait(), 0);
 	EXPECT_FALSE(myMutex.isLocked());
+}
+
+static void * function(void * context) {
+	*((int *)context) = 1;
+	return context;
+}
+
+TEST_F(ThreadTest, Function) {
+	int variable = 0;
+	Thread thread;
+	EXPECT_EQ(variable, 0);
+	EXPECT_EQ(thread.start(function, &variable), 0);
+	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(variable, 1);
+	void * result = 0;
+	EXPECT_EQ(thread.join(result), 0);
+	EXPECT_NE(result, (void *)0);
+	EXPECT_EQ(result, &variable);
 }
 
 }

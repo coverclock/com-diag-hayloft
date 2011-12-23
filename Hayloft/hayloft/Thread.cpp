@@ -46,32 +46,11 @@ void Thread::exit() {
 	return ::pthread_self();
 }
 
-void Thread::cleanup_thread(void * arg) {
-	Thread * that = static_cast<Thread *>(arg);
-	if (that->running) {
-		::pthread_mutex_lock(&that->mutex);
-		that->running = false;
-		::pthread_cond_broadcast(&that->condition);
-		::pthread_mutex_unlock(&that->mutex);
-	}
-}
-
-void * Thread::start_routine(void * arg) {
-	Thread * that = static_cast<Thread *>(arg);
-	pthread_cleanup_push(cleanup_thread, that);
-	::pthread_setspecific(key, that);
-	int dontcare;
-	::pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &dontcare);
-	::pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &dontcare);
-	that->run();
-	pthread_cleanup_pop(!0);
-	return 0;
-}
-
 Thread::Thread()
 : running(false)
 , notifying(false)
 , canceling(false)
+, function(0)
 , identity(0)
 {
     initialize();
@@ -81,6 +60,7 @@ Thread::Thread(pthread_t id)
 : running(true)
 , notifying(false)
 , canceling(false)
+, function(0)
 , identity(id)
 {
     initialize();
@@ -125,13 +105,46 @@ void Thread::initialize() {
 	::pthread_cond_init(&condition, 0);
 }
 
-int Thread::start() {
+void * Thread::empty_function(void *) {
+	return 0;
+}
+
+void * Thread::run() {
+	return (function != 0) ? (*function)(context) : 0;
+}
+
+void Thread::cleanup_thread(void * arg) {
+	Thread * that = static_cast<Thread *>(arg);
+	if (that->running) {
+		::pthread_mutex_lock(&that->mutex);
+		that->running = false;
+		::pthread_cond_broadcast(&that->condition);
+		::pthread_mutex_unlock(&that->mutex);
+	}
+}
+
+void * Thread::start_routine(void * arg) {
+	Thread * that = static_cast<Thread *>(arg);
+	void * rc = reinterpret_cast<void *>(-1);
+	int dontcare;
+	::pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &dontcare);
+	::pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &dontcare);
+	::pthread_setspecific(key, that);
+	pthread_cleanup_push(cleanup_thread, that);
+	rc = that->run();
+	pthread_cleanup_pop(!0);
+	return rc;
+}
+
+int Thread::start(Function & implementation, void * data) {
 	int rc;
 	::pthread_mutex_lock(&mutex);
 	pthread_cleanup_push(cleanup_mutex, this);
 	if (!running) {
 		running = true;
 		notifying = false;
+		function = &implementation;
+		context = data;
 		rc = ::pthread_create(&identity, 0, start_routine, this);
 		if (rc != 0) { running = false; }
 	} else {
@@ -171,9 +184,6 @@ int Thread::wait() {
 	}
 	pthread_cleanup_pop(!0);
 	return rc;
-}
-
-void Thread::run() {
 }
 
 /*******************************************************************************
