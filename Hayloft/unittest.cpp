@@ -22,6 +22,11 @@
 #include "com/diag/unittest/Parameter.h"
 #include "com/diag/unittest/size.h"
 #include "com/diag/unittest/Fibonacci.h"
+#endif
+
+// Unit Tests that also use POSIX Threads and Real Time.
+
+#if 1
 #include "com/diag/unittest/Thread.h"
 #endif
 
@@ -55,21 +60,9 @@
 
 #if 1
 #include "com/diag/unittest/s3/Bucket.h"
-#endif
-
-#if 1
 #include "com/diag/unittest/s3/Object.h"
-#endif
-
-#if 1
 #include "com/diag/unittest/s3/convergence.h"
-#endif
-
-#if 1
 #include "com/diag/unittest/s3/Grant.h"
-#endif
-
-#if 1
 #include "com/diag/unittest/s3/Log.h"
 #endif
 
