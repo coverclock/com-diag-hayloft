@@ -335,6 +335,7 @@ struct ThreadLeavesMutexLocked : public Thread {
 };
 
 TEST_F(ThreadTest, CancelLeavesMutexLocked) {
+	uint16_t mask = verbose();
 	ASSERT_FALSE(badMutex.isLocked());
 	ThreadLeavesMutexLocked thread;
 	EXPECT_FALSE(thread.cancelled());
@@ -345,12 +346,10 @@ TEST_F(ThreadTest, CancelLeavesMutexLocked) {
 	EXPECT_EQ(thread.cancel(), 0);
 	EXPECT_TRUE(thread.cancelled());
 	EXPECT_EQ(thread.wait(), 0);
+	logger.print("Stack %s unwound upon thread cancel after wait!\n", badMutex.isLocked() ? "was NOT" : "WAS");
 	EXPECT_EQ(thread.join(), 0);
-	if (badMutex.isLocked()) {
-		logger.print("Stack was NOT unwound upon thread cancel!\n");
-	} else {
-		logger.print("Stack WAS unwound upon thread cancel!\n");
-	}
+	logger.print("Stack %s unwound upon thread cancel after join!\n", badMutex.isLocked() ? "was NOT" : "WAS");
+	restore(mask);
 }
 
 struct ThreadInstance : public Thread {
