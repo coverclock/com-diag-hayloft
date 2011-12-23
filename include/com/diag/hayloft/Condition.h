@@ -19,6 +19,20 @@ namespace hayloft {
 
 class Mutex;
 
+/**
+ * Condition implements a POSIX thread condition variable. Condition variables
+ * are a form of thread synchronization using a monitor-like mechanism. Threads
+ * of control may wait until receiving a signal from another thread. Signals
+ * are not persistent: if no thread is waiting on a Condition when a thread
+ * signals the Condition, the signal does nothing. All waiting must be done
+ * inside a critical section (as implemented by CriticalSection) that holds
+ * a mutex (as implemented by Mutex). Signaling is not necessarily done
+ * inside a critical section. All Condition signals are broadcast signals: all
+ * waiting threads are woken up and queue for the critical section. As near as
+ * I can tell, POSIX does not specify whether its condition variables are
+ * Hoare-like (the signaling thread blocks) or Mesa-like (the signaling thread
+ * does not block). I suspect the latter.
+ */
 class Condition {
 
 protected:
@@ -27,12 +41,29 @@ protected:
 
 public:
 
+	/**
+	 * Constructor.
+	 */
 	explicit Condition();
 
+	/**
+	 * Destructor.
+	 */
 	virtual ~Condition();
 
+	/**
+	 * Block waiting on this Condition inside a CriticalSection which has Mutex
+	 * locked until all Threads blocked on this Condition are signaled.
+	 *
+	 * @return 0 for success or an error number of an error occurred.
+	 */
 	virtual int wait(Mutex & mutex);
 
+	/**
+	 * Signal and hence unblock all Threads waiting on this Condtion.
+	 *
+	 * @return 0 for success or an error number if an error occurred.
+	 */
 	virtual int signal();
 
 private:
