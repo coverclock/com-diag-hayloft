@@ -16,10 +16,17 @@ namespace diag {
 namespace hayloft {
 
 /**
- * Uncancellable cases the current thread to become uncancellable while this
- * object is in scope.
+ * Uncancellable causes the current thread to become uncancellable while an
+ * object of this type is in scope. You shouldn't be using cancel semantics
+ * anyway, for lots of reasons. But if are, and you need to suppress
+ * cancellation for the duration of a block of code, this object will do that
+ * for you.
  */
 class Uncancellable {
+
+protected:
+
+    int state;
 
 public:
 
@@ -32,10 +39,6 @@ public:
      *  Destructor.
      */
     virtual ~Uncancellable();
-
-protected:
-
-    int state;
 
 };
 
