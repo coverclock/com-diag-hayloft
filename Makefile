@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=2
-MINOR=3
+MINOR=4
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -166,7 +166,6 @@ default:	all
 
 MANIFEST_O=\
  hayloft/Condition.o \
- hayloft/CriticalSection.o \
  hayloft/Logger.o \
  hayloft/Packet.o \
  hayloft/Parameter.o \
@@ -305,6 +304,20 @@ proxy:	unittest
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE="1"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
 	script -c "./unittest --gtest_color=no" proxy.log
+	
+PHONY+=memcheck
+
+memcheck:	unittest
+	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "valgrind --tool=memcheck ./unittest --gtest_color=no" memcheck.log
+	
+PHONY+=helgrind
+
+helgrind:	unittest
+	export COM_DIAG_HAYLOFT_LOGGER_MASK="0xfff0"; \
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "valgrind --tool=helgrind ./unittest --gtest_color=no" helgrind.log
 
 ################################################################################
 # PATTERNS

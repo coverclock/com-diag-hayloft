@@ -31,7 +31,10 @@ class Mutex;
  * waiting threads are woken up and queue for the critical section. As near as
  * I can tell, POSIX does not specify whether its condition variables are
  * Hoare-like (the signaling thread blocks) or Mesa-like (the signaling thread
- * does not block). I suspect the latter.
+ * does not block). I suspect the latter. Note that while it is not required
+ * that an application signal while inside a critical section that holds a
+ * mutex, there are very few synchronization patterns in which that would not
+ * be a (possible subtle) bug in the application.
  */
 class Condition {
 

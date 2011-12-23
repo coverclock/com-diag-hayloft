@@ -23,7 +23,8 @@ class Condition;
  * Mutex implements mutual exclusion using a POSIX thread mutex.
  * This class is mostly an alias for the Desperado Mutex class with
  * additional support for the Hayloft Condition class which must
- * access the POSIX thread mutex in the Mutex object.
+ * access the POSIX thread mutex in the Mutex object. Like Desperado Mutex,
+ * Hayloft Mutex allows recursive locking by the same thread of control.
  */
 class Mutex : public ::com::diag::desperado::Mutex {
 

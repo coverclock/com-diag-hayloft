@@ -51,8 +51,10 @@ public:
 
 	/**
 	 * Cause the calling thread of control to exit.
+	 *
+	 * @param result becomes the final value of the thread of control.
 	 */
-	static void exit();
+	static void exit(void * result = 0);
 
 	/**
 	 * Return the POSIX thread identifier for the calling thread of control.
@@ -60,6 +62,21 @@ public:
 	 * @return the POSIX thread idenifier for the calling thread of control.
 	 */
 	static ::pthread_t self();
+
+public:
+
+	/***************************************************************************
+	 * The class methods in this section are used to implement the C-linkage
+	 * ABI to POSIX Threads and must necessarily be publicly accessible. Don't
+	 * call them. (If C++ allowed friend functions with C-linkage this wouldn't
+	 * be necessary.)
+	 **************************************************************************/
+
+	static void cleanup_mutex(void * arg);
+
+	static void cleanup_thread(void * arg);
+
+	static void * start_routine(void * arg);
 
 protected:
 
@@ -73,12 +90,6 @@ protected:
 
 	static int setup(void);
 
-	static void cleanup_mutex(void * arg);
-
-	static void cleanup_thread(void * arg);
-
-	static void * start_routine(void * arg);
-
 	static void * empty_function(void * context);
 
 	bool running;
@@ -91,20 +102,13 @@ protected:
 
 	void * context;
 
+	void * final;
+
 	::pthread_t identity;
 
 	::pthread_mutex_t mutex;
 
 	::pthread_cond_t condition;
-
-	explicit Thread(::pthread_t id);
-
-	/**
-	 * The derived class may override this method to provide an implementation
-	 * for the thread of control to execute with this Thread is started. This
-	 * is an alternative to providing a function.
-	 */
-	virtual void * run();
 
 public:
 
@@ -161,11 +165,33 @@ public:
 	/**
 	 * Get the POSIX thread identifier for the thread of control associated with
 	 * this Thread. This value has no meaning if the thread of control has
-	 * never been started, and the returned value is undefined.
+	 * never been started; otherwise the returned value is undefined.
 	 *
 	 * @return the POSIX thread identifier associated with this Thread.
 	 */
 	::pthread_t getIdentity() { return identity; }
+
+	/**
+	 * Get the final value of the thread. This value has no meaning until the
+	 * thread of control completes and has been joined. Otherwise the returned
+	 * value is unrefined.
+	 *
+	 * @return the final value of the thread of control.
+	 */
+	void * getFinal() { return final; }
+
+protected:
+
+	explicit Thread(::pthread_t id);
+
+	/**
+	 * A derived class may override this method to provide an implementation
+	 * for the thread of control to execute with this Thread is started. This
+	 * is an alternative to providing a function.
+	 *
+	 * @return the final value of the thread of control.
+	 */
+	virtual void * run();
 
 private:
 
@@ -224,14 +250,16 @@ public:
 	 * associated with this Thread has completed or been canceled. POSIX
 	 * allows only a single thread of control to join with another thread.
 	 * Calling join on a Thread that has never been started is likely to
-	 * crash the application (and there is no reliable way to fix this).
+	 * crash or hang the application (and there is no reliable way to fix this).
 	 * Some POSIX implementations encourage this call to clean up system
 	 * resources associated with a thread. For others it is merely a
 	 * conveniences. This method is provided for completeness.
 	 *
+	 * @param result references a value result into which the final value
+	 *        of the thread of control is stored.
 	 * @return 0 for success or an error number if an error occurred.
 	 */
-	virtual int join(void * & final = dontcare);
+	virtual int join(void * & result = dontcare);
 
 };
 
