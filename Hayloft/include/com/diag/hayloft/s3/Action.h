@@ -12,8 +12,8 @@
  */
 
 #include <string>
+#include "com/diag/hayloft/MemoryBarrier.h"
 #include "com/diag/desperado/generics.h"
-#include "com/diag/desperado/MemoryBarrier.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -71,14 +71,12 @@ protected:
 
 	/**
 	 * This returns the current status within the context of a full global
-	 * memory barrier with both read and write semantics that is performed both
-	 * before the fetch and again afterwards. The fact that I use a memory
-	 * barrier instead of a full mutex means I assume that the status value
-	 * can be read and written atomically.
+	 * memory fence. Status is the one variable we're allowed to look at
+	 * while another thread is manipulating this Action.
 	 *
-	 * @return	the current status value.
+	 * @return the current status value.
 	 */
-	Status state() const { ::com::diag::desperado::MemoryBarrier barrier; return status; }
+	Status state() const { MemoryBarrier barrier; return status; }
 
 public:
 
