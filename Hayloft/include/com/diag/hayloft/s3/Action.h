@@ -23,6 +23,7 @@ namespace s3 {
 
 class Plex;
 class Reaction;
+class LifeCycle;
 
 /**
  * Action is a C++ object whose state may be altered in the background by a
@@ -32,6 +33,8 @@ class Reaction;
  * the constructor of the derived class.
  */
 class Action {
+
+	friend class LifeCycle;
 
 public:
 
@@ -53,7 +56,7 @@ private:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
-	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 protected:
 
@@ -254,12 +257,13 @@ protected:
 	 * ::S3StatusAbortedByCallback) this Action will be immediately terminated
 	 * and completed with that status.
 	 *
-	 * @param properties points to a libs3 ::S3ResponseProperties structure.
+	 * @param responseProperties points to a libs3 ::S3ResponseProperties
+	 *        structure.
 	 * @return a status that if ::S3StatusOK allows the Action to continue or
 	 *         if anything else such as ::S3StatusAbortedByCallback immediately
 	 *         terminates the Action.
 	 */
-	virtual Status properties(const ::S3ResponseProperties * properties);
+	virtual Status properties(const ::S3ResponseProperties * responseProperties);
 
 	/**
 	 * This method is called when libs3 completes executing the Action.
@@ -277,12 +281,14 @@ protected:
 	 * is otherwise designed for it to do so. The default behavior of Hayloft
 	 * is to not reference this Action following this call.
 	 *
-	 * The current Action status is not passed to this method but can be
-	 * retrieved using the getStatus() method.
-	 *
+	 * @param final is the final libs3 status. It is the responsibility of this
+	 *              method to store the status in the status field of this
+	 *              Action providing it doesn't delete the object. This allows
+	 *              this method to see that the Action has completed before any
+	 *              other threads that may be polling on the Action status.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
-	virtual void complete(const ::S3ErrorDetails * errorDetails);
+	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
 
 private:
 

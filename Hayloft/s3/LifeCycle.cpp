@@ -8,10 +8,11 @@
  */
 
 #include "com/diag/hayloft/s3/LifeCycle.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/s3/Action.h"
+#include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/CriticalSection.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/Logger.h"
 
 namespace com {
 namespace diag {
@@ -58,12 +59,14 @@ void LifeCycle::start(Action & action) {
 	Logger::instance().debug("LifeCycle@%p: Action@%p: start\n", this, &action);
 }
 
-void LifeCycle::properties(Action & action, const ::S3ResponseProperties * properties) {
+Status LifeCycle::properties(Action & action, const ::S3ResponseProperties * responseProperties) {
 	Logger::instance().debug("LifeCycle@%p: Action@%p: properties\n", this, &action);
+	return action.properties(responseProperties);
 }
 
-void LifeCycle::complete(Action & action, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: complete\n", this, &action);
+void LifeCycle::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
+	Logger::instance().debug("LifeCycle@%p: Action@%p: complete \"%s\"\n", this, &action, tostring(final));
+	action.complete(final, errorDetails);
 }
 
 void LifeCycle::destructor(Action & action) {

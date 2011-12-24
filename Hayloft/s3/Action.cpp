@@ -25,25 +25,24 @@ Status Action::responsePropertiesCallback(const ::S3ResponseProperties * respons
 	if ((responseProperties->requestId != 0) && (responseProperties->requestId[0] != '\0')) { that->requestid = responseProperties->requestId; }
 	if ((responseProperties->requestId2 != 0) && (responseProperties->requestId2[0] != '\0')) { that->requestid2 = responseProperties->requestId2; }
 	if ((responseProperties->server != 0) && (responseProperties->server[0] != '\0')) { that->server = responseProperties->server; }
-	Status status = that->properties(responseProperties);
+	Status status = LifeCycle::instance().properties(*that, responseProperties);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(responseProperties, level);
 	return status;
 }
 
-void Action::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
-	that->status = status;
 	// An ::S3StatusInterrupted means someone destroyed our request context.
 	// We are now a synchronous Action.
-	if (status == ::S3StatusInterrupted) { that->pending = 0; }
+	if (final == ::S3StatusInterrupted) { that->pending = 0; }
 	Logger::Level level;
 	// I've never seen ::S3StatusErrorNoSuchKey in response to a GET or a HEAD
 	// so I'm not sure under what circumstances it occurs. A missing OBJECT
 	// seems to result in the typical HTTP error NOT FOUND a.k.a. the dreaded
 	// "404".
-	switch (status) {
+	switch (final) {
 	case ::S3StatusOK:
 	case ::S3StatusErrorNoSuchBucket:
 	case ::S3StatusErrorNoSuchKey:
@@ -54,10 +53,10 @@ void Action::responseCompleteCallback(Status status, const ::S3ErrorDetails * er
 		level = Logger::NOTICE; // Considered to be a platform issue.
 		break;
 	}
-	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
+	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, final, tostring(final));
 	show(errorDetails, level);
 	// Application is permitted to delete that object in the following method.
-	that->complete(errorDetails);
+	LifeCycle::instance().complete(*that, final, errorDetails);
 	// Not safe to reference object fields or methods after this point.
 	Logger::instance().log(level, "Action@%p: end\n", that);
 }
@@ -114,12 +113,14 @@ void Action::reset() {
 }
 
 Status Action::properties(const ::S3ResponseProperties * properties) {
-	LifeCycle::instance().properties(*this, properties);
 	return ::S3StatusOK;
 }
 
-void Action::complete(const ::S3ErrorDetails * errorDetails) {
-	LifeCycle::instance().complete(*this, errorDetails);
+void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
+	// We wait to after we call the complete handler to store the status. That
+	// allows the complete handler to see the Action has completed before any
+	// other threads polling on the status will notice it.
+	status = final;
 }
 
 }

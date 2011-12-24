@@ -11,8 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-struct S3ResponseProperties;
-struct S3ErrorDetails;
+#include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
 namespace diag {
@@ -114,9 +113,13 @@ public:
 	 * to call this method.
 	 *
 	 * @param action refers to the Action receiving the properties response.
-	 * @param properties points to a libs3 ::S3ResponseProperties structure.
+	 * @param responseProperties points to a libs3 ::S3ResponseProperties
+	 *        structure.
+	 * @return a status that if ::S3StatusOK allows the Action to continue or
+	 *         if anything else such as ::S3StatusAbortedByCallback immediately
+	 *         terminates the Action.
 	 */
-	virtual void properties(Action & action, const ::S3ResponseProperties * properties);
+	virtual Status properties(Action & action, const ::S3ResponseProperties * responseProperties);
 
 	/**
 	 * This method is called when libs3 completes executing the Action.
@@ -129,9 +132,11 @@ public:
 	 * perhaps based on its status.
 	 *
 	 * @param action refers to the Action being completed.
+	 * @param status is the final libs3 status for the Action. The status has
+	 *        not yet been updated in the Action.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
-	virtual void complete(Action & action, const ::S3ErrorDetails * errorDetails);
+	virtual void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
 
 	/**
 	 * This method is called when the Action destructor is called.
