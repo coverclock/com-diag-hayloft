@@ -103,9 +103,9 @@ TEST_F(ThreadTest, CriticalSectionRecursive) {
 	EXPECT_EQ(myMutex.status, 0);
 }
 
-struct ThreadWait : public Thread {
+struct ThreadJoin : public Thread {
 	int & variable;
-	explicit ThreadWait(int & shared)
+	explicit ThreadJoin(int & shared)
 	: variable(shared)
 	{
 		variable = 1;
@@ -119,18 +119,18 @@ struct ThreadWait : public Thread {
 
 TEST_F(ThreadTest, Idle) {
 	int variable = 0;
-	ThreadWait thread(variable);
+	ThreadJoin thread(variable);
 	EXPECT_EQ(variable, 1);
 	EXPECT_EQ(thread.notify(), 0);
 	EXPECT_TRUE(thread.notified());
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ(variable, 1);
 }
 
 TEST_F(ThreadTest, Join) {
 	int variable = 0;
 	EXPECT_EQ(variable, 0);
-	ThreadWait thread(variable);
+	ThreadJoin thread(variable);
 	EXPECT_EQ(variable, 1);
 	{
 		MyCriticalSection guard(myMutex);
@@ -145,31 +145,7 @@ TEST_F(ThreadTest, Join) {
 	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ(variable, 3);
 	variable = 4;
-	EXPECT_EQ(thread.wait(), 0);
-	EXPECT_EQ(variable, 4);
-	platform.yield(platform.frequency());
-	EXPECT_EQ(variable, 4);
-}
-
-TEST_F(ThreadTest, Wait) {
-	int variable = 0;
-	EXPECT_EQ(variable, 0);
-	ThreadWait thread(variable);
-	EXPECT_EQ(variable, 1);
-	{
-		MyCriticalSection guard(myMutex);
-		variable = 2;
-		EXPECT_EQ(variable, 2);
-		EXPECT_EQ(thread.start(), 0);
-		EXPECT_NE(thread.start(), 0);
-		EXPECT_EQ(variable, 2);
-		platform.yield(platform.frequency());
-		EXPECT_EQ(variable, 2);
-	}
-	EXPECT_EQ(thread.wait(), 0);
-	EXPECT_EQ(variable, 3);
-	variable = 4;
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ(variable, 4);
 	platform.yield(platform.frequency());
 	EXPECT_EQ(variable, 4);
@@ -206,7 +182,7 @@ TEST_F(ThreadTest, Cancel) {
 	EXPECT_FALSE(thread.cancelled());
 	EXPECT_EQ(thread.cancel(), 0);
 	EXPECT_TRUE(thread.cancelled());
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ(variable, 3);
 	variable = 4;
 	platform.yield(platform.frequency());
@@ -246,7 +222,7 @@ TEST_F(ThreadTest, Notify) {
 	EXPECT_FALSE(thread.notified());
 	EXPECT_EQ(thread.notify(), 0);
 	EXPECT_TRUE(thread.notified());
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ(variable, 3);
 	variable = 4;
 	platform.yield(platform.frequency());
@@ -267,31 +243,31 @@ TEST_F(ThreadTest, Exit) {
 	platform.yield(platform.frequency());
 }
 
-TEST_F(ThreadTest, ReturnWait) {
+TEST_F(ThreadTest, ReturnJoin) {
 	Thread thread;
 	EXPECT_EQ(thread.start(), 0);
 	platform.yield(platform.frequency());
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 }
 
-TEST_F(ThreadTest, ExitWait) {
+TEST_F(ThreadTest, ExitJoin) {
 	Thread thread;
 	EXPECT_EQ(thread.start(), 0);
 	platform.yield(platform.frequency());
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 }
 
-struct ThreadWaitReturn : public Thread {
+struct ThreadJoinReturn : public Thread {
 	virtual void * run() {
 		::com::diag::desperado::Platform::instance().yield(::com::diag::desperado::Platform::instance().frequency());
 		return 0;
 	}
 };
 
-TEST_F(ThreadTest, WaitReturn) {
-	ThreadWaitReturn thread;
+TEST_F(ThreadTest, JoinReturn) {
+	ThreadJoinReturn thread;
 	EXPECT_EQ(thread.start(), 0);
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 }
 
 static MyMutex sacrificialMutex;
@@ -318,9 +294,6 @@ TEST_F(ThreadTest, StackUnwind) {
 	EXPECT_FALSE(thread.cancelled());
 	EXPECT_EQ(thread.cancel(), 0);
 	EXPECT_TRUE(thread.cancelled());
-	EXPECT_EQ(thread.wait(), 0);
-	EXPECT_EQ((status = sacrificialMutex.attempt()), 0);
-	if (status == 0) { EXPECT_EQ(sacrificialMutex.end(), 0); }
 	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ((status = sacrificialMutex.attempt()), 0);
 	if (status == 0) { EXPECT_EQ(sacrificialMutex.end(), 0); }
@@ -361,7 +334,7 @@ TEST_F(ThreadTest, Uncancellable) {
 	EXPECT_FALSE(thread.notified());
 	EXPECT_EQ(thread.notify(), 0);
 	EXPECT_TRUE(thread.notified());
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 }
 
 struct ThreadInstance : public Thread {
@@ -385,7 +358,7 @@ TEST_F(ThreadTest, Instance) {
 	pthread_t id = 0;
 	ThreadInstance thread(&here, &id);
 	EXPECT_EQ(thread.start(), 0);
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 	ASSERT_NE(here, (Thread*)0);
 	EXPECT_EQ(here, &thread);
 	EXPECT_EQ(id, thread.getIdentity());
@@ -435,28 +408,64 @@ TEST_F(ThreadTest, Condition) {
 			conditionodd.signal();
 		}
 	}
-	EXPECT_EQ(thread.wait(), 0);
+	EXPECT_EQ(thread.join(), 0);
 	EXPECT_EQ(variable, 100);
 }
 
-static void * function(void * context) {
+static void * functionreturns(void * context) {
 	*((int *)context) = 1;
 	return context;
 }
 
-TEST_F(ThreadTest, Function) {
+TEST_F(ThreadTest, FunctionReturn) {
+	void * result = 0;
 	int variable = 0;
 	Thread thread;
 	EXPECT_EQ(variable, 0);
 	EXPECT_NE(thread.getFinal(), &variable);
-	EXPECT_EQ(thread.start(function, &variable), 0);
-	EXPECT_EQ(thread.wait(), 0);
-	EXPECT_EQ(variable, 1);
-	void * result = 0;
+	EXPECT_EQ(thread.start(functionreturns, &variable), 0);
 	EXPECT_EQ(thread.join(result), 0);
-	EXPECT_NE(result, (void *)0);
-	EXPECT_EQ(result, &variable);
+	EXPECT_EQ(variable, 1);
 	EXPECT_EQ(thread.getFinal(), &variable);
+	EXPECT_EQ(result, &variable);
+}
+
+static void * functionexits(void * context) {
+	*((int *)context) = 1;
+	Thread::exit(context);
+	return 0;
+}
+
+TEST_F(ThreadTest, FunctionExit) {
+	void * result = 0;
+	int variable = 0;
+	Thread thread;
+	EXPECT_EQ(variable, 0);
+	EXPECT_NE(thread.getFinal(), &variable);
+	EXPECT_EQ(thread.start(functionexits, &variable), 0);
+	EXPECT_EQ(thread.join(result), 0);
+	EXPECT_EQ(variable, 1);
+	EXPECT_EQ(thread.getFinal(), &variable);
+	EXPECT_EQ(result, &variable);
+}
+
+static void * functionpexits(void * context) {
+	*((int *)context) = 1;
+	::pthread_exit(context);
+	return 0;
+}
+
+TEST_F(ThreadTest, FunctionPExit) {
+	void * result = 0;
+	int variable = 0;
+	Thread thread;
+	EXPECT_EQ(variable, 0);
+	EXPECT_NE(thread.getFinal(), &variable);
+	EXPECT_EQ(thread.start(functionpexits, &variable), 0);
+	EXPECT_EQ(thread.join(result), 0);
+	EXPECT_EQ(variable, 1);
+	EXPECT_EQ(thread.getFinal(), &variable);
+	EXPECT_EQ(result, &variable);
 }
 
 TEST_F(ThreadTest, MemoryBarrier) {

@@ -22,13 +22,19 @@ void * Thread::dontcare = 0;
 
 pthread_key_t Thread::key;
 
-Thread Thread::main(pthread_self());
+Thread Thread::main(::pthread_self());
 
 int Thread::handle = Thread::setup();
 
 /*******************************************************************************
  * C ABI PROXY FUNCTIONS
  ******************************************************************************/
+
+// These functions probably aren't necessary. But strictly speaking, class
+// (static) methods in C++ don't necessarily have C linkage, and POSIX Threads
+// is an API all based on C linkage. So the only really reliable and portable
+// way to hook up C++ with POSIX Threads is to place a thin layer of C linkage
+// functions in between the two.
 
 extern "C" {
 
@@ -102,6 +108,11 @@ void Thread::yield() {
 }
 
 void Thread::exit(void * result) {
+	Thread * that = &(Thread::instance());
+	::pthread_mutex_lock(&that->mutex);
+	pthread_cleanup_push(cleanup_mutex_proxy, that);
+	that->final = result;
+	pthread_cleanup_pop(!0);
 	::pthread_exit(result);
 }
 
@@ -122,9 +133,10 @@ Thread::Thread(::pthread_t id)
 : running(true)
 , notifying(false)
 , canceling(false)
+, joining(false)
 , function(0)
 , context(0)
-, final(reinterpret_cast<void *>(-1))
+, final(reinterpret_cast<void *>(~0))
 , identity(id)
 {
     initialize();
@@ -138,9 +150,10 @@ Thread::Thread()
 : running(false)
 , notifying(false)
 , canceling(false)
+, joining(true)
 , function(0)
 , context(0)
-, final(reinterpret_cast<void *>(-1))
+, final(reinterpret_cast<void *>(~0))
 , identity(pthread_self())
 {
     initialize();
@@ -171,7 +184,7 @@ Thread::~Thread() {
 	::pthread_cond_destroy(&condition);
 	::pthread_mutex_destroy(&mutex);
 	if (self) {
-		::pthread_exit(reinterpret_cast<void*>(-1));
+		::pthread_exit(reinterpret_cast<void*>(~0));
 	}
 }
 
@@ -182,11 +195,15 @@ int Thread::start(Function & implementation, void * data) {
 	if (!running) {
 		running = true;
 		notifying = false;
+		joining = false;
 		function = &implementation;
 		context = data;
 		final = reinterpret_cast<void *>(~0);
 		rc = ::pthread_create(&identity, 0, start_routine_proxy, this);
-		if (rc != 0) { running = false; }
+		if (rc != 0) {
+			running = false;
+			joining = true;
+		}
 	} else {
 		rc = EBUSY;
 	}
@@ -211,16 +228,35 @@ bool Thread::notified() {
 	return result;
 }
 
-int Thread::wait() {
+int Thread::join(void * & result) {
 	int rc;
 	::pthread_mutex_lock(&mutex);
 	pthread_cleanup_push(cleanup_mutex_proxy, this);
 	if (!running) {
 		rc = 0;
-	} else if (!::pthread_equal(pthread_self(), identity)) {
-		rc = ::pthread_cond_wait(&condition, &mutex); // CANCELLATION POINT
-	} else {
+	} else if (::pthread_equal(pthread_self(), identity)) {
 		rc = EBUSY;
+	} else if (joining) {
+		rc = ::pthread_cond_wait(&condition, &mutex);
+	} else {
+		// The first thread unblocked by the terminating thread does an
+		// actual POSIX thread join operation. Some thread implementations
+		// depend on this to clean up underlying resources in the platform
+		// before the parent process terminates. We save the value given
+		// to us by the POSIX thread join; for some code paths, it's the
+		// only way to get the final value of the thread of control
+		// associated with this Thread. It also guarantees that that thread
+		// of control completely terminated.
+		rc = ::pthread_cond_wait(&condition, &mutex);
+		if (rc == 0) {
+			rc = ::pthread_join(identity, &final);
+			if (rc == 0) {
+				joining = true;
+			}
+		}
+	}
+	if (rc == 0) {
+		result = final;
 	}
 	pthread_cleanup_pop(!0);
 	return rc;
@@ -233,11 +269,6 @@ void * Thread::run() {
 /*******************************************************************************
  * DEPRECATED INSTANCE METHODS
  ******************************************************************************/
-
-int Thread::join(void * & result) {
-	// Note that blocking on join while inside the Thread mutex would deadlock.
-	return ::pthread_join(identity, &result);
-}
 
 void Thread::cancellable() {
 	::pthread_testcancel();

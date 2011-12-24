@@ -34,10 +34,10 @@ public:
 	typedef void * (Function)(void * data);
 
 	/**
-	 * Returns an reference to the Thread that represents the calling thread
+	 * Returns a reference to the Thread that represents the calling thread
 	 * of control. Hayloft guarantees that all calls to this class method
-	 * will return the same Thread object for the same calling thread of
-	 * control.
+	 * will return the same Thread object when called by the same calling
+	 * thread of control.
 	 *
 	 * @return a reference to the Thread representing the calling thread.
 	 */
@@ -98,6 +98,8 @@ protected:
 
 	bool canceling;
 
+	bool joining;
+
 	Function * function;
 
 	void * context;
@@ -138,18 +140,26 @@ public:
 	virtual int start(Function & implementation = empty_function, void * data = 0);
 
 	/**
-	 * Wait for the thread of control associated with this Thread to complete.
-	 * Multiple threads of control can wait on the same Thread. It is an error
-	 * for a thread of control to wait on itself.
+	 * Wait for the thread of control associated with this Thread to terminate.
+	 * Unlike the POSIX thread join, multiple threads of control can join with
+	 * the same Thread, even if the thread of control associated with this
+	 * Thread isn't running, or has never been started. It is however an error
+	 * for a thread of control to join with itself. The first thread of control
+	 * to become unblocked in this method does an actual POSIX join on the
+	 * terminating Thread; some thread implementations use this to clean up
+	 * resources in the underlying platform before the parent process
+	 * terminates.
 	 *
+	 * @param result refers to an optional variable into which the final value
+	 *        of the thread of control associated with this Thread.
 	 * @return 0 for success or an error number if an error occurred.
 	 */
-	virtual int wait();
+	virtual int join(void * & result = dontcare);
 
 	/**
 	 * Notify the Thread. This merely sets the a flag in this Thread which can
 	 * be interrogated by the notified method. Once a Thread is notified, it
-	 * remains notified until it completes and is re-started.
+	 * remains notified until it terminates and is re-started.
 	 *
 	 * @return 0 for success or an error number if an error occurred.
 	 */
@@ -164,17 +174,17 @@ public:
 
 	/**
 	 * Get the POSIX thread identifier for the thread of control associated with
-	 * this Thread. This value has no meaning if the thread of control has
-	 * never been started; otherwise the returned value is undefined.
+	 * this Thread. This value is undefined if the thread of control has
+	 * never been started.
 	 *
 	 * @return the POSIX thread identifier associated with this Thread.
 	 */
 	::pthread_t getIdentity() { return identity; }
 
 	/**
-	 * Get the final value of the thread. This value has no meaning until the
-	 * thread of control completes and has been joined. Otherwise the returned
-	 * value is unrefined.
+	 * Get the final value of the thread of control associated with this Thread.
+	 * This value is undefined until the thread of control has terminated and,
+	 * depending on how the thread terminated, has been joined.
 	 *
 	 * @return the final value of the thread of control.
 	 */
@@ -244,22 +254,6 @@ public:
 	 * @return true if this Thread has been cancelled, false otherwise.
 	 */
 	virtual bool cancelled();
-
-	/**
-	 * Block the calling thread of control until the thread of control
-	 * associated with this Thread has completed or been canceled. POSIX
-	 * allows only a single thread of control to join with another thread.
-	 * Calling join on a Thread that has never been started is likely to
-	 * crash or hang the application (and there is no reliable way to fix this).
-	 * Some POSIX implementations encourage this call to clean up system
-	 * resources associated with a thread. For others it is merely a
-	 * conveniences. This method is provided for completeness.
-	 *
-	 * @param result references a value result into which the final value
-	 *        of the thread of control is stored.
-	 * @return 0 for success or an error number if an error occurred.
-	 */
-	virtual int join(void * & result = dontcare);
 
 };
 
