@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=2
-MINOR=4
+MINOR=5
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -180,6 +180,7 @@ MANIFEST_O=\
  s3/BucketDelete.o \
  s3/BucketHead.o \
  s3/BucketManifest.o \
+ s3/Complex.o \
  s3/Conditions.o \
  s3/Container.o \
  s3/Context.o \

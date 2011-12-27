@@ -78,7 +78,7 @@ GrantGet::~GrantGet() {
 }
 
 void GrantGet::initialize() {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 	ownerid[0] = '\0';
 	ownerdisplayname[0] = '\0';
 	handler.propertiesCallback = Grant::handler.propertiesCallback;
@@ -86,7 +86,7 @@ void GrantGet::initialize() {
 }
 
 void GrantGet::execute() {
-	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(BUSY);
 	count = 0;
 	delete [] grants;
 	grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];

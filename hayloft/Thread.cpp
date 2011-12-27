@@ -8,6 +8,7 @@
  */
 
 #include "com/diag/hayloft/Thread.h"
+#include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/errno.h"
 
 namespace com {
@@ -86,6 +87,7 @@ void * Thread::start_routine(void * arg) {
 	::pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &dontcare);
 	::pthread_setspecific(key, that);
 	pthread_cleanup_push(cleanup_thread_proxy, that);
+	Logger::instance().debug("Thread@%p{0x%lx}: run{0x%lx}\n", that, pthread_self(), that->identity);
 	that->final = that->run();
 	pthread_cleanup_pop(!0);
 	return that->final;
@@ -200,7 +202,9 @@ int Thread::start(Function & implementation, void * data) {
 		context = data;
 		final = reinterpret_cast<void *>(~0);
 		rc = ::pthread_create(&identity, 0, start_routine_proxy, this);
-		if (rc != 0) {
+		if (rc == 0) {
+			Logger::instance().debug("Thread@%p{0x%lx}: start{0x%lx}\n", this, pthread_self(), identity);
+		} else {
 			running = false;
 			joining = true;
 		}
@@ -216,6 +220,7 @@ int Thread::notify() {
 	pthread_cleanup_push(cleanup_mutex_proxy, this);
 	notifying = true;
 	pthread_cleanup_pop(!0);
+	Logger::instance().debug("Thread@%p{0x%lx}: notify{0x%lx}\n", this, pthread_self(), identity);
 	return 0;
 }
 
@@ -252,6 +257,7 @@ int Thread::join(void * & result) {
 			rc = ::pthread_join(identity, &final);
 			if (rc == 0) {
 				joining = true;
+				Logger::instance().debug("Thread@%p{0x%lx}: join{0x%lx}\n", this, pthread_self(), identity);
 			}
 		}
 	}
@@ -283,6 +289,9 @@ int Thread::cancel() {
 	} else if (!::pthread_equal(pthread_self(), identity)) {
 		canceling = true;
 		rc = ::pthread_cancel(identity);
+		if (rc == 0) {
+			Logger::instance().debug("Thread@%p{0x%lx}: cancel{0x%lx}\n", this, pthread_self(), identity);
+		}
 	} else {
 		rc = EBUSY;
 	}

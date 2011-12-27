@@ -57,7 +57,7 @@ ServiceManifest::~ServiceManifest() {
 }
 
 void ServiceManifest::initialize() {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Service::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = Service::handler.completeCallback;
@@ -65,7 +65,7 @@ void ServiceManifest::initialize() {
 }
 
 void ServiceManifest::execute() {
-	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY);
 	Logger::instance().debug("ServiceManifest@%p: begin\n", this);
 	Service::execute();
 	::S3_list_service(
