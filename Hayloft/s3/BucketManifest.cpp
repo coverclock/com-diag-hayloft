@@ -134,7 +134,7 @@ BucketManifest::~BucketManifest() {
 }
 
 void BucketManifest::initialize() {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("Bucket@%p: prefix=\"%s\"\n", this, prefix.c_str());
@@ -151,7 +151,7 @@ void BucketManifest::initialize() {
 void BucketManifest::execute() {
 	Manifest::size_type size = manifest.size();
 	if (maximum > size) {
-		status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+		status = static_cast<Status>(BUSY);
 		Logger::instance().debug("BucketManifest@%p: %s\n", this, (size == 0) ? "begin" : "continue");
 		Bucket::execute();
 		::S3_list_bucket(

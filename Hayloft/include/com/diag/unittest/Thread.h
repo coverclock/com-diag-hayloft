@@ -472,6 +472,38 @@ TEST_F(ThreadTest, MemoryBarrier) {
 	MemoryBarrier fence;
 }
 
+static MyMutex monitormutex;
+static Condition monitorcondition;
+
+struct ThreadMonitor : public Thread {
+	int & variable;
+	explicit ThreadMonitor(int & shared)
+	: variable(shared)
+	{}
+	virtual void * run() {
+		::com::diag::desperado::Platform::instance().yield(::com::diag::desperado::Platform::instance().frequency());
+		{
+			MyCriticalSection guard(monitormutex);
+			monitorcondition.signal();
+			if (variable == 0) { variable = 1; }
+		}
+		return 0;
+	}
+};
+
+TEST_F(ThreadTest, Monitor) {
+	int variable = 0;
+	ThreadMonitor thread(variable);
+	EXPECT_EQ(thread.start(), 0);
+	{
+		MyCriticalSection guard(monitormutex);
+		monitorcondition.wait(monitormutex);
+		if (variable == 0) { variable = 2; }
+	}
+	EXPECT_EQ(thread.join(), 0);
+	Logger::instance().configuration("ThreadTest.Monitor: looks like a %s monitor to me.\n", (variable == 1) ? "Mesa" : (variable == 2) ? "Hoare" : "Unknown");
+}
+
 }
 }
 }

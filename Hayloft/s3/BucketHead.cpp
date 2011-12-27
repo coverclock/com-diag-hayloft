@@ -55,14 +55,14 @@ BucketHead::~BucketHead() {
 }
 
 void BucketHead::initialize() {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 	constraint[0] = '\0';
 	handler.propertiesCallback = Bucket::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;;
 }
 
 void BucketHead::execute() {
-	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY);
 	Logger::instance().debug("BucketHead@%p: begin\n", this);
 	Bucket::execute();
 	::S3_test_bucket(

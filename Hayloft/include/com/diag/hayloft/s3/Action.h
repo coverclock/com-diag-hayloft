@@ -40,17 +40,25 @@ public:
 
 	/**
 	 * This is a fake libs3 ::S3Status value that means the Action has been
+	 * constructed but has not yet been started.
+	 */
+	static const int IDLE = intmaxof(Status);
+
+	/**
+	 * This is a fake libs3 ::S3Status value that means the Action has been
 	 * started and is being executed in the background by a separate libs3
 	 * thread. Most methods which mutate an Action are ignored when the Action
 	 * is in this state.
 	 */
-	static const int BUSY = intmaxof(Status);
+	static const int BUSY = intmaxof(Status) - 1;
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has been
-	 * constructed but has never been started.
+	 * This is a fake libs3 ::S3Status value that means the Action has finished
+	 * running but has not yet been completed. This is a transitional state
+	 * used mostly when Action processing is being done by a background thread.
+	 * Actions in this state can be re-started.
 	 */
-	static const int IDLE = intmaxof(Status) - 1;
+	static const int PENDING = intmaxof(Status) - 2;
 
 private:
 
@@ -119,7 +127,7 @@ public:
 	 * Return true if this Action is neither IDLE nor BUSY.
 	 * @return true if this Action is neither IDLE nor BUSY.
 	 */
-	operator bool() const { Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY)); }
+	operator bool() const { Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY) && ((temporary != PENDING))); }
 
 	/**
 	 * Return true if this Action is IDLE.
@@ -244,18 +252,10 @@ protected:
 	/**
 	 * This method is called when a Properties response is returned from S3.
 	 *
-	 * The default implementation in the base class calls the corresponding
-	 * LifeCycle method. The default implementation of the corresponding
-	 * LifeCycle method does nothing, but the default implementation may be
-	 * replaced in order to implement more complex Action life cycle policies.
-	 * Derived classes may override this method but is so doing the designer
-	 * must decide whether to call this base class method thereby calling the
-	 * LifeCycle method implicitly, call the LifeCycle method explicitly, or
-	 * not call the LifeCycle method at all.
-	 *
-	 * If the overriding method returns a status other than ::S3StatusOK (like
-	 * ::S3StatusAbortedByCallback) this Action will be immediately terminated
-	 * and completed with that status.
+	 * The default implementation in the base class returns ::S3StatusOK to
+	 * allow the Action to continue. If the overriding method returns a status
+	 * other than ::S3StatusOK (like ::S3StatusAbortedByCallback) this Action
+	 * will be immediately terminated and completed with that status.
 	 *
 	 * @param responseProperties points to a libs3 ::S3ResponseProperties
 	 *        structure.
@@ -268,18 +268,14 @@ protected:
 	/**
 	 * This method is called when libs3 completes executing the Action.
 	 *
-	 * The default implementation in the base class calls the corresponding
-	 * LifeCycle method. The default implementation of the corresponding
-	 * LifeCycle method does nothing, but the default implementation may be
-	 * replaced in order to implement more complex Action life cycle policies.
-	 * Derived classes may override this method but is so doing the designer
-	 * must decide whether to call this base class method thereby calling the
-	 * LifeCycle method implicitly, call the LifeCycle method explicitly, or
-	 * not call the LifeCycle method at all.
-	 *
-	 * The overriding method can delete this Action providing the application
-	 * is otherwise designed for it to do so. The default behavior of Hayloft
-	 * is to not reference this Action following this call.
+	 * The default implementation in the base class stores the status in the
+	 * status field of this Action. This is the responsibility of this method
+	 * for several reasons. The overriding method is allowed to delete this
+	 * Action (providing the application is otherwise designed for it to do so)
+	 * so Hayloft guarantees it will make no further reference to it following
+	 * this call. The overriding method is allowed to restart this Action, so
+	 * the status is not stored so that concurrent threads polling for the
+	 * status of this Action will not see that it has completed.
 	 *
 	 * @param final is the final libs3 status. It is the responsibility of this
 	 *              method to store the status in the status field of this

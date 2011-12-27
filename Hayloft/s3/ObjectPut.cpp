@@ -187,7 +187,7 @@ ObjectPut::~ObjectPut() {
 }
 
 void ObjectPut::initialize(const Properties::Metadata & settings) {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 	std::memset(&properties, 0, sizeof(properties));
 	properties.contentType = set(type);
 	properties.md5 = set(checksum);
@@ -218,7 +218,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 }
 
 void ObjectPut::execute() {
-	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY);
 	Logger::instance().debug("ObjectPut@%p: begin\n", this);
 	Object::execute();
 	::S3_put_object(

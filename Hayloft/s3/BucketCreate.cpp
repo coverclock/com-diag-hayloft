@@ -48,11 +48,11 @@ BucketCreate::~BucketCreate() {
 }
 
 void BucketCreate::initialize() {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 }
 
 void BucketCreate::execute() {
-	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(BUSY)?
+	status = static_cast<Status>(BUSY);
 	Logger::instance().debug("BucketCreate@%p: begin\n", this);
 	Bucket::execute();
 	::S3_create_bucket(

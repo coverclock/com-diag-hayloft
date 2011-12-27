@@ -53,7 +53,7 @@ LogSet::~LogSet() {
 }
 
 void LogSet::initialize() {
-	status = static_cast<Status>(IDLE); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(IDLE);
 	handler.propertiesCallback = Grant::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
 	Logger & logger = Logger::instance();
@@ -64,7 +64,7 @@ void LogSet::initialize() {
 }
 
 void LogSet::execute() {
-	status = static_cast<Status>(BUSY); // Why not static_cast<::S3Status>(IDLE)?
+	status = static_cast<Status>(BUSY);
 	delete [] grants;
 	grants = generate(count);
 	show(grants, count, Logger::DEBUG);

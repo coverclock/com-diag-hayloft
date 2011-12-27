@@ -35,13 +35,15 @@ Status Action::responsePropertiesCallback(const ::S3ResponseProperties * respons
 void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
 	// An ::S3StatusInterrupted means someone destroyed our request context.
-	// We are now a synchronous Action.
-	if (final == ::S3StatusInterrupted) { that->pending = 0; }
-	Logger::Level level;
+	// We are henceforth a synchronous Action.
+	if (final == ::S3StatusInterrupted) {
+		that->pending = 0;
+	}
 	// I've never seen ::S3StatusErrorNoSuchKey in response to a GET or a HEAD
 	// so I'm not sure under what circumstances it occurs. A missing OBJECT
 	// seems to result in the typical HTTP error NOT FOUND a.k.a. the dreaded
 	// "404".
+	Logger::Level level;
 	switch (final) {
 	case ::S3StatusOK:
 	case ::S3StatusErrorNoSuchBucket:
@@ -55,9 +57,18 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	}
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, final, tostring(final));
 	show(errorDetails, level);
-	// Application is permitted to delete that object in the following method.
+	// This is a transitional state after the Action has completed and before
+	// the final state is assigned by the application. This provides a state
+	// from which the application can safely delete or re-start the Action but
+	// from which Action completion is not visible to other threads polling on
+	// the status of the Action.
+	that->status = static_cast<Status>(PENDING);
+	// The application is permitted to delete or re-start the Action in the
+	// LifeCycle method or in the Action method called by the LifeCycle
+	// method.
 	LifeCycle::instance().complete(*that, final, errorDetails);
-	// Not safe to reference object fields or methods after this point.
+	// Not safe to reference object fields or methods after this point since
+	// the application is allowed to have deleted the Action.
 	Logger::instance().log(level, "Action@%p: end\n", that);
 }
 
@@ -85,7 +96,9 @@ Action::~Action() {
 }
 
 void Action::initialize() {
-	if (pending != 0) { Logger::instance().debug("Action@%p: pending=%p\n", this, pending); }
+	if (pending != 0) {
+		Logger::instance().debug("Action@%p: pending=%p\n", this, pending);
+	}
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
