@@ -194,7 +194,7 @@ TEST_F(LogTest, SetGetApplication) {
 	LogSet logset(bucket, multiplex, log, PREFIX);
 	ASSERT_TRUE(complete(logset));
 	Fibonacci factor;
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
 	for (int ii = 0; ii < 10; ++ii) {
@@ -202,7 +202,7 @@ TEST_F(LogTest, SetGetApplication) {
 		multiplex.complete();
 		if (!put.isRetryable()) { break; }
 		platform.yield(factor * platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		put.reset(input, inputsize);
 	}

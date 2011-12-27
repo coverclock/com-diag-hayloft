@@ -46,14 +46,14 @@ TEST_F(GrantTest, GetSynchronous) {
 	GrantGet grantgetbucket(bucketcreate);
 	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket);
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput.reset(input, inputsize);
 		objectput.start();
@@ -78,7 +78,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 	GrantGet grantgetbucket(bucketcreate, multiplex);
 	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket);
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize);
 	objectput.start();
@@ -87,7 +87,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput.reset(input, inputsize);
 		objectput.start();
@@ -116,14 +116,14 @@ TEST_F(GrantTest, GetPublicRead) {
 	show(grantgetbucket);
 	Properties properties;
 	properties.setAccess(access);
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput.reset(input, inputsize);
 		objectput.start();
@@ -146,14 +146,14 @@ TEST_F(GrantTest, SetGet) {
 	BucketCreate bucketcreate(BUCKET);
 	ASSERT_TRUE(complete(bucketcreate));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput.reset(input, inputsize);
 		objectput.start();
