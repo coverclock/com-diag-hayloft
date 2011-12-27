@@ -237,23 +237,25 @@ int Thread::join(void * & result) {
 	int rc;
 	::pthread_mutex_lock(&mutex);
 	pthread_cleanup_push(cleanup_mutex_proxy, this);
+	// It's okay to invoke a Hayloft Thread join even if the thread of control
+	// is not running. It is not okay for a thread of control to try to join
+	// with itself.
 	if (!running) {
 		rc = 0;
 	} else if (::pthread_equal(pthread_self(), identity)) {
 		rc = EBUSY;
-	} else if (joining) {
-		rc = ::pthread_cond_wait(&condition, &mutex);
 	} else {
-		// The first thread unblocked by the terminating thread does an
-		// actual POSIX thread join operation. Some thread implementations
-		// depend on this to clean up underlying resources in the platform
-		// before the parent process terminates. We save the value given
-		// to us by the POSIX thread join; for some code paths, it's the
-		// only way to get the final value of the thread of control
-		// associated with this Thread. It also guarantees that that thread
-		// of control completely terminated.
 		rc = ::pthread_cond_wait(&condition, &mutex);
-		if (rc == 0) {
+	}
+	// The first thread unblocked by the terminating thread does an actual
+	// POSIX thread join operation. Some thread implementations depend on this
+	// to clean up underlying resources in the platform before the parent
+	// process terminates. We save the value given to us by the POSIX thread
+	// join; for some code paths, it's the only way to get the final value of
+	// the thread of control associated with this Thread. It also guarantees
+	// that the thread of control has completely terminated from a POSIX POV.
+	if (rc == 0) {
+		if (!joining) {
 			rc = ::pthread_join(identity, &final);
 			if (rc == 0) {
 				joining = true;
@@ -261,6 +263,8 @@ int Thread::join(void * & result) {
 			}
 		}
 	}
+	// We have to check the return code again because it could have changed if
+	// the join failed. The final value is only valid if everything succeeded.
 	if (rc == 0) {
 		result = final;
 	}

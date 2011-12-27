@@ -21,6 +21,8 @@
 #include "com/diag/hayloft/MemoryBarrier.h"
 #include "com/diag/desperado/string.h"
 #include "com/diag/desperado/errno.h"
+#include "com/diag/desperado/target.h"
+#include "com/diag/desperado/generics.h"
 #include <pthread.h>
 
 namespace com {
@@ -502,6 +504,64 @@ TEST_F(ThreadTest, Monitor) {
 	}
 	EXPECT_EQ(thread.join(), 0);
 	Logger::instance().configuration("ThreadTest.Monitor: looks like a %s monitor to me.\n", (variable == 1) ? "Mesa" : (variable == 2) ? "Hoare" : "Unknown");
+}
+
+static MyMutex parallelmutex;
+static Condition parallelcondition;
+
+struct ThreadParallel : public Thread {
+	uint64_t & enabled;
+	uint64_t mask;
+	uint64_t & variable;
+	explicit ThreadParallel(uint64_t & ee, int nn, uint64_t & vv)
+	: enabled(ee)
+	, mask(1ULL << nn)
+	, variable(vv)
+	{}
+	virtual void * run() {
+		MyCriticalSection guard(parallelmutex);
+		while ((enabled & mask) == 0) {
+			parallelcondition.wait(parallelmutex);
+		}
+		if ((variable & mask) == 0) {
+			variable |= mask;
+		} else {
+			variable &= ~mask;
+		}
+		return 0;
+	}
+};
+
+TEST_F(ThreadTest, Parallel) {
+	uint64_t enabled = 0;
+	uint64_t variable = 0;
+	ThreadParallel * thread[64];
+	for (int index = 0; index < countof(thread); ++index) {
+		thread[index] = new ThreadParallel(enabled, index, variable);
+		ASSERT_NE(thread[index], (Thread *)0);
+	}
+	EXPECT_EQ(variable, 0ULL);
+	{
+		MyCriticalSection guard(parallelmutex);
+		for (int index = 0; index < countof(thread); ++index) {
+			EXPECT_EQ(thread[index]->start(), 0);
+		}
+	}
+	EXPECT_EQ(variable, 0ULL);
+	{
+		for (int index = 0; index < countof(thread); ++index) {
+			MyCriticalSection guard(parallelmutex);
+			enabled |= 1ULL << index;
+			EXPECT_EQ(parallelcondition.signal(), 0);
+		}
+	}
+	for (int index = 0; index < countof(thread); ++index) {
+		EXPECT_EQ(thread[index]->join(), 0);
+	}
+	EXPECT_EQ(variable, 0xffffffffffffffffULL);
+	for (int index = 0; index < countof(thread); ++index) {
+		delete thread[index];
+	}
 }
 
 }
