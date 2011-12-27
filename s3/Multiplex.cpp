@@ -55,7 +55,7 @@ void Multiplex::initialize() {
 
 int Multiplex::complete() {
 	int rc = 0;
-	S3Status status = ::S3_runall_request_context(pending);
+	Status status = ::S3_runall_request_context(pending);
 	if (status != S3StatusOK) {
 		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 		rc = (::S3_status_is_retryable(status) != 0) ? RETRY : ERROR;
@@ -67,7 +67,7 @@ int Multiplex::iterate(int & actions /* static dontcare */) {
 	Logger & logger = Logger::instance();
 	int rc = 0;
 	int count = 0;
-	S3Status status = ::S3_runonce_request_context(pending, &count);
+	Status status = ::S3_runonce_request_context(pending, &count);
 	if (status != S3StatusOK) {
 		logger.error("Multiplex@%p: S3_runonce_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 		rc |= (::S3_status_is_retryable(status) != 0) ? RETRY : ERROR;

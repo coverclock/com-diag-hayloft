@@ -48,11 +48,11 @@ ObjectDelete::~ObjectDelete() {
 }
 
 void ObjectDelete::initialize() {
-	status = static_cast<Status>(IDLE);
+	state(static_cast<Status>(IDLE));
 }
 
 void ObjectDelete::execute() {
-	status = static_cast<Status>(BUSY);
+	state(static_cast<Status>(BUSY));
 	Logger::instance().debug("ObjectDelete@%p: begin\n", this);
 	Object::execute();
 	::S3_delete_object(

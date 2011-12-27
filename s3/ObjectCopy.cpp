@@ -95,7 +95,7 @@ ObjectCopy::~ObjectCopy() {
 }
 
 void ObjectCopy::initialize(const Properties::Metadata & settings) {
-	status = static_cast<Status>(IDLE);
+	state(static_cast<Status>(IDLE));
 	Logger & logger = Logger::instance();
 	if (logger.isEnabled(Logger::DEBUG)) {
 		logger.debug("ObjectCopy@%p: tocanonical=\"%s\"\n", this, tocanonical.c_str());
@@ -130,7 +130,7 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 }
 
 void ObjectCopy::execute() {
-	status = static_cast<Status>(BUSY);
+	state(static_cast<Status>(BUSY));
 	Logger::instance().debug("ObjectCopy@%p: begin\n", this);
 	Object::execute();
 	::S3_copy_object(

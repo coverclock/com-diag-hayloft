@@ -173,7 +173,7 @@ ObjectGet::~ObjectGet() {
 }
 
 void ObjectGet::initialize() {
-	status = static_cast<Status>(IDLE);
+	state(static_cast<Status>(IDLE));
 	std::memset(&conditions, 0, sizeof(conditions));
 	conditions.ifModifiedSince = since;
 	conditions.ifNotModifiedSince = notsince;
@@ -187,7 +187,7 @@ void ObjectGet::initialize() {
 }
 
 void ObjectGet::execute() {
-	status = static_cast<Status>(BUSY);
+	state(static_cast<Status>(BUSY));
 	Logger::instance().debug("ObjectGet@%p: begin\n", this);
 	Object::execute();
 	::S3_get_object(

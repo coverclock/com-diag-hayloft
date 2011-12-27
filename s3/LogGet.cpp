@@ -61,7 +61,7 @@ LogGet::~LogGet() {
 }
 
 void LogGet::initialize() {
-	status = static_cast<Status>(IDLE);
+	state(static_cast<Status>(IDLE));
 	targetbucket[0] = '\0';
 	targetprefix[0] = '\0';
 	handler.propertiesCallback = Log::handler.propertiesCallback;
@@ -69,7 +69,7 @@ void LogGet::initialize() {
 }
 
 void LogGet::execute() {
-	status = static_cast<Status>(BUSY);
+	state(static_cast<Status>(BUSY));
 	count = 0;
 	delete [] grants;
 	grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];
