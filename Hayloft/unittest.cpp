@@ -36,7 +36,7 @@
 // appears to be a known issue in libcrypto in which uninitialized memory is
 // deliberately used while trying to increase the size of the entropy pool.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/sizeof.h"
 #include "com/diag/unittest/s3/Endpoint.h"
 #include "com/diag/unittest/s3/Session.h"
@@ -58,7 +58,7 @@
 
 // Unit tests that use S3, perhaps more properly called functional tests.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Bucket.h"
 #include "com/diag/unittest/s3/Object.h"
 #include "com/diag/unittest/s3/convergence.h"

@@ -33,15 +33,15 @@ using namespace ::com::diag::hayloft;
 typedef Fixture SizeTest;
 
 TEST_F(SizeTest, Size) {
-	Size namesize = size(__FILE__);
+	Size namesize = size("unittest.txt");
 	EXPECT_TRUE(namesize > 0);
 	/**/
-	int fd = ::open(__FILE__, O_RDONLY);
+	int fd = ::open("unittest.txt", O_RDONLY);
 	EXPECT_TRUE(fd >= 0);
 	Size fdsize = size(fd);
 	EXPECT_EQ(fdsize, namesize);
 	/**/
-	FILE * fp = ::fopen(__FILE__, "r");
+	FILE * fp = ::fopen("unittest.txt", "r");
 	EXPECT_TRUE(fp != 0);
 	Size fpsize = size(fp);
 	EXPECT_EQ(fpsize, namesize);
@@ -50,7 +50,7 @@ TEST_F(SizeTest, Size) {
 	Size descriptorsize = size(descriptorinput);
 	EXPECT_EQ(descriptorsize, namesize);
 	/**/
-	::com::diag::desperado::PathInput pathinput(__FILE__);
+	::com::diag::desperado::PathInput pathinput("unittest.txt");
 	Size pathsize = size(pathinput);
 	EXPECT_EQ(pathsize, namesize);
 	/**/

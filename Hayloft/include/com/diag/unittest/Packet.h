@@ -797,41 +797,57 @@ TEST_F(PacketInputOutputTest, Character) {
 	EXPECT_EQ(std::memcmp(data, buffer, sizeof(data)), 0);
 }
 
-static const char * SONNET99[] = {
-	"SONNET 99\n",
-	"Love is not all: it is not meat nor drink\n",
-	"Nor slumber nor a roof against the rain;\n",
-	"Nor yet a floating spar to men that sink\n",
-	"And rise and sink and rise and sink again;\n",
-	"Love can not fill the thickened lung with breath,\n",
-	"Nor clean the blood, nor set the fractured bone;\n",
-	"Yet many a man is making friends with death\n",
-	"Even as I speak, for lack of love alone.\n",
-	"It well may be that in a difficult hour,\n",
-	"Pinned down by pain and moaning for release,\n",
-	"Or nagged by want past resolution's power,\n",
-	"I might be driven to sell your love for peace,\n",
-	"Or trade the memory of this night for food.\n",
-	"It well may be. I do not think I would.\n",
-	"-- Edna St. Vincent Millay"
+static const char * HENRYV[] = {
+	"This day is call'd the feast of Crispian.\n",
+	"He that outlives this day, and comes safe home,\n",
+	"Will stand a tip-toe when this day is named,\n",
+	"And rouse him at the name of Crispian.\n",
+	"He that shall live this day, and see old age,\n",
+	"Will yearly on the vigil feast his neighbours,\n",
+	"And say, \"To-morrow is Saint Crispian.\"\n",
+	"Then will he strip his sleeve and show his scars,\n",
+	"And say, \"These wounds I had on Crispin's day.\"\n",
+	"Old men forget; yet all shall be forgot,\n",
+	"But he'll remember with advantages\n",
+	"What feats he did that day. Then shall our names,\n",
+	"Familiar in his mouth as household words,\n",
+	"Harry the King, Bedford, and Exeter,\n",
+	"Warwick and Talbot, Salisbury and Gloucester,\n",
+	"Be in their flowing cups freshly rememb'red.\n",
+	"This story shall the good man teach his son;\n",
+	"And Crispin Crispian shall ne'er go by,\n",
+	"From this day to the ending of the world,\n",
+	"But we in it shall be remembered-\n",
+	"We few, we happy few, we band of brothers;\n",
+	"For he to-day that sheds his blood with me\n",
+	"Shall be my brother; be he ne'er so vile,\n",
+	"This day shall gentle his condition:\n",
+	"And gentlemen in England now a-bed\n",
+	"Shall think themselves accursed they were not here,\n",
+	"And hold their manhoods cheap whiles any speaks\n",
+	"That fought with us upon Saint Crispin's day.\n",
+	"-- William Shakespeare, HENRY V, act IV scene iii\n"
 };
 
 TEST_F(PacketInputOutputTest, String) {
 	static const size_t ALLOC = 7;
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
-	for (size_t ii = 0; ii < countof(SONNET99); ++ii) {
-		size_t length = std::strlen(SONNET99[ii]);
-		EXPECT_LE((packet.output())(SONNET99[ii]), length);
+	size_t longest = 0;
+	for (size_t ii = 0; ii < countof(HENRYV); ++ii) {
+		size_t length = std::strlen(HENRYV[ii]);
+		if (length > longest) { longest = length; }
+		EXPECT_LE((packet.output())(HENRYV[ii]), length);
 		EXPECT_FALSE(packet.empty());
 	}
-	char buffer[countof(SONNET99)][64];
+	char buffer[countof(HENRYV)][64];
+	ASSERT_LT(longest, 64);
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
 		(packet.input())(buffer[ii], sizeof(buffer[ii]));
 	}
 	EXPECT_TRUE(packet.empty());
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
-		EXPECT_EQ(std::strncmp(SONNET99[ii], buffer[ii], sizeof(buffer[ii])), 0);
+		EXPECT_EQ(std::strncmp(HENRYV[ii], buffer[ii], sizeof(buffer[ii])), 0);
 	}
 }
 
@@ -840,17 +856,17 @@ TEST_F(PacketInputOutputTest, Formatted) {
 	Packet packet(ALLOC, Packet::APPEND);
 	EXPECT_TRUE(packet.empty());
 	::com::diag::desperado::Print print(packet.output());
-	for (size_t ii = 0; ii < countof(SONNET99); ++ii) {
-		print("%s", SONNET99[ii]);
+	for (size_t ii = 0; ii < countof(HENRYV); ++ii) {
+		print("%s", HENRYV[ii]);
 		EXPECT_FALSE(packet.empty());
 	}
-	char buffer[countof(SONNET99)][64];
+	char buffer[countof(HENRYV)][64];
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
 		(packet.input())(buffer[ii], sizeof(buffer[ii]));
 	}
 	EXPECT_TRUE(packet.empty());
 	for (size_t ii = 0; ii < countof(buffer); ++ii) {
-		EXPECT_EQ(std::strncmp(SONNET99[ii], buffer[ii], sizeof(buffer[ii])), 0);
+		EXPECT_EQ(std::strncmp(HENRYV[ii], buffer[ii], sizeof(buffer[ii])), 0);
 	}
 }
 
@@ -866,7 +882,7 @@ static const char RICHARDII[] = {
 	"Or as a moat defensive to a house,\n"
 	"Against the envy of less happier lands,--\n"
 	"This blessed plot, this earth, this realm, this England.\n"
-	"-- William Shakespeare, KING RICHARD II, Act 2 scene 1\n"
+	"-- William Shakespeare, KING RICHARD II, act II scene i\n"
 };
 
 TEST_F(PacketInputOutputTest, SourceSinkBuffer) {
@@ -885,7 +901,7 @@ TEST_F(PacketInputOutputTest, SourceSinkBuffer) {
 
 TEST_F(PacketInputOutputTest, SourceSinkPathFile) {
 
-	::com::diag::desperado::PathInput input(__FILE__, "r");
+	::com::diag::desperado::PathInput input("unittest.txt", "r");
 	Size inputsize = size(input);
 	EXPECT_TRUE(inputsize > 0);
 	char name[] = "/tmp/PacketTest.SourceSinkPathFile.XXXXXX";
@@ -905,7 +921,7 @@ TEST_F(PacketInputOutputTest, SourceSinkPathFile) {
 	EXPECT_EQ(outputsize, inputsize);
 	EXPECT_EQ(::close(fd), 0);
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += name;
 	EXPECT_EQ(std::system(command.c_str()), 0);

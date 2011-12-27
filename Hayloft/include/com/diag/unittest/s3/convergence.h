@@ -64,13 +64,13 @@ TEST_F(ConvergenceTest, Synchronous) {
 	BucketCreate bucketcreate2(BUCKET2);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 		objectput1.start();
@@ -114,7 +114,7 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
@@ -143,13 +143,13 @@ TEST_F(ConvergenceTest, Complete) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 		objectput1.start();
@@ -193,7 +193,7 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
@@ -222,13 +222,13 @@ TEST_F(ConvergenceTest, Service) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 		objectput1.start();
@@ -272,7 +272,7 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(service_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);

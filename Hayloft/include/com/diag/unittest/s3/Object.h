@@ -149,7 +149,7 @@ TEST_F(ObjectTest, Heap) {
 	Size inputsize = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objectput;
-		::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+		::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 		inputsize = size(*input);
 		ASSERT_TRUE(inputsize > 0);
@@ -337,7 +337,7 @@ TEST_F(ObjectTest, Heap) {
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT;
 	ASSERT_EQ(std::system(command.c_str()), 0);
@@ -479,7 +479,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
@@ -505,7 +505,7 @@ TEST_F(ObjectTest, Complete) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
@@ -767,7 +767,7 @@ TEST_F(ObjectTest, Complete) {
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT;
 	ASSERT_EQ(std::system(command.c_str()), 0);
@@ -877,7 +877,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
@@ -895,7 +895,7 @@ TEST_F(ObjectTest, Simplex) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
@@ -1101,7 +1101,7 @@ TEST_F(ObjectTest, Simplex) {
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT;
 	ASSERT_EQ(std::system(command.c_str()), 0);
@@ -1264,7 +1264,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
@@ -1295,7 +1295,7 @@ TEST_F(ObjectTest, Service) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
@@ -1592,7 +1592,7 @@ TEST_F(ObjectTest, Service) {
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT;
 	ASSERT_EQ(std::system(command.c_str()), 0);
@@ -1628,7 +1628,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_EQ(bucketmanifest1.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
@@ -1636,7 +1636,7 @@ TEST_F(ObjectTest, Manifest) {
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
@@ -1660,7 +1660,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_NE(bucketmanifest2.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest2.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	input = new ::com::diag::desperado::PathInput(__FILE__);
+	input = new ::com::diag::desperado::PathInput("unittest.txt");
 	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 	inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
@@ -1668,7 +1668,7 @@ TEST_F(ObjectTest, Manifest) {
 	for (int ii = 0; objectput2.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
@@ -1872,13 +1872,13 @@ TEST_F(ObjectTest, Copy) {
 	/**/
 	Properties properties;
 	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput(__FILE__);
+	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput(__FILE__);
+		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 		objectput1.start();
@@ -2008,7 +2008,7 @@ TEST_F(ObjectTest, Copy) {
 	ASSERT_TRUE(bucketdelete2.isSuccessful());
 	/**/
 	std::string command = "diff ";
-	command += __FILE__;
+	command += "unittest.txt";
 	command += " ";
 	command += OBJECT2;
 	ASSERT_EQ(std::system(command.c_str()), 0);
