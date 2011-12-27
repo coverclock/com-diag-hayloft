@@ -48,11 +48,11 @@ BucketDelete::~BucketDelete() {
 }
 
 void BucketDelete::initialize() {
-	status = static_cast<Status>(IDLE);
+	state(static_cast<Status>(IDLE));
 }
 
 void BucketDelete::execute() {
-	status = static_cast<Status>(BUSY);
+	state(static_cast<Status>(BUSY));
 	Logger::instance().debug("BucketDelete@%p: begin\n", this);
 	Bucket::execute();
 	::S3_delete_bucket(

@@ -12,6 +12,7 @@
 #include "com/diag/hayloft/s3/Plex.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/desperado/string.h"
 
@@ -62,7 +63,7 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	// from which the application can safely delete or re-start the Action but
 	// from which Action completion is not visible to other threads polling on
 	// the status of the Action.
-	that->status = static_cast<Status>(PENDING);
+	that->state(static_cast<Status>(PENDING));
 	// The application is permitted to delete or re-start the Action in the
 	// LifeCycle method or in the Action method called by the LifeCycle
 	// method.
@@ -92,6 +93,7 @@ Action::~Action() {
 	// already been invoked. Only those derived classes which actually implement
 	// a start() method that enqueues a request on the request context should
 	// call S3_runall_request_context() in their destructor.
+	condition.signal();
 	LifeCycle::instance().destructor(*this);
 }
 
@@ -133,7 +135,31 @@ void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
 	// We wait to after we call the complete handler to store the status. That
 	// allows the complete handler to see the Action has completed before any
 	// other threads polling on the status will notice it.
-	status = final;
+	state(final);
+}
+
+Status Action::state() const {
+	CriticalSection guard(mutex);
+	return status;
+}
+
+Status Action::state(Status update) {
+	CriticalSection guard(mutex);
+	Status previous = status;
+	status = update;
+	if ((status != IDLE) && (status != BUSY) && (status != PENDING)) {
+		condition.signal();
+	}
+	return previous;
+}
+
+int Action::wait() {
+	CriticalSection guard(mutex);
+	int rc = 0;
+	while ((rc == 0) && (status != IDLE) && (status != BUSY) && (status != PENDING)) {
+		rc = condition.wait(mutex);
+	}
+	return rc;
 }
 
 }

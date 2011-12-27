@@ -48,11 +48,11 @@ ObjectHead::~ObjectHead() {
 }
 
 void ObjectHead::initialize() {
-	status = static_cast<Status>(IDLE);
+	state(static_cast<Status>(IDLE));
 }
 
 void ObjectHead::execute() {
-	status = static_cast<Status>(BUSY);
+	state(static_cast<Status>(BUSY));
 	Logger::instance().debug("ObjectHead@%p: begin\n", this);
 	Object::execute();
 	::S3_head_object(

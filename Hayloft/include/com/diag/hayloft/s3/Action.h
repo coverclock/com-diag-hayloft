@@ -12,7 +12,8 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/MemoryBarrier.h"
+#include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/Condition.h"
 #include "com/diag/desperado/generics.h"
 #include "com/diag/hayloft/s3/S3.h"
 
@@ -66,6 +67,12 @@ private:
 
 	static void responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
+	mutable Mutex mutex;
+
+	Condition condition;
+
+	Status status;
+
 protected:
 
 	std::string server;
@@ -76,18 +83,24 @@ protected:
 
 	Pending * pending;
 
-	Status status;
-
 	::S3ResponseHandler handler;
 
 	/**
-	 * This returns the current status within the context of a full global
-	 * memory fence. Status is the one variable we're allowed to look at
-	 * while another thread is manipulating this Action.
+	 * This returns the current status value.
 	 *
 	 * @return the current status value.
 	 */
-	Status state() const { MemoryBarrier barrier; return status; }
+	Status state() const;
+
+	/**
+	 * This updates the current status and returns its prior value. As a side
+	 * effect, it signals any waiting threads if the updated status indicates
+	 * that this Action has completed.
+	 *
+	 * @param update is the new status value.
+	 * @return the prior status value.
+	 */
+	Status state(Status update);
 
 public:
 
@@ -247,6 +260,16 @@ public:
 	 */
 	virtual void reset();
 
+	/**
+	 * Blocks the calling thread until this Action is complete. Should only be
+	 * used in applications that execute the Action in a background thread.
+	 * Applications using the asynchronous interface with a Complex object fall
+	 * into this category, but other implementations are possible.
+	 *
+	 * @return 0 for success or a system error number if an error occurred.
+	 */
+	virtual int wait();
+
 protected:
 
 	/**
@@ -268,14 +291,16 @@ protected:
 	/**
 	 * This method is called when libs3 completes executing the Action.
 	 *
-	 * The default implementation in the base class stores the status in the
+	 * The default implementation in the base class updates the status in the
 	 * status field of this Action. This is the responsibility of this method
 	 * for several reasons. The overriding method is allowed to delete this
 	 * Action (providing the application is otherwise designed for it to do so)
 	 * so Hayloft guarantees it will make no further reference to it following
 	 * this call. The overriding method is allowed to restart this Action, so
 	 * the status is not stored so that concurrent threads polling for the
-	 * status of this Action will not see that it has completed.
+	 * status of this Action will not see that it has completed. The overriding
+	 * class can simply call this base class method to update the status field
+	 * appropriately (it's a little more complicated than just storing it).
 	 *
 	 * @param final is the final libs3 status. It is the responsibility of this
 	 *              method to store the status in the status field of this
