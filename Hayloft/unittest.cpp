@@ -54,7 +54,6 @@
 #include "com/diag/unittest/s3/ObjectBase.h"
 #include "com/diag/unittest/s3/GrantBase.h"
 #include "com/diag/unittest/s3/LogBase.h"
-#include "com/diag/unittest/s3/Complex.h"
 #endif
 
 // Unit tests that use S3, perhaps more properly called functional tests.
@@ -65,6 +64,10 @@
 #include "com/diag/unittest/s3/convergence.h"
 #include "com/diag/unittest/s3/Grant.h"
 #include "com/diag/unittest/s3/Log.h"
+#endif
+
+#if 1
+#include "com/diag/unittest/s3/Complex.h"
 #endif
 
 // Hooks to clean up singletons just for valgrind.
