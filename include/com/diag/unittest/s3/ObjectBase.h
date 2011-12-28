@@ -104,7 +104,7 @@ TEST_F(ObjectBaseTest, CopyConstructor) {
 	Context context(credentials, region, protocol, style, access);
 	Bucket bucket("Bucket", context, session);
 	Object source("CopyConstructor", bucket);
-	EXPECT_EQ(source.getPending(), (::S3RequestContext*)0);
+	EXPECT_EQ(source.getPending(), (Pending*)0);
 	EXPECT_TRUE(source == true);
 	EXPECT_FALSE(source.isIdle());
 	EXPECT_FALSE(source.isBusy());
@@ -119,7 +119,7 @@ TEST_F(ObjectBaseTest, CopyConstructor) {
 	EXPECT_EQ(source.getProtocol(), ::S3ProtocolHTTP);
 	Multiplex multiplex;
 	Object sink(source, multiplex);
-	EXPECT_NE(sink.getPending(), (::S3RequestContext*)0);
+	EXPECT_NE(sink.getPending(), (Pending*)0);
 	EXPECT_TRUE(sink == true);
 	EXPECT_FALSE(sink.isIdle());
 	EXPECT_FALSE(sink.isBusy());

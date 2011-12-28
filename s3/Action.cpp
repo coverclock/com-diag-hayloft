@@ -21,6 +21,10 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+/*******************************************************************************
+ * CLASS CALLBACK METHODS FOR LIBS3
+ ******************************************************************************/
+
 Status Action::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Action * that = static_cast<Action*>(callbackData);
 	if ((responseProperties->requestId != 0) && (responseProperties->requestId[0] != '\0')) { that->requestid = responseProperties->requestId; }
@@ -58,20 +62,20 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	}
 	Logger::instance().log(level, "Action@%p: status=%d=\"%s\"\n", that, final, tostring(final));
 	show(errorDetails, level);
-	// This is a transitional state after the Action has completed and before
-	// the final state is assigned by the application. This provides a state
-	// from which the application can safely delete or re-start the Action but
-	// from which Action completion is not visible to other threads polling on
-	// the status of the Action.
-	that->state(static_cast<Status>(PENDING));
+	// Update the status for all to see.
+	that->state(final);
 	// The application is permitted to delete or re-start the Action in the
 	// LifeCycle method or in the Action method called by the LifeCycle
 	// method.
 	LifeCycle::instance().complete(*that, final, errorDetails);
 	// Not safe to reference object fields or methods after this point since
-	// the application is allowed to have deleted the Action.
+	// the application may have deleted the Action.
 	Logger::instance().log(level, "Action@%p: end\n", that);
 }
+
+/*******************************************************************************
+ * INSTANCE METHODS THAT ARE PART OF THE PUBLIC API
+ ******************************************************************************/
 
 Action::Action()
 : pending(0)
@@ -97,23 +101,10 @@ Action::~Action() {
 	LifeCycle::instance().destructor(*this);
 }
 
-void Action::initialize() {
-	if (pending != 0) {
-		Logger::instance().debug("Action@%p: pending=%p\n", this, pending);
-	}
-	std::memset(&handler, 0, sizeof(handler));
-	handler.propertiesCallback = &responsePropertiesCallback;
-	handler.completeCallback = &responseCompleteCallback;
-	LifeCycle::instance().constructor(*this);
-}
-
-void Action::execute() {
-	LifeCycle::instance().start(*this);
-}
-
 Status Action::getStatus(const char ** description) const {
-	if (description != 0) { *description = tostring(status); }
-	return status;
+	Status temporary = state();
+	if (description != 0) { *description = tostring(temporary); }
+	return temporary;
 }
 
 void Action::start() {
@@ -127,16 +118,20 @@ void Action::start() {
 void Action::reset() {
 }
 
+/*******************************************************************************
+ * INSTANCE METHODS WHICH A DERIVED CLASS MAY OVERRIDE TO IMPLEMENT STRATEGY
+ ******************************************************************************/
+
 Status Action::properties(const ::S3ResponseProperties * properties) {
 	return ::S3StatusOK;
 }
 
 void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
-	// We wait to after we call the complete handler to store the status. That
-	// allows the complete handler to see the Action has completed before any
-	// other threads polling on the status will notice it.
-	state(final);
 }
+
+/*******************************************************************************
+ * INSTANCE METHODS WHICH PROVIDE SYNCHRONIZATION
+ ******************************************************************************/
 
 Status Action::state() const {
 	CriticalSection guard(mutex);
@@ -147,19 +142,25 @@ Status Action::state(Status update) {
 	CriticalSection guard(mutex);
 	Status previous = status;
 	status = update;
-	if ((status != IDLE) && (status != BUSY) && (status != PENDING)) {
-		condition.signal();
-	}
 	return previous;
 }
 
-int Action::wait() {
-	CriticalSection guard(mutex);
-	int rc = 0;
-	while ((rc == 0) && (status != IDLE) && (status != BUSY) && (status != PENDING)) {
-		rc = condition.wait(mutex);
+/*******************************************************************************
+ * NON-VIRTUAL INSTANCE METHODS THAT MAY BE CALLED FROM A CONSTRUCTOR
+ ******************************************************************************/
+
+void Action::initialize() {
+	if (pending != 0) {
+		Logger::instance().debug("Action@%p: pending=%p\n", this, pending);
 	}
-	return rc;
+	std::memset(&handler, 0, sizeof(handler));
+	handler.propertiesCallback = &responsePropertiesCallback;
+	handler.completeCallback = &responseCompleteCallback;
+	LifeCycle::instance().constructor(*this);
+}
+
+void Action::execute() {
+	LifeCycle::instance().start(*this);
 }
 
 }

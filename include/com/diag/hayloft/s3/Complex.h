@@ -11,12 +11,20 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include <list>
 #include "com/diag/hayloft/s3/Plex.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
+#include "com/diag/hayloft/Thread.h"
+#include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/desperado/types.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 namespace s3 {
+
+class Action;
 
 /**
  * Complex is system-wide mechanism to manage Actions. It implements a separate
@@ -36,7 +44,57 @@ class Complex : public Plex {
 
 protected:
 
-	Status status;
+	struct LifeCycle : public ::com::diag::hayloft::s3::LifeCycle {
+
+		virtual void constructor(Action & action);
+
+		virtual void start(Action & action);
+
+		virtual Status properties(Action & action, const ::S3ResponseProperties * properties);
+
+		virtual void complete(Action & action, Status status, const ::S3ErrorDetails * errorDetails);
+
+		virtual void destructor(Action & action);
+
+	};
+
+	friend class LifeCycle;
+
+	struct Thread : public ::com::diag::hayloft::Thread {
+
+		virtual void * run();
+
+	};
+
+	friend class Thread;
+
+	typedef std::list<Action *> List;
+
+	static Mutex mutex;
+
+	static int instances;
+
+	static ::com::diag::desperado::ticks_t numerator;
+
+	static ::com::diag::desperado::ticks_t denominator;
+
+	static Status status;
+
+	static Pending * complex;
+
+	static ::com::diag::hayloft::s3::LifeCycle * nextlifecycle;
+
+	static LifeCycle lifecycle;
+
+	static Thread thread;
+
+	static List list;
+
+protected:
+
+	static void * run();
+
+	static void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
 
 public:
 
@@ -49,7 +107,6 @@ public:
 	 * Dtor.
 	 */
 	virtual ~Complex();
-
 
 	/**
 	 * Returns true if construction was successful.
@@ -64,6 +121,30 @@ public:
 	 * @return the status.
 	 */
 	Status getStatus() const { return status; }
+
+	/**
+	 * Submit the Action to the Complex service thread for processing. Possible
+	 * failure modes are: the referenced Action did not reference a Complex
+	 * object as its Plex during construction; or the Action is not in a state
+	 * in which it can be started.
+	 *
+	 * @param action refers to the Action to be submitted.
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool start(Action & action);
+
+	/**
+	 * Block the calling thread until the referenced Action is complete.
+	 * Possible failure modes are: the referenced Action did not reference a
+	 * Complex object as its Plex during construction; or the Action is not in
+	 * a state during which it can be waited upon. When this call returns
+	 * successfully, the referenced Action is guaranteed to have a final
+	 * status which is not retryable.
+	 *
+	 * @param action refers to the Action to be waited upon.
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool wait(Action & action);
 
 };
 
