@@ -25,6 +25,7 @@ namespace s3 {
 class Plex;
 class Reaction;
 class LifeCycle;
+class Complex;
 
 /**
  * Action is a C++ object whose state may be altered in the background by a
@@ -36,6 +37,7 @@ class LifeCycle;
 class Action {
 
 	friend class LifeCycle;
+	friend class Complex;
 
 public:
 
@@ -46,30 +48,29 @@ public:
 	static const int IDLE = intmaxof(Status);
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has been
-	 * started and is being executed in the background by a separate libs3
-	 * thread. Most methods which mutate an Action are ignored when the Action
-	 * is in this state.
+	 * This is a fake libs3 ::S3Status value that means the Action is in a
+	 * transitional state between being constructed and being started.
 	 */
-	static const int BUSY = intmaxof(Status) - 1;
+	static const int PENDING = intmaxof(Status) - 1;
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has finished
-	 * running but has not yet been completed. This is a transitional state
-	 * used mostly when Action processing is being done by a background thread.
-	 * Actions in this state can be re-started.
+	 * This is a fake libs3 ::S3Status value that means the Action has been
+	 * started and is being executed. Most methods which mutate an Action are
+	 * ignored when the Action is in this state.
 	 */
-	static const int PENDING = intmaxof(Status) - 2;
+	static const int BUSY = intmaxof(Status) - 2;
+
+	/**
+	 * This is a fake libs3 ::S3Status value that means the Action is in a
+	 * transitional state between being started and being complete.
+	 */
+	static const int FINAL = intmaxof(Status) - 3;
 
 private:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
 	static void responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-	mutable Mutex mutex;
-
-	Condition condition;
 
 	Status status;
 
@@ -83,6 +84,10 @@ protected:
 
 	Pending * pending;
 
+	mutable Mutex mutex;
+
+	Condition condition;
+
 	::S3ResponseHandler handler;
 
 	/**
@@ -93,9 +98,7 @@ protected:
 	Status state() const;
 
 	/**
-	 * This updates the current status and returns its prior value. As a side
-	 * effect, it signals any waiting threads if the updated status indicates
-	 * that this Action has completed.
+	 * This updates the current status and returns its prior value.
 	 *
 	 * @param update is the new status value.
 	 * @return the prior status value.
@@ -137,10 +140,10 @@ public:
 	virtual ~Action();
 
 	/**
-	 * Return true if this Action is neither IDLE nor BUSY.
-	 * @return true if this Action is neither IDLE nor BUSY.
+	 * Return true if this Action has achieved a final state.
+	 * @return true if this Action has achieved a final state.
 	 */
-	operator bool() const { Status temporary = state(); return ((temporary != IDLE) && (temporary != BUSY) && ((temporary != PENDING))); }
+	operator bool() const { Status temp = state(); return ((temp != IDLE) && (temp != PENDING) && (temp != BUSY) && (temp != FINAL)); }
 
 	/**
 	 * Return true if this Action is IDLE.
@@ -182,7 +185,7 @@ public:
 	 *
 	 * @return true if this Action indicates inaccessibility.
 	 */
-	bool isInaccessible() const { Status temporary = state(); return ((temporary == ::S3StatusHttpErrorForbidden) || (temporary == ::S3StatusErrorAccessDenied)); }
+	bool isInaccessible() const { Status temp = state(); return ((temp == ::S3StatusHttpErrorForbidden) || (temp == ::S3StatusErrorAccessDenied)); }
 
 	/**
 	 * Return true if this Action has a status that indicates the requested
@@ -190,7 +193,7 @@ public:
 	 *
 	 * @return true if this Action indicates nonexistence.
 	 */
-	bool isNonexistent() const { Status temporary = state(); return ((temporary == ::S3StatusHttpErrorNotFound) || (temporary == ::S3StatusErrorNoSuchKey) || (temporary == ::S3StatusErrorNoSuchBucket)); }
+	bool isNonexistent() const { Status temp = state(); return ((temp == ::S3StatusHttpErrorNotFound) || (temp == ::S3StatusErrorNoSuchKey) || (temp == ::S3StatusErrorNoSuchBucket)); }
 
 	/**
 	 * Get the libs3 ::S3RequestContext associated with this Action. This
@@ -260,16 +263,6 @@ public:
 	 */
 	virtual void reset();
 
-	/**
-	 * Blocks the calling thread until this Action is complete. Should only be
-	 * used in applications that execute the Action in a background thread.
-	 * Applications using the asynchronous interface with a Complex object fall
-	 * into this category, but other implementations are possible.
-	 *
-	 * @return 0 for success or a system error number if an error occurred.
-	 */
-	virtual int wait();
-
 protected:
 
 	/**
@@ -291,22 +284,13 @@ protected:
 	/**
 	 * This method is called when libs3 completes executing the Action.
 	 *
-	 * The default implementation in the base class updates the status in the
-	 * status field of this Action. This is the responsibility of this method
-	 * for several reasons. The overriding method is allowed to delete this
-	 * Action (providing the application is otherwise designed for it to do so)
-	 * so Hayloft guarantees it will make no further reference to it following
-	 * this call. The overriding method is allowed to restart this Action, so
-	 * the status is not stored so that concurrent threads polling for the
-	 * status of this Action will not see that it has completed. The overriding
-	 * class can simply call this base class method to update the status field
-	 * appropriately (it's a little more complicated than just storing it).
+	 * The default implementation in the base class does nothing. The overriding
+	 * method is allowed to delete this Action (providing the application is
+	 * otherwise designed for it to do so); Hayloft guarantees it will make
+	 * no further reference to it following this call. The overriding method is
+	 * allowed to restart this Action.
 	 *
-	 * @param final is the final libs3 status. It is the responsibility of this
-	 *              method to store the status in the status field of this
-	 *              Action providing it doesn't delete the object. This allows
-	 *              this method to see that the Action has completed before any
-	 *              other threads that may be polling on the Action status.
+	 * @param final is the final libs3 status.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
 	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
