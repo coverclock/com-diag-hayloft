@@ -157,7 +157,7 @@ TEST_F(BucketTest, Stack) {
 		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			buckethead.start();
+			EXPECT_TRUE(buckethead.start());
 		}
 		EXPECT_TRUE(buckethead == true);
 		EXPECT_FALSE(buckethead.isIdle());
@@ -172,7 +172,7 @@ TEST_F(BucketTest, Stack) {
 		for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			bucketcreate.start();
+			EXPECT_TRUE(bucketcreate.start());
 		}
 		EXPECT_TRUE(bucketcreate == true);
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -191,7 +191,7 @@ TEST_F(BucketTest, Stack) {
 				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
-			buckethead.start();
+			EXPECT_TRUE(buckethead.start());
 		}
 		EXPECT_TRUE(buckethead == true);
 		EXPECT_FALSE(buckethead.isIdle());
@@ -210,7 +210,7 @@ TEST_F(BucketTest, Stack) {
 				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
-			bucketdelete.start();
+			EXPECT_TRUE(bucketdelete.start());
 		}
 		EXPECT_TRUE(bucketdelete == true);
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -229,7 +229,7 @@ TEST_F(BucketTest, Stack) {
 				logger.configuration("WAITING %d\n", __LINE__);
 			}
 			platform.yield(platform.frequency());
-			buckethead.start();
+			EXPECT_TRUE(buckethead.start());
 		}
 		EXPECT_TRUE(buckethead == true);
 		EXPECT_FALSE(buckethead.isIdle());
@@ -257,7 +257,7 @@ TEST_F(BucketTest, Explicit) {
 	for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		buckethead.start();
+		EXPECT_TRUE(buckethead.start());
 	}
 	EXPECT_TRUE(buckethead == true);
 	EXPECT_FALSE(buckethead.isIdle());
@@ -271,7 +271,7 @@ TEST_F(BucketTest, Explicit) {
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketcreate.start();
+		EXPECT_TRUE(bucketcreate.start());
 	}
 	EXPECT_TRUE(bucketcreate == true);
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -281,7 +281,7 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(bucketcreate.isNonexistent());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
-	buckethead.start();
+	EXPECT_TRUE(buckethead.start());
 	for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
 			logger.configuration("RETRYING %d\n", __LINE__);
@@ -289,7 +289,7 @@ TEST_F(BucketTest, Explicit) {
 			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		buckethead.start();
+		EXPECT_TRUE(buckethead.start());
 	}
 	EXPECT_TRUE(buckethead == true);
 	EXPECT_FALSE(buckethead.isIdle());
@@ -311,7 +311,7 @@ TEST_F(BucketTest, Explicit) {
 			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		bucketdelete.start();
+		EXPECT_TRUE(bucketdelete.start());
 	}
 	EXPECT_TRUE(bucketdelete == true);
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -321,7 +321,7 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
-	buckethead.start();
+	EXPECT_TRUE(buckethead.start());
 	for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
 			logger.configuration("RETRYING %d\n", __LINE__);
@@ -329,7 +329,7 @@ TEST_F(BucketTest, Explicit) {
 			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		buckethead.start();
+		EXPECT_TRUE(buckethead.start());
 	}
 	EXPECT_TRUE(buckethead == true);
 	EXPECT_FALSE(buckethead.isIdle());
@@ -354,7 +354,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int ii = 0; ii < LIMIT; ++ii) {
-			buckethead.start();
+			EXPECT_TRUE(buckethead.start());
 			EXPECT_FALSE(buckethead == true);
 			EXPECT_FALSE(buckethead.isIdle());
 			EXPECT_TRUE(buckethead.isBusy());
@@ -385,7 +385,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		EXPECT_FALSE(bucketcreate.isSuccessful());
 		for (int ii = 0; ii < LIMIT; ++ii) {
-			bucketcreate.start();
+			EXPECT_TRUE(bucketcreate.start());
 			EXPECT_FALSE(bucketcreate == true);
 			EXPECT_FALSE(bucketcreate.isIdle());
 			EXPECT_TRUE(bucketcreate.isBusy());
@@ -417,7 +417,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				buckethead.start();
+				EXPECT_TRUE(buckethead.start());
 				EXPECT_FALSE(buckethead == true);
 				EXPECT_FALSE(buckethead.isIdle());
 				EXPECT_TRUE(buckethead.isBusy());
@@ -453,7 +453,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(bucketdelete.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				bucketdelete.start();
+				EXPECT_TRUE(bucketdelete.start());
 				EXPECT_FALSE(bucketdelete == true);
 				EXPECT_FALSE(bucketdelete.isIdle());
 				EXPECT_TRUE(bucketdelete.isBusy());
@@ -489,7 +489,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				buckethead.start();
+				EXPECT_TRUE(buckethead.start());
 				EXPECT_FALSE(buckethead == true);
 				EXPECT_FALSE(buckethead.isIdle());
 				EXPECT_TRUE(buckethead.isBusy());
@@ -530,7 +530,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int ii = 0; ii < LIMIT; ++ii) {
-			buckethead.start();
+			EXPECT_TRUE(buckethead.start());
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
@@ -553,7 +553,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		EXPECT_FALSE(bucketcreate.isSuccessful());
 		for (int ii = 0; ii < LIMIT; ++ii) {
-			bucketcreate.start();
+			EXPECT_TRUE(bucketcreate.start());
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
@@ -577,7 +577,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				buckethead.start();
+				EXPECT_TRUE(buckethead.start());
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
 				logger.configuration("RETRYING %d\n", __LINE__);
@@ -605,7 +605,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(bucketdelete.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				bucketdelete.start();
+				EXPECT_TRUE(bucketdelete.start());
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
 				logger.configuration("RETRYING %d\n", __LINE__);
@@ -633,7 +633,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				buckethead.start();
+				EXPECT_TRUE(buckethead.start());
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
 				logger.configuration("RETRYING %d\n", __LINE__);
@@ -667,7 +667,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int ii = 0; ii < LIMIT; ++ii) {
-			buckethead.start();
+			EXPECT_TRUE(buckethead.start());
 			EXPECT_FALSE(buckethead == true);
 			EXPECT_FALSE(buckethead.isIdle());
 			EXPECT_TRUE(buckethead.isBusy());
@@ -703,7 +703,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		EXPECT_FALSE(bucketcreate.isSuccessful());
 		for (int ii = 0; ii < LIMIT; ++ii) {
-			bucketcreate.start();
+			EXPECT_TRUE(bucketcreate.start());
 			EXPECT_FALSE(bucketcreate == true);
 			EXPECT_FALSE(bucketcreate.isIdle());
 			EXPECT_TRUE(bucketcreate.isBusy());
@@ -740,7 +740,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				buckethead.start();
+				EXPECT_TRUE(buckethead.start());
 				EXPECT_FALSE(buckethead == true);
 				EXPECT_FALSE(buckethead.isIdle());
 				EXPECT_TRUE(buckethead.isBusy());
@@ -781,7 +781,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(bucketdelete.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				bucketdelete.start();
+				EXPECT_TRUE(bucketdelete.start());
 				EXPECT_FALSE(bucketdelete == true);
 				EXPECT_FALSE(bucketdelete.isIdle());
 				EXPECT_TRUE(bucketdelete.isBusy());
@@ -822,7 +822,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(buckethead.isSuccessful());
 		for (int jj = 0; jj < LIMIT; ++jj) {
 			for (int ii = 0; ii < LIMIT; ++ii) {
-				buckethead.start();
+				EXPECT_TRUE(buckethead.start());
 				EXPECT_FALSE(buckethead == true);
 				EXPECT_FALSE(buckethead.isIdle());
 				EXPECT_TRUE(buckethead.isBusy());
@@ -862,20 +862,20 @@ TEST_F(BucketTest, Manifest) {
 	for (int ii = 0; servicemanifest1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		servicemanifest1.start();
+		EXPECT_TRUE(servicemanifest1.start());
 	}
 	EXPECT_EQ(servicemanifest1.getManifest().size(), 0);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketcreate1.start();
+		EXPECT_TRUE(bucketcreate1.start());
 	}
 	ServiceManifest servicemanifest2;
 	for (int ii = 0; servicemanifest2.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		servicemanifest2.start();
+		EXPECT_TRUE(servicemanifest2.start());
 	}
 	EXPECT_EQ(servicemanifest2.getManifest().size(), 1);
 	EXPECT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
@@ -883,19 +883,19 @@ TEST_F(BucketTest, Manifest) {
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		bucketcreate2.start();
+		EXPECT_TRUE(bucketcreate2.start());
 	}
 	ServiceManifest servicemanifest3;
 	for (int ii = 0; servicemanifest3.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		servicemanifest3.start();
+		EXPECT_TRUE(servicemanifest3.start());
 	}
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 2);
 	EXPECT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	show(servicemanifest3);
-	servicemanifest3.reset();
+	EXPECT_TRUE(servicemanifest3.reset());
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
@@ -907,13 +907,13 @@ TEST_F(BucketTest, Manifest) {
 			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		bucketdelete1.start();
+		EXPECT_TRUE(bucketdelete1.start());
 	}
 	ServiceManifest servicemanifest4;
 	for (int ii = 0; servicemanifest4.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		servicemanifest4.start();
+		EXPECT_TRUE(servicemanifest4.start());
 	}
 	EXPECT_EQ(servicemanifest4.getManifest().size(), 1);
 	EXPECT_EQ(servicemanifest4.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
@@ -926,13 +926,13 @@ TEST_F(BucketTest, Manifest) {
 			logger.configuration("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		bucketdelete2.start();
+		EXPECT_TRUE(bucketdelete2.start());
 	}
 	ServiceManifest servicemanifest5;
 	for (int ii = 0; servicemanifest5.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		servicemanifest5.start();
+		EXPECT_TRUE(servicemanifest5.start());
 	}
 	EXPECT_EQ(servicemanifest5.getManifest().size(), 0);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);

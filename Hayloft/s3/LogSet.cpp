@@ -82,9 +82,12 @@ void LogSet::execute() {
 	);
 }
 
-void LogSet::start() {
+bool LogSet::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

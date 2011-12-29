@@ -72,8 +72,8 @@ TEST_F(ConvergenceTest, Synchronous) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput1.reset(input, inputsize);
-		objectput1.start();
+		EXPECT_TRUE(objectput1.reset(input, inputsize));
+		EXPECT_TRUE(objectput1.start());
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
@@ -92,12 +92,12 @@ TEST_F(ConvergenceTest, Synchronous) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
 			output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
-			objectget2.reset(output2);
+			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectget2.start();
+		EXPECT_TRUE(objectget2.start());
 	}
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
@@ -151,8 +151,8 @@ TEST_F(ConvergenceTest, Complete) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput1.reset(input, inputsize);
-		objectput1.start();
+		EXPECT_TRUE(objectput1.reset(input, inputsize));
+		EXPECT_TRUE(objectput1.start());
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
@@ -171,12 +171,12 @@ TEST_F(ConvergenceTest, Complete) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
 			output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
-			objectget2.reset(output2);
+			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectget2.start();
+		EXPECT_TRUE(objectget2.start());
 	}
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
@@ -230,8 +230,8 @@ TEST_F(ConvergenceTest, Service) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput1.reset(input, inputsize);
-		objectput1.start();
+		EXPECT_TRUE(objectput1.reset(input, inputsize));
+		EXPECT_TRUE(objectput1.start());
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
@@ -250,12 +250,12 @@ TEST_F(ConvergenceTest, Service) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
 			output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
-			objectget2.reset(output2);
+			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
 		}
 		platform.yield(platform.frequency());
-		objectget2.start();
+		EXPECT_TRUE(objectget2.start());
 	}
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/

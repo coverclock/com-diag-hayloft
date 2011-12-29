@@ -98,9 +98,12 @@ void GrantSet::execute() {
 	);
 }
 
-void GrantSet::start() {
+bool GrantSet::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

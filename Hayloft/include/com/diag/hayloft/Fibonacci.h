@@ -11,14 +11,17 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
+#include "com/diag/desperado/generics.h"
+
 namespace com {
 namespace diag {
 namespace hayloft {
 
 /**
  * Fibonacci implements the Fibonacci sequence for use in back off during
- * error recovery and retry. There is no provision for handling integer
- * overflow.
+ * error recovery and retry. The resulting Fibonacci number is limited to
+ * no more than the the maximum possible value of the underlying integer
+ * data type.
  */
 class Fibonacci {
 
@@ -44,7 +47,7 @@ public:
 	 * @return the current number in the sequence.
 	 */
 	unsigned int next() {
-		int result = now + was;
+		int result = (now <= (intmaxof(unsigned int) - was)) ? now + was : now;
 		was = now;
 		now = result;
 		return result;

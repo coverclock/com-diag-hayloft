@@ -87,9 +87,12 @@ void LogGet::execute() {
 	);
 }
 
-void LogGet::start() {
+bool LogGet::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

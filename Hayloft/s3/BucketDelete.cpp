@@ -68,9 +68,12 @@ void BucketDelete::execute() {
 	);
 }
 
-void BucketDelete::start() {
+bool BucketDelete::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

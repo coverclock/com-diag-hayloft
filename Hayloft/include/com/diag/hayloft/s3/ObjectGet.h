@@ -293,11 +293,22 @@ public:
 	/**
 	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
 	 * BUSY.
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void start();
+	virtual bool start();
 
 	/**
-	 * If the Action is not BUSY, reset the data source to a new Input functor.
+	 * If the Action is not BUSY and none of the data sink has been produced,
+	 * return true to indicate the Action can be retried without a new Output
+	 * functor.
+	 *
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool reset();
+
+	/**
+	 * If the Action is not BUSY, reset the data sink to a new Output functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sink refers to an Output functor.
@@ -305,11 +316,12 @@ public:
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
 	 *        be retrieved or zero to retrieve the entire object.
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
+	virtual bool reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
 
 	/**
-	 * If the Action is not BUSY, reset the data source to a new Input functor.
+	 * If the Action is not BUSY, reset the data sink to a new Output functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
@@ -318,8 +330,9 @@ public:
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
 	 *        be retrieved or zero to retrieve the entire object.
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void reset(Output * sinkp = 0 /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
+	virtual bool reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
 
 protected:
 

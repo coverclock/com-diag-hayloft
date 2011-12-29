@@ -107,15 +107,17 @@ Status Action::getStatus(const char ** description) const {
 	return temporary;
 }
 
-void Action::start() {
+bool Action::start() {
 	// It is the responsibility of the derived classes to call the
 	// corresponding LifeCycle method when they actually start. This isn't
 	// always done in their overriding start method but instead in a non-virtual
 	// method, typically called execute, that may be called from their
 	// constructor for the synchronous interface.
+	return true;
 }
 
-void Action::reset() {
+bool Action::reset() {
+	return true;
 }
 
 /*******************************************************************************
