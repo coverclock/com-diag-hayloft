@@ -24,7 +24,7 @@
 #include "com/diag/unittest/Fibonacci.h"
 #endif
 
-// Unit Tests that also use POSIX Threads and Real Time.
+// Unit Tests that also use POSIX Threads and maybe Real Time.
 
 #if 1
 #include "com/diag/unittest/Thread.h"
@@ -58,7 +58,7 @@
 
 // Unit tests that use S3, perhaps more properly called functional tests.
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Bucket.h"
 #include "com/diag/unittest/s3/Object.h"
 #include "com/diag/unittest/s3/convergence.h"

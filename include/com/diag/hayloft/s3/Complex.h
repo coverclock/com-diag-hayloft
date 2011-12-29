@@ -58,15 +58,11 @@ protected:
 
 	};
 
-	friend class LifeCycle;
-
 	struct Thread : public ::com::diag::hayloft::Thread {
 
 		virtual void * run();
 
 	};
-
-	friend class Thread;
 
 	typedef std::list<Action *> List;
 
