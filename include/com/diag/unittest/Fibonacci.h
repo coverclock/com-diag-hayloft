@@ -57,20 +57,20 @@ TEST_F(FibonacciTest, Overflow) {
 	Fibonacci fibonacci;
 	unsigned long long sum;
 	unsigned long long cum = 0;
-	unsigned int was = 0;
-	unsigned int now = fibonacci;
 	unsigned int ndx = 0;
-	printf("%10s %10s %10s %10s %10s\n", "NDX", "WAS", "NOW", "SUM", "CUM");
-	while (now > was) {
+	unsigned int now = 0;
+	unsigned int was;
+	printf("%3s %10s %10s %12s %12s\n", "NDX", "WAS", "NOW", "SUM", "CUM");
+	do {
+		was = now;
+		now = fibonacci;
 		ASSERT_NE(now, 0);
 		sum = was;
 		sum += now;
 		cum += now;
-		printf("%10u %10u %10u %10llu %10llu\n", ndx, was, now, sum, cum);
-		was = now;
-		now = fibonacci;
+		printf("%3u %10u %10u %12llu %12llu\n", ndx, was, now, sum, cum);
 		++ndx;
-	}
+	} while (was < now);
 	ASSERT_NE(now, 0);
 }
 

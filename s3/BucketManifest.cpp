@@ -167,9 +167,12 @@ void BucketManifest::execute() {
 	}
 }
 
-void BucketManifest::start() {
+bool BucketManifest::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -182,12 +185,15 @@ const BucketManifest::Entry * BucketManifest::find(const char * name) const {
 	return entry;
 }
 
-void BucketManifest::reset() {
+bool BucketManifest::reset() {
 	if ((state() != BUSY)) {
 		manifest.clear();
 		common.clear();
 		nextmarker = marker;
 		truncated = false;
+		return true;
+	} else {
+		return false;
 	}
 }
 

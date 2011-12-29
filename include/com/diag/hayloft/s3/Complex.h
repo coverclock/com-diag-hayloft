@@ -96,6 +96,10 @@ protected:
 
 	static void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
 
+	static Action * pop_front();
+
+	static void push_back(Action & action);
+
 public:
 
 	/**

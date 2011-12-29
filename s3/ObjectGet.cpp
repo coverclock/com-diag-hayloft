@@ -213,13 +213,20 @@ void ObjectGet::finalize() {
 	taken = 0;
 }
 
-void ObjectGet::start() {
+bool ObjectGet::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 
-void ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
+bool ObjectGet::reset() {
+	return ((state() != BUSY) && (produced == 0));
+}
+
+bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
 	if ((state() != BUSY)) {
 		finalize();
 		output = &sink;
@@ -227,10 +234,13 @@ void ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
 		offset = objectoffset;
 		size = objectsize;
 		produced = 0;
+		return true;
+	} else {
+		return false;
 	}
 }
 
-void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets objectsize) {
+bool ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets objectsize) {
 	if ((state() != BUSY)) {
 		finalize();
 		output = sinkp;
@@ -238,6 +248,9 @@ void ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 		offset = objectoffset;
 		size = objectsize;
 		produced = 0;
+		return true;
+	} else {
+		return false;
 	}
 }
 

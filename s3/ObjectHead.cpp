@@ -64,9 +64,12 @@ void ObjectHead::execute() {
 	);
 }
 
-void ObjectHead::start() {
+bool ObjectHead::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

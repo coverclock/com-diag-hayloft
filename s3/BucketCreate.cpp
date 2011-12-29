@@ -69,9 +69,12 @@ void BucketCreate::execute() {
 	);
 }
 
-void BucketCreate::start() {
+bool BucketCreate::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

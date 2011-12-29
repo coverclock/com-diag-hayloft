@@ -242,29 +242,42 @@ void ObjectPut::finalize() {
 	taken = 0;
 }
 
-void ObjectPut::start() {
+bool ObjectPut::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 
-void ObjectPut::reset(Input & source, Octets objectsize) {
+bool ObjectPut::reset() {
+	return ((state() != BUSY) && (consumed == 0));
+}
+
+bool ObjectPut::reset(Input & source, Octets objectsize) {
 	if ((state() != BUSY)) {
 		finalize();
 		input = &source;
 		taken = 0;
 		size = objectsize;
 		consumed = 0;
+		return true;
+	} else {
+		return false;
 	}
 }
 
-void ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
+bool ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
 	if ((state() != BUSY)) {
 		finalize();
 		input = sourcep;
 		taken = sourcep;
 		size = objectsize;
 		consumed = 0;
+		return true;
+	} else {
+		return false;
 	}
 }
 

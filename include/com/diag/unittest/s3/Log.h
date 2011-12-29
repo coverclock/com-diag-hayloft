@@ -109,7 +109,7 @@ TEST_F(LogTest, SetGet) {
 		ASSERT_NE(logget2.getTarget(), (char *)0);
 		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
 		::com::diag::desperado::Platform::instance().yield(fibonacci * ::com::diag::desperado::Platform::instance().frequency());
-		logget2.start();
+		EXPECT_TRUE(logget2.start());
 	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
 	ASSERT_NE(logget2.getPrefix(), (char *)0);
@@ -158,7 +158,7 @@ TEST_F(LogTest, SetGetPrefix) {
 		ASSERT_NE(logget2.getTarget(), (char *)0);
 		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
 		::com::diag::desperado::Platform::instance().yield(fibonacci * ::com::diag::desperado::Platform::instance().frequency());
-		logget2.start();
+		EXPECT_TRUE(logget2.start());
 	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
 	ASSERT_NE(logget2.getPrefix(), (char *)0);
@@ -198,13 +198,13 @@ TEST_F(LogTest, SetGetApplication) {
 	Size inputsize = size(*input);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
 	for (int ii = 0; ii < 10; ++ii) {
-		put.start();
+		EXPECT_TRUE(put.start());
 		multiplex.complete();
 		if (!put.isRetryable()) { break; }
 		platform.yield(factor * platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		put.reset(input, inputsize);
+		EXPECT_TRUE(put.reset(input, inputsize));
 	}
 	ASSERT_TRUE(put.isSuccessful());
 	BucketManifest manifest1(bucket, multiplex);

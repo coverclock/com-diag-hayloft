@@ -64,9 +64,12 @@ void ObjectDelete::execute() {
 	);
 }
 
-void ObjectDelete::start() {
+bool ObjectDelete::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

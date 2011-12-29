@@ -248,20 +248,24 @@ public:
 	 * called from a constructor when the synchronous interface is used, at
 	 * which time construction of the object may not be complete (depending on
 	 * the C++ implementation).
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void start();
+	virtual bool start();
 
 	/**
 	 * Reset the action.
 	 *
-	 * The default implementation in the base class does nothing. Derived
+	 * The default implementation in the base class returns success. Derived
 	 * classes may use this to perform some recovery or reinitialization action
 	 * when signaled by a management entity that calls this method before
 	 * restarting the Action. Typically, actions that use input or output
 	 * functors will do whatever is necessary to rewind the input or output
 	 * stream.
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void reset();
+	virtual bool reset();
 
 protected:
 

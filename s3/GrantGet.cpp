@@ -105,9 +105,12 @@ void GrantGet::execute() {
 	);
 }
 
-void GrantGet::start() {
+bool GrantGet::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

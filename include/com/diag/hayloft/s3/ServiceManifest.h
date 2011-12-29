@@ -158,8 +158,10 @@ public:
 	/**
 	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
 	 * BUSY.
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void start();
+	virtual bool start();
 
 	/**
 	 * Get a constant reference to the Manifest map.
@@ -180,8 +182,10 @@ public:
 	/**
 	 * Reset this ServiceManifest so it can be reused. This includes clearing
 	 * the Manifest map.
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void reset();
+	virtual bool reset();
 
 protected:
 

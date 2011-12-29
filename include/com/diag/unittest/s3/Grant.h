@@ -55,8 +55,8 @@ TEST_F(GrantTest, GetSynchronous) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput.reset(input, inputsize);
-		objectput.start();
+		EXPECT_TRUE(objectput.reset(input, inputsize));
+		EXPECT_TRUE(objectput.start());
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
 	GrantGet grantgetobject(objectput);
@@ -81,7 +81,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize);
-	objectput.start();
+	EXPECT_TRUE(objectput.start());
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		multiplex.complete();
 		if (!objectput.isRetryable()) { break; }
@@ -89,8 +89,8 @@ TEST_F(GrantTest, GetAsynchronous) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput.reset(input, inputsize);
-		objectput.start();
+		EXPECT_TRUE(objectput.reset(input, inputsize));
+		EXPECT_TRUE(objectput.start());
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
 	GrantGet grantgetobject(objectput, multiplex);
@@ -125,8 +125,8 @@ TEST_F(GrantTest, GetPublicRead) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput.reset(input, inputsize);
-		objectput.start();
+		EXPECT_TRUE(objectput.reset(input, inputsize));
+		EXPECT_TRUE(objectput.start());
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
 	GrantGet grantgetobject(objectput);
@@ -155,8 +155,8 @@ TEST_F(GrantTest, SetGet) {
 		platform.yield(platform.frequency());
 		input = new ::com::diag::desperado::PathInput("unittest.txt");
 		inputsize = size(*input);
-		objectput.reset(input, inputsize);
-		objectput.start();
+		EXPECT_TRUE(objectput.reset(input, inputsize));
+		EXPECT_TRUE(objectput.start());
 	}
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/

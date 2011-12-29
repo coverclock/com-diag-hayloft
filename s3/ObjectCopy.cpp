@@ -147,9 +147,12 @@ void ObjectCopy::execute() {
 	);
 }
 
-void ObjectCopy::start() {
+bool ObjectCopy::start() {
 	if (state() != BUSY) {
 		execute();
+		return true;
+	} else {
+		return false;
 	}
 }
 

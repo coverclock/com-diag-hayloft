@@ -66,7 +66,7 @@
 #include "com/diag/unittest/s3/Log.h"
 #endif
 
-#if 1
+#if 0
 #include "com/diag/unittest/s3/Complex.h"
 #endif
 

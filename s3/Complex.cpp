@@ -127,6 +127,21 @@ Complex::~Complex() {
 	}
 }
 
+Action * Complex::pop_front() {
+	CriticalSection guard(mutex);
+	Action * action = 0;
+	if (!list.empty()) {
+		action = list.front();
+		list.pop_front();
+	}
+	return action;
+}
+
+void Complex::push_back(Action & action) {
+	CriticalSection guard(mutex);
+	list.push_back(&action);
+}
+
 bool Complex::start(Action & action) {
 	Action * actionable = 0;
 	{
@@ -139,8 +154,7 @@ bool Complex::start(Action & action) {
 		}
 	}
 	if (actionable != 0) {
-		CriticalSection guard(mutex);
-		list.push_back(actionable);
+		push_back(*actionable);
 		thread.start();
 		return true;
 	} else {
@@ -163,22 +177,26 @@ bool Complex::wait(Action & action) {
 }
 
 void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
+	Action * actionable = 0;
 	{
 		CriticalSection guard(action.mutex);
 		if (action.pending == complex) {
 			if (::S3_status_is_retryable(action.status) != 0) {
-				CriticalSection guard(mutex);
-				list.push_back(&action);
-				thread.start();
-				return;
+				actionable = &action;
+			} else {
+				action.condition.signal();
 			}
-			action.condition.signal();
 		}
 	}
-	// The LifeCycle complete method or the Action complete method that it
-	// calls is permitted to delete the Action. So there can be no references
-	// to any fields in the Action following this call. That includes its mutex.
-	nextlifecycle->complete(action, final, errorDetails);
+	if (actionable != 0) {
+		push_back(*actionable);
+		thread.start();
+	} else {
+		// The LifeCycle complete method or the Action complete method that it
+		// calls is permitted to delete the Action. So there can be no references
+		// to any fields in the Action following this call. That includes its mutex.
+		nextlifecycle->complete(action, final, errorDetails);
+	}
 }
 
 static const Milliseconds RETRY = 1000;
@@ -223,21 +241,20 @@ void * Complex::run() {
 			// Step through everything on our list and see what needs to be done.
 
 			Action * action;
-			do {
+			for (action = pop_front(); action != 0; action = pop_front()) {
+				bool startable = false;
 				{
-					CriticalSection guard(mutex);
-					if (!list.empty()) {
-						action = list.front();
-						list.pop_front();
-					} else {
-						action = 0;
+					CriticalSection guard(action->mutex);
+					startable = (action->status == Action::PENDING);
+					if (!startable) {
+						action->condition.signal();
 					}
 				}
-				if (action != 0) {
-					// Insert backoff stuff here.
+				// Insert back off stuff here.
+				if (startable || action->reset()) {
 					action->start();
 				}
-			} while (action != 0);
+			}
 
 			// Iterate once over any of the pending requests. This is necessary
 			// just to get stuff started: sending any initial requests to S3 so

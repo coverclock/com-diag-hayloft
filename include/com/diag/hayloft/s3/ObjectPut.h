@@ -284,8 +284,19 @@ public:
 	/**
 	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
 	 * BUSY.
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void start();
+	virtual bool start();
+
+	/**
+	 * If the Action is not BUSY and none of the data source has been consumed,
+	 * return true to indicate the Action can be retried without a new Input
+	 * functor.
+	 *
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool reset();
 
 	/**
 	 * If the Action is not BUSY, reset the data source to a new Input functor.
@@ -294,8 +305,9 @@ public:
 	 * @param source refers to an Input functor.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads.
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void reset(Input & source, Octets objectsize);
+	virtual bool reset(Input & source, Octets objectsize);
 
 	/**
 	 * If the Action is not BUSY, reset the data source to a new Input functor.
@@ -305,8 +317,9 @@ public:
 	 *        the Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads.
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void reset(Input * sourcep = 0 /* TAKEN */, Octets objectsize = 0);
+	virtual bool reset(Input * sourcep /* TAKEN */, Octets objectsize);
 
 protected:
 

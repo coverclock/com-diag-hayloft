@@ -175,8 +175,10 @@ public:
 	/**
 	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
 	 * BUSY.
+	 *
+	 * @return true if successful, false otherwise.
 	 */
-	virtual void start();
+	virtual bool start();
 
 	/**
 	 * Get the canonical name of the bucket to which the copy is made.
