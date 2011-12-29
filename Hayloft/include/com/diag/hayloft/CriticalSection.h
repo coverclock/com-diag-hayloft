@@ -22,23 +22,35 @@ namespace hayloft {
  * destructor. This allows you to implement a critical section protected by
  * a Mutex by using the C++ "Resource Allocation is Initialization" idiom. The
  * critical section is protected by the associated Mutex while an object of
- * this type is in scope. This class is an alias for the Desperado
- * CriticalSection class. Like Desperado CriticalSection, the default
- * behavior for Hayloft CriticalSection is to disable cancellation of the
+ * this type is in scope. This class is mostly an alias for the Desperado
+ * CriticalSection class. But unike Desperado CriticalSection, the default
+ * behavior for Hayloft CriticalSection is to enable cancellation of the
  * constructing thread of control while an object of this type is in scope.
- *
- * I've had mixed experiences leaving cancellation enabled in the Hayloft unit
- * test suite. Generally, using thread cancellation is a bad idea, for lots
- * of reasons. Historically, best practices in using threading packages in
- * systems ranging from GNU/Linux to vxWorks recommend against it. Typically
- * this is because canceling a thread may subvert or bypass the normal
- * mechanisms that guarantee its acquired resources are released. My expectation
- * is that the C++ run time system should guarantee that the destructors for
- * stack objects would be executed. But this may be dependent on the specific
- * C++ implementation. I cannot recommend it as a general practice, but there
- * may be situations where it is necessary.
+ * Instead, it relies on the C++ run time unwinding the stack to insure that
+ * the Mutex is released. Having said that, using thread cancellation is a
+ * really really bad idea for lots of really really good reasons. You can
+ * disable cancellation by not using the default value for the second
+ * constructor parameter, by using the Desperado base class, or by using the
+ * similarly scope-controlled Uncancellable class. (I confess this is mostly
+ * an experiment.)
  */
-typedef ::com::diag::desperado::CriticalSection CriticalSection;
+class CriticalSection : public ::com::diag::desperado::CriticalSection {
+
+public:
+
+    /**
+     *  Constructor.
+     *
+     * @param mutexr refers to a mutex object.
+     * @param disable if true causes the calling thread to be uncancellable
+     *                when an object of this type is in scope. To leave the
+     *                calling thread cancellable is the default behavior.
+     */
+    explicit CriticalSection(Mutex& mutexr, bool disable = false)
+    : ::com::diag::desperado::CriticalSection(mutexr, disable)
+    {}
+
+};
 
 }
 }
