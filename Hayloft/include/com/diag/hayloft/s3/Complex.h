@@ -16,7 +16,10 @@
 #include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/Thread.h"
 #include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/Fibonacci.h"
+#include "com/diag/hayloft/Seconds.h"
 #include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/desperado/types.h"
 
 namespace com {
@@ -66,7 +69,9 @@ protected:
 
 	typedef std::list<Action *> List;
 
-	static Mutex mutex;
+	static Mutex instance;
+
+	static Mutex shared;
 
 	static int instances;
 
@@ -84,17 +89,21 @@ protected:
 
 	static Thread thread;
 
-	static List list;
+	static List starting;
 
-protected:
+	static List restarting;
+
+	static Fibonacci fibonacci;
+
+	static Epochalseconds alarm;
 
 	static void * run();
 
 	static void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
 
-	static Action * pop_front();
+	static Action * pop_front(List & list);
 
-	static void push_back(Action & action);
+	static List & push_back(List & list, Action & action);
 
 public:
 

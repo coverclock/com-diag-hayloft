@@ -74,6 +74,20 @@ TEST_F(FibonacciTest, Overflow) {
 	ASSERT_NE(now, 0);
 }
 
+TEST_F(FibonacciTest, Limit) {
+	Fibonacci fibonacci(5);
+	EXPECT_EQ(fibonacci.get(), 1);
+	EXPECT_EQ(fibonacci.get(), 1);
+	EXPECT_EQ(fibonacci.next(), 1);
+	EXPECT_EQ(fibonacci.next(), 2);
+	EXPECT_EQ(fibonacci.next(), 3);
+	EXPECT_EQ(fibonacci.next(), 5);
+	EXPECT_EQ(fibonacci.get(), 5);
+	EXPECT_EQ(fibonacci.next(), 5);
+	EXPECT_EQ(fibonacci.next(), 5);
+	EXPECT_EQ(fibonacci.next(), 5);
+}
+
 }
 }
 }

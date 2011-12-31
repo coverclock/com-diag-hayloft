@@ -49,7 +49,7 @@ TEST_F(ComplexTest, Stack) {
 	EXPECT_NE(complex2.getPending(), (Pending*)0);
 }
 
-TEST_F(ComplexTest, Foo) {
+TEST_F(ComplexTest, Application) {
 	static const int LIMIT = 10;
 	Bucket BUCKET1("ComplexTestService1");
 	Bucket BUCKET2("ComplexTestService2");

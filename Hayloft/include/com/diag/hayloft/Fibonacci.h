@@ -21,7 +21,7 @@ namespace hayloft {
  * Fibonacci implements the Fibonacci sequence for use in back off during
  * error recovery and retry. The resulting Fibonacci number is limited to
  * no more than the the maximum possible value of the underlying integer
- * data type.
+ * data type or optionally some other maximum value.
  */
 class Fibonacci {
 
@@ -31,14 +31,20 @@ private:
 
 	unsigned int now;
 
+	unsigned int max;
+
 public:
 
 	/**
 	 * Ctor.
+	 *
+	 * @param limit is the maximum unsigned integer value that a generated
+	 *        Fibonacci number may assume.
 	 */
-	Fibonacci()
+	Fibonacci(unsigned int limit = intmaxof(unsigned int))
 	: was(0)
 	, now(1)
+	, max(limit)
 	{}
 
 	/**
@@ -47,7 +53,7 @@ public:
 	 * @return the current number in the sequence.
 	 */
 	unsigned int next() {
-		int result = (now <= (intmaxof(unsigned int) - was)) ? now + was : now;
+		int result = (now <= (max - was)) ? now + was : now;
 		was = now;
 		now = result;
 		return result;

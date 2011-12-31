@@ -18,10 +18,10 @@
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/Condition.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/desperado/target.h"
 #include "com/diag/desperado/errno.h"
 #include "com/diag/desperado/string.h"
+#include "com/diag/desperado/Dump.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -30,10 +30,30 @@ namespace hayloft {
 namespace s3 {
 
 /*******************************************************************************
+ * CONSTANTS
+ ******************************************************************************/
+
+static const Milliseconds RETRY = 1000;
+
+static const Milliseconds TIMEOUT = 1000;
+
+static const Milliseconds MINIMUM = 1000;
+
+static const Epochalseconds BACKOFF = 1;
+
+/*******************************************************************************
  * CLASS VARIABLES
  ******************************************************************************/
 
-Mutex Complex::mutex;
+// To avoid deadlock, the locking order of the mutexen must be
+// 1. Complex::instance,
+// 2. Action::mutex,
+// 3. Complex::shared,
+// 4. Thread::mutex.
+
+Mutex Complex::instance;
+
+Mutex Complex::shared;
 
 int Complex::instances = 0;
 
@@ -51,7 +71,13 @@ Complex::LifeCycle Complex::lifecycle;
 
 Complex::Thread Complex::thread;
 
-Complex::List Complex::list;
+Complex::List Complex::starting;
+
+Complex::List Complex::restarting;
+
+Fibonacci Complex::fibonacci(1000);
+
+Epochalseconds Complex::alarm = 0;
 
 /*******************************************************************************
  * LIFE CYCLE
@@ -89,9 +115,10 @@ void * Complex::Thread::run() {
  * COMPLEX
  ******************************************************************************/
 
+// This will be called in the context of the Application Thread.
 Complex::Complex()
 {
-	CriticalSection guard(mutex);
+	CriticalSection guard(instance);
 	if (instances == 0) {
 		::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
 		status = ::S3_create_request_context(&complex);
@@ -107,8 +134,9 @@ Complex::Complex()
 	logger.debug("Complex@%p: pending=%p\n", this, pending);
 }
 
+// This will be called in the context of the Application Thread.
 Complex::~Complex() {
-	CriticalSection guard(mutex);
+	CriticalSection guard(instance);
 	--instances;
 	if (instances == 0) {
 		LifeCycle::instance(*nextlifecycle);
@@ -119,16 +147,28 @@ Complex::~Complex() {
 		Action * action;
 		::S3ErrorDetails errorDetails;
 		memset(&errorDetails, 0, sizeof(errorDetails));
-		while (!list.empty()) {
-			action = list.front();
-			list.pop_front();
-			nextlifecycle->complete(*action, ::S3StatusAbortedByCallback, &errorDetails);
+		for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
+			CriticalSection guard(action->mutex);
+			action->status = ::S3StatusInternalError;
+			if (action->pending == complex) {
+				action->condition.signal();
+			}
+			nextlifecycle->complete(*action, action->status, &errorDetails);
+		}
+		for (Action * action = pop_front(restarting); action != 0; action = pop_front(restarting)) {
+			CriticalSection guard(action->mutex);
+			action->status = ::S3StatusInternalError;
+			if (action->pending == complex) {
+				action->condition.signal();
+			}
+			nextlifecycle->complete(*action, action->status, &errorDetails);
 		}
 	}
 }
 
-Action * Complex::pop_front() {
-	CriticalSection guard(mutex);
+// This may be called in the context if either Thread.
+Action * Complex::pop_front(List & list) {
+	CriticalSection guard(shared);
 	Action * action = 0;
 	if (!list.empty()) {
 		action = list.front();
@@ -137,71 +177,64 @@ Action * Complex::pop_front() {
 	return action;
 }
 
-void Complex::push_back(Action & action) {
-	CriticalSection guard(mutex);
+// This may be called in the context if either Thread.
+Complex::List & Complex::push_back(List & list, Action & action) {
+	CriticalSection guard(shared);
 	list.push_back(&action);
+	return list;
 }
 
-bool Complex::start(Action & action) {
-	Action * actionable = 0;
-	{
-		CriticalSection guard(action.mutex);
-		if (action.pending == complex) {
-			if ((action.status != Action::PENDING) && (action.status != Action::BUSY) && (action.status != Action::FINAL)) {
-				action.status = static_cast<Status>(Action::PENDING);
-				actionable = &action;
-			}
-		}
-	}
-	if (actionable != 0) {
-		push_back(*actionable);
-		thread.start();
-		return true;
-	} else {
-		return false;
-	}
-}
-
+// This will be called in the context of the Application Thread.
 bool Complex::wait(Action & action) {
 	CriticalSection guard(action.mutex);
-	if (action.pending != complex) {
-		return false;
-	} else {
-		while ((action.status != Action::PENDING) && (action.status != Action::BUSY) && (action.status != Action::FINAL) && (::S3_status_is_retryable(action.status) != 0)) {
+	if (action.pending == complex) {
+		while ((action.status == Action::PENDING) || (action.status == Action::BUSY)) {
 			if (action.condition.wait(action.mutex) != 0) {
 				return false;
 			}
 		}
 		return true;
 	}
+	return false;
 }
 
-void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
-	Action * actionable = 0;
-	{
-		CriticalSection guard(action.mutex);
-		if (action.pending == complex) {
-			if (::S3_status_is_retryable(action.status) != 0) {
-				actionable = &action;
-			} else {
-				action.condition.signal();
-			}
+// This will be called in the context of the Application Thread.
+bool Complex::start(Action & action) {
+	CriticalSection guard(action.mutex);
+	if (action.pending == complex) {
+		if ((action.status != Action::PENDING) && (action.status != Action::BUSY)) {
+			action.status = static_cast<Status>(Action::PENDING);
+			push_back(starting, action);
+			thread.start();
+			return true;
 		}
 	}
-	if (actionable != 0) {
-		push_back(*actionable);
-		thread.start();
-	} else {
-		// The LifeCycle complete method or the Action complete method that it
-		// calls is permitted to delete the Action. So there can be no references
-		// to any fields in the Action following this call. That includes its mutex.
-		nextlifecycle->complete(action, final, errorDetails);
-	}
+	return false;
 }
 
-static const Milliseconds RETRY = 1000;
-static const Milliseconds TIMEOUT = 1000;
-static const Milliseconds MINIMUM = 1000;
+// This is always called from the context Complex Thread since it is invoked
+// by libs3 as a result of the run method calling the libs3 iterate. There
+// is no separate libs3 Thread (nor probably a cURL Thread).
+void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
+	CriticalSection guard(action.mutex);
+	if (!::S3_status_is_retryable(final)) {
+		alarm = 0;
+		fibonacci.reset();
+	} else if (action.pending != complex) {
+		// Do nothing.
+	} else if (action.reset()) {
+		push_back(restarting, action);
+		thread.start();
+		return;
+	} else {
+		// Do nothing.
+	}
+	if (action.pending == complex) {
+		action.condition.signal();
+
+	}
+	nextlifecycle->complete(action, final, errorDetails);
+}
 
 void * Complex::run() {
 	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
@@ -211,48 +244,49 @@ void * Complex::run() {
 
 	::com::diag::desperado::ticks_t retryticks = (RETRY * numerator) / (1000 * denominator);
 
-	int actions;
-
-	Status result;
-
-	fd_set reads;
-	fd_set writes;
-	fd_set exceptions;
-
-	int maxfd;
-
-	Milliseconds maximum;
-	Milliseconds effective;
-
-	struct timeval timeoutval = { 0 };
-
-	int rc;
-
-	int ready;
-
-	::com::diag::desperado::ticks_t delayticks = 0;
+	Seconds time;
 
 	// This thread runs forever until notified by the last Complex destructor.
 
 	while (!thread.notified()) {
 
+		::com::diag::desperado::ticks_t delayticks = 0;
+
 		do {
 
-			// Step through everything on our list and see what needs to be done.
+			// If the restarting list is not empty, then we've had Actions
+			// with retryable failures. These are likely to be temporary
+			// network failures. Recompute are back-off start time. Note
+			// that only this thread access the restarting list.
 
-			Action * action;
-			for (action = pop_front(); action != 0; action = pop_front()) {
-				bool startable = false;
-				{
+			if (!restarting.empty()) {
+				Epochalseconds delay = BACKOFF * fibonacci.next();
+				logger.debug("Complex: backoff=%llus\n", delay);
+				alarm = time.now() + delay;
+			}
+
+			// Process all Actions which are waiting for restarting by moving
+			// them to the starting list. It's important to separate
+			// these two states. It's possible that a retryable failure will
+			// lead an Action being restarted to immediately complete. Putting
+			// an Action in either state in the same list can lead to an
+			// infinite loop as it continuously cycles back onto the starting
+			// list, which would never become empty.
+
+			for (Action * action = pop_front(restarting); action != 0; action = pop_front(restarting)) {
+				CriticalSection guard(action->mutex);
+				push_back(starting, *action);
+			}
+
+			// Wait until our back off alarm has gone off to start anything.
+
+			if ((alarm == 0) || (alarm >= time.now())) {
+				for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
 					CriticalSection guard(action->mutex);
-					startable = (action->status == Action::PENDING);
-					if (!startable) {
+					if (!action->start()) {
+						action->status = ::S3StatusInternalError; // Should never happen.
 						action->condition.signal();
 					}
-				}
-				// Insert back off stuff here.
-				if (startable || action->reset()) {
-					action->start();
 				}
 			}
 
@@ -263,8 +297,8 @@ void * Complex::run() {
 			// returns we assume that libs3 has do all the writes that can be done
 			// at this point and is now waiting for S3 to respond so it can read.
 
-			actions = 0;
-			result = ::S3_runonce_request_context(complex, &actions);
+			int actions = 0;
+			Status result = ::S3_runonce_request_context(complex, &actions);
 			if (result != S3StatusOK) {
 				logger.error("Complex: S3_runonce_request_context failed! status=%d=\"%s\"\n", result, tostring(result));
 				delayticks = retryticks;
@@ -285,11 +319,15 @@ void * Complex::run() {
 			// fd_sets all zeroed out as required by libs3, even though we
 			// won't use two of them.
 
+			fd_set reads;
+			fd_set writes;
+			fd_set exceptions;
+
 			FD_ZERO(&reads);
 			FD_ZERO(&writes);
 			FD_ZERO(&exceptions);
 
-			maxfd = -1;
+			int maxfd = -1;
 			result = ::S3_get_request_context_fdsets(complex, &reads, &writes, &exceptions, &maxfd);
 			if (result != ::S3StatusOK) {
 				logger.error("Complex: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", result, tostring(result));
@@ -306,7 +344,7 @@ void * Complex::run() {
 				break;
 			}
 
-			logger.debug("Complex: fd=%d\n", maxfd);
+			logger.debug("Complex: maxfd=%d\n", maxfd);
 
 			// Figure out a usable timeout and delay value. The libs3
 			// ::S3_get_request_context_timeout function can return 0 of the
@@ -315,8 +353,8 @@ void * Complex::run() {
 			// wait at all. Note that we don't use Fibonacci scaling here but
 			// instead rely on the function to tell us the maximum delay.
 
-			effective = TIMEOUT;
-			maximum = ::S3_get_request_context_timeout(complex);
+			Milliseconds effective = TIMEOUT;
+			Milliseconds maximum = ::S3_get_request_context_timeout(complex);
 			if (effective > maximum) { effective = maximum; }
 			if (effective < 0) { effective = MINIMUM; }
 
@@ -332,6 +370,7 @@ void * Complex::run() {
 
 			logger.debug("Complex: timeout=%llums\n", effective);
 
+			struct timeval timeoutval = { 0 };
 			timeoutval.tv_sec = effective / 1000;
 			timeoutval.tv_usec = (effective % 1000) * 1000;
 
@@ -341,18 +380,21 @@ void * Complex::run() {
 			// purpose of this is just to delay this thread until there is something
 			// for libs3 to do.
 
-			rc = ::select(maxfd, &reads, 0, 0, &timeoutval);
+			int rc = ::select(maxfd, &reads, 0, 0, &timeoutval);
 			if (rc < 0) {
 				logger.error("Complex: select failed! error=%d=\"%s\"\n", errno, ::strerror(errno));
 				delayticks = retryticks;
 				break;
 			}
 
-			// This is really inefficient but it is the only reliable way to do it
+			// This is inefficient but it is the only reliable way to do it
 			// without cracking open the fd_set structure and relying on its
 			// specific implementation.
 
-			ready = 0;
+::com::diag::desperado::Dump dump;
+dump.words(&reads, sizeof(reads));
+
+			int ready = 0;
 			for (int fd = 0; fd <= maxfd; ++fd) {
 				if (FD_ISSET(fd, &reads)) {
 					++ready;
