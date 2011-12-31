@@ -37,34 +37,28 @@ class Complex;
 class Action {
 
 	friend class LifeCycle;
+
 	friend class Complex;
 
 public:
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has been
-	 * constructed but has not yet been started.
+	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * transitional status between constructing and starting.
 	 */
 	static const int IDLE = intmaxof(Status);
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action is in a
-	 * transitional state between being constructed and being started.
+	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * transitional status between starting and running.
 	 */
 	static const int PENDING = intmaxof(Status) - 1;
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has been
-	 * started and is being executed. Most methods which mutate an Action are
-	 * ignored when the Action is in this state.
+	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * transitional status between running and completing.
 	 */
 	static const int BUSY = intmaxof(Status) - 2;
-
-	/**
-	 * This is a fake libs3 ::S3Status value that means the Action is in a
-	 * transitional state between being started and being complete.
-	 */
-	static const int FINAL = intmaxof(Status) - 3;
 
 private:
 
@@ -143,7 +137,7 @@ public:
 	 * Return true if this Action has achieved a final state.
 	 * @return true if this Action has achieved a final state.
 	 */
-	operator bool() const { Status temp = state(); return ((temp != IDLE) && (temp != PENDING) && (temp != BUSY) && (temp != FINAL)); }
+	operator bool() const { Status temp = state(); return ((temp != IDLE) && (temp != BUSY)); }
 
 	/**
 	 * Return true if this Action is IDLE.

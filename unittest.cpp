@@ -58,7 +58,7 @@
 
 // Unit tests that use S3, perhaps more properly called functional tests.
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Bucket.h"
 #include "com/diag/unittest/s3/Object.h"
 #include "com/diag/unittest/s3/convergence.h"
@@ -66,7 +66,7 @@
 #include "com/diag/unittest/s3/Log.h"
 #endif
 
-#if 0
+#if 1
 #include "com/diag/unittest/s3/Complex.h"
 #endif
 
