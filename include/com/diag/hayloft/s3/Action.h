@@ -60,15 +60,13 @@ public:
 	 */
 	static const int BUSY = intmaxof(Status) - 2;
 
-private:
+protected:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
 	static void responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 	Status status;
-
-protected:
 
 	std::string server;
 
@@ -262,6 +260,14 @@ public:
 	 * @return true if successful, false otherwise.
 	 */
 	virtual bool reset();
+
+	/**
+	 * Determine if this Action is retryable given the specified status.
+	 *
+	 * @param status refers to the Status to be evaluated for retryability.
+	 * @return true if retryable, false otherwise.
+	 */
+	virtual bool retryable(Status final);
 
 protected:
 

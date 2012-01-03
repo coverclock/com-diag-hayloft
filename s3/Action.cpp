@@ -122,6 +122,25 @@ bool Action::reset() {
 	return true;
 }
 
+// This method in the base class takes a broader view of retryability to
+// include not only temporary network failures but possibly convergence
+// latency too. Whether this is reasonable for all Actions is up to the
+// derived classes.
+bool Action::retryable(Status status) {
+	bool result;
+	switch (status) {
+	case ::S3StatusHttpErrorNotFound:
+	case ::S3StatusErrorNoSuchKey:
+	case ::S3StatusErrorNoSuchBucket:
+		result = true;
+		break;
+	default:
+		result = ::S3_status_is_retryable(status);
+		break;
+	}
+	return result;
+}
+
 /*******************************************************************************
  * INSTANCE METHODS WHICH A DERIVED CLASS MAY OVERRIDE TO IMPLEMENT STRATEGY
  ******************************************************************************/

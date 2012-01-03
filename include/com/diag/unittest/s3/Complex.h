@@ -15,6 +15,7 @@
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Complex.h"
+#include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/hayloft/s3/ObjectGet.h"
 #include "com/diag/desperado/PathOutput.h"
@@ -65,6 +66,10 @@ TEST_F(ComplexTest, Success) {
 	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
 
+// For other Actions we could simply define a properties() method that returns
+// something other than S3StatusOK. But there are no properties for a new
+// Bucket so that method never gets called. So we have to wire into the
+// start method.
 struct BucketCreateProxy : public BucketCreate {
 	int failures;
 	Status failure;
@@ -73,13 +78,15 @@ struct BucketCreateProxy : public BucketCreate {
 	, failures(0)
 	, failure(::S3StatusOK)
 	{}
-	virtual Status properties(const ::S3ResponseProperties * responseProperties) {
-		Status status = ::S3StatusOK;
+	virtual bool start() {
 		if (failures > 0) {
-			status = failure;
 			--failures;
+			::S3ErrorDetails errorDetails = { 0 };
+			responseCompleteCallback(failure, &errorDetails, this);
+			return true;
+		} else {
+			return BucketCreate::start();
 		}
-		return status;
 	}
 };
 
@@ -142,14 +149,10 @@ TEST_F(ComplexTest, Unrecoverable) {
 	EXPECT_TRUE(complex.start(bucketcreate));
 	EXPECT_TRUE(complex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
-	BucketDelete bucketdelete(BUCKET, complex);
-	EXPECT_TRUE(complex.start(bucketdelete));
-	EXPECT_TRUE(complex.wait(bucketdelete));
-	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
 
 struct ComplexIrrecoverable : public Complex {
-	ComplexIrrecoverable() {
+	explicit ComplexIrrecoverable() {
 		RETRIES = 1;
 	}
 };
@@ -165,11 +168,7 @@ TEST_F(ComplexTest, Irrecoverable) {
 	bucketcreate.failure = ::S3StatusErrorInternalError;
 	EXPECT_TRUE(complex.start(bucketcreate));
 	EXPECT_TRUE(complex.wait(bucketcreate));
-	EXPECT_TRUE(bucketcreate.isSuccessful());
-	BucketDelete bucketdelete(BUCKET, complex);
-	EXPECT_TRUE(complex.start(bucketdelete));
-	EXPECT_TRUE(complex.wait(bucketdelete));
-	EXPECT_TRUE(bucketdelete.isSuccessful());
+	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
 TEST_F(ComplexTest, Application) {

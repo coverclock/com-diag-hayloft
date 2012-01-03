@@ -123,14 +123,6 @@ protected:
 	 */
 	static int RETRIES;
 
-	/**
-	 * If this is true, than S3 status returns indicating that a bucket or
-	 * object was not found are considered retryable. This can let Complex
-	 * recover from temporary convergence issues where Eventual Consistency
-	 * is more eventual than usual.
-	 */
-	static bool RETRYABLE;
-
 private:
 
 	static Mutex instance;
@@ -162,17 +154,6 @@ private:
 	static Fibonacci fibonacci;
 
 	static Epochalseconds alarm;
-
-public:
-
-	/**
-	 * Determine if an action is retryable. Complex's idea of retryable may not
-	 * be exactly the same of libs3's idea of retryable.
-	 *
-	 * @param status refers to the Status to be evaluated for retryability.
-	 * @return true if retryable, false otherwise.
-	 */
-	static bool retryable(Status status);
 
 protected:
 
