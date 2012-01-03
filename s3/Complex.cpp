@@ -151,7 +151,7 @@ Complex::~Complex() {
 		thread.notify();
 		ready.signal(); // Do we really need to lock shared for this?
 		thread.join();
-		S3_destroy_request_context(complex);
+		S3_destroy_request_context(complex); // Forces all pending Actions to complete.
 		complex = 0;
 		Action * action;
 		::S3ErrorDetails errorDetails = { 0 };
@@ -159,6 +159,7 @@ Complex::~Complex() {
 			CriticalSection guard(action->mutex);
 			action->status = ::S3StatusInternalError;
 			if (action->pending == complex) {
+				action->retries = 0;
 				action->condition.signal();
 			}
 			nextlifecycle->complete(*action, action->status, &errorDetails);
@@ -167,6 +168,7 @@ Complex::~Complex() {
 			CriticalSection guard(action->mutex);
 			action->status = ::S3StatusInternalError;
 			if (action->pending == complex) {
+				action->retries = 0;
 				action->condition.signal();
 			}
 			nextlifecycle->complete(*action, action->status, &errorDetails);
@@ -204,7 +206,7 @@ Complex::List & Complex::push_back_signal(List & list, Action & action) {
 bool Complex::wait(Action & action) {
 	CriticalSection guard(action.mutex);
 	if (action.pending == complex) {
-		while ((action.status == Action::PENDING) || (action.status == Action::BUSY)) {
+		while (action.retries > 0) {
 			if (action.condition.wait(action.mutex) != 0) {
 				return false;
 			}
@@ -240,12 +242,16 @@ void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * e
 		logger->debug("Complex: Action@%p: not retryable\n", &action);
 		alarm = 0;
 		fibonacci.reset();
+		// Fall through: no return.
 	} else if (action.pending != complex) {
 		logger->debug("Complex: Action@%p: not complex\n", &action);
+		// Fall through: no return.
 	} else if (action.retries <= 0) {
 		logger->debug("Complex: Action@%p: too many retries\n", &action);
+		// Fall through: no return.
 	} else if (!action.reset()) {
 		logger->debug("Complex: Action@%p: reset failed\n", &action);
+		// Fall through: no return.
 	} else {
 		logger->debug("Complex: Action@%p: retrying\n", &action);
 		--action.retries;
@@ -253,6 +259,7 @@ void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * e
 		return;
 	}
 	if (action.pending == complex) {
+		action.retries = 0;
 		action.condition.signal();
 
 	}
@@ -326,6 +333,7 @@ void * Complex::run() {
 						if (action->status == static_cast<Status>(Action::PENDING)) {
 							action->status = ::S3StatusInternalError;
 						}
+						action->retries = 0;
 						action->condition.signal();
 						nextlifecycle->complete(*action, action->status, &errorDetails);
 					}
@@ -449,6 +457,7 @@ void * Complex::run() {
 				break;
 			}
 			logger->debug("Complex: readable=%d writable=%d exceptional=%d\n", readable, writable, exceptional);
+			delay = 0;
 
 		} while (false);
 
