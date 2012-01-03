@@ -24,13 +24,8 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
 	// Remember, this is actually a read; put is the S3 operation in progress.
 	int rc = that->put(bufferSize, buffer);
-	if (rc >= 0) {
-		that->consumed += rc;
-		Logger::instance().debug("ObjectPut@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->consumed);
-	} else {
-		Logger::instance().notice("ObjectPut@%p: requested=%d returned=%d total=%d errno=%d=\"%s\"\n", that, bufferSize, rc, that->consumed, errno, ::strerror(errno));
-		rc = 0;
-	}
+	if (rc > 0) { that->consumed += rc; }
+	Logger::instance().debug("ObjectPut@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->consumed);
 	return (rc > 0) ? rc : 0;
 }
 
@@ -286,6 +281,7 @@ int ObjectPut::put(int bufferSize, void * buffer) {
 	if (input != 0) {
 		octets = (*input)(buffer, 1, bufferSize);
 		if (octets == EOF) {
+			if (errno != 0) { Logger::instance().error("ObjectPut@%p: failed! errno=%d=\"%s\"\n", this, errno, ::strerror(errno)); }
 			finalize();
 			octets = 0;
 		}

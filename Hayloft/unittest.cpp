@@ -13,7 +13,7 @@
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/unittest/s3/Environment.h"
 
-// Unit Tests that stand alone.
+// Unit tests that use libhayloft and libdesperado.
 
 #if 1
 #include "com/diag/unittest/Seconds.h"
@@ -24,7 +24,7 @@
 #include "com/diag/unittest/Fibonacci.h"
 #endif
 
-// Unit Tests that also use POSIX Threads and maybe Real Time.
+// Unit tests that also use libpthreads and librt.
 
 #if 1
 #include "com/diag/unittest/Thread.h"
@@ -64,9 +64,6 @@
 #include "com/diag/unittest/s3/convergence.h"
 #include "com/diag/unittest/s3/Grant.h"
 #include "com/diag/unittest/s3/Log.h"
-#endif
-
-#if 1
 #include "com/diag/unittest/s3/Complex.h"
 #endif
 
