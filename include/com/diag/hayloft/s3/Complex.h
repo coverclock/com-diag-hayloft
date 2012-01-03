@@ -16,11 +16,28 @@
 #include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/Thread.h"
 #include "com/diag/hayloft/Mutex.h"
+#include "com/diag/hayloft/Condition.h"
 #include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/hayloft/Seconds.h"
 #include "com/diag/hayloft/s3/S3.h"
 #include "com/diag/hayloft/types.h"
 #include "com/diag/desperado/types.h"
+
+namespace com {
+namespace diag {
+namespace desperado {
+class Platform;
+}
+}
+}
+
+namespace com {
+namespace diag {
+namespace hayloft {
+class Logger;
+}
+}
+}
 
 namespace com {
 namespace diag {
@@ -69,9 +86,58 @@ protected:
 
 	typedef std::list<Action *> List;
 
+	static ::com::diag::desperado::Platform * platform;
+
+	static Logger * logger;
+
+	/**
+	 * If we have an internal error, like an error return on a system call,
+	 * for which there is no known recovery, we assume it is a temporary
+	 * condition, we wait for this many milliseconds, and iterate again.
+	 */
+	static Milliseconds RETRY;
+
+	/**
+	 * If cURL via libs3 doesn't propose a timeout period for waiting one a
+	 * socket to become readable, this is how many milliseconds we wait.
+	 */
+	static Milliseconds TIMEOUT;
+
+	/**
+	 * If cURL proposes a timeout period longer than this many milliseconds
+	 * (it routinely suggests almost as long as thirty seconds), we wait this
+	 * many milliseconds instead. Waiting for less time than cURL suggests is
+	 * okay, we just can't wait longer or else its timers will pop.
+	 */
+	static Milliseconds MAXIMUM;
+
+	/**
+	 * If we get a failure, our back off duration is some multiple of this many
+	 * milliseconds.
+	 */
+	static Milliseconds BACKOFF;
+
+	/**
+	 * This is the maximum number of times an Action may be retried before
+	 * deciding we're not getting anywhere.
+	 */
+	static int RETRIES;
+
+	/**
+	 * If this is true, than S3 status returns indicating that a bucket or
+	 * object was not found are considered retryable. This can let Complex
+	 * recover from temporary convergence issues where Eventual Consistency
+	 * is more eventual than usual.
+	 */
+	static bool RETRYABLE;
+
+private:
+
 	static Mutex instance;
 
 	static Mutex shared;
+
+	static Condition ready;
 
 	static int instances;
 
@@ -97,6 +163,19 @@ protected:
 
 	static Epochalseconds alarm;
 
+public:
+
+	/**
+	 * Determine if an action is retryable. Complex's idea of retryable may not
+	 * be exactly the same of libs3's idea of retryable.
+	 *
+	 * @param status refers to the Status to be evaluated for retryability.
+	 * @return true if retryable, false otherwise.
+	 */
+	static bool retryable(Status status);
+
+protected:
+
 	static void * run();
 
 	static void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
@@ -104,6 +183,8 @@ protected:
 	static Action * pop_front(List & list);
 
 	static List & push_back(List & list, Action & action);
+
+	static List & push_back_signal(List & list, Action & action);
 
 public:
 

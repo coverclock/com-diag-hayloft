@@ -82,6 +82,8 @@ protected:
 
 	Condition condition;
 
+	int retries;
+
 	::S3ResponseHandler handler;
 
 	/**

@@ -79,6 +79,7 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 
 Action::Action()
 : pending(0)
+, retries(0)
 , status(::S3StatusOK)
 {
 	initialize();
@@ -86,6 +87,7 @@ Action::Action()
 
 Action::Action(const Plex & plex)
 : pending(plex.getPending())
+, retries(0)
 , status(::S3StatusOK)
 {
 	initialize();
