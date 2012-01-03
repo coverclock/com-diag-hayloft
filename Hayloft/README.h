@@ -4,7 +4,7 @@
 
 /*******************************************************************************
 
-	Copyright 2011 by the Digital Aggregates Corporation, Colorado, USA.
+	Copyright 2011-2012 by the Digital Aggregates Corporation, Colorado, USA.
 
 --------------------------------------------------------------------------------
 
@@ -267,6 +267,52 @@
 		sizeable Pentium server I sometimes see only around 660B/s. I suspect
 		this is my broadband provider throttling my uplink speed. This will be
 		an issue during ObjectGet and ObjectPut Actions.
+
+--------------------------------------------------------------------------------
+
+	PLEXES
+
+	Plexes are different approaches to managing the execution of Actions. You
+	can see examples of all of them in the unit test suite. Briefly here are
+	the different Plexes you can use.
+
+	None
+
+	When you use a constructor that doesn't specify a Plex, you are using the
+	synchronous interface. The Action will be started inside the Action
+	constructor and the calling thread will block until the Action completes.
+	It is up to you to decide whether you need to restart the Action for any
+	reason.
+
+	Simplex
+
+	The Simplex uses the synchronous interface but doesn't start the Action
+	automatically. You must start it manually using its start method. The
+	calling thread will block in the start method until the Action completes.
+	It is up to you to decide whether you need to restart the Action for any
+	reason.
+
+	Multiplex
+
+	The Multiplex uses the asynchronous interface. You must start the Action
+	manually using the start method, and then use the methods provided by the
+	Multiplex to drive the underlying state machines inside libs3 and libcurl
+	to talk to S3. Typically you will run these Multiplex methods in the
+	foreground thread. It is possible to run them in a background thread, but
+	you are responsible for any synchronization. It is up to you to decide
+	whether you need to restart the Action for any reason.
+
+	Complex
+
+	The Complex uses the asyncronous interface. You don't start the Action at
+	all, but instead submit it to the Complex background thread for starting.
+	You can call the wait method which will block your thread until a specific
+	Action has completed. Complex automatically retries any Actions that
+	complete due to a recoverable error, or for errors which are likely to be
+	caused by eventual consistency issues. Complex can run many Actions
+	simultaneously. Once an Action completes, either it has completed for a
+	reason that is non-retryable (including success), it has already been
+	retried too many times, or it failed to start or to reset upon a restart.
 
 *******************************************************************************/
 

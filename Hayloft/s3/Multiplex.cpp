@@ -108,10 +108,7 @@ int Multiplex::ready(Milliseconds timeout) {
 		if (timeout < 0) { timeout = DEFAULT; } // ::S3_get_request_context_timeout() can return -1 indicating no suggested value.
 		logger.debug("Multiplex@%p: milliseconds=%lld\n", this, timeout);
 		struct timeval timeoutval = { timeout / 1000, (timeout % 1000) * 1000 };
-		// No really, we only care about the reads. We assume if libs3 had
-		// something to write it would do so. The fact that sockets are
-		// writable without blocking isn't really useful to know.
-		if (::select(maxfd, &reads, 0, 0, &timeoutval) < 0) {
+		if (::select(maxfd + 1, &reads, &writes, &exceptions, &timeoutval) < 0) {
 			logger.error("Multiplex@%p: select failed! error=%d=\"%s\"\n", this, errno, ::strerror(errno));
 			rc |= ERROR;
 			break;
@@ -120,7 +117,7 @@ int Multiplex::ready(Milliseconds timeout) {
 		// without cracking open the fd_set structure and relying on its
 		// specific implementation.
 		for (int fd = 0; fd <= maxfd; ++fd) {
-			if (FD_ISSET(fd, &reads)) { rc |= READY; break; }
+			if (FD_ISSET(fd, &reads) || FD_ISSET(fd, &writes) || FD_ISSET(fd, &exceptions)) { rc |= READY; break; }
 		}
 	} while (false);
 	logger.debug("Multiplex@%p: ready=0x%x\n", this, rc);

@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2011 by the Digital Aggregates Corporation, Colorado, USA
+# Copyright 2011-2012 by the Digital Aggregates Corporation, Colorado, USA
 # Licensed under the terms in README.h
 # Chip Overclock <coverclock@diag.com>
 # http://www.diag.com/navigation/downloads/Hayloft
@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=2
-MINOR=5
+MINOR=6
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
