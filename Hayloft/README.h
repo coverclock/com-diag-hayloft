@@ -255,6 +255,19 @@
 		This causes CURL, the URL library used by libs3, to log just about
 		everything it does. This might be useful for debugging.
 
+	COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT
+	COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME
+
+		If S3 does not maintain a bandwidth of at least the LOW_SPEED_LIMIT in
+		bytes per second during a window of LOW_SPEED_TIME seconds, libcurl will
+		terminate the connection. libs3 sets these parameters to 1024 and 15
+		respectively. These strings, when converted to long values, can be used
+		to change this limit. Typically you'll want to set them lower. I find
+		that even with a good broadband internet connection using a pretty
+		sizeable Pentium server I sometimes see only around 660B/s. I suspect
+		this is my broadband provider throttling my uplink speed. This will be
+		an issue during ObjectGet and ObjectPut Actions.
+
 *******************************************************************************/
 
 /**

@@ -42,8 +42,6 @@ Milliseconds Complex::MAXIMUM = 5000;
 
 int Complex::RETRIES = 4;
 
-bool Complex::RETRYABLE = true;
-
 /*******************************************************************************
  * CLASS VARIABLES
  ******************************************************************************/
@@ -221,11 +219,11 @@ bool Complex::start(Action & action) {
 	CriticalSection guard(action.mutex);
 	if (action.pending == complex) {
 		if ((action.status != Action::PENDING) && (action.status != Action::BUSY)) {
+			logger->debug("Complex: Action@%p: pending\n", &action);
 			action.status = static_cast<Status>(Action::PENDING);
 			action.retries = RETRIES;
 			thread.start();
 			push_back_signal(starting, action);
-			logger->debug("Complex: Action@%p: pending\n", &action);
 			return true;
 		}
 	}
@@ -233,34 +231,15 @@ bool Complex::start(Action & action) {
 	return false;
 }
 
-// This may be called in the context of either the Complex Thread or the
-// Application Thread. This method takes a broader view of retryability to
-// include not only temporary network failures but possibly convergence
-// latency too.
-bool Complex::retryable(Status status) {
-	bool result;
-	switch (status) {
-	case ::S3StatusHttpErrorNotFound:
-	case ::S3StatusErrorNoSuchKey:
-	case ::S3StatusErrorNoSuchBucket:
-		result = RETRYABLE;
-		break;
-	default:
-		result = ::S3_status_is_retryable(status);
-		break;
-	}
-	return result;
-}
-
 // This is always called from the context of the Complex Thread since it is
 // invoked by libs3 as a result of the run method calling the libs3 iterate once
 // function. There is no separate libs3 Thread (nor probably a cURL Thread).
 void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
 	CriticalSection guard(action.mutex);
-	if (!retryable(final)) {
+	if (!action.retryable(final)) {
+		logger->debug("Complex: Action@%p: not retryable\n", &action);
 		alarm = 0;
 		fibonacci.reset();
-		logger->debug("Complex: Action@%p: not retryable\n", &action);
 	} else if (action.pending != complex) {
 		logger->debug("Complex: Action@%p: not complex\n", &action);
 	} else if (action.retries <= 0) {
@@ -268,9 +247,9 @@ void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * e
 	} else if (!action.reset()) {
 		logger->debug("Complex: Action@%p: reset failed\n", &action);
 	} else {
+		logger->debug("Complex: Action@%p: retrying\n", &action);
 		--action.retries;
 		push_back(restarting, action);
-		logger->debug("Complex: Action@%p: retrying\n", &action);
 		return;
 	}
 	if (action.pending == complex) {
@@ -290,7 +269,7 @@ void * Complex::run() {
 
 	while (!thread.notified()) {
 
-		Milliseconds delay = 0;
+		Milliseconds delay = RETRY;
 
 		do {
 
@@ -308,9 +287,9 @@ void * Complex::run() {
 
 			int restarted = 0;
 			for (Action * action = pop_front(restarting); action != 0; action = pop_front(restarting)) {
+				logger->debug("Complex: Action@%p: restarting\n", action);
 				push_back(starting, *action);
 				++restarted;
-				logger->debug("Complex: Action@%p: restarted\n", action);
 			}
 
 			// If the restarting list was not empty, then we've had Actions
@@ -340,8 +319,8 @@ void * Complex::run() {
 				for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
 					CriticalSection guard(action->mutex);
 					if (action->start()) {
-						++started;
 						logger->debug("Complex: Action@%p: started\n", action);
+						++started;
 					} else {
 						logger->debug("Complex: Action@%p: start failed\n", action);
 						if (action->status == static_cast<Status>(Action::PENDING)) {
@@ -365,7 +344,6 @@ void * Complex::run() {
 			Status result = ::S3_runonce_request_context(complex, &active);
 			if (result != S3StatusOK) {
 				logger->error("Complex: S3_runonce_request_context failed! status=%d=\"%s\"\n", result, tostring(result));
-				delay = RETRY;
 				break;
 			}
 
@@ -378,22 +356,20 @@ void * Complex::run() {
 
 			if (active <= 0) {
 				CriticalSection guard(shared);
-				delay = 0;
 				while (starting.empty() && restarting.empty() && (!thread.notified())) {
 					int error = ready.wait(shared);
 					if (error != 0) {
 						logger->error("Complex: wait failed! error=%d=\"%s\"\n", error, ::strerror(error));
-						delay = RETRY;
 						break;
+					} else {
+						delay = 0;
 					}
 				}
 				break;
 			}
 			logger->debug("Complex: active=%d\n", active);
 
-			// We really only care about the reads, but we provide all three
-			// fd_sets all zeroed out as required by libs3, even though we
-			// won't use two of them.
+			// See what file descriptors libs3 cares about.
 
 			fd_set reads;
 			fd_set writes;
@@ -407,7 +383,6 @@ void * Complex::run() {
 			result = ::S3_get_request_context_fdsets(complex, &reads, &writes, &exceptions, &maxfd);
 			if (result != ::S3StatusOK) {
 				logger->error("Complex: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", result, tostring(result));
-				delay = delay;
 				break;
 			}
 
@@ -416,7 +391,6 @@ void * Complex::run() {
 			// do some writes.
 
 			if (maxfd < 0) {
-				delay = 0;
 				break;
 			}
 			logger->debug("Complex: maxfd=%d\n", maxfd);
@@ -432,8 +406,8 @@ void * Complex::run() {
 			if (timeout < 0) { timeout = TIMEOUT; }
 			if (timeout > MAXIMUM) { timeout = MAXIMUM; }
 
-			// If we've been told not to wait at all, then there is something to
-			// do right now. So we try again.
+			// If cURL says not to wait at all, then there is something to do
+			// right now. So we try again without delay.
 
 			if (timeout == 0) {
 				delay = 0;
@@ -445,16 +419,11 @@ void * Complex::run() {
 			timeoutval.tv_sec = timeout / 1000;
 			timeoutval.tv_usec = (timeout % 1000) * 1000;
 
-			// We only care about the reads. We assume if libs3 had something
-			// to write it would do so. The fact that sockets are writable
-			// without blocking isn't really useful to know. The real purpose
-			// of this is just to delay this thread until there is something
-			// for libs3 to read.
+			// We copy libs3 and wait on all the FD sets.
 
-			int rc = ::select(maxfd + 1, &reads, 0, 0, &timeoutval);
+			int rc = ::select(maxfd + 1, &reads, &writes, &exceptions, &timeoutval);
 			if (rc < 0) {
 				logger->error("Complex: select failed! error=%d=\"%s\"\n", errno, ::strerror(errno));
-				delay = RETRY;
 				break;
 			}
 
@@ -462,22 +431,24 @@ void * Complex::run() {
 			// without cracking open the fd_set structure and relying on its
 			// specific implementation.
 
-			int ready = 0;
+			int readable = 0;
+			int writable = 0;
+			int exceptional = 0;
 			for (int fd = 0; fd <= maxfd; ++fd) {
 				if (FD_ISSET(fd, &reads)) {
-					++ready;
+					++readable;
+				}
+				if (FD_ISSET(fd, &writes)) {
+					++writable;
+				}
+				if (FD_ISSET(fd, &exceptions)) {
+					++exceptional;
 				}
 			}
-
-			// Nothing ready to read, still waiting on S3 to respond, might as
-			// well wait a bit and then give libs3 a chance to process writes
-			// for any actions that have come along since our last iteration.
-
-			if (ready == 0) {
-				delay = 0;
+			if ((readable == 0) && (writable == 0) && (exceptional==0)) {
 				break;
 			}
-			logger->debug("Complex: ready=%d\n", ready);
+			logger->debug("Complex: readable=%d writable=%d exceptional=%d\n", readable, writable, exceptional);
 
 		} while (false);
 
