@@ -25,13 +25,8 @@ Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, voi
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
 	// Remember, this is actually a write; get is the S3 operation in progress.
 	int rc = that->get(bufferSize, buffer);
-	if (rc >= 0) {
-		that->produced += rc;
-		Logger::instance().debug("ObjectGet@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->produced);
-	} else {
-		Logger::instance().notice("ObjectGet@%p: requested=%d returned=%d total=%d errno=%d=\"%s\"\n", that, bufferSize, rc, that->produced, errno, ::strerror(errno));
-		rc = 0;
-	}
+	if (rc > 0) { that->produced += rc; }
+	Logger::instance().debug("ObjectGet@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->produced);
 	return (rc > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
 }
 
@@ -259,6 +254,7 @@ int ObjectGet::get(int bufferSize, const void * buffer) {
 	if (output != 0) {
 		octets = (*output)(buffer, bufferSize, bufferSize);
 		if (octets == EOF) {
+			if (errno != 0) { Logger::instance().error("ObjectGet@%p: failed! errno=%d=\"%s\"\n", this, errno, ::strerror(errno)); }
 			finalize();
 			octets = 0;
 		}

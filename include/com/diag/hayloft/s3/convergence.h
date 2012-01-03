@@ -15,7 +15,10 @@
  * asynchronous Actions in parallel on a single Plex and handle all of
  * those Actions in parallel, possibly doing so through a single service
  * thread. Rather than polling for completion, an application will probably
- * derive from the various Action classes and override the complete() method.
+ * derive from the various Action classes and override the complete() method
+ * or use the conditional variables with wait and signal. In particular see the
+ * Complex Plex and its associated unit tests, which is how I think an actual
+ * application will use Hayloft.
  */
 
 #include "com/diag/hayloft/types.h"
