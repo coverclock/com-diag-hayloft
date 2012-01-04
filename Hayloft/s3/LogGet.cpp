@@ -54,7 +54,7 @@ LogGet::LogGet(const Bucket & bucket, const Plex & plex)
 }
 
 LogGet::~LogGet() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 	delete [] grants;
@@ -87,8 +87,8 @@ void LogGet::execute() {
 	);
 }
 
-bool LogGet::start() {
-	if (state() != BUSY) {
+bool LogGet::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

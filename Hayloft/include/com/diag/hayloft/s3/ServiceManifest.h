@@ -106,11 +106,9 @@ public:
 	 */
 	typedef std::pair<std::string, Entry> Pair;
 
-private:
+protected:
 
 	static Status listServiceCallback(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds, void * callbackData);
-
-protected:
 
 	Manifest manifest;
 
@@ -156,12 +154,13 @@ public:
 	virtual ~ServiceManifest();
 
 	/**
-	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
-	 * BUSY.
+	 * Start the Action if it is not busy or forced.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start();
+	virtual bool start(bool force = false);
 
 	/**
 	 * Get a constant reference to the Manifest map.
@@ -180,12 +179,14 @@ public:
 	virtual const Entry * find(const char * name) const;
 
 	/**
-	 * Reset this ServiceManifest so it can be reused. This includes clearing
+	 * Reset the action if it is not busy or forced. This includes clearing
 	 * the Manifest map.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset();
+	virtual bool reset(bool force = false);
 
 protected:
 

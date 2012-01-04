@@ -49,13 +49,11 @@ public:
 
 	typedef ::com::diag::desperado::Input Input;
 
-private:
+protected:
 
 	static int putObjectDataCallback(int bufferSize, char * buffer, void * callbackData);
 
 	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-protected:
 
 	std::string type;
 
@@ -282,24 +280,27 @@ public:
 	Octets getConsumed() const { return consumed; }
 
 	/**
-	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
-	 * BUSY.
+	 * Start the Action if it is not busy or forced.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start();
+	virtual bool start(bool force = false);
 
 	/**
-	 * If the Action is not BUSY and none of the data source has been consumed,
-	 * return true to indicate the Action can be retried without a new Input
-	 * functor.
+	 * Reset the action if it is not busy or forced and none of the data source
+	 * has been consumed. Success means the Action can be retried without a new
+	 * Input functor.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset();
+	virtual bool reset(bool force = false);
 
 	/**
-	 * If the Action is not BUSY, reset the data source to a new Input functor.
+	 * If the Action is not busy, reset the data source to a new Input functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param source refers to an Input functor.
@@ -310,7 +311,7 @@ public:
 	virtual bool reset(Input & source, Octets objectsize);
 
 	/**
-	 * If the Action is not BUSY, reset the data source to a new Input functor.
+	 * If the Action is not busy, reset the data source to a new Input functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when

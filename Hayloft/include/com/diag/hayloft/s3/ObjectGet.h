@@ -291,24 +291,27 @@ public:
 	Octets getProduced() const { return produced; }
 
 	/**
-	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
-	 * BUSY.
+	 * Start the Action if it is not busy or forced.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start();
+	virtual bool start(bool force = false);
 
 	/**
-	 * If the Action is not BUSY and none of the data sink has been produced,
-	 * return true to indicate the Action can be retried without a new Output
-	 * functor.
+	 * Reset the action if it is not busy or forced and none of the data sink
+	 * has been produced. Success means the Action can be retried without a new
+	 * Output functor.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset();
+	virtual bool reset(bool force = false);
 
 	/**
-	 * If the Action is not BUSY, reset the data sink to a new Output functor.
+	 * If the Action is not busy, reset the data sink to a new Output functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sink refers to an Output functor.
@@ -321,7 +324,7 @@ public:
 	virtual bool reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
 
 	/**
-	 * If the Action is not BUSY, reset the data sink to a new Output functor.
+	 * If the Action is not busy, reset the data sink to a new Output functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when

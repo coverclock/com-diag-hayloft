@@ -50,7 +50,7 @@ public:
 
 	/**
 	 * This is a fake libs3 ::S3Status value that means the Action has a
-	 * transitional status between starting and running.
+	 * transitional status between starting or restarting and running.
 	 */
 	static const int PENDING = intmaxof(Status) - 1;
 
@@ -60,13 +60,17 @@ public:
 	 */
 	static const int BUSY = intmaxof(Status) - 2;
 
+	/**
+	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * transitional status between completing and restarting.
+	 */
+	static const int FINAL = intmaxof(Status) - 3;
+
 protected:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
 	static void responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-	Status status;
 
 	std::string server;
 
@@ -84,20 +88,9 @@ protected:
 
 	::S3ResponseHandler handler;
 
-	/**
-	 * This returns the current status value.
-	 *
-	 * @return the current status value.
-	 */
-	Status state() const;
+private:
 
-	/**
-	 * This updates the current status and returns its prior value.
-	 *
-	 * @param update is the new status value.
-	 * @return the prior status value.
-	 */
-	Status state(Status update);
+	Status status;
 
 public:
 
@@ -134,31 +127,33 @@ public:
 	virtual ~Action();
 
 	/**
-	 * Return true if this Action has achieved a final state.
+	 * Return true if this Action has achieved a final (non-transitional) state.
 	 * @return true if this Action has achieved a final state.
 	 */
-	operator bool() const { Status temp = state(); return ((temp != IDLE) && (temp != BUSY)); }
+	operator bool() const { Status status = state(); return ((status != IDLE) && (status != BUSY) && (status != PENDING)  && (status != FINAL)); }
 
 	/**
-	 * Return true if this Action is IDLE.
+	 * Return true if this Action is in a state in which it has never been
+	 * started.
 	 *
 	 * @return return true if this Action is IDLE.
 	 */
 	bool isIdle() const { return (state() == IDLE); }
 
 	/**
-	 * Return true if this Action is BUSY.
+	 * Return true if this Action is in a state in which it cannot be started
+	 * or reset.
 	 *
 	 * @return return true if this Action is BUSY.
 	 */
-	bool isBusy() const { return (state() == BUSY); }
+	bool isBusy() const { Status status = state(); return ((status == PENDING) || (status == BUSY) || (status == FINAL)); }
 
 	/**
 	 * Return true if this Action is in a state that is retryable, that is, in
 	 * a state that is a result of a temporary failure and in which the Action
-	 * is likely to succeed if it is restarted. Status values IDLE, BUSY,
-	 * ::S3StatusOK which indicates success, and common failure codes such as
-	 * ::S3StatusHttpErrorNotFound, are not retryable.
+	 * is likely to succeed if it is restarted. Transitional status values,
+	 * ::S3StatusOK which indicates success, and "permanent" failure status
+	 * values such as ::S3StatusHttpErrorNotFound, are not retryable.
 	 *
 	 * @return return true if this Action is in a state that is retryable,
 	 */
@@ -179,7 +174,7 @@ public:
 	 *
 	 * @return true if this Action indicates inaccessibility.
 	 */
-	bool isInaccessible() const { Status temp = state(); return ((temp == ::S3StatusHttpErrorForbidden) || (temp == ::S3StatusErrorAccessDenied)); }
+	bool isInaccessible() const { Status status = state(); return ((status == ::S3StatusHttpErrorForbidden) || (status == ::S3StatusErrorAccessDenied)); }
 
 	/**
 	 * Return true if this Action has a status that indicates the requested
@@ -187,7 +182,7 @@ public:
 	 *
 	 * @return true if this Action indicates nonexistence.
 	 */
-	bool isNonexistent() const { Status temp = state(); return ((temp == ::S3StatusHttpErrorNotFound) || (temp == ::S3StatusErrorNoSuchKey) || (temp == ::S3StatusErrorNoSuchBucket)); }
+	bool isNonexistent() const { Status status = state(); return ((status == ::S3StatusHttpErrorNotFound) || (status == ::S3StatusErrorNoSuchKey) || (status == ::S3StatusErrorNoSuchBucket)); }
 
 	/**
 	 * Get the libs3 ::S3RequestContext associated with this Action. This
@@ -231,7 +226,7 @@ public:
 	const char * getRequestId2() const { return requestid2.c_str(); }
 
 	/**
-	 * Start the Action.
+	 * Start the Action if it is not busy or forced.
 	 *
 	 * The default implementation in the base class does nothing. It is the
 	 * responsibility of the derived classes to call the appropriate LifeCycle
@@ -243,12 +238,14 @@ public:
 	 * which time construction of the object may not be complete (depending on
 	 * the C++ implementation).
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start();
+	virtual bool start(bool force = false);
 
 	/**
-	 * Reset the action.
+	 * Reset the action if it is not busy or forced.
 	 *
 	 * The default implementation in the base class returns success. Derived
 	 * classes may use this to perform some recovery or reinitialization action
@@ -257,17 +254,36 @@ public:
 	 * functors will do whatever is necessary to rewind the input or output
 	 * stream.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset();
+	virtual bool reset(bool force = false);
 
 	/**
-	 * Determine if this Action is retryable given the specified status.
+	 * Determine if this Action is retryable given the specified status. This
+	 * method in the base class takes a broader view of retryability to
+	 * include not only temporary network failures but possibly convergence
+	 * latency too. Whether this is reasonable for all Actions is up to the
+	 * derived class.
 	 *
 	 * @param status refers to the Status to be evaluated for retryability.
+	 * @param nonexistence is the value returned for statuses indicating
+	 *                     non-existence.
 	 * @return true if retryable, false otherwise.
 	 */
-	virtual bool retryable(Status final);
+	virtual bool retryable(Status final, bool nonexistence = true);
+
+	/**
+	 * Block the calling thread until this Action is signaled to be complete.
+	 * This method is only useful if the Application executes Actions in a
+	 * background thread.
+	 *
+	 * @param pended if non-null causes the wait to fail if this Action's
+	 *        pending is not equal to the pended value.
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool wait(Pending * pended = 0);
 
 protected:
 
@@ -301,11 +317,31 @@ protected:
 	 */
 	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
 
-private:
+	/**
+	 * Signal any waiting threads that this Action is complete.
+	 *
+	 * @param final is the value to which the status is set.
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool signal(Status final);
 
-	void initialize();
+	/**
+	 * This returns the current status value with an appropriate memory barrier
+	 * to accommodate threads running on different processors.
+	 *
+	 * @return the current status value.
+	 */
+	Status state() const;
 
-protected:
+	/**
+	 * This updates the current status and returns its prior value with an
+	 * appropriate memory barrier to accommodate threads running on different
+	 * processors.
+	 *
+	 * @param update is the new status value.
+	 * @return the prior status value.
+	 */
+	Status state(Status update);
 
 	void execute();
 
@@ -331,6 +367,8 @@ private:
      *  @param that refers to an R-value object of this type.
      */
 	Action& operator=(const Action& that);
+
+	void initialize();
 
 };
 

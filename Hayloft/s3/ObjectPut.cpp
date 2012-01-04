@@ -31,7 +31,7 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 
 void ObjectPut::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
-	that->finalize();
+	if (!that->retryable(status)) { that->finalize(); }
 	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
 }
 
@@ -174,7 +174,7 @@ ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input * sourcep, 
 }
 
 ObjectPut::~ObjectPut() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 	delete [] properties.metaData;
@@ -228,17 +228,15 @@ void ObjectPut::execute() {
 }
 
 void ObjectPut::finalize() {
-	if (input != 0) {
-		input = 0;
-	}
+	input = 0;
 	// For some input functors, the delete performs the close on the underlying
 	// operating system data source.
 	delete taken;
 	taken = 0;
 }
 
-bool ObjectPut::start() {
-	if (state() != BUSY) {
+bool ObjectPut::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {
@@ -246,12 +244,12 @@ bool ObjectPut::start() {
 	}
 }
 
-bool ObjectPut::reset() {
-	return ((state() != BUSY) && (consumed == 0));
+bool ObjectPut::reset(bool force) {
+	return (((!isBusy()) || force) && (consumed == 0));
 }
 
 bool ObjectPut::reset(Input & source, Octets objectsize) {
-	if ((state() != BUSY)) {
+	if (!isBusy()) {
 		finalize();
 		input = &source;
 		taken = 0;
@@ -264,7 +262,7 @@ bool ObjectPut::reset(Input & source, Octets objectsize) {
 }
 
 bool ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
-	if ((state() != BUSY)) {
+	if (!isBusy()) {
 		finalize();
 		input = sourcep;
 		taken = sourcep;

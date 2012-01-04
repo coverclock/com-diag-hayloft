@@ -27,11 +27,9 @@ namespace s3 {
  */
 class LogSet : public Log {
 
-private:
+protected:
 
 	static void responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData);
-
-protected:
 
 	int count;
 
@@ -91,12 +89,13 @@ public:
 	virtual ~LogSet();
 
 	/**
-	 * Start the Action if it is IDLE, or re-start it if it is neither IDLE nor
-	 * BUSY.
+	 * Start the Action if it is not busy or forced.
 	 *
+	 * @param force if true cause the start to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start();
+	virtual bool start(bool force = false);
 
 private:
 

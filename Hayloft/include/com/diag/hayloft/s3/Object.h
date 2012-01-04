@@ -59,11 +59,9 @@ public:
 	 */
 	typedef std::pair<std::string, std::string> Pair;
 
-private:
+protected:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
-
-protected:
 
 	std::string key;
 

@@ -54,6 +54,9 @@ ServiceManifest::ServiceManifest(const Plex & plex, const Context & context, con
 }
 
 ServiceManifest::~ServiceManifest() {
+	if (isBusy() && (pending != 0)) {
+		(void)S3_runall_request_context(pending);
+	}
 }
 
 void ServiceManifest::initialize() {
@@ -79,8 +82,8 @@ void ServiceManifest::execute() {
 	);
 }
 
-bool ServiceManifest::start() {
-	if ((state() == BUSY) && (pending != 0)) {
+bool ServiceManifest::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {
@@ -97,8 +100,8 @@ const ServiceManifest::Entry * ServiceManifest::find(const char * name) const {
 	return entry;
 }
 
-bool ServiceManifest::reset() {
-	if ((state() != BUSY)) {
+bool ServiceManifest::reset(bool force) {
+	if ((!isBusy()) || force) {
 		manifest.clear();
 		return true;
 	} else {

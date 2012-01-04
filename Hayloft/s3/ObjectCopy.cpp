@@ -88,7 +88,7 @@ ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const
 }
 
 ObjectCopy::~ObjectCopy() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 	delete [] properties.metaData;
@@ -147,8 +147,8 @@ void ObjectCopy::execute() {
 	);
 }
 
-bool ObjectCopy::start() {
-	if (state() != BUSY) {
+bool ObjectCopy::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {
