@@ -61,7 +61,7 @@ GrantSet::GrantSet(const Object & object, const Plex & plex, const Grant & grant
 }
 
 GrantSet::~GrantSet() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 	delete [] grants;
@@ -98,8 +98,8 @@ void GrantSet::execute() {
 	);
 }
 
-bool GrantSet::start() {
-	if (state() != BUSY) {
+bool GrantSet::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

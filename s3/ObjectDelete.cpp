@@ -42,7 +42,7 @@ ObjectDelete::ObjectDelete(const Object & object, const Plex & plex)
 }
 
 ObjectDelete::~ObjectDelete() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 }
@@ -64,8 +64,8 @@ void ObjectDelete::execute() {
 	);
 }
 
-bool ObjectDelete::start() {
-	if (state() != BUSY) {
+bool ObjectDelete::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

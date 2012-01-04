@@ -128,7 +128,7 @@ BucketManifest::BucketManifest(const Bucket & bucket, const Plex & plex, const S
 }
 
 BucketManifest::~BucketManifest() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 }
@@ -167,8 +167,8 @@ void BucketManifest::execute() {
 	}
 }
 
-bool BucketManifest::start() {
-	if (state() != BUSY) {
+bool BucketManifest::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {
@@ -185,8 +185,8 @@ const BucketManifest::Entry * BucketManifest::find(const char * name) const {
 	return entry;
 }
 
-bool BucketManifest::reset() {
-	if ((state() != BUSY)) {
+bool BucketManifest::reset(bool force) {
+	if ((!isBusy()) || force) {
 		manifest.clear();
 		common.clear();
 		nextmarker = marker;

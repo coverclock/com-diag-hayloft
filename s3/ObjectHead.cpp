@@ -42,7 +42,7 @@ ObjectHead::ObjectHead(const Object & object, const Plex & plex)
 }
 
 ObjectHead::~ObjectHead() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 }
@@ -64,8 +64,8 @@ void ObjectHead::execute() {
 	);
 }
 
-bool ObjectHead::start() {
-	if (state() != BUSY) {
+bool ObjectHead::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

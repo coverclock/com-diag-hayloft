@@ -49,7 +49,7 @@ BucketHead::BucketHead(const Bucket & bucket, const Plex & plex)
 }
 
 BucketHead::~BucketHead() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 }
@@ -79,8 +79,8 @@ void BucketHead::execute() {
 	);
 }
 
-bool BucketHead::start() {
-	if (state() != BUSY) {
+bool BucketHead::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

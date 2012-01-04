@@ -18,6 +18,7 @@
 #include "com/diag/desperado/target.h"
 #include "com/diag/desperado/errno.h"
 #include "com/diag/desperado/string.h"
+#include "com/diag/desperado/stdio.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -50,11 +51,12 @@ int Complex::RETRIES = 4;
 
 Logger * Complex::logger = 0;
 
-// To avoid deadlock, the locking order of the mutexen must be
-// 1. Complex::instance,
-// 2. Action::mutex,
-// 3. Complex::shared,
-// 4. Thread::mutex.
+// To avoid deadlock, the locking order of the mutexen must be as follows.
+// 1. Complex::instance
+// 2. Action::mutex
+// 3. Complex::shared
+// 4. Thread::mutex
+// But we try really hard not to have to lock mutexen in a nested fashion.
 
 Mutex Complex::instance;
 
@@ -119,31 +121,66 @@ void * Complex::Thread::run() {
 }
 
 /*******************************************************************************
- * COMPLEX
+ * COMPLEX PUBLIC API (APPLICATION THREAD CONTEXT)
  ******************************************************************************/
 
-// This will be called in the context of the Application Thread.
 Complex::Complex()
 {
+	initialize();
+	pending = complex;
+	if (pending != 0) { logger->debug("Complex@%p: pending=%p\n", this, pending); }
+}
+
+Complex::~Complex() {
+	finalize();
+}
+
+bool Complex::wait(Action & action) {
+	return action.wait(complex);
+}
+
+bool Complex::start(Action & action) {
+	Action * actionable = 0;
+	{
+		CriticalSection guard(action.mutex);
+		if (action.pending == complex) {
+			if (!action.isBusy()) {
+				action.status = static_cast<Status>(Action::PENDING);
+				action.retries = RETRIES;
+				actionable = &action;
+			}
+		}
+	}
+	if (actionable != 0) {
+		logger->debug("Complex: Action@%p: starting\n", &action);
+		thread.start();
+		push_back_signal(starting, action);
+		return true;
+	} else {
+		logger->error("Complex: Action@%p: not startable\n", &action);
+		return false;
+	}
+}
+
+/*******************************************************************************
+ * COMPLEX UTILITIES
+ ******************************************************************************/
+
+void Complex::initialize() {
 	CriticalSection guard(instance);
 	if (instances == 0) {
 		platform = &::com::diag::desperado::Platform::instance();
 		logger = &Logger::instance();
 		platform->frequency(numerator, denominator);
 		status = ::S3_create_request_context(&complex);
+		if (status != S3StatusOK) { logger->error("Complex: S3_create_request_context failed! status=%d=\"%s\"\n", status, tostring(status)); }
 		nextlifecycle = &(LifeCycle::instance());
 		LifeCycle::instance(lifecycle);
 	}
 	++instances;
-	pending = complex;
-	if (status != S3StatusOK) {
-		logger->error("Complex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
-	}
-	logger->debug("Complex@%p: pending=%p\n", this, pending);
 }
 
-// This will be called in the context of the Application Thread.
-Complex::~Complex() {
+void Complex::finalize() {
 	CriticalSection guard(instance);
 	--instances;
 	if (instances == 0) {
@@ -156,22 +193,10 @@ Complex::~Complex() {
 		Action * action;
 		::S3ErrorDetails errorDetails = { 0 };
 		for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
-			CriticalSection guard(action->mutex);
-			action->status = ::S3StatusInternalError;
-			if (action->pending == complex) {
-				action->retries = 0;
-				action->condition.signal();
-			}
-			nextlifecycle->complete(*action, action->status, &errorDetails);
+			nextlifecycle->complete(*action, ::S3StatusInterrupted, &errorDetails);
 		}
 		for (Action * action = pop_front(restarting); action != 0; action = pop_front(restarting)) {
-			CriticalSection guard(action->mutex);
-			action->status = ::S3StatusInternalError;
-			if (action->pending == complex) {
-				action->retries = 0;
-				action->condition.signal();
-			}
-			nextlifecycle->complete(*action, action->status, &errorDetails);
+			nextlifecycle->complete(*action, ::S3StatusInterrupted, &errorDetails);
 		}
 	}
 }
@@ -202,75 +227,47 @@ Complex::List & Complex::push_back_signal(List & list, Action & action) {
 	return list;
 }
 
-// This will be called in the context of the Application Thread.
-bool Complex::wait(Action & action) {
-	CriticalSection guard(action.mutex);
-	if (action.pending == complex) {
-		while (action.retries > 0) {
-			if (action.condition.wait(action.mutex) != 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-	return false;
-}
-
-// This will be called in the context of the Application Thread.
-bool Complex::start(Action & action) {
-	CriticalSection guard(action.mutex);
-	if (action.pending == complex) {
-		if ((action.status != Action::PENDING) && (action.status != Action::BUSY)) {
-			logger->debug("Complex: Action@%p: pending\n", &action);
-			action.status = static_cast<Status>(Action::PENDING);
-			action.retries = RETRIES;
-			thread.start();
-			push_back_signal(starting, action);
-			return true;
-		}
-	}
-	logger->debug("Complex: Action@%p: not startable\n", &action);
-	return false;
-}
+/*******************************************************************************
+ * COMPLEX INTERNALS (COMPLEX THREAD CONTEXT)
+ ******************************************************************************/
 
 // This is always called from the context of the Complex Thread since it is
 // invoked by libs3 as a result of the run method calling the libs3 iterate once
-// function. There is no separate libs3 Thread (nor probably a cURL Thread).
+// function. So we don't have to be concerned about changing Complex variables
+// that aren't shared with other Threads.
 void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
-	CriticalSection guard(action.mutex);
-	if (!action.retryable(final)) {
-		logger->debug("Complex: Action@%p: not retryable\n", &action);
-		alarm = 0;
-		fibonacci.reset();
-		// Fall through: no return.
-	} else if (action.pending != complex) {
-		logger->debug("Complex: Action@%p: not complex\n", &action);
-		// Fall through: no return.
-	} else if (action.retries <= 0) {
-		logger->debug("Complex: Action@%p: too many retries\n", &action);
-		// Fall through: no return.
-	} else if (!action.reset()) {
-		logger->debug("Complex: Action@%p: reset failed\n", &action);
-		// Fall through: no return.
-	} else {
-		logger->debug("Complex: Action@%p: retrying\n", &action);
-		--action.retries;
+	Action * actionable = 0;
+	{
+		CriticalSection guard(action.mutex);
+		action.status = static_cast<Status>(Action::FINAL);
+		if (!action.retryable(final)) {
+			logger->debug("Complex: Action@%p: not retryable\n", &action);
+			alarm = 0;
+			fibonacci.reset();
+		} else if (action.pending != complex) {
+			logger->error("Complex: Action@%p: not complex\n", &action);
+		} else if (action.retries <= 0) {
+			logger->debug("Complex: Action@%p: too many retries\n", &action);
+		} else if (!action.reset(true)) {
+			logger->error("Complex: Action@%p: reset failed\n", &action);
+		} else {
+			logger->debug("Complex: Action@%p: restarting\n", &action);
+			action.status = static_cast<Status>(Action::PENDING);
+			--action.retries;
+			actionable = &action;
+		}
+	}
+	if (actionable != 0) {
 		push_back(restarting, action);
-		return;
+	} else {
+		nextlifecycle->complete(action, final, errorDetails);
 	}
-	if (action.pending == complex) {
-		action.retries = 0;
-		action.condition.signal();
-
-	}
-	nextlifecycle->complete(action, final, errorDetails);
 }
 
 void * Complex::run() {
 	Seconds time;
 
 	logger->debug("Complex: begin\n");
-
 
 	// This thread runs forever until notified by the last Complex destructor.
 
@@ -292,11 +289,11 @@ void * Complex::run() {
 			// infinite loop as it continuously cycles back onto the starting
 			// list, which would never become empty.
 
-			int restarted = 0;
+			bool restarted = false;
 			for (Action * action = pop_front(restarting); action != 0; action = pop_front(restarting)) {
-				logger->debug("Complex: Action@%p: restarting\n", action);
+				logger->debug("Complex: Action@%p: restart\n", action);
 				push_back(starting, *action);
-				++restarted;
+				restarted = true;
 			}
 
 			// If the restarting list was not empty, then we've had Actions
@@ -306,7 +303,7 @@ void * Complex::run() {
 			// failures or just had a success, or the prior alarm time if we
 			// haven't had a success since the last retryable failure.
 
-			if (restarted > 0) {
+			if (restarted) {
 				Epochalseconds backoff = ((BACKOFF  * fibonacci.next()) + 500) / 1000;
 				alarm = now + backoff;
 			}
@@ -320,22 +317,13 @@ void * Complex::run() {
 			// Wait until our back off alarm has gone off to start anything.
 			// Then walk the list of starting Actions.
 
-			int started = 0;
 			if (alarm == 0) {
 				::S3ErrorDetails errorDetails = { 0 };
 				for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
-					CriticalSection guard(action->mutex);
-					if (action->start()) {
-						logger->debug("Complex: Action@%p: started\n", action);
-						++started;
-					} else {
+					logger->debug("Complex: Action@%p: start\n", action);
+					if (!action->start(true)) {
 						logger->debug("Complex: Action@%p: start failed\n", action);
-						if (action->status == static_cast<Status>(Action::PENDING)) {
-							action->status = ::S3StatusInternalError;
-						}
-						action->retries = 0;
-						action->condition.signal();
-						nextlifecycle->complete(*action, action->status, &errorDetails);
+						nextlifecycle->complete(*action, ::S3StatusInternalError, &errorDetails);
 					}
 				}
 			}

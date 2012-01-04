@@ -42,7 +42,7 @@ BucketCreate::BucketCreate(const Bucket & bucket, const Plex & plex)
 }
 
 BucketCreate::~BucketCreate() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 }
@@ -69,8 +69,8 @@ void BucketCreate::execute() {
 	);
 }
 
-bool BucketCreate::start() {
-	if (state() != BUSY) {
+bool BucketCreate::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

@@ -46,7 +46,7 @@ LogSet::LogSet(const Bucket & bucket, const Plex & plex, const Bucket & log, con
 }
 
 LogSet::~LogSet() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 	delete [] grants;
@@ -82,8 +82,8 @@ void LogSet::execute() {
 	);
 }
 
-bool LogSet::start() {
-	if (state() != BUSY) {
+bool LogSet::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {

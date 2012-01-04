@@ -65,7 +65,8 @@ Status LifeCycle::properties(Action & action, const ::S3ResponseProperties * res
 }
 
 void LifeCycle::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: complete \"%s\"\n", this, &action, tostring(final));
+	Logger::instance().debug("LifeCycle@%p: Action@%p: complete\n", this, &action);
+	action.signal(final); // All polling or waiting Threads can see this.
 	action.complete(final, errorDetails);
 }
 

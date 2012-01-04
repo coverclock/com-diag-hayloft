@@ -17,9 +17,14 @@ namespace s3 {
 
 const char * tostring(Status status) {
 	const char * result;
-	if      (status == static_cast<Status>(Action::BUSY))	{ result = "BUSY"; }
-	else if (status == static_cast<Status>(Action::IDLE))	{ result = "IDLE"; }
-	else													{ result = ::S3_get_status_name(status); }
+	int state = status;
+	switch (state) {
+	case Action::BUSY:		result = "BUSY";						break;
+	case Action::FINAL:		result = "FINAL";						break;
+	case Action::IDLE:		result = "IDLE";						break;
+	case Action::PENDING:	result = "PENDING";						break;
+	default:				result = ::S3_get_status_name(status);	break;
+	}
 	return result;
 }
 

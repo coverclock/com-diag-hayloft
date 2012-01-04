@@ -155,6 +155,10 @@ private:
 
 	static Epochalseconds alarm;
 
+	static void initialize();
+
+	static void finalize();
+
 protected:
 
 	static void * run();

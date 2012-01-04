@@ -66,10 +66,6 @@ TEST_F(ComplexTest, Success) {
 	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
 
-// For other Actions we could simply define a properties() method that returns
-// something other than S3StatusOK. But there are no properties for a new
-// Bucket so that method never gets called. So we have to wire into the
-// start method.
 struct BucketCreateProxy : public BucketCreate {
 	int failures;
 	Status failure;
@@ -78,14 +74,14 @@ struct BucketCreateProxy : public BucketCreate {
 	, failures(0)
 	, failure(::S3StatusOK)
 	{}
-	virtual bool start() {
+	virtual bool start(bool force = false) {
 		if (failures > 0) {
 			--failures;
 			::S3ErrorDetails errorDetails = { 0 };
 			responseCompleteCallback(failure, &errorDetails, this);
 			return true;
 		} else {
-			return BucketCreate::start();
+			return BucketCreate::start(force);
 		}
 	}
 };
@@ -171,6 +167,46 @@ TEST_F(ComplexTest, Irrecoverable) {
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
+struct ObjectPutProxy : public ObjectPut {
+	int failures;
+	Status failure;
+	explicit ObjectPutProxy(const Object & object, const Plex & plex, Input * sourcep, Octets objectsize)
+	: ObjectPut(object, plex, sourcep, objectsize)
+	, failures(0)
+	, failure(::S3StatusOK)
+	{}
+	virtual bool start(bool force = false) {
+		if (failures > 0) {
+			--failures;
+			::S3ErrorDetails errorDetails = { 0 };
+			responseCompleteCallback(failure, &errorDetails, this);
+			return true;
+		} else {
+			return ObjectPut::start(force);
+		}
+	}
+};
+
+struct ObjectGetProxy : public ObjectGet {
+	int failures;
+	Status failure;
+	explicit ObjectGetProxy(const Object & object, const Plex & plex, Output * sinkp)
+	: ObjectGet(object, plex, sinkp)
+	, failures(0)
+	, failure(::S3StatusOK)
+	{}
+	virtual bool start(bool force = false) {
+		if (failures > 0) {
+			--failures;
+			::S3ErrorDetails errorDetails = { 0 };
+			responseCompleteCallback(failure, &errorDetails, this);
+			return true;
+		} else {
+			return ObjectGet::start(force);
+		}
+	}
+};
+
 TEST_F(ComplexTest, Application) {
 	static const int LIMIT = 10;
 	Bucket BUCKET1("ComplexTestApplication1");
@@ -195,7 +231,9 @@ TEST_F(ComplexTest, Application) {
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
-	ObjectPut objectput1(OBJECT1, complex, input, inputsize);
+	ObjectPutProxy objectput1(OBJECT1, complex, input, inputsize);
+	objectput1.failures = 2;
+	objectput1.failure = ::S3StatusErrorInternalError;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		EXPECT_TRUE(complex.start(objectput1));
 		EXPECT_TRUE(complex.wait(objectput1));
@@ -214,7 +252,9 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
-	ObjectGet objectget2(OBJECT2, complex, output2);
+	ObjectGetProxy objectget2(OBJECT2, complex, output2);
+	objectget2.failures = 3;
+	objectget2.failure = ::S3StatusErrorInternalError;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		EXPECT_TRUE(complex.start(objectget2));
 		EXPECT_TRUE(complex.wait(objectget2));

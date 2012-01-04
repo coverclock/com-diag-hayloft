@@ -32,7 +32,7 @@ Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, voi
 
 void ObjectGet::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
-	that->finalize();
+	if (!that->retryable(status)) { that->finalize(); }
 	(*that->Object::handler.completeCallback)(status, errorDetails, callbackData);
 }
 
@@ -161,7 +161,7 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output * sinkp, /
 }
 
 ObjectGet::~ObjectGet() {
-	if ((state() == BUSY) && (pending != 0)) {
+	if (isBusy() && (pending != 0)) {
 		(void)S3_runall_request_context(pending);
 	}
 	finalize();
@@ -198,18 +198,16 @@ void ObjectGet::execute() {
 }
 
 void ObjectGet::finalize() {
-	if (output != 0) {
-		(*output)();
-		output = 0;
-	}
+	if (output != 0) { (*output)(); }
+	output = 0;
 	// For some output functors, the delete performs the close on the underlying
 	// operating system data sink.
 	delete taken;
 	taken = 0;
 }
 
-bool ObjectGet::start() {
-	if (state() != BUSY) {
+bool ObjectGet::start(bool force) {
+	if ((!isBusy()) || force) {
 		execute();
 		return true;
 	} else {
@@ -217,12 +215,12 @@ bool ObjectGet::start() {
 	}
 }
 
-bool ObjectGet::reset() {
-	return ((state() != BUSY) && (produced == 0));
+bool ObjectGet::reset(bool force) {
+	return (((!isBusy()) || force) && (produced == 0));
 }
 
 bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
-	if ((state() != BUSY)) {
+	if (!isBusy()) {
 		finalize();
 		output = &sink;
 		taken = 0;
@@ -236,7 +234,7 @@ bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
 }
 
 bool ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets objectsize) {
-	if ((state() != BUSY)) {
+	if (!isBusy()) {
 		finalize();
 		output = sinkp;
 		taken = sinkp;
