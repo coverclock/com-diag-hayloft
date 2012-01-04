@@ -42,16 +42,17 @@
 
 	ABSTRACT
 
-	This file is part of the Digital Aggregates Corporation Hayloft package,
-	which, among other things, presents a C++-based abstraction around Bryan
-	Ischo's excellent C-based libs3 interface to Amazon Web Service (AWS)
-	Simple Storage Service (S3). It is built on top of the Digital Aggregates
-	Corporation Desperadito package, a C++ systems programming library that is
-	a subset of the much larger Desperado package. libs3 is built on top of the
-	cURL, Open SSL, and XML2 libraries, which I acquired through the normal
-	package manager on my server. I've also made patches to libs3 to support the
-	use of the Charles Web Debugging Proxy application by Karl von Randow and
-	cCURL verbosity.
+	This file is part of the Digital Aggregates Corporation
+	Hayloft package, which, among other things, presents a C++-based
+	abstraction around Bryan Ischo's excellent C-based libs3 interface
+	to Amazon Web Service (AWS) Simple Storage Service (S3). It is
+	built on top of the Digital Aggregates Corporation Desperadito
+	package, a C++ systems programming library that is a subset of
+	the much larger Desperado package. libs3 is built on top of the
+	cURL, Open SSL, and XML2 libraries, which I acquired through
+	the normal package manager on my server. I've also made patches
+	to libs3 to support the use of the Charles Web Debugging Proxy
+	application by Karl von Randow and cCURL verbosity.
 
 	This software is an original work of its author.
 
@@ -148,60 +149,67 @@
 
 	COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESSKEYID
 
-		This string is your twenty character AWS access key id, a sort of
-		login (but not your AWS web login).
+		This string is your twenty character AWS access key id,
+		a sort of login (but not your AWS web login).
 
 	COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRETACCESSKEY
 
-		This string is your forty character AWS secret access key, a sort of
-		password (but not your AWS web password) and encryption key.
+		This string is your forty character AWS secret access
+		key, a sort of password (but not your AWS web password)
+		and encryption key.
 
 	COM_DIAG_HAYLOFT_S3_ENDPOINT_HOSTNAME
 
-		This string is the DNS host name of the AWS S3 service. This host name
-		may (or must) differ depending on the region the bucket is in. If not
-		specified, the United States Standard end point, "s3.amazonaws.com",
-		is used.
+		This string is the DNS host name of the AWS S3
+		service. This host name may (or must) differ depending on
+		the region the bucket is in. If not specified, the United
+		States Standard end point, "s3.amazonaws.com", is used.
 
 	COM_DIAG_HAYLOFT_S3_SESSION_BUCKETSUFFIX
 
-		If specified, this string is is appended without further punctuation
-		to each bucket name specified in any of the Bucket* constructors
-		(BucketCreate, etc.) prior to the bucket name being canonicalized by
-		Hayloft. Canonicalized bucket names have to be globally unique and
-		form a legal internet Domain Name Service (DNS) domain name. Although
-		domain names are case insensitive, S3 requires that they be all lower
-		case. I recommend using your DNS domain name with a leading dot as a
-		bucket suffix, for example ".foo.bar.com". An application creating a
-		bucket using BucketCreate("Me") and using the default end point
-		name and the default virtual path style URL will hence see the name
-		canonicalized into an S3 bucket name "me.foo.bar.com.s3.amazonaws.com".
-		Canonicalized bucket names are what you will see in a ServiceManifest.
+		If specified, this string is is appended without further
+		punctuation to each bucket name specified in any of the
+		Bucket* constructors (BucketCreate, etc.) prior to the
+		bucket name being canonicalized by Hayloft. Canonicalized
+		bucket names have to be globally unique and form a legal
+		internet Domain Name Service (DNS) domain name. Although
+		domain names are case insensitive, S3 requires that
+		they be all lower case. I recommend using your DNS
+		domain name with a leading dot as a bucket suffix,
+		for example ".foo.bar.com". An application creating a
+		bucket using BucketCreate("Me") and using the default end
+		point name and the default virtual path style URL will
+		hence see the name canonicalized into an S3 bucket name
+		"me.foo.bar.com.s3.amazonaws.com".  Canonicalized bucket
+		names are what you will see in a ServiceManifest.
 
 	COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT
 
-		If specified, this string is passed to S3 in the User-Agent HTTP header
-		to identify your application.
+		If specified, this string is passed to S3 in the
+		User-Agent HTTP header to identify your application.
 
 	COM_DIAG_HAYLOFT_S3_REGION_NAME
 
-		This string is the default AWS region to use. If not specified, the
-		United States Standard region is used (which is actually specified by
-		omitting the region parameter altogether in messages to S3).
+		This string is the default AWS region to use. If not
+		specified, the United States Standard region is used
+		(which is actually specified by omitting the region
+		parameter altogether in messages to S3).
 
 	COM_DIAG_HAYLOFT_LOGGER_MASK
 
-		If specified, this string contains a sixteen bit number, encoded using
-		the normal C syntax rules for octal, decimal, or hexadecimal numbers,
-		to specify a sixteen bit logging mask at run time. The bits in the mask
-		which of the sixteen log levels are enabled via the expression
-		(1 << LEVEL) where LEVEL is one of the following log levels. So for
-		example the DEBUG level is enabled if bit (1 << DEBUG) or 0x0010 is set.
-		The different log levels found in com/diag/desperado/Log.h are the
-		transitive closure of common logging mechanisms from GNU/Linux, Apache,
-		Java, etc. The Desperado log levels are mapped to the appropriate log
-		levels in the underlying logging mechanism. For example, SYSLOG has
-		eight log levels.
+		If specified, this string contains a sixteen bit number,
+		encoded using the normal C syntax rules for octal,
+		decimal, or hexadecimal numbers, to specify a sixteen bit
+		logging mask at run time. The bits in the mask which of
+		the sixteen log levels are enabled via the expression
+		(1 << LEVEL) where LEVEL is one of the following log
+		levels. So for example the DEBUG level is enabled if bit
+		(1 << DEBUG) or 0x0010 is set.	The different log levels
+		found in com/diag/desperado/Log.h are the transitive
+		closure of common logging mechanisms from GNU/Linux,
+		Apache, Java, etc. The Desperado log levels are mapped
+		to the appropriate log levels in the underlying logging
+		mechanism. For example, SYSLOG has eight log levels.
 
         ENUMERATION		VALUE	MASK
 
@@ -231,88 +239,118 @@
 
 	COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY
 
-		This string specifies the IP address and port used for the cURL PROXY
-		option used in conjunction with the Charles Web Debugging Proxy
-		application. Typically this will be the local host address and Charles
-		port "127.0.0.1:8888". This capability is only available if your libs3
-		sources have been patched with the patch file in the Hayloft
-		distribution, and is only necessary if you are using Charles to spy
-		on the communication between your system and S3. This might be useful
-		for debugging.
+		This string specifies the IP address and port used
+		for the cURL PROXY option used in conjunction with
+		the Charles Web Debugging Proxy application. Typically
+		this will be the local host address and Charles port
+		"127.0.0.1:8888". This capability is only available if
+		your libs3 sources have been patched with the patch file
+		in the Hayloft distribution, and is only necessary if
+		you are using Charles to spy on the communication between
+		your system and S3. This might be useful for debugging.
 
-		libcurl and Charles don't seem to play well together when switching
-		back and forth between HTTP and HTTPS. HTTPS is the default. Running
-		the entire unit test suite with proxying enabled seems to cause Charles
-		to break the BucketTest.Explicit unit test, which is the only unit test
-		that uses HTTP. Running that unit test all by itself works fine. Running
-		all unit tests without Charles works fine. As far as I can tell, libcurl
-		is not reusing an existing HTTPS socket connection when switching to
-		HTTP for BucketTest.Explicit, which I thought might be the problem.
+		libcurl and Charles don't seem to play well together when
+		switching back and forth between HTTP and HTTPS. HTTPS
+		is the default. Running the entire unit test suite
+		with proxying enabled seems to cause Charles to break
+		the BucketTest.Explicit unit test, which is the only
+		unit test that uses HTTP. Running that unit test all by
+		itself works fine. Running all unit tests without Charles
+		works fine. As far as I can tell, libcurl is not reusing
+		an existing HTTPS socket connection when switching to
+		HTTP for BucketTest.Explicit, which I thought might be
+		the problem.
 
 	COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE
 
-		This string, if it is equal to "1", turns on the cURL VERBOSE option.
-		This causes CURL, the URL library used by libs3, to log just about
-		everything it does. This might be useful for debugging.
+		This string, if it is equal to "1", turns on the cURL
+		VERBOSE option.  This causes CURL, the URL library used
+		by libs3, to log just about everything it does. This
+		might be useful for debugging.
 
 	COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT
 	COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME
 
-		If S3 does not maintain a bandwidth of at least the LOW_SPEED_LIMIT in
-		bytes per second during a window of LOW_SPEED_TIME seconds, libcurl will
-		terminate the connection. libs3 sets these parameters to 1024 and 15
-		respectively. These strings, when converted to long values, can be used
-		to change this limit. Typically you'll want to set them lower. I find
-		that even with a good broadband internet connection using a pretty
-		sizeable Pentium server I sometimes see only around 660B/s. I suspect
-		this is my broadband provider throttling my uplink speed. This will be
-		an issue during ObjectGet and ObjectPut Actions.
+		If S3 does not maintain a bandwidth of at least the
+		LOW_SPEED_LIMIT in bytes per second during a window
+		of LOW_SPEED_TIME seconds, libcurl will terminate the
+		connection. libs3 sets these parameters to 1024 and
+		15 respectively. These strings, when converted to long
+		values, can be used to change this limit. Typically you'll
+		want to set them lower. I find that even with a good
+		broadband internet connection using a pretty sizeable
+		Pentium server I sometimes see only around 660B/s. I
+		suspect this is my broadband provider throttling my
+		uplink speed. This will be an issue during ObjectGet
+		and ObjectPut Actions.
 
 --------------------------------------------------------------------------------
 
 	PLEXES
 
-	Plexes are different approaches to managing the execution of Actions. You
-	can see examples of all of them in the unit test suite. Briefly here are
-	the different Plexes you can use.
+	Plexes are different approaches to managing the execution of
+	Actions. You can see examples of all of them in the unit test
+	suite. Briefly here are the different Plexes you can use.
 
 	None
 
-	When you use a constructor that doesn't specify a Plex, you are using the
-	synchronous interface. The Action will be started inside the Action
-	constructor and the calling thread will block until the Action completes.
-	It is up to you to decide whether you need to restart the Action for any
-	reason.
+		When you use a constructor that doesn't specify a Plex,
+		you are using the synchronous interface. The Action
+		will be started inside the Action constructor and the
+		calling thread will block until the Action completes.
+		It is up to you to decide whether you need to restart
+		the Action for any reason.
 
 	Simplex
 
-	The Simplex uses the synchronous interface but doesn't start the Action
-	automatically. You must start it manually using its start method. The
-	calling thread will block in the start method until the Action completes.
-	It is up to you to decide whether you need to restart the Action for any
-	reason.
+		The Simplex uses the synchronous interface but doesn't
+		start the Action automatically. You must start it manually
+		using its start method. The calling thread will block in
+		the start method until the Action completes.  It is up
+		to you to decide whether you need to restart the Action
+		for any reason.
 
 	Multiplex
 
-	The Multiplex uses the asynchronous interface. You must start the Action
-	manually using the start method, and then use the methods provided by the
-	Multiplex to drive the underlying state machines inside libs3 and libcurl
-	to talk to S3. Typically you will run these Multiplex methods in the
-	foreground thread. It is possible to run them in a background thread, but
-	you are responsible for any synchronization. It is up to you to decide
-	whether you need to restart the Action for any reason.
+		The Multiplex uses the asynchronous interface. You must
+		start the Action manually using the start method, and
+		then use the methods provided by the Multiplex to drive
+		the underlying state machines inside libs3 and libcurl
+		to talk to S3. Typically you will run these Multiplex
+		methods in the foreground thread. It is possible to run
+		them in a background thread, but you are responsible for
+		any synchronization. It is up to you to decide whether
+		you need to restart the Action for any reason.
 
 	Complex
 
-	The Complex uses the asyncronous interface. You don't start the Action at
-	all, but instead submit it to the Complex background thread for starting.
-	You can call the wait method which will block your thread until a specific
-	Action has completed. Complex automatically retries any Actions that
-	complete due to a recoverable error, or for errors which are likely to be
-	caused by eventual consistency issues. Complex can run many Actions
-	simultaneously. Once an Action completes, either it has completed for a
-	reason that is non-retryable (including success), it has already been
-	retried too many times, or it failed to start or to reset upon a restart.
+	    Complex uses the asynchronous interface. You don't
+		start the Action at all, but instead submit it to the
+		Complex background thread for starting.  You can call
+		the wait method which will block your thread until a
+		specific Action has completed. Complex automatically
+		retries any Actions that complete due to a recoverable
+		error, or for errors which are likely to be caused by
+		eventual consistency issues. Complex can run many Actions
+		simultaneously. Once an Action completes, either it has
+		completed for a reason that is non-retryable (including
+		success), it has already been retried too many times,
+		or it failed to start or to reset upon a restart.
+
+--------------------------------------------------------------------------------
+
+	DIRECTORY LAYOUT
+
+		./							Makefile, README, unit test source file, etc.
+			hayloft/				non-S3-specific source files
+			include/
+				com/
+					diag/
+						hayloft/	non-S3-specific header files
+							s3/		S3-specific header files
+						unittest/	non-S3-specific unit test files
+							s3/		S3-specific unit test files
+			s3/						S3-specific source files
 
 *******************************************************************************/
 
