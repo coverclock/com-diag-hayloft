@@ -1,0 +1,1194 @@
+Script started on Wed Jan  4 15:05:21 2012
+[==========] Running 222 tests from 35 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from SecondsTest
+[ RUN      ] SecondsTest.Seconds
+NOW=1325714721
+ZULU="2012-01-04T22:05:21Z"
+ZULU=<2012-01-04 22:05:21>
+Wed Jan  4 22:05:21 UTC 2012
+JULIET="2012-01-04T15:05:21-07:00"
+JULIET=<2012-01-04 15:05:21>
+Wed Jan  4 15:05:21 MST 2012
+[       OK ] SecondsTest.Seconds (7 ms)
+[----------] 1 test from SecondsTest (7 ms total)
+
+[----------] 8 tests from LoggerTest
+[ RUN      ] LoggerTest.Defaults
+[       OK ] LoggerTest.Defaults (0 ms)
+[ RUN      ] LoggerTest.HeapAndShow
+Logger(0x8efaac8)[12]:
+ Logger(0x8efaac8)[8]:
+  ou=0x8efae20
+   SyslogOutput(0x8efae20)[16]:
+    Output(0x8efae20)[4]
+    ident="silver"
+    option=0x2b
+    facility=0x8
+ mask=0x0
+[       OK ] LoggerTest.HeapAndShow (0 ms)
+[ RUN      ] LoggerTest.EnableDisable
+[       OK ] LoggerTest.EnableDisable (48 ms)
+[ RUN      ] LoggerTest.Initialization
+[       OK ] LoggerTest.Initialization (78 ms)
+[ RUN      ] LoggerTest.SetMask
+[       OK ] LoggerTest.SetMask (35 ms)
+[ RUN      ] LoggerTest.SetMaskEnvironment
+[       OK ] LoggerTest.SetMaskEnvironment (295 ms)
+[ RUN      ] LoggerTest.Logging
+2012-01-04 22:05:22.239623Z [PRNT] print
+2012-01-04 22:05:22.239646Z [FINS] finest
+2012-01-04 22:05:22.239658Z [PRNT] print
+2012-01-04 22:05:22.239670Z [FINR] finer
+2012-01-04 22:05:22.239681Z [PRNT] print
+2012-01-04 22:05:22.239692Z [FINE] fine
+2012-01-04 22:05:22.239703Z [PRNT] print
+2012-01-04 22:05:22.239714Z [TRAC] trace
+2012-01-04 22:05:22.239725Z [PRNT] print
+2012-01-04 22:05:22.239736Z [DBUG] debug
+2012-01-04 22:05:22.239747Z [PRNT] print
+2012-01-04 22:05:22.239758Z [INFO] information
+2012-01-04 22:05:22.239770Z [PRNT] print
+2012-01-04 22:05:22.239781Z [CONF] configuration
+2012-01-04 22:05:22.239792Z [PRNT] print
+2012-01-04 22:05:22.239803Z [NOTE] notice
+2012-01-04 22:05:22.239814Z [PRNT] print
+2012-01-04 22:05:22.239825Z [WARN] warning
+2012-01-04 22:05:22.239836Z [PRNT] print
+2012-01-04 22:05:22.239848Z [ERRR] error
+2012-01-04 22:05:22.239858Z [PRNT] print
+2012-01-04 22:05:22.239869Z [SEVR] severe
+2012-01-04 22:05:22.239880Z [PRNT] print
+2012-01-04 22:05:22.239891Z [CRIT] critical
+2012-01-04 22:05:22.239902Z [PRNT] print
+2012-01-04 22:05:22.239914Z [ALRT] alert
+2012-01-04 22:05:22.239924Z [PRNT] print
+2012-01-04 22:05:22.239935Z [FATL] fatal
+2012-01-04 22:05:22.239946Z [PRNT] print
+2012-01-04 22:05:22.239958Z [EMER] emergency
+2012-01-04 22:05:22.239968Z [PRNT] print
+2012-01-04 22:05:22.239980Z [PRNT] print
+[       OK ] LoggerTest.Logging (0 ms)
+[ RUN      ] LoggerTest.Instance
+[       OK ] LoggerTest.Instance (0 ms)
+[----------] 8 tests from LoggerTest (458 ms total)
+
+[----------] 8 tests from PacketDataTest
+[ RUN      ] PacketDataTest.Heap
+[       OK ] PacketDataTest.Heap (0 ms)
+[ RUN      ] PacketDataTest.InitialDefault
+[       OK ] PacketDataTest.InitialDefault (0 ms)
+[ RUN      ] PacketDataTest.InitialEither
+[       OK ] PacketDataTest.InitialEither (0 ms)
+[ RUN      ] PacketDataTest.InitialAppend
+[       OK ] PacketDataTest.InitialAppend (0 ms)
+[ RUN      ] PacketDataTest.InitialPrepend
+[       OK ] PacketDataTest.InitialPrepend (0 ms)
+[ RUN      ] PacketDataTest.ConsumeOnce
+[       OK ] PacketDataTest.ConsumeOnce (0 ms)
+[ RUN      ] PacketDataTest.ConsumeMany
+[       OK ] PacketDataTest.ConsumeMany (0 ms)
+[ RUN      ] PacketDataTest.BufferSize
+[       OK ] PacketDataTest.BufferSize (0 ms)
+[----------] 8 tests from PacketDataTest (0 ms total)
+
+[----------] 1 test from PacketDataDynamicTest
+[ RUN      ] PacketDataDynamicTest.Heap
+[       OK ] PacketDataDynamicTest.Heap (0 ms)
+[----------] 1 test from PacketDataDynamicTest (0 ms total)
+
+[----------] 1 test from PacketBufferTest
+[ RUN      ] PacketBufferTest.Heap
+[       OK ] PacketBufferTest.Heap (0 ms)
+[----------] 1 test from PacketBufferTest (0 ms total)
+
+[----------] 16 tests from PacketBufferDynamicTest
+[ RUN      ] PacketBufferDynamicTest.Heap1
+[       OK ] PacketBufferDynamicTest.Heap1 (0 ms)
+[ RUN      ] PacketBufferDynamicTest.Heap2
+[       OK ] PacketBufferDynamicTest.Heap2 (0 ms)
+[ RUN      ] PacketBufferDynamicTest.InitialDefault
+[       OK ] PacketBufferDynamicTest.InitialDefault (0 ms)
+[ RUN      ] PacketBufferDynamicTest.InitialEither
+[       OK ] PacketBufferDynamicTest.InitialEither (0 ms)
+[ RUN      ] PacketBufferDynamicTest.InitialAppend
+[       OK ] PacketBufferDynamicTest.InitialAppend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.InitialPrepend
+[       OK ] PacketBufferDynamicTest.InitialPrepend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.AppendOnceAppend
+[       OK ] PacketBufferDynamicTest.AppendOnceAppend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.AppendOncePrepend
+[       OK ] PacketBufferDynamicTest.AppendOncePrepend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.AppendManyAppend
+[       OK ] PacketBufferDynamicTest.AppendManyAppend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.PrependOnceAppend
+[       OK ] PacketBufferDynamicTest.PrependOnceAppend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.PrependOncePrepend
+[       OK ] PacketBufferDynamicTest.PrependOncePrepend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.PrependManyPrepend
+[       OK ] PacketBufferDynamicTest.PrependManyPrepend (0 ms)
+[ RUN      ] PacketBufferDynamicTest.PrependAppendConsumeOnce
+[       OK ] PacketBufferDynamicTest.PrependAppendConsumeOnce (0 ms)
+[ RUN      ] PacketBufferDynamicTest.PrependAppendConsumeMany
+[       OK ] PacketBufferDynamicTest.PrependAppendConsumeMany (0 ms)
+[ RUN      ] PacketBufferDynamicTest.AppendOnceClear
+[       OK ] PacketBufferDynamicTest.AppendOnceClear (0 ms)
+[ RUN      ] PacketBufferDynamicTest.PrependOnceClear
+[       OK ] PacketBufferDynamicTest.PrependOnceClear (0 ms)
+[----------] 16 tests from PacketBufferDynamicTest (0 ms total)
+
+[----------] 8 tests from PacketTest
+[ RUN      ] PacketTest.HeapAndShow
+Packet(0x8efaab8)[36]:
+ InputOutput(0x8efaab8)[4]
+ allocation=4096
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0x8efaacc)[8]:
+   Input(0x8efaacc)[4]
+   packet=0x8efaab8
+ out:
+  Packet(0x8efaad4)[8]:
+   Output(0x8efaad4)[4]
+   packet=0x8efaab8
+[       OK ] PacketTest.HeapAndShow (0 ms)
+[ RUN      ] PacketTest.EitherPrependAppendConsumeMany
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=0x92fb310
+  0x92fb310: next=0x92fb280 size=32 prefix=16 length=16 suffix=0 total=32
+   0x092fb340: 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 |........|
+   0x092fb348: 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f |........|
+  0x92fb280: next=0x92fb1f0 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2a0: 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 |........|
+   0x092fb2a8: 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f |........|
+   0x092fb2b0: 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 | !"#$%&'|
+   0x092fb2b8: 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f |()*+,-./|
+  0x92fb1f0: next=0x92fb160 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb210: 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 |01234567|
+   0x092fb218: 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f |89:;<=>?|
+   0x092fb220: 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 |@ABCDEFG|
+   0x092fb228: 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f |HIJKLMNO|
+  0x92fb160: next=0x92fb118 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb180: 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 |PQRSTUVW|
+   0x092fb188: 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f |XYZ[\]^_|
+   0x092fb190: 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 |`abcdefg|
+   0x092fb198: 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f |hijklmno|
+  0x92fb118: next=0x92fb1a8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb138: 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 |pqrstuvw|
+   0x092fb140: 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f |xyz{|}~.|
+   0x092fb148: 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 |........|
+   0x092fb150: 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f |........|
+  0x92fb1a8: next=0x92fb238 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb1c8: 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 |........|
+   0x092fb1d0: 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f |........|
+   0x092fb1d8: 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 |........|
+   0x092fb1e0: 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf |........|
+  0x92fb238: next=0x92fb2c8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb258: 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 |........|
+   0x092fb260: 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf |........|
+   0x092fb268: 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 |........|
+   0x092fb270: 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf |........|
+  0x92fb2c8: next=0x92fb358 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2e8: 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 |........|
+   0x092fb2f0: 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf |........|
+   0x092fb2f8: 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 |........|
+   0x092fb300: 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef |........|
+  0x92fb358: next=(nil) size=32 prefix=0 length=16 suffix=16 total=32
+   0x092fb378: 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 |........|
+   0x092fb380: 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff |........|
+ tail=0x92fb358
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+[       OK ] PacketTest.EitherPrependAppendConsumeMany (1 ms)
+[ RUN      ] PacketTest.PrependPrependAppendConsumeMany
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=0x92fb2c8
+  0x92fb2c8: next=0x92fb238 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2e8: 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 |........|
+   0x092fb2f0: 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f |........|
+   0x092fb2f8: 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 |........|
+   0x092fb300: 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f |........|
+  0x92fb238: next=0x92fb1a8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb258: 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 | !"#$%&'|
+   0x092fb260: 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f |()*+,-./|
+   0x092fb268: 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 |01234567|
+   0x092fb270: 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f |89:;<=>?|
+  0x92fb1a8: next=0x92fb118 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb1c8: 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 |@ABCDEFG|
+   0x092fb1d0: 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f |HIJKLMNO|
+   0x092fb1d8: 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 |PQRSTUVW|
+   0x092fb1e0: 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f |XYZ[\]^_|
+  0x92fb118: next=0x92fb160 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb138: 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 |`abcdefg|
+   0x092fb140: 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f |hijklmno|
+   0x092fb148: 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 |pqrstuvw|
+   0x092fb150: 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f |xyz{|}~.|
+  0x92fb160: next=0x92fb1f0 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb180: 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 |........|
+   0x092fb188: 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f |........|
+   0x092fb190: 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 |........|
+   0x092fb198: 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f |........|
+  0x92fb1f0: next=0x92fb280 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb210: 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 |........|
+   0x092fb218: 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf |........|
+   0x092fb220: 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 |........|
+   0x092fb228: 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf |........|
+  0x92fb280: next=0x92fb310 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2a0: 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 |........|
+   0x092fb2a8: 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf |........|
+   0x092fb2b0: 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 |........|
+   0x092fb2b8: 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf |........|
+  0x92fb310: next=(nil) size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb330: 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 |........|
+   0x092fb338: 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef |........|
+   0x092fb340: 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 |........|
+   0x092fb348: 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff |........|
+ tail=0x92fb310
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+[       OK ] PacketTest.PrependPrependAppendConsumeMany (2 ms)
+[ RUN      ] PacketTest.AppendPrependAppendConsumeMany
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=0x92fb310
+  0x92fb310: next=0x92fb280 size=32 prefix=1 length=31 suffix=0 total=32
+   0x092fb330:      0x00 0x01 0x02 0x03 0x04 0x05 0x06 | .......|
+   0x092fb338: 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e |........|
+   0x092fb340: 0x0f 0x10 0x11 0x12 0x13 0x14 0x15 0x16 |........|
+   0x092fb348: 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e |........|
+  0x92fb280: next=0x92fb1f0 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2a0: 0x1f 0x20 0x21 0x22 0x23 0x24 0x25 0x26 |. !"#$%&|
+   0x092fb2a8: 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e |'()*+,-.|
+   0x092fb2b0: 0x2f 0x30 0x31 0x32 0x33 0x34 0x35 0x36 |/0123456|
+   0x092fb2b8: 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e |789:;<=>|
+  0x92fb1f0: next=0x92fb160 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb210: 0x3f 0x40 0x41 0x42 0x43 0x44 0x45 0x46 |?@ABCDEF|
+   0x092fb218: 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e |GHIJKLMN|
+   0x092fb220: 0x4f 0x50 0x51 0x52 0x53 0x54 0x55 0x56 |OPQRSTUV|
+   0x092fb228: 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e |WXYZ[\]^|
+  0x92fb160: next=0x92fb118 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb180: 0x5f 0x60 0x61 0x62 0x63 0x64 0x65 0x66 |_`abcdef|
+   0x092fb188: 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e |ghijklmn|
+   0x092fb190: 0x6f 0x70 0x71 0x72 0x73 0x74 0x75 0x76 |opqrstuv|
+   0x092fb198: 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e |wxyz{|}~|
+  0x92fb118: next=0x92fb1a8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb138: 0x7f 0x80 0x81 0x82 0x83 0x84 0x85 0x86 |........|
+   0x092fb140: 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e |........|
+   0x092fb148: 0x8f 0x90 0x91 0x92 0x93 0x94 0x95 0x96 |........|
+   0x092fb150: 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e |........|
+  0x92fb1a8: next=0x92fb238 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb1c8: 0x9f 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 |........|
+   0x092fb1d0: 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae |........|
+   0x092fb1d8: 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 |........|
+   0x092fb1e0: 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe |........|
+  0x92fb238: next=0x92fb2c8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb258: 0xbf 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 |........|
+   0x092fb260: 0xc7 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce |........|
+   0x092fb268: 0xcf 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 |........|
+   0x092fb270: 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde |........|
+  0x92fb2c8: next=0x92fb358 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2e8: 0xdf 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 |........|
+   0x092fb2f0: 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee |........|
+   0x092fb2f8: 0xef 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 |........|
+   0x092fb300: 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe |........|
+  0x92fb358: next=(nil) size=32 prefix=0 length=1 suffix=31 total=32
+   0x092fb378: 0xff                                    |.       |
+ tail=0x92fb358
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+[       OK ] PacketTest.AppendPrependAppendConsumeMany (1 ms)
+[ RUN      ] PacketTest.EitherAppendPrependConsumeMany
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=0x92fb358
+  0x92fb358: next=0x92fb2c8 size=32 prefix=16 length=16 suffix=0 total=32
+   0x092fb388: 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 |........|
+   0x092fb390: 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f |........|
+  0x92fb2c8: next=0x92fb238 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2e8: 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 |........|
+   0x092fb2f0: 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f |........|
+   0x092fb2f8: 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 | !"#$%&'|
+   0x092fb300: 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f |()*+,-./|
+  0x92fb238: next=0x92fb1a8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb258: 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 |01234567|
+   0x092fb260: 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f |89:;<=>?|
+   0x092fb268: 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 |@ABCDEFG|
+   0x092fb270: 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f |HIJKLMNO|
+  0x92fb1a8: next=0x92fb118 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb1c8: 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 |PQRSTUVW|
+   0x092fb1d0: 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f |XYZ[\]^_|
+   0x092fb1d8: 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 |`abcdefg|
+   0x092fb1e0: 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f |hijklmno|
+  0x92fb118: next=0x92fb160 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb138: 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 |pqrstuvw|
+   0x092fb140: 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f |xyz{|}~.|
+   0x092fb148: 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 |........|
+   0x092fb150: 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f |........|
+  0x92fb160: next=0x92fb1f0 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb180: 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 |........|
+   0x092fb188: 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f |........|
+   0x092fb190: 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 |........|
+   0x092fb198: 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf |........|
+  0x92fb1f0: next=0x92fb280 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb210: 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 |........|
+   0x092fb218: 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf |........|
+   0x092fb220: 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 |........|
+   0x092fb228: 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf |........|
+  0x92fb280: next=0x92fb310 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2a0: 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 |........|
+   0x092fb2a8: 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf |........|
+   0x092fb2b0: 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 |........|
+   0x092fb2b8: 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef |........|
+  0x92fb310: next=(nil) size=32 prefix=0 length=16 suffix=16 total=32
+   0x092fb330: 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 |........|
+   0x092fb338: 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff |........|
+ tail=0x92fb310
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+[       OK ] PacketTest.EitherAppendPrependConsumeMany (2 ms)
+[ RUN      ] PacketTest.PrependAppendPrependConsumeMany
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=0x92fb358
+  0x92fb358: next=0x92fb2c8 size=32 prefix=31 length=1 suffix=0 total=32
+   0x092fb390:                                    0x00 |       .|
+  0x92fb2c8: next=0x92fb238 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2e8: 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 |........|
+   0x092fb2f0: 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f 0x10 |........|
+   0x092fb2f8: 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 |........|
+   0x092fb300: 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f 0x20 |....... |
+  0x92fb238: next=0x92fb1a8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb258: 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 |!"#$%&'(|
+   0x092fb260: 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f 0x30 |)*+,-./0|
+   0x092fb268: 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 |12345678|
+   0x092fb270: 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f 0x40 |9:;<=>?@|
+  0x92fb1a8: next=0x92fb118 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb1c8: 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 |ABCDEFGH|
+   0x092fb1d0: 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f 0x50 |IJKLMNOP|
+   0x092fb1d8: 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 |QRSTUVWX|
+   0x092fb1e0: 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f 0x60 |YZ[\]^_`|
+  0x92fb118: next=0x92fb160 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb138: 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 |abcdefgh|
+   0x092fb140: 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f 0x70 |ijklmnop|
+   0x092fb148: 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 |qrstuvwx|
+   0x092fb150: 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f 0x80 |yz{|}~..|
+  0x92fb160: next=0x92fb1f0 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb180: 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 |........|
+   0x092fb188: 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 |........|
+   0x092fb190: 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 |........|
+   0x092fb198: 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f 0xa0 |........|
+  0x92fb1f0: next=0x92fb280 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb210: 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 |........|
+   0x092fb218: 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf 0xb0 |........|
+   0x092fb220: 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 |........|
+   0x092fb228: 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf 0xc0 |........|
+  0x92fb280: next=0x92fb310 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2a0: 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 |........|
+   0x092fb2a8: 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf 0xd0 |........|
+   0x092fb2b0: 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 0xd8 |........|
+   0x092fb2b8: 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf 0xe0 |........|
+  0x92fb310: next=(nil) size=32 prefix=0 length=31 suffix=1 total=32
+   0x092fb330: 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 0xe8 |........|
+   0x092fb338: 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef 0xf0 |........|
+   0x092fb340: 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 |........|
+   0x092fb348: 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff      |....... |
+ tail=0x92fb310
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+[       OK ] PacketTest.PrependAppendPrependConsumeMany (2 ms)
+[ RUN      ] PacketTest.AppendAppendPrependConsumeMany
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=0x92fb310
+  0x92fb310: next=0x92fb280 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb330: 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 |........|
+   0x092fb338: 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f |........|
+   0x092fb340: 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 |........|
+   0x092fb348: 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f |........|
+  0x92fb280: next=0x92fb1f0 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2a0: 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 | !"#$%&'|
+   0x092fb2a8: 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f |()*+,-./|
+   0x092fb2b0: 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 |01234567|
+   0x092fb2b8: 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f |89:;<=>?|
+  0x92fb1f0: next=0x92fb160 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb210: 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 |@ABCDEFG|
+   0x092fb218: 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f |HIJKLMNO|
+   0x092fb220: 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 |PQRSTUVW|
+   0x092fb228: 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f |XYZ[\]^_|
+  0x92fb160: next=0x92fb118 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb180: 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 |`abcdefg|
+   0x092fb188: 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f |hijklmno|
+   0x092fb190: 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 |pqrstuvw|
+   0x092fb198: 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f |xyz{|}~.|
+  0x92fb118: next=0x92fb1a8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb138: 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 |........|
+   0x092fb140: 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f |........|
+   0x092fb148: 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 |........|
+   0x092fb150: 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f |........|
+  0x92fb1a8: next=0x92fb238 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb1c8: 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 |........|
+   0x092fb1d0: 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf |........|
+   0x092fb1d8: 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 |........|
+   0x092fb1e0: 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf |........|
+  0x92fb238: next=0x92fb2c8 size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb258: 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 |........|
+   0x092fb260: 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf |........|
+   0x092fb268: 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 |........|
+   0x092fb270: 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf |........|
+  0x92fb2c8: next=(nil) size=32 prefix=0 length=32 suffix=0 total=32
+   0x092fb2e8: 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 |........|
+   0x092fb2f0: 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef |........|
+   0x092fb2f8: 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 |........|
+   0x092fb300: 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff |........|
+ tail=0x92fb2c8
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+Packet(0xbfd9694c)[36]:
+ InputOutput(0xbfd9694c)[4]
+ allocation=32
+ head=(nil)
+ tail=(nil)
+ in:
+  Packet(0xbfd96960)[8]:
+   Input(0xbfd96960)[4]
+   packet=0xbfd9694c
+ out:
+  Packet(0xbfd96968)[8]:
+   Output(0xbfd96968)[4]
+   packet=0xbfd9694c
+[       OK ] PacketTest.AppendAppendPrependConsumeMany (2 ms)
+[ RUN      ] PacketTest.MixedBag
+[       OK ] PacketTest.MixedBag (0 ms)
+[----------] 8 tests from PacketTest (12 ms total)
+
+[----------] 6 tests from PacketInputOutputTest
+[ RUN      ] PacketInputOutputTest.Block
+[       OK ] PacketInputOutputTest.Block (0 ms)
+[ RUN      ] PacketInputOutputTest.Character
+[       OK ] PacketInputOutputTest.Character (0 ms)
+[ RUN      ] PacketInputOutputTest.String
+[       OK ] PacketInputOutputTest.String (1 ms)
+[ RUN      ] PacketInputOutputTest.Formatted
+[       OK ] PacketInputOutputTest.Formatted (0 ms)
+[ RUN      ] PacketInputOutputTest.SourceSinkBuffer
+[       OK ] PacketInputOutputTest.SourceSinkBuffer (0 ms)
+[ RUN      ] PacketInputOutputTest.SourceSinkPathFile
+[       OK ] PacketInputOutputTest.SourceSinkPathFile (229 ms)
+[----------] 6 tests from PacketInputOutputTest (230 ms total)
+
+[----------] 6 tests from ParameterTest
+[ RUN      ] ParameterTest.Array
+[       OK ] ParameterTest.Array (0 ms)
+[ RUN      ] ParameterTest.String
+[       OK ] ParameterTest.String (0 ms)
+[ RUN      ] ParameterTest.Stack
+[       OK ] ParameterTest.Stack (0 ms)
+[ RUN      ] ParameterTest.StackLength
+[       OK ] ParameterTest.StackLength (0 ms)
+[ RUN      ] ParameterTest.Heap
+[       OK ] ParameterTest.Heap (0 ms)
+[ RUN      ] ParameterTest.DefaultFunctionArgument
+[       OK ] ParameterTest.DefaultFunctionArgument (0 ms)
+[----------] 6 tests from ParameterTest (0 ms total)
+
+[----------] 1 test from SizeTest
+[ RUN      ] SizeTest.Size
+[       OK ] SizeTest.Size (0 ms)
+[----------] 1 test from SizeTest (0 ms total)
+
+[----------] 3 tests from FibonacciTest
+[ RUN      ] FibonacciTest.Sanity
+[       OK ] FibonacciTest.Sanity (0 ms)
+[ RUN      ] FibonacciTest.Overflow
+NDX        WAS        NOW          SUM          CUM
+  0          0          1            1            1
+  1          1          2            3            3
+  2          2          3            5            6
+  3          3          5            8           11
+  4          5          8           13           19
+  5          8         13           21           32
+  6         13         21           34           53
+  7         21         34           55           87
+  8         34         55           89          142
+  9         55         89          144          231
+ 10         89        144          233          375
+ 11        144        233          377          608
+ 12        233        377          610          985
+ 13        377        610          987         1595
+ 14        610        987         1597         2582
+ 15        987       1597         2584         4179
+ 16       1597       2584         4181         6763
+ 17       2584       4181         6765        10944
+ 18       4181       6765        10946        17709
+ 19       6765      10946        17711        28655
+ 20      10946      17711        28657        46366
+ 21      17711      28657        46368        75023
+ 22      28657      46368        75025       121391
+ 23      46368      75025       121393       196416
+ 24      75025     121393       196418       317809
+ 25     121393     196418       317811       514227
+ 26     196418     317811       514229       832038
+ 27     317811     514229       832040      1346267
+ 28     514229     832040      1346269      2178307
+ 29     832040    1346269      2178309      3524576
+ 30    1346269    2178309      3524578      5702885
+ 31    2178309    3524578      5702887      9227463
+ 32    3524578    5702887      9227465     14930350
+ 33    5702887    9227465     14930352     24157815
+ 34    9227465   14930352     24157817     39088167
+ 35   14930352   24157817     39088169     63245984
+ 36   24157817   39088169     63245986    102334153
+ 37   39088169   63245986    102334155    165580139
+ 38   63245986  102334155    165580141    267914294
+ 39  102334155  165580141    267914296    433494435
+ 40  165580141  267914296    433494437    701408731
+ 41  267914296  433494437    701408733   1134903168
+ 42  433494437  701408733   1134903170   1836311901
+ 43  701408733 1134903170   1836311903   2971215071
+ 44 1134903170 1836311903   2971215073   4807526974
+ 45 1836311903 2971215073   4807526976   7778742047
+ 46 2971215073 2971215073   5942430146  10749957120
+[       OK ] FibonacciTest.Overflow (0 ms)
+[ RUN      ] FibonacciTest.Limit
+[       OK ] FibonacciTest.Limit (0 ms)
+[----------] 3 tests from FibonacciTest (0 ms total)
+
+[----------] 22 tests from ThreadTest
+[ RUN      ] ThreadTest.Mutex
+[       OK ] ThreadTest.Mutex (0 ms)
+[ RUN      ] ThreadTest.MutexRecursive
+[       OK ] ThreadTest.MutexRecursive (0 ms)
+[ RUN      ] ThreadTest.CriticalSection
+[       OK ] ThreadTest.CriticalSection (0 ms)
+[ RUN      ] ThreadTest.CriticalSectionRecursive
+[       OK ] ThreadTest.CriticalSectionRecursive (0 ms)
+[ RUN      ] ThreadTest.Idle
+[       OK ] ThreadTest.Idle (0 ms)
+[ RUN      ] ThreadTest.Join
+[       OK ] ThreadTest.Join (2001 ms)
+[ RUN      ] ThreadTest.Cancel
+[       OK ] ThreadTest.Cancel (2000 ms)
+[ RUN      ] ThreadTest.Notify
+[       OK ] ThreadTest.Notify (2000 ms)
+[ RUN      ] ThreadTest.Exit
+[       OK ] ThreadTest.Exit (1000 ms)
+[ RUN      ] ThreadTest.ReturnJoin
+[       OK ] ThreadTest.ReturnJoin (1000 ms)
+[ RUN      ] ThreadTest.ExitJoin
+[       OK ] ThreadTest.ExitJoin (1000 ms)
+[ RUN      ] ThreadTest.JoinReturn
+[       OK ] ThreadTest.JoinReturn (1000 ms)
+[ RUN      ] ThreadTest.StackUnwind
+[       OK ] ThreadTest.StackUnwind (1000 ms)
+[ RUN      ] ThreadTest.Uncancellable
+[       OK ] ThreadTest.Uncancellable (2000 ms)
+[ RUN      ] ThreadTest.Instance
+[       OK ] ThreadTest.Instance (0 ms)
+[ RUN      ] ThreadTest.Condition
+[       OK ] ThreadTest.Condition (1 ms)
+[ RUN      ] ThreadTest.FunctionReturn
+[       OK ] ThreadTest.FunctionReturn (0 ms)
+[ RUN      ] ThreadTest.FunctionExit
+[       OK ] ThreadTest.FunctionExit (0 ms)
+[ RUN      ] ThreadTest.FunctionPExit
+[       OK ] ThreadTest.FunctionPExit (0 ms)
+[ RUN      ] ThreadTest.MemoryBarrier
+[       OK ] ThreadTest.MemoryBarrier (0 ms)
+[ RUN      ] ThreadTest.Monitor
+[       OK ] ThreadTest.Monitor (1000 ms)
+[ RUN      ] ThreadTest.Parallel
+[       OK ] ThreadTest.Parallel (4 ms)
+[----------] 22 tests from ThreadTest (14007 ms total)
+
+[----------] 1 test from SizeofTest
+[ RUN      ] SizeofTest.Sizeof
+sizeof(Access)=8
+sizeof(Action)=120
+sizeof(Bucket)=184
+sizeof(BucketCreate)=184
+sizeof(BucketDelete)=184
+sizeof(BucketHead)=216
+sizeof(BucketManifest)=252
+sizeof(Conditions)=28
+sizeof(Container)=168
+sizeof(Context)=28
+sizeof(Credentials)=12
+sizeof(Endpoint)=8
+sizeof(Grant)=192
+sizeof(GrantGet)=468
+sizeof(GrantSet)=208
+sizeof(Multiplex)=16
+sizeof(Object)=232
+sizeof(ObjectCopy)=356
+sizeof(ObjectDelete)=232
+sizeof(ObjectGet)=324
+sizeof(ObjectHead)=232
+sizeof(ObjectPut)=340
+sizeof(Properties)=60
+sizeof(Protocol)=8
+sizeof(Region)=8
+sizeof(Selection)=20
+sizeof(Service)=136
+sizeof(ServiceManifest)=172
+sizeof(Session)=20
+sizeof(Style)=8
+[       OK ] SizeofTest.Sizeof (0 ms)
+[----------] 1 test from SizeofTest (0 ms total)
+
+[----------] 14 tests from EndpointTest
+[ RUN      ] EndpointTest.Heap
+[       OK ] EndpointTest.Heap (0 ms)
+[ RUN      ] EndpointTest.Stack
+[       OK ] EndpointTest.Stack (0 ms)
+[ RUN      ] EndpointTest.Default
+[       OK ] EndpointTest.Default (0 ms)
+[ RUN      ] EndpointTest.Ireland
+[       OK ] EndpointTest.Ireland (0 ms)
+[ RUN      ] EndpointTest.NorthernCalifornia
+[       OK ] EndpointTest.NorthernCalifornia (0 ms)
+[ RUN      ] EndpointTest.Singapore
+[       OK ] EndpointTest.Singapore (0 ms)
+[ RUN      ] EndpointTest.Tokyo
+[       OK ] EndpointTest.Tokyo (0 ms)
+[ RUN      ] EndpointTest.UnitedStates
+[       OK ] EndpointTest.UnitedStates (0 ms)
+[ RUN      ] EndpointTest.NorthernVirginia
+[       OK ] EndpointTest.NorthernVirginia (0 ms)
+[ RUN      ] EndpointTest.Oregon
+[       OK ] EndpointTest.Oregon (0 ms)
+[ RUN      ] EndpointTest.SaoPaulo
+[       OK ] EndpointTest.SaoPaulo (0 ms)
+[ RUN      ] EndpointTest.Environment
+[       OK ] EndpointTest.Environment (0 ms)
+[ RUN      ] EndpointTest.DefaultFunctionArgument
+[       OK ] EndpointTest.DefaultFunctionArgument (0 ms)
+[ RUN      ] EndpointTest.Settors
+[       OK ] EndpointTest.Settors (0 ms)
+[----------] 14 tests from EndpointTest (1 ms total)
+
+[----------] 6 tests from SessionTest
+[ RUN      ] SessionTest.Heap
+[       OK ] SessionTest.Heap (1 ms)
+[ RUN      ] SessionTest.Stack
+[       OK ] SessionTest.Stack (0 ms)
+[ RUN      ] SessionTest.Environment
+[       OK ] SessionTest.Environment (0 ms)
+[ RUN      ] SessionTest.Explicit
+[       OK ] SessionTest.Explicit (0 ms)
+[ RUN      ] SessionTest.Instance
+[       OK ] SessionTest.Instance (0 ms)
+[ RUN      ] SessionTest.Canonicalization
+[       OK ] SessionTest.Canonicalization (0 ms)
+[----------] 6 tests from SessionTest (1 ms total)
+
+[----------] 12 tests from CredentialsTest
+[ RUN      ] CredentialsTest.Heap
+[       OK ] CredentialsTest.Heap (0 ms)
+[ RUN      ] CredentialsTest.Explicit
+[       OK ] CredentialsTest.Explicit (0 ms)
+[ RUN      ] CredentialsTest.ExplicitShort
+2012-01-04 22:05:36.491638Z [WARN] Credentials@0xbfd96b7c: access key id length invalid! (19!=20)
+2012-01-04 22:05:36.491666Z [WARN] Credentials@0xbfd96b7c: secret access key length invalid! (39!=40)
+[       OK ] CredentialsTest.ExplicitShort (0 ms)
+[ RUN      ] CredentialsTest.ExplicitLong
+2012-01-04 22:05:36.491721Z [WARN] Credentials@0xbfd96b7c: access key id length invalid! (21!=20)
+2012-01-04 22:05:36.491740Z [WARN] Credentials@0xbfd96b7c: secret access key length invalid! (41!=40)
+[       OK ] CredentialsTest.ExplicitLong (0 ms)
+[ RUN      ] CredentialsTest.Environment
+[       OK ] CredentialsTest.Environment (0 ms)
+[ RUN      ] CredentialsTest.EnvironmentShort
+2012-01-04 22:05:36.491867Z [WARN] Credentials@0xbfd96ab4: access key id length invalid! (19!=20)
+2012-01-04 22:05:36.491887Z [WARN] Credentials@0xbfd96ab4: secret access key length invalid! (39!=40)
+[       OK ] CredentialsTest.EnvironmentShort (0 ms)
+[ RUN      ] CredentialsTest.EnvironmentLong
+2012-01-04 22:05:36.491968Z [WARN] Credentials@0xbfd96ab4: access key id length invalid! (21!=20)
+2012-01-04 22:05:36.491987Z [WARN] Credentials@0xbfd96ab4: secret access key length invalid! (41!=40)
+[       OK ] CredentialsTest.EnvironmentLong (1 ms)
+[ RUN      ] CredentialsTest.ExplicitOverridesEnvironment
+[       OK ] CredentialsTest.ExplicitOverridesEnvironment (0 ms)
+[ RUN      ] CredentialsTest.Input
+[       OK ] CredentialsTest.Input (0 ms)
+[ RUN      ] CredentialsTest.InputTaken
+[       OK ] CredentialsTest.InputTaken (0 ms)
+[ RUN      ] CredentialsTest.Missing
+2012-01-04 22:05:36.492196Z [WARN] Credentials@0xbfd96ad4: access key id length invalid! (0!=20)
+2012-01-04 22:05:36.492215Z [WARN] Credentials@0xbfd96ad4: secret access key length invalid! (0!=40)
+[       OK ] CredentialsTest.Missing (0 ms)
+[ RUN      ] CredentialsTest.Settors
+[       OK ] CredentialsTest.Settors (0 ms)
+[----------] 12 tests from CredentialsTest (1 ms total)
+
+[----------] 7 tests from ProtocolTest
+[ RUN      ] ProtocolTest.Heap
+[       OK ] ProtocolTest.Heap (0 ms)
+[ RUN      ] ProtocolTest.Stack
+[       OK ] ProtocolTest.Stack (0 ms)
+[ RUN      ] ProtocolTest.Default
+[       OK ] ProtocolTest.Default (0 ms)
+[ RUN      ] ProtocolTest.Secure
+[       OK ] ProtocolTest.Secure (0 ms)
+[ RUN      ] ProtocolTest.Unsecure
+[       OK ] ProtocolTest.Unsecure (0 ms)
+[ RUN      ] ProtocolTest.DefaultFunctionArgument
+[       OK ] ProtocolTest.DefaultFunctionArgument (0 ms)
+[ RUN      ] ProtocolTest.Settors
+[       OK ] ProtocolTest.Settors (0 ms)
+[----------] 7 tests from ProtocolTest (0 ms total)
+
+[----------] 7 tests from StyleTest
+[ RUN      ] StyleTest.Heap
+[       OK ] StyleTest.Heap (0 ms)
+[ RUN      ] StyleTest.Stack
+[       OK ] StyleTest.Stack (0 ms)
+[ RUN      ] StyleTest.Default
+[       OK ] StyleTest.Default (0 ms)
+[ RUN      ] StyleTest.VirtualHost
+[       OK ] StyleTest.VirtualHost (0 ms)
+[ RUN      ] StyleTest.Path
+[       OK ] StyleTest.Path (0 ms)
+[ RUN      ] StyleTest.DefaultFunctionArgument
+[       OK ] StyleTest.DefaultFunctionArgument (0 ms)
+[ RUN      ] StyleTest.Settors
+[       OK ] StyleTest.Settors (0 ms)
+[----------] 7 tests from StyleTest (0 ms total)
+
+[----------] 14 tests from RegionTest
+[ RUN      ] RegionTest.Heap
+[       OK ] RegionTest.Heap (0 ms)
+[ RUN      ] RegionTest.Stack
+[       OK ] RegionTest.Stack (0 ms)
+[ RUN      ] RegionTest.Default
+[       OK ] RegionTest.Default (0 ms)
+[ RUN      ] RegionTest.Ireland
+[       OK ] RegionTest.Ireland (0 ms)
+[ RUN      ] RegionTest.NorthernCalifornia
+[       OK ] RegionTest.NorthernCalifornia (0 ms)
+[ RUN      ] RegionTest.Singapore
+[       OK ] RegionTest.Singapore (0 ms)
+[ RUN      ] RegionTest.Tokyo
+[       OK ] RegionTest.Tokyo (0 ms)
+[ RUN      ] RegionTest.UnitedStates
+[       OK ] RegionTest.UnitedStates (0 ms)
+[ RUN      ] RegionTest.NorthernVirginia
+[       OK ] RegionTest.NorthernVirginia (0 ms)
+[ RUN      ] RegionTest.Oregon
+[       OK ] RegionTest.Oregon (0 ms)
+[ RUN      ] RegionTest.SaoPaulo
+[       OK ] RegionTest.SaoPaulo (0 ms)
+[ RUN      ] RegionTest.Environment
+[       OK ] RegionTest.Environment (0 ms)
+[ RUN      ] RegionTest.DefaultFunctionArgument
+[       OK ] RegionTest.DefaultFunctionArgument (0 ms)
+[ RUN      ] RegionTest.Settors
+[       OK ] RegionTest.Settors (0 ms)
+[----------] 14 tests from RegionTest (1 ms total)
+
+[----------] 9 tests from AccessTest
+[ RUN      ] AccessTest.Heap
+[       OK ] AccessTest.Heap (0 ms)
+[ RUN      ] AccessTest.Stack
+[       OK ] AccessTest.Stack (0 ms)
+[ RUN      ] AccessTest.Default
+[       OK ] AccessTest.Default (0 ms)
+[ RUN      ] AccessTest.Private
+[       OK ] AccessTest.Private (0 ms)
+[ RUN      ] AccessTest.PublicRead
+[       OK ] AccessTest.PublicRead (0 ms)
+[ RUN      ] AccessTest.PublicReadWrite
+[       OK ] AccessTest.PublicReadWrite (0 ms)
+[ RUN      ] AccessTest.AuthenticatedRead
+[       OK ] AccessTest.AuthenticatedRead (0 ms)
+[ RUN      ] AccessTest.DefaultFunctionArgument
+[       OK ] AccessTest.DefaultFunctionArgument (0 ms)
+[ RUN      ] AccessTest.Settors
+[       OK ] AccessTest.Settors (0 ms)
+[----------] 9 tests from AccessTest (0 ms total)
+
+[----------] 5 tests from ContextTest
+[ RUN      ] ContextTest.Heap
+[       OK ] ContextTest.Heap (0 ms)
+[ RUN      ] ContextTest.Stack
+[       OK ] ContextTest.Stack (0 ms)
+[ RUN      ] ContextTest.Implicit
+[       OK ] ContextTest.Implicit (0 ms)
+[ RUN      ] ContextTest.Explicit
+[       OK ] ContextTest.Explicit (0 ms)
+[ RUN      ] ContextTest.Settors
+[       OK ] ContextTest.Settors (0 ms)
+[----------] 5 tests from ContextTest (0 ms total)
+
+[----------] 7 tests from MultiplexTest
+[ RUN      ] MultiplexTest.Heap
+[       OK ] MultiplexTest.Heap (1 ms)
+[ RUN      ] MultiplexTest.Stack
+[       OK ] MultiplexTest.Stack (0 ms)
+[ RUN      ] MultiplexTest.Complete
+[       OK ] MultiplexTest.Complete (0 ms)
+[ RUN      ] MultiplexTest.Iterate
+[       OK ] MultiplexTest.Iterate (0 ms)
+[ RUN      ] MultiplexTest.Ready
+[       OK ] MultiplexTest.Ready (0 ms)
+[ RUN      ] MultiplexTest.Plex
+[       OK ] MultiplexTest.Plex (0 ms)
+[ RUN      ] MultiplexTest.Simplex
+[       OK ] MultiplexTest.Simplex (0 ms)
+[----------] 7 tests from MultiplexTest (2 ms total)
+
+[----------] 4 tests from PropertiesTest
+[ RUN      ] PropertiesTest.Heap
+[       OK ] PropertiesTest.Heap (0 ms)
+[ RUN      ] PropertiesTest.Stack
+[       OK ] PropertiesTest.Stack (0 ms)
+[ RUN      ] PropertiesTest.Explicit
+[       OK ] PropertiesTest.Explicit (0 ms)
+[ RUN      ] PropertiesTest.Settors
+[       OK ] PropertiesTest.Settors (0 ms)
+[----------] 4 tests from PropertiesTest (0 ms total)
+
+[----------] 4 tests from ConditionsTest
+[ RUN      ] ConditionsTest.Heap
+[       OK ] ConditionsTest.Heap (0 ms)
+[ RUN      ] ConditionsTest.Stack
+[       OK ] ConditionsTest.Stack (0 ms)
+[ RUN      ] ConditionsTest.Explicit
+[       OK ] ConditionsTest.Explicit (0 ms)
+[ RUN      ] ConditionsTest.Settors
+[       OK ] ConditionsTest.Settors (0 ms)
+[----------] 4 tests from ConditionsTest (0 ms total)
+
+[----------] 4 tests from SelectionTest
+[ RUN      ] SelectionTest.Heap
+[       OK ] SelectionTest.Heap (0 ms)
+[ RUN      ] SelectionTest.Stack
+[       OK ] SelectionTest.Stack (0 ms)
+[ RUN      ] SelectionTest.Explicit
+[       OK ] SelectionTest.Explicit (0 ms)
+[ RUN      ] SelectionTest.Settors
+[       OK ] SelectionTest.Settors (0 ms)
+[----------] 4 tests from SelectionTest (0 ms total)
+
+[----------] 6 tests from BucketBaseTest
+[ RUN      ] BucketBaseTest.Heap
+[       OK ] BucketBaseTest.Heap (0 ms)
+[ RUN      ] BucketBaseTest.Stack
+[       OK ] BucketBaseTest.Stack (0 ms)
+[ RUN      ] BucketBaseTest.Temporary
+[       OK ] BucketBaseTest.Temporary (0 ms)
+[ RUN      ] BucketBaseTest.VirtualHostURI
+URI="https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com"
+[       OK ] BucketBaseTest.VirtualHostURI (0 ms)
+[ RUN      ] BucketBaseTest.PathURI
+URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com"
+[       OK ] BucketBaseTest.PathURI (0 ms)
+[ RUN      ] BucketBaseTest.CopyConstructor
+[       OK ] BucketBaseTest.CopyConstructor (0 ms)
+[----------] 6 tests from BucketBaseTest (1 ms total)
+
+[----------] 6 tests from ObjectBaseTest
+[ RUN      ] ObjectBaseTest.Heap
+[       OK ] ObjectBaseTest.Heap (0 ms)
+[ RUN      ] ObjectBaseTest.Stack
+[       OK ] ObjectBaseTest.Stack (0 ms)
+[ RUN      ] ObjectBaseTest.Temporary
+[       OK ] ObjectBaseTest.Temporary (0 ms)
+[ RUN      ] ObjectBaseTest.VirtualHostURI
+URI="https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com/VirtualHost.txt"
+[       OK ] ObjectBaseTest.VirtualHostURI (0 ms)
+[ RUN      ] ObjectBaseTest.PathURI
+URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt"
+[       OK ] ObjectBaseTest.PathURI (0 ms)
+[ RUN      ] ObjectBaseTest.CopyConstructor
+[       OK ] ObjectBaseTest.CopyConstructor (0 ms)
+[----------] 6 tests from ObjectBaseTest (1 ms total)
+
+[----------] 1 test from GrantBaseTest
+[ RUN      ] GrantBaseTest.Sanity
+[       OK ] GrantBaseTest.Sanity (0 ms)
+[----------] 1 test from GrantBaseTest (0 ms total)
+
+[----------] 2 tests from LogBaseTest
+[ RUN      ] LogBaseTest.NoPrefix
+[       OK ] LogBaseTest.NoPrefix (0 ms)
+[ RUN      ] LogBaseTest.Prefix
+[       OK ] LogBaseTest.Prefix (0 ms)
+[----------] 2 tests from LogBaseTest (0 ms total)
+
+[----------] 7 tests from BucketTest
+[ RUN      ] BucketTest.Heap
+[       OK ] BucketTest.Heap (2302 ms)
+[ RUN      ] BucketTest.Stack
+[       OK ] BucketTest.Stack (1393 ms)
+[ RUN      ] BucketTest.Explicit
+[       OK ] BucketTest.Explicit (1193 ms)
+[ RUN      ] BucketTest.Complete
+[       OK ] BucketTest.Complete (1582 ms)
+[ RUN      ] BucketTest.Simplex
+[       OK ] BucketTest.Simplex (1754 ms)
+[ RUN      ] BucketTest.Service
+[       OK ] BucketTest.Service (1271 ms)
+[ RUN      ] BucketTest.Manifest
+[       OK ] BucketTest.Manifest (2358 ms)
+[----------] 7 tests from BucketTest (11853 ms total)
+
+[----------] 6 tests from ObjectTest
+[ RUN      ] ObjectTest.Heap
+[       OK ] ObjectTest.Heap (2289 ms)
+[ RUN      ] ObjectTest.Complete
+[       OK ] ObjectTest.Complete (5254 ms)
+[ RUN      ] ObjectTest.Simplex
+[       OK ] ObjectTest.Simplex (4041 ms)
+[ RUN      ] ObjectTest.Service
+[       OK ] ObjectTest.Service (3706 ms)
+[ RUN      ] ObjectTest.Manifest
+[       OK ] ObjectTest.Manifest (7105 ms)
+[ RUN      ] ObjectTest.Copy
+[       OK ] ObjectTest.Copy (2810 ms)
+[----------] 6 tests from ObjectTest (25205 ms total)
+
+[----------] 3 tests from ConvergenceTest
+[ RUN      ] ConvergenceTest.Synchronous
+[       OK ] ConvergenceTest.Synchronous (3275 ms)
+[ RUN      ] ConvergenceTest.Complete
+[       OK ] ConvergenceTest.Complete (4752 ms)
+[ RUN      ] ConvergenceTest.Service
+[       OK ] ConvergenceTest.Service (4423 ms)
+[----------] 3 tests from ConvergenceTest (12450 ms total)
+
+[----------] 4 tests from GrantTest
+[ RUN      ] GrantTest.GetSynchronous
+[       OK ] GrantTest.GetSynchronous (1793 ms)
+[ RUN      ] GrantTest.GetAsynchronous
+[       OK ] GrantTest.GetAsynchronous (1708 ms)
+[ RUN      ] GrantTest.GetPublicRead
+[       OK ] GrantTest.GetPublicRead (1734 ms)
+[ RUN      ] GrantTest.SetGet
+[       OK ] GrantTest.SetGet (1764 ms)
+[----------] 4 tests from GrantTest (6999 ms total)
+
+[----------] 5 tests from LogTest
+[ RUN      ] LogTest.GetSynchronous
+[       OK ] LogTest.GetSynchronous (819 ms)
+[ RUN      ] LogTest.GetAsynchronous
+[       OK ] LogTest.GetAsynchronous (3640 ms)
+[ RUN      ] LogTest.SetGet
+[       OK ] LogTest.SetGet (2540 ms)
+[ RUN      ] LogTest.SetGetPrefix
+[       OK ] LogTest.SetGetPrefix (2793 ms)
+[ RUN      ] LogTest.SetGetApplication
+[       OK ] LogTest.SetGetApplication (4778 ms)
+[----------] 5 tests from LogTest (14570 ms total)
+
+[----------] 7 tests from ComplexTest
+[ RUN      ] ComplexTest.Stack
+[       OK ] ComplexTest.Stack (1 ms)
+[ RUN      ] ComplexTest.Success
+[       OK ] ComplexTest.Success (2526 ms)
+[ RUN      ] ComplexTest.Recoverable
+[       OK ] ComplexTest.Recoverable (4689 ms)
+[ RUN      ] ComplexTest.Recoverables
+[       OK ] ComplexTest.Recoverables (11002 ms)
+[ RUN      ] ComplexTest.Unrecoverable
+[       OK ] ComplexTest.Unrecoverable (0 ms)
+[ RUN      ] ComplexTest.Irrecoverable
+[       OK ] ComplexTest.Irrecoverable (2001 ms)
+[ RUN      ] ComplexTest.Application
+[       OK ] ComplexTest.Application (15696 ms)
+[----------] 7 tests from ComplexTest (35915 ms total)
+
+[----------] Global test environment tear-down
+[==========] 222 tests from 35 test cases ran. (121715 ms total)
+[  PASSED  ] 222 tests.
+
+real	2m1.726s
+user	0m1.948s
+sys	0m4.124s
+
+Script done on Wed Jan  4 15:07:23 2012
