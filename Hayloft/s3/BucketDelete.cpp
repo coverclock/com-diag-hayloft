@@ -42,9 +42,6 @@ BucketDelete::BucketDelete(const Bucket & bucket, const Plex & plex)
 }
 
 BucketDelete::~BucketDelete() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 }
 
 void BucketDelete::initialize() {

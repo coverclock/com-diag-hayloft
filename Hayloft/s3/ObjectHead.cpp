@@ -42,9 +42,6 @@ ObjectHead::ObjectHead(const Object & object, const Plex & plex)
 }
 
 ObjectHead::~ObjectHead() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 }
 
 void ObjectHead::initialize() {

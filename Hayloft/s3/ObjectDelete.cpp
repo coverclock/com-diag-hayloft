@@ -42,9 +42,6 @@ ObjectDelete::ObjectDelete(const Object & object, const Plex & plex)
 }
 
 ObjectDelete::~ObjectDelete() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 }
 
 void ObjectDelete::initialize() {

@@ -42,9 +42,6 @@ BucketCreate::BucketCreate(const Bucket & bucket, const Plex & plex)
 }
 
 BucketCreate::~BucketCreate() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 }
 
 void BucketCreate::initialize() {

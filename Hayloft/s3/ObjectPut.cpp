@@ -174,9 +174,6 @@ ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input * sourcep, 
 }
 
 ObjectPut::~ObjectPut() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 	delete [] properties.metaData;
 	finalize();
 }
