@@ -78,7 +78,7 @@ public:
 
 protected:
 
-	Pending * taken;
+	Handle * taken;
 
 	Status status;
 
@@ -97,7 +97,7 @@ public:
 	 * @param untaken is the S3RequestContext. It is UNTAKEN and must be
 	 *        be destroyed by the application.
 	 */
-	explicit Multiplex(Pending * untaken /* UNTAKEN */);
+	explicit Multiplex(Handle * untaken /* UNTAKEN */);
 
 	/**
 	 * Dtor. If there are pending Actions, the dtor blocks and they are all

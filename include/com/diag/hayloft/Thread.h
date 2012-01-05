@@ -86,9 +86,9 @@ protected:
 
 	static ::pthread_key_t key;
 
-	static int handle;
+	static int setupped;
 
-	static int setup(void);
+	static int setup();
 
 	static void * empty_function(void * context);
 

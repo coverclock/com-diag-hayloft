@@ -43,11 +43,11 @@ TEST_F(ComplexTest, Stack) {
 	Complex complex1;
 	EXPECT_TRUE(complex1 == true);
 	EXPECT_EQ(complex1.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex1.getPending(), (Pending*)0);
+	EXPECT_NE(complex1.getHandle(), (Handle*)0);
 	Complex complex2;
 	EXPECT_TRUE(complex2 == true);
 	EXPECT_EQ(complex2.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex2.getPending(), (Pending*)0);
+	EXPECT_NE(complex2.getHandle(), (Handle*)0);
 }
 
 TEST_F(ComplexTest, Success) {
@@ -55,7 +55,7 @@ TEST_F(ComplexTest, Success) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreate bucketcreate(BUCKET, complex);
 	EXPECT_TRUE(complex.start(bucketcreate));
 	EXPECT_TRUE(complex.wait(bucketcreate));
@@ -91,7 +91,7 @@ TEST_F(ComplexTest, Recoverable) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateRecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
@@ -110,7 +110,7 @@ TEST_F(ComplexTest, Recoverables) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateRecoverable bucketcreate1(BUCKET1, complex);
 	bucketcreate1.failures = 2;
 	bucketcreate1.failure = ::S3StatusErrorInternalError;
@@ -138,7 +138,7 @@ TEST_F(ComplexTest, Unrecoverable) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateRecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusAbortedByCallback;
@@ -158,7 +158,7 @@ TEST_F(ComplexTest, Irrecoverable) {
 	ComplexIrrecoverable complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateRecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 2;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
@@ -181,7 +181,7 @@ TEST_F(ComplexTest, Unretryable) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateUnretryable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusConnectionFailed;
@@ -204,7 +204,7 @@ TEST_F(ComplexTest, Unstartable) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateUnstartable bucketcreate(BUCKET, complex);
 	EXPECT_TRUE(complex.start(bucketcreate));
 	EXPECT_TRUE(complex.wait(bucketcreate));
@@ -225,7 +225,7 @@ TEST_F(ComplexTest, Unresettable) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreateUnresettable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusConnectionFailed;
@@ -283,7 +283,7 @@ TEST_F(ComplexTest, Application) {
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getPending(), (Pending*)0);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, complex);
 	EXPECT_TRUE(complex.start(bucketcreate1));

@@ -42,8 +42,8 @@ ObjectDelete::ObjectDelete(const Object & object, const Plex & plex)
 }
 
 ObjectDelete::~ObjectDelete() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -58,7 +58,7 @@ void ObjectDelete::execute() {
 	::S3_delete_object(
 		&context,
 		key.c_str(),
-		pending,
+		handle,
 		&handler,
 		this
 	);

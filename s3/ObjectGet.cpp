@@ -161,8 +161,8 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output * sinkp, /
 }
 
 ObjectGet::~ObjectGet() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 	finalize();
 }
@@ -191,7 +191,7 @@ void ObjectGet::execute() {
 		&conditions,
 		offset,
 		size,
-		pending,
+		handle,
 		&handler,
 		this
 	);

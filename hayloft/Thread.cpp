@@ -25,7 +25,7 @@ pthread_key_t Thread::key;
 
 Thread Thread::main(::pthread_self());
 
-int Thread::handle = Thread::setup();
+int Thread::setupped = Thread::setup();
 
 /*******************************************************************************
  * C ABI PROXY FUNCTIONS

@@ -61,8 +61,8 @@ GrantSet::GrantSet(const Object & object, const Plex & plex, const Grant & grant
 }
 
 GrantSet::~GrantSet() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 	delete [] grants;
 }
@@ -92,7 +92,7 @@ void GrantSet::execute() {
 		display.c_str(),
 		count,
 		grants,
-		pending,
+		handle,
 		&handler,
 		this
 	);

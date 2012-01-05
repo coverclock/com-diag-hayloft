@@ -71,8 +71,8 @@ GrantGet::GrantGet(const Object & object, const Plex & plex)
 }
 
 GrantGet::~GrantGet() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 	delete [] grants;
 }
@@ -99,7 +99,7 @@ void GrantGet::execute() {
 		ownerdisplayname,
 		&count,
 		grants,
-		pending,
+		handle,
 		&handler,
 		this
 	);

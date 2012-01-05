@@ -15,8 +15,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
-Plex::Plex(Pending * untaken)
-: pending(untaken)
+Plex::Plex(Handle * untaken)
+: handle(untaken)
 {
 	initialize();
 }
@@ -25,7 +25,7 @@ Plex::~Plex() {
 }
 
 void Plex::initialize() {
-	Logger::instance().debug("Plex@%p: pending=%p\n", this, pending);
+	Logger::instance().debug("Plex@%p: handle=%p\n", this, handle);
 }
 
 }

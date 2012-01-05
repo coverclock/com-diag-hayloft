@@ -49,8 +49,8 @@ BucketHead::BucketHead(const Bucket & bucket, const Plex & plex)
 }
 
 BucketHead::~BucketHead() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -73,7 +73,7 @@ void BucketHead::execute() {
 		endpoint.c_str(),
 		canonical.c_str(),
 		sizeof(constraint) - 1, constraint,
-		pending,
+		handle,
 		&handler,
 		this
 	);

@@ -32,14 +32,14 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 		action.start();
 	}
 	Fibonacci factor;
-	Pending * pending;
+	Handle * handle;
 	int rc;
 	Milliseconds effective;
 	const char * label = "";
 	for (int ii = 0; ii < tries; ++ii) {
-		pending = action.getPending();
-		if (pending != 0) {
-			Multiplex multiplex(pending);
+		handle = action.getHandle();
+		if (handle != 0) {
+			Multiplex multiplex(handle);
 			rc = multiplex.complete();
 			if ((rc & Multiplex::ERROR) != 0) {
 				logger.log(level, "failing@%p\n", &action);
@@ -79,15 +79,15 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 		action.start();
 	}
 	Fibonacci factor;
-	Pending * pending;
+	Handle * handle;
 	int rc;
 	Milliseconds effective;
 	const char * label = "";
 	for (int ii = 0; ii < tries; ++ii) {
-		pending = action.getPending();
-		if (pending != 0) {
+		handle = action.getHandle();
+		if (handle != 0) {
 			if (action.isBusy()) {
-				Multiplex multiplex(pending);
+				Multiplex multiplex(handle);
 				rc = multiplex.service(timeout, iterations);
 				if ((rc & Multiplex::ERROR) != 0) {
 					// Uh oh. No point in proceeding any further.

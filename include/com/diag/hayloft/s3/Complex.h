@@ -139,7 +139,7 @@ private:
 
 	static Status status;
 
-	static Pending * complex;
+	static Handle * complex;
 
 	static ::com::diag::hayloft::s3::LifeCycle * nextlifecycle;
 

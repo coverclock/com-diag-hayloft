@@ -42,8 +42,8 @@ BucketDelete::BucketDelete(const Bucket & bucket, const Plex & plex)
 }
 
 BucketDelete::~BucketDelete() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -62,7 +62,7 @@ void BucketDelete::execute() {
 		secret.c_str(),
 		endpoint.c_str(),
 		canonical.c_str(),
-		pending,
+		handle,
 		&handler,
 		this
 	);
