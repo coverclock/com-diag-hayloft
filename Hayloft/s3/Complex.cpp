@@ -249,7 +249,7 @@ void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * e
 		} else if (action.retries <= 0) {
 			logger->debug("Complex: Action@%p: too many retries\n", &action);
 		} else if (!action.reset(true)) {
-			logger->error("Complex: Action@%p: reset failed\n", &action);
+			logger->error("Complex: Action@%p: reset failed!\n", &action);
 		} else {
 			logger->debug("Complex: Action@%p: restarting\n", &action);
 			action.status = static_cast<Status>(Action::PENDING);
@@ -322,7 +322,7 @@ void * Complex::run() {
 				for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
 					logger->debug("Complex: Action@%p: start\n", action);
 					if (!action->start(true)) {
-						logger->debug("Complex: Action@%p: start failed\n", action);
+						logger->error("Complex: Action@%p: start failed!\n", action);
 						nextlifecycle->complete(*action, ::S3StatusInternalError, &errorDetails);
 					}
 				}
