@@ -66,10 +66,10 @@ TEST_F(ComplexTest, Success) {
 	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
 
-struct BucketCreateProxy : public BucketCreate {
+struct BucketCreateRecoverable : public BucketCreate {
 	int failures;
 	Status failure;
-	explicit BucketCreateProxy(const Bucket & bucket, const Plex & plex)
+	explicit BucketCreateRecoverable(const Bucket & bucket, const Plex & plex)
 	: BucketCreate(bucket, plex)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -92,7 +92,7 @@ TEST_F(ComplexTest, Recoverable) {
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
 	EXPECT_NE(complex.getPending(), (Pending*)0);
-	BucketCreateProxy bucketcreate(BUCKET, complex);
+	BucketCreateRecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
 	EXPECT_TRUE(complex.start(bucketcreate));
@@ -111,10 +111,10 @@ TEST_F(ComplexTest, Recoverables) {
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
 	EXPECT_NE(complex.getPending(), (Pending*)0);
-	BucketCreateProxy bucketcreate1(BUCKET1, complex);
+	BucketCreateRecoverable bucketcreate1(BUCKET1, complex);
 	bucketcreate1.failures = 2;
 	bucketcreate1.failure = ::S3StatusErrorInternalError;
-	BucketCreateProxy bucketcreate2(BUCKET2, complex);
+	BucketCreateRecoverable bucketcreate2(BUCKET2, complex);
 	bucketcreate2.failures = 3;
 	bucketcreate2.failure = ::S3StatusErrorInternalError;
 	EXPECT_TRUE(complex.start(bucketcreate1));
@@ -139,7 +139,7 @@ TEST_F(ComplexTest, Unrecoverable) {
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
 	EXPECT_NE(complex.getPending(), (Pending*)0);
-	BucketCreateProxy bucketcreate(BUCKET, complex);
+	BucketCreateRecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusAbortedByCallback;
 	EXPECT_TRUE(complex.start(bucketcreate));
@@ -159,7 +159,7 @@ TEST_F(ComplexTest, Irrecoverable) {
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
 	EXPECT_NE(complex.getPending(), (Pending*)0);
-	BucketCreateProxy bucketcreate(BUCKET, complex);
+	BucketCreateRecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 2;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
 	EXPECT_TRUE(complex.start(bucketcreate));
@@ -167,10 +167,77 @@ TEST_F(ComplexTest, Irrecoverable) {
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
-struct ObjectPutProxy : public ObjectPut {
+struct BucketCreateUnretryable : public BucketCreateRecoverable {
+	explicit BucketCreateUnretryable(const Bucket & bucket, const Plex & plex)
+	: BucketCreateRecoverable(bucket, plex)
+	{}
+	virtual bool retryable(Status final, bool nonexistence = true) {
+		return false;
+	}
+};
+
+TEST_F(ComplexTest, Unretryable) {
+	Bucket BUCKET("ComplexTestUnretryable");
+	Complex complex;
+	EXPECT_TRUE(complex == true);
+	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(complex.getPending(), (Pending*)0);
+	BucketCreateUnretryable bucketcreate(BUCKET, complex);
+	bucketcreate.failures = 1;
+	bucketcreate.failure = ::S3StatusConnectionFailed;
+	EXPECT_TRUE(complex.start(bucketcreate));
+	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_FALSE(bucketcreate.isSuccessful());
+}
+
+struct BucketCreateUnstartable : public BucketCreate {
+	explicit BucketCreateUnstartable(const Bucket & bucket, const Plex & plex)
+	: BucketCreate(bucket, plex)
+	{}
+	virtual bool start(bool force = false) {
+		return false;
+	}
+};
+
+TEST_F(ComplexTest, Unstartable) {
+	Bucket BUCKET("ComplexTestUnstartable");
+	Complex complex;
+	EXPECT_TRUE(complex == true);
+	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(complex.getPending(), (Pending*)0);
+	BucketCreateUnstartable bucketcreate(BUCKET, complex);
+	EXPECT_TRUE(complex.start(bucketcreate));
+	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_FALSE(bucketcreate.isSuccessful());
+}
+
+struct BucketCreateUnresettable : public BucketCreateRecoverable {
+	explicit BucketCreateUnresettable(const Bucket & bucket, const Plex & plex)
+	: BucketCreateRecoverable(bucket, plex)
+	{}
+	virtual bool reset(bool force = false) {
+		return false;
+	}
+};
+
+TEST_F(ComplexTest, Unresettable) {
+	Bucket BUCKET("ComplexTestUnresettable");
+	Complex complex;
+	EXPECT_TRUE(complex == true);
+	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(complex.getPending(), (Pending*)0);
+	BucketCreateUnresettable bucketcreate(BUCKET, complex);
+	bucketcreate.failures = 1;
+	bucketcreate.failure = ::S3StatusConnectionFailed;
+	EXPECT_TRUE(complex.start(bucketcreate));
+	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_FALSE(bucketcreate.isSuccessful());
+}
+
+struct ObjectPutApplication : public ObjectPut {
 	int failures;
 	Status failure;
-	explicit ObjectPutProxy(const Object & object, const Plex & plex, Input * sourcep, Octets objectsize)
+	explicit ObjectPutApplication(const Object & object, const Plex & plex, Input * sourcep, Octets objectsize)
 	: ObjectPut(object, plex, sourcep, objectsize)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -187,10 +254,10 @@ struct ObjectPutProxy : public ObjectPut {
 	}
 };
 
-struct ObjectGetProxy : public ObjectGet {
+struct ObjectGetApplication : public ObjectGet {
 	int failures;
 	Status failure;
-	explicit ObjectGetProxy(const Object & object, const Plex & plex, Output * sinkp)
+	explicit ObjectGetApplication(const Object & object, const Plex & plex, Output * sinkp)
 	: ObjectGet(object, plex, sinkp)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -231,7 +298,7 @@ TEST_F(ComplexTest, Application) {
 	/**/
 	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
 	Size inputsize = size(*input);
-	ObjectPutProxy objectput1(OBJECT1, complex, input, inputsize);
+	ObjectPutApplication objectput1(OBJECT1, complex, input, inputsize);
 	objectput1.failures = 2;
 	objectput1.failure = ::S3StatusErrorInternalError;
 	for (int ii = 0; ii < LIMIT; ++ii) {
@@ -252,7 +319,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
 	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
-	ObjectGetProxy objectget2(OBJECT2, complex, output2);
+	ObjectGetApplication objectget2(OBJECT2, complex, output2);
 	objectget2.failures = 3;
 	objectget2.failure = ::S3StatusErrorInternalError;
 	for (int ii = 0; ii < LIMIT; ++ii) {

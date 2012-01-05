@@ -87,14 +87,14 @@
 
 	INSTALLATION
 
-	Versions of Hayloft have been built and tested on the following platforms:
+	Hayloft have been built and tested on the following platform(s):
 
 		Dell Inspiron 530 i686
 		Ubuntu 10.04 "Lucid Lynx"
 		Linux 2.6.32
 		GCC 4.4.3
 		libs3 2.0
-		Desperadito 6.6.0 (Desperado "Globe")
+		Desperadito 7.0.0 (Desperado "Inspiration")
 		AWS S3 API 2006-03-01
 
 	See the Makefile for more information.
@@ -324,7 +324,7 @@
 
 	Complex
 
-	    Complex uses the asynchronous interface. You don't
+		Complex uses the asynchronous interface. You don't
 		start the Action at all, but instead submit it to the
 		Complex background thread for starting.  You can call
 		the wait method which will block your thread until a

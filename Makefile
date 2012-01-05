@@ -7,7 +7,7 @@
 
 PROJECT=hayloft
 MAJOR=2
-MINOR=8
+MINOR=9
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -267,6 +267,14 @@ COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME=60
 unittest:	unittest.o $(HAYLOFT_LIB) $(LARIAT_LIB) $(GMOCK_LIB) $(GTEST_LIB) $(DESPERADO_LIB) $(S3_LIB) $(XML2_LIB) $(CURL_LIB) $(OPENSSL_LIB) $(CRYPTO_LIB)
 	$(CXX) -o unittest unittest.o $(LDFLAGS)
 
+PHONY+=unittest.log
+
+unittest.log:	unittest
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT)"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	script -c "time ./unittest --gtest_color=no" unittest.log
+
 PHONY+=run
 
 run:	unittest
@@ -284,14 +292,6 @@ debug:	unittest
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
 	time ./unittest
-
-PHONY+=capture
-
-capture:	unittest
-	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT)"; \
-	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
-	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	script -c "time ./unittest --gtest_color=no" capture.log
 
 PHONY+=test
 
@@ -331,7 +331,7 @@ memcheck:	unittest
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT)"; \
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	script -c "valgrind --tool=memcheck ./unittest --gtest_color=no" memcheck.log
+	script -c "valgrind --tool=memcheck --leak-check=full ./unittest --gtest_color=no" memcheck.log
 	
 PHONY+=helgrind
 
