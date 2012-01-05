@@ -49,9 +49,6 @@ BucketHead::BucketHead(const Bucket & bucket, const Plex & plex)
 }
 
 BucketHead::~BucketHead() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 }
 
 void BucketHead::initialize() {

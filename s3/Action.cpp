@@ -46,7 +46,10 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	// manage active Actions when using the asynchronous interface. Typically
 	// this occurs when the Plex used when we were constructed is deleted while
 	// we were busy. We are henceforth a synchronous Action. Wackiness ensues.
-	if (final == ::S3StatusInterrupted) { that->handle = 0; }
+	if (final == ::S3StatusInterrupted) {
+		Logger::instance().error("Action%p: interrupted while busy!\n", that);
+		that->handle = 0;
+	}
 	Logger::Level level;
 	switch (final) {
 	case ::S3StatusOK:
@@ -91,14 +94,16 @@ Action::Action(const Plex & plex)
 }
 
 Action::~Action() {
-	// We can't call S3_runall_request_context() from here because the libs3
-	// thread will be accessing data in the derived class whose destructor has
-	// already been invoked. Only those derived classes which actually implement
-	// a start() method that enqueues a request on the request context should
-	// call S3_runall_request_context() in their destructor. This will force
-	// this Action to complete, and doing so will also signal any waiting
-	// Threads if the Application is using a multi-threaded Plex. Still, we
-	// expect wackiness to ensue.
+	// We shouldn't call S3_runall_request_context from here because the derived
+	// class destructor has already been invoked. But this is simpler, and if
+	// we're deleting this Action while it is busy, wackiness has already ensued.
+	// This will force this Action to complete, and doing so will also signal
+	// any waiting Threads if the Application is using a multi-threaded Plex.
+	// Valgrind will have a stroke over this, I wager.
+	if (isBusy()) {
+		Logger::instance().error("Action%p: deleted while busy!\n", this);
+		if (handle != 0) { (void)S3_runall_request_context(handle); }
+	}
 	LifeCycle::instance().destructor(*this);
 }
 

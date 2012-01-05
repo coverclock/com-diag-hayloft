@@ -57,12 +57,16 @@ TEST_F(ComplexTest, Success) {
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
 	EXPECT_NE(complex.getHandle(), (Handle*)0);
 	BucketCreate bucketcreate(BUCKET, complex);
+	EXPECT_FALSE(bucketcreate == true);
 	EXPECT_TRUE(complex.start(bucketcreate));
 	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(bucketcreate == true);
 	EXPECT_TRUE(bucketcreate.isSuccessful());
 	BucketDelete bucketdelete(BUCKET, complex);
+	EXPECT_FALSE(bucketdelete == true);
 	EXPECT_TRUE(complex.start(bucketdelete));
 	EXPECT_TRUE(complex.wait(bucketdelete));
+	EXPECT_TRUE(bucketdelete == true);
 	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
 

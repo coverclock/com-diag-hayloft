@@ -46,9 +46,6 @@ LogSet::LogSet(const Bucket & bucket, const Plex & plex, const Bucket & log, con
 }
 
 LogSet::~LogSet() {
-	if (isBusy() && (handle != 0)) {
-		(void)S3_runall_request_context(handle);
-	}
 	delete [] grants;
 }
 
