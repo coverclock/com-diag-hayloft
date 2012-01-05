@@ -42,8 +42,8 @@ ObjectHead::ObjectHead(const Object & object, const Plex & plex)
 }
 
 ObjectHead::~ObjectHead() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -58,7 +58,7 @@ void ObjectHead::execute() {
 	::S3_head_object(
 		&context,
 		key.c_str(),
-		pending,
+		handle,
 		&handler,
 		this
 	);

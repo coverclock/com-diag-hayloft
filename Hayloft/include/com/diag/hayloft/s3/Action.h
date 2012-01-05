@@ -78,7 +78,7 @@ protected:
 
 	std::string requestid2;
 
-	Pending * pending;
+	Handle * handle;
 
 	mutable Mutex mutex;
 
@@ -190,7 +190,7 @@ public:
 	 *
 	 * @return the libs3 ::S3RequestContext associated with this Action.
 	 */
-	Pending * getPending() const { return pending; }
+	Handle * getHandle() const { return handle; }
 
 	/**
 	 * Get the status for this Action. A pointer to a C string describing the
@@ -279,11 +279,11 @@ public:
 	 * This method is only useful if the Application executes Actions in a
 	 * background thread.
 	 *
-	 * @param pended if non-null causes the wait to fail if this Action's
-	 *        pending is not equal to the pended value.
+	 * @param handled if non-null causes the wait to fail if this Action's
+	 *        handle is not equal to the handled value.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool wait(Pending * pended = 0);
+	virtual bool wait(Handle * handled = 0);
 
 protected:
 

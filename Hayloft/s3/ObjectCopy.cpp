@@ -88,8 +88,8 @@ ObjectCopy::ObjectCopy(const Object & fromobject, const Object & toobject, const
 }
 
 ObjectCopy::~ObjectCopy() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 	delete [] properties.metaData;
 }
@@ -141,7 +141,7 @@ void ObjectCopy::execute() {
 		&properties,
 		&modified,
 		sizeof(entitytag), entitytag,
-		pending,
+		handle,
 		&handler,
 		this
 	);

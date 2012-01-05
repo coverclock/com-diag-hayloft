@@ -27,11 +27,12 @@ namespace hayloft {
 namespace s3 {
 
 /*******************************************************************************
- * CONSTANTS
+ * TUNABLE VARIABLES
  ******************************************************************************/
 
-// These aren't really constants, but they are fundamental tuning values, and
-// they can only be changed by overriding the base class and writing into them.
+// These aren't constants, but they are fundamental tuning values. They
+// can only be changed by overriding the base class and writing into them,
+// for example during construction.
 
 Milliseconds Complex::RETRY = 1000;
 
@@ -72,7 +73,7 @@ int Complex::instances = 0;
 
 Status Complex::status = ::S3StatusInternalError;
 
-Pending * Complex::complex = 0;
+Handle * Complex::complex = 0;
 
 ::com::diag::hayloft::s3::LifeCycle * Complex::nextlifecycle = 0;
 
@@ -127,8 +128,8 @@ void * Complex::Thread::run() {
 Complex::Complex()
 {
 	initialize();
-	pending = complex;
-	if (pending != 0) { logger->debug("Complex@%p: pending=%p\n", this, pending); }
+	handle = complex;
+	logger->debug("Complex@%p: handle=%p\n", this, handle);
 }
 
 Complex::~Complex() {
@@ -143,7 +144,7 @@ bool Complex::start(Action & action) {
 	Action * actionable = 0;
 	{
 		CriticalSection guard(action.mutex);
-		if (action.pending == complex) {
+		if (action.handle == complex) {
 			if (!action.isBusy()) {
 				action.status = static_cast<Status>(Action::PENDING);
 				action.retries = RETRIES;
@@ -244,7 +245,7 @@ void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * e
 			logger->debug("Complex: Action@%p: not retryable\n", &action);
 			alarm = 0;
 			fibonacci.reset();
-		} else if (action.pending != complex) {
+		} else if (action.handle != complex) {
 			logger->error("Complex: Action@%p: not complex\n", &action);
 		} else if (action.retries <= 0) {
 			logger->debug("Complex: Action@%p: too many retries\n", &action);

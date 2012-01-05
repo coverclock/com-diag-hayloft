@@ -31,14 +31,14 @@ TEST_F(MultiplexTest, Heap) {
 	Multiplex * multiplex = new Multiplex;
 	EXPECT_NE(multiplex, (Multiplex*)0);
 	EXPECT_TRUE((*multiplex) == true);
-	EXPECT_NE(multiplex->getPending(), (Pending*)0);
+	EXPECT_NE(multiplex->getHandle(), (Handle*)0);
 	delete multiplex;
 }
 
 TEST_F(MultiplexTest, Stack) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_NE(multiplex.getPending(), (Pending*)0);
+	EXPECT_NE(multiplex.getHandle(), (Handle*)0);
 }
 
 TEST_F(MultiplexTest, Complete) {
@@ -64,15 +64,15 @@ TEST_F(MultiplexTest, Ready) {
 TEST_F(MultiplexTest, Plex) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_NE(multiplex.getPending(), (Pending*)0);
-	Plex plex(multiplex.getPending());
-	EXPECT_NE(plex.getPending(), (Pending*)0);
-	EXPECT_EQ(multiplex.getPending(), plex.getPending());
+	EXPECT_NE(multiplex.getHandle(), (Handle*)0);
+	Plex plex(multiplex.getHandle());
+	EXPECT_NE(plex.getHandle(), (Handle*)0);
+	EXPECT_EQ(multiplex.getHandle(), plex.getHandle());
 }
 
 TEST_F(MultiplexTest, Simplex) {
 	Simplex simplex;
-	EXPECT_EQ(simplex.getPending(), (Pending*)0);
+	EXPECT_EQ(simplex.getHandle(), (Handle*)0);
 }
 
 }

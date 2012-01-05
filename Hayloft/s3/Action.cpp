@@ -41,9 +41,12 @@ Status Action::responsePropertiesCallback(const ::S3ResponseProperties * respons
 void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	Logger & logger = Logger::instance();
 	Action * that = static_cast<Action*>(callbackData);
-	// An ::S3StatusInterrupted means someone destroyed our request context.
-	// We are henceforth a synchronous Action.
-	if (final == ::S3StatusInterrupted) { that->pending = 0; }
+	// An ::S3StatusInterrupted means someone destroyed our request context,
+	// a (to us anyway) opaque handle that is used by libs3 and libcurl to
+	// manage active Actions when using the asynchronous interface. Typically
+	// this occurs when the Plex used when we were constructed is deleted while
+	// we were busy. We are henceforth a synchronous Action. Wackiness ensues.
+	if (final == ::S3StatusInterrupted) { that->handle = 0; }
 	Logger::Level level;
 	switch (final) {
 	case ::S3StatusOK:
@@ -72,7 +75,7 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
  ******************************************************************************/
 
 Action::Action()
-: pending(0)
+: handle(0)
 , retries(0)
 , status(::S3StatusOK)
 {
@@ -80,7 +83,7 @@ Action::Action()
 }
 
 Action::Action(const Plex & plex)
-: pending(plex.getPending())
+: handle(plex.getHandle())
 , retries(0)
 , status(::S3StatusOK)
 {
@@ -140,9 +143,9 @@ Status Action::state(Status update) {
 	return previous;
 }
 
-bool Action::wait(Pending * pended) {
+bool Action::wait(Handle * handled) {
 	CriticalSection guard(mutex);
-	if ((pended != 0) && (pending != pended)) {
+	if ((handled != 0) && (handle != handled)) {
 		return false;
 	} else {
 		while ((status == PENDING) || (status == BUSY) || (status == FINAL)) { // IDLE doesn't wait.
@@ -180,7 +183,7 @@ void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
  ******************************************************************************/
 
 void Action::initialize() {
-	if (pending != 0) { Logger::instance().debug("Action@%p: pending=%p\n", this, pending); }
+	if (handle != 0) { Logger::instance().debug("Action@%p: handle=%p\n", this, handle); }
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;

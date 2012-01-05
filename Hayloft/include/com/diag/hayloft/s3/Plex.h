@@ -33,7 +33,7 @@ class Plex {
 
 protected:
 
-	Pending * pending;
+	Handle * handle;
 
 public:
 
@@ -44,7 +44,7 @@ public:
 	 * @param untaken is the S3RequestContext. It is UNTAKEN and must be
 	 *        destroyed by the application.
 	 */
-	explicit Plex(Pending * untaken = 0 /* UNTAKEN */);
+	explicit Plex(Handle * untaken = 0 /* UNTAKEN */);
 
 	/**
 	 * Dtor. If there are pending Actions, the dtor blocks and they are all
@@ -57,7 +57,7 @@ public:
 	 *
 	 * @return the S3RequestContext.
 	 */
-	Pending * getPending() const { return pending; }
+	Handle * getHandle() const { return handle; }
 
 private:
 

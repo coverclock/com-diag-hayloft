@@ -42,8 +42,8 @@ BucketCreate::BucketCreate(const Bucket & bucket, const Plex & plex)
 }
 
 BucketCreate::~BucketCreate() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -63,7 +63,7 @@ void BucketCreate::execute() {
 		canonical.c_str(),
 		access,
 		(region.length() > 0) ? region.c_str() : 0,
-		pending,
+		handle,
 		&handler,
 		this
 	);

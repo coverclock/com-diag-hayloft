@@ -128,8 +128,8 @@ BucketManifest::BucketManifest(const Bucket & bucket, const Plex & plex, const S
 }
 
 BucketManifest::~BucketManifest() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -160,7 +160,7 @@ void BucketManifest::execute() {
 			set(nextmarker),
 			set(delimiter),
 			maximum - size,
-			pending,
+			handle,
 			&handler,
 			this
 		);

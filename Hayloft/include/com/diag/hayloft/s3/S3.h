@@ -31,7 +31,7 @@ typedef ::S3Status Status;
  * name space syntax inside template argument lists including C++ casts.
  * Note that ::S3RequestContext is an opaque type in libs3.h.
  */
-typedef ::S3RequestContext Pending;
+typedef ::S3RequestContext Handle;
 
 }
 }

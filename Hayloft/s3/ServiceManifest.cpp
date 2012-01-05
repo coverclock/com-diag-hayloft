@@ -54,8 +54,8 @@ ServiceManifest::ServiceManifest(const Plex & plex, const Context & context, con
 }
 
 ServiceManifest::~ServiceManifest() {
-	if (isBusy() && (pending != 0)) {
-		(void)S3_runall_request_context(pending);
+	if (isBusy() && (handle != 0)) {
+		(void)S3_runall_request_context(handle);
 	}
 }
 
@@ -76,7 +76,7 @@ void ServiceManifest::execute() {
 		id.c_str(),
 		secret.c_str(),
 		endpoint.c_str(),
-		pending,
+		handle,
 		&handler,
 		this
 	);
