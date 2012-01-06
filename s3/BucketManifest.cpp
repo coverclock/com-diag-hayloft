@@ -30,23 +30,16 @@ BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModifie
 
 Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData) {
 	BucketManifest * that = static_cast<BucketManifest*>(callbackData);
+	Logger & logger = Logger::instance();
 	Status status = that->entry(isTruncated, nextMarker, contentsCount, contents, commonPrefixesCount, commonPrefixes);
 	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
-	// See listBucketCallback() in s3.c from libs3 for Bryan's comments on how
-	// S3 doesn't return nextMarker when there is no delimiter. I've modeled
-	// this after his implementation which alternatively derives nextMarker.
+	logger.log(level, "BucketManifest@%p: isTruncated=%d nextMarker=\"%s\" contentsCount=%d commonPrefixesCount=%d\n", that, isTruncated, (nextMarker != 0) ? nextMarker : "(nil)", contentsCount, commonPrefixesCount);
 	that->truncated = (isTruncated != 0);
-	if ((nextMarker != 0) && (nextMarker[0] != '\0') && (contentsCount > 0) && (contents != 0)) {
-		nextMarker = contents[contentsCount - 1].key;
-	}
-	if (nextMarker != 0) {
-		that->nextmarker = nextMarker;
-	}
 	if (contents != 0) {
 		for (int ii = 0; ii < contentsCount; ++ii) {
 			if ((contents[ii].key != 0) && (contents[ii].key[0] != '\0')) {
 				Entry entry(contents[ii].key, contents[ii].lastModified, contents[ii].eTag, contents[ii].size, contents[ii].ownerId, contents[ii].ownerDisplayName);
-				Logger::instance().log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, entry.getKey(), entry.getModified(), entry.getETag(), entry.getSize(), entry.getOwnerId(), entry.getOwnerDisplayName());
+				logger.log(level, "BucketManifest@%p: key=\"%s\" lastModified=%lld eTag=\"%s\" size=%llu ownerId=\"%s\" ownerDisplayName=\"%s\"\n", that, entry.getKey(), entry.getModified(), entry.getETag(), entry.getSize(), entry.getOwnerId(), entry.getOwnerDisplayName());
 				if ((status == ::S3StatusOK) && (that->manifest.size() < that->maximum)) {
 					that->manifest.insert(Pair(contents[ii].key, entry));
 				}
@@ -56,14 +49,21 @@ Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMark
 	if (commonPrefixes != 0) {
 		for (int ii = 0; ii < commonPrefixesCount; ++ii) {
 			if ((commonPrefixes[ii] != 0) && (*commonPrefixes[ii] != '\0')) {
-				Logger::instance().log(level, "BucketManifest@%p: commonPrefix=\"%s\"\n", that, commonPrefixes[ii]);
+				logger.log(level, "BucketManifest@%p: commonPrefix=\"%s\"\n", that, commonPrefixes[ii]);
 				if (status == ::S3StatusOK) {
 					that->common.push_back(commonPrefixes[ii]);
 				}
 			}
 		}
 	}
-	Logger::instance().log(level, "BucketManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
+	// See listBucketCallback() in s3.c from libs3 for Bryan's comments on how
+	// S3 doesn't return nextMarker when there is no delimiter. I've modeled
+	// this after his implementation which alternatively derives nextMarker.
+	if ((contents != 0) && (contentsCount > 0)) {
+		that->nextmarker = contents[contentsCount - 1].key;
+		logger.log(level, "BucketManifest@%p: nextMarker=\"%s\"\n", that, that->nextmarker.c_str());
+	}
+	logger.log(level, "BucketManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	return status;
 }
 
