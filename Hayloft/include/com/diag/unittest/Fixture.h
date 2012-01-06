@@ -62,7 +62,7 @@ public:
 			.disable(Logger::DEBUG)
 			.disable(Logger::INFORMATION)
 			.disable(Logger::CONFIGURATION)
-			.disable(Logger::NOTICE)
+			.enable(Logger::NOTICE)
 			.enable(Logger::WARNING)
 			.enable(Logger::ERROR)
 			.enable(Logger::SEVERE)

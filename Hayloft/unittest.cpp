@@ -65,6 +65,7 @@
 #include "com/diag/unittest/s3/Grant.h"
 #include "com/diag/unittest/s3/Log.h"
 #include "com/diag/unittest/s3/Complex.h"
+#include "com/diag/unittest/s3/Manifest.h"
 #endif
 
 // Hooks to clean up singletons just for valgrind.
