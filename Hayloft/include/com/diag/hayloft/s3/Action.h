@@ -267,7 +267,7 @@ public:
 	 * latency too. Whether this is reasonable for all Actions is up to the
 	 * derived class.
 	 *
-	 * @param status refers to the Status to be evaluated for retryability.
+	 * @param final refers to the Status to be evaluated for retryability.
 	 * @param nonexistence is the value returned for statuses indicating
 	 *                     non-existence.
 	 * @return true if retryable, false otherwise.
