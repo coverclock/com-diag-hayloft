@@ -52,7 +52,7 @@
 	cURL, Open SSL, and XML2 libraries, which I acquired through
 	the normal package manager on my server. I've also made patches
 	to libs3 to support the use of the Charles Web Debugging Proxy
-	application by Karl von Randow and cCURL verbosity.
+	application by Karl von Randow and cURL verbosity.
 
 	This software is an original work of its author.
 
