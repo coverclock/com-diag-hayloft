@@ -132,7 +132,7 @@ public:
 	 * perhaps based on its status.
 	 *
 	 * @param action refers to the Action being completed.
-	 * @param status is the final libs3 status for the Action. The status has
+	 * @param final is the final libs3 status for the Action. The status has
 	 *        not yet been updated in the Action.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
