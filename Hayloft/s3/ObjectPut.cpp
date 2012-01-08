@@ -245,8 +245,8 @@ bool ObjectPut::reset(bool force) {
 	return (((!isBusy()) || force) && (consumed == 0));
 }
 
-bool ObjectPut::reset(Input & source, Octets objectsize) {
-	if (!isBusy()) {
+bool ObjectPut::reset(Input & source, Octets objectsize, bool force) {
+	if ((!isBusy()) || force) {
 		finalize();
 		input = &source;
 		taken = 0;
@@ -258,8 +258,8 @@ bool ObjectPut::reset(Input & source, Octets objectsize) {
 	}
 }
 
-bool ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize) {
-	if (!isBusy()) {
+bool ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize, bool force) {
+	if ((!isBusy()) || force) {
 		finalize();
 		input = sourcep;
 		taken = sourcep;

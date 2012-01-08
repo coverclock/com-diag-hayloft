@@ -293,7 +293,7 @@ public:
 	 * has been consumed. Success means the Action can be retried without a new
 	 * Input functor.
 	 *
-	 * @param force if true cause the start to be performed even if the Action
+	 * @param force if true cause the reset to be performed even if the Action
 	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
@@ -306,9 +306,11 @@ public:
 	 * @param source refers to an Input functor.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads.
+	 * @param force if true cause the reset to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Input & source, Octets objectsize);
+	virtual bool reset(Input & source, Octets objectsize, bool force = false);
 
 	/**
 	 * If the Action is not busy, reset the data source to a new Input functor.
@@ -318,9 +320,11 @@ public:
 	 *        the Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads.
+	 * @param force if true cause the reset to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Input * sourcep /* TAKEN */, Octets objectsize);
+	virtual bool reset(Input * sourcep /* TAKEN */, Octets objectsize, bool force = false);
 
 protected:
 

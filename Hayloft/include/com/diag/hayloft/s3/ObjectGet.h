@@ -304,7 +304,7 @@ public:
 	 * has been produced. Success means the Action can be retried without a new
 	 * Output functor.
 	 *
-	 * @param force if true cause the start to be performed even if the Action
+	 * @param force if true cause the reset to be performed even if the Action
 	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
@@ -319,9 +319,11 @@ public:
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
 	 *        be retrieved or zero to retrieve the entire object.
+	 * @param force if true cause the reset to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
+	virtual bool reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0, bool force = false);
 
 	/**
 	 * If the Action is not busy, reset the data sink to a new Output functor.
@@ -333,9 +335,11 @@ public:
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
 	 *        be retrieved or zero to retrieve the entire object.
+	 * @param force if true cause the reset to be performed even if the Action
+	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
+	virtual bool reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0, bool force = false);
 
 protected:
 
