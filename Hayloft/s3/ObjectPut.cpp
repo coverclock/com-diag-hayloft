@@ -46,7 +46,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input & source
 , access(props.getAccess())
 , input(&source)
 , taken(0)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -64,7 +64,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, Input * source
 , access(props.getAccess())
 , input(sourcep)
 , taken(sourcep)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -81,7 +81,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Plex & p
 , access(props.getAccess())
 , input(&source)
 , taken(0)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -98,7 +98,7 @@ ObjectPut::ObjectPut(const char * keyname, const Bucket & bucket, const Plex & p
 , access(props.getAccess())
 , input(sourcep)
 , taken(sourcep)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -115,7 +115,7 @@ ObjectPut::ObjectPut(const Object & object, Input & source, Octets objectsize, c
 , access(props.getAccess())
 , input(&source)
 , taken(0)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -133,7 +133,7 @@ ObjectPut::ObjectPut(const Object & object, Input * sourcep, Octets objectsize, 
 , access(props.getAccess())
 , input(sourcep)
 , taken(sourcep)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -150,7 +150,7 @@ ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input & source, O
 , access(props.getAccess())
 , input(&source)
 , taken(0)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -167,7 +167,7 @@ ObjectPut::ObjectPut(const Object & object, const Plex & plex, Input * sourcep, 
 , access(props.getAccess())
 , input(sourcep)
 , taken(sourcep)
-, size(objectsize)
+, total(objectsize)
 , consumed(0)
 {
 	initialize(props.getMetadata());
@@ -216,7 +216,7 @@ void ObjectPut::execute() {
 	::S3_put_object(
 		&context,
 		key.c_str(),
-		size,
+		total,
 		&properties,
 		handle,
 		&handler,
@@ -250,7 +250,7 @@ bool ObjectPut::reset(Input & source, Octets objectsize, bool force) {
 		finalize();
 		input = &source;
 		taken = 0;
-		size = objectsize;
+		total = objectsize;
 		consumed = 0;
 		return true;
 	} else {
@@ -263,7 +263,7 @@ bool ObjectPut::reset(Input * sourcep /* TAKEN */, Octets objectsize, bool force
 		finalize();
 		input = sourcep;
 		taken = sourcep;
-		size = objectsize;
+		total = objectsize;
 		consumed = 0;
 		return true;
 	} else {

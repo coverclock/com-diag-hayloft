@@ -373,17 +373,17 @@ struct ObjectPutFactory : public ObjectPut {
 	const char * path;
 	bool succeed;
 	explicit ObjectPutFactory(const Object & object, const Plex & plex, const char * inputname)
-	: ObjectPut(object, plex, new ::com::diag::desperado::PathInput(inputname), ::com::diag::hayloft::size(inputname))
+	: ObjectPut(object, plex, new ::com::diag::desperado::PathInput(inputname), size(inputname))
 	, path(inputname)
 	, succeed(false)
 	{}
 	virtual bool reset(bool force = false) {
-		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), ::com::diag::hayloft::size(path), force);
+		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), size(path), force);
 	}
 	virtual int put(int bufferSize, void * buffer) {
 		if (succeed) {
 			return ObjectPut::put(bufferSize, buffer);
-		} else if (consumed < (size / 2)) {
+		} else if (consumed < (total / 2)) {
 			return ObjectPut::put(bufferSize, buffer);
 		} else {
 			succeed = true;
@@ -410,7 +410,7 @@ struct ObjectGetFactory : public ObjectGet {
 	virtual int get(int bufferSize, const void * buffer) {
 		if (succeed) {
 			return ObjectGet::get(bufferSize, buffer);
-		} else if (produced < (size / 2)) {
+		} else if (produced < (total / 2)) {
 			return ObjectGet::get(bufferSize, buffer);;
 		} else {
 			succeed = true;
@@ -424,7 +424,6 @@ struct ObjectGetFactory : public ObjectGet {
 };
 
 TEST_F(ComplexTest, Factory) {
-	static const int LIMIT = 10;
 	Bucket BUCKET1("ComplexTestFactory1");
 	Bucket BUCKET2("ComplexTestFactory2");
 	Object OBJECT1("Object1.txt", BUCKET1);
