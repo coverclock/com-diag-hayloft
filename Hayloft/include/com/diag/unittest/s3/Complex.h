@@ -490,6 +490,77 @@ TEST_F(ComplexTest, Factory) {
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
 }
 
+static void complextestpoll(Action & action) {
+	while (action != true) { Thread::yield(); }
+}
+
+TEST_F(ComplexTest, Polled) {
+	Bucket BUCKET1("ComplexTestPolled1");
+	Bucket BUCKET2("ComplexTestPolled2");
+	Object OBJECT1("Object1.txt", BUCKET1);
+	Object OBJECT2("Object2.txt", BUCKET2);
+	Complex complex;
+	EXPECT_TRUE(complex == true);
+	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(complex.getHandle(), (Handle*)0);
+	/**/
+	BucketCreate bucketcreate1(BUCKET1, complex);
+	EXPECT_TRUE(complex.start(bucketcreate1));
+	/**/
+	BucketCreate bucketcreate2(BUCKET2, complex);
+	EXPECT_TRUE(complex.start(bucketcreate2));
+	/**/
+	complextestpoll(bucketcreate1);
+	complextestpoll(bucketcreate2);
+	EXPECT_TRUE(bucketcreate1.isSuccessful());
+	EXPECT_TRUE(bucketcreate2.isSuccessful());
+	/**/
+	ObjectPutFactory objectput1(OBJECT1, complex, "unittest.txt");
+	EXPECT_TRUE(complex.start(objectput1));
+	complextestpoll(objectput1);
+	EXPECT_TRUE(objectput1.isSuccessful());
+	/**/
+	ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
+	EXPECT_TRUE(complex.start(objectcopy));
+	complextestpoll(objectcopy);
+	EXPECT_TRUE(objectcopy.isSuccessful());
+	/**/
+	ObjectGetFactory objectget2(OBJECT2, complex, OBJECT2.getKey());
+	EXPECT_TRUE(complex.start(objectget2));
+	complextestpoll(objectget2);
+	EXPECT_TRUE(objectget2.isSuccessful());
+	/**/
+	ObjectDelete objectdelete1(OBJECT1, complex);
+	EXPECT_TRUE(complex.start(objectdelete1));
+	/**/
+	ObjectDelete objectdelete2(OBJECT2, complex);
+	EXPECT_TRUE(complex.start(objectdelete2));
+	/**/
+	complextestpoll(objectdelete1);
+	complextestpoll(objectdelete2);
+	EXPECT_TRUE(objectdelete1.isSuccessful());
+	EXPECT_TRUE(objectdelete2.isSuccessful());
+	/**/
+	BucketDelete bucketdelete1(BUCKET1, complex);
+	EXPECT_TRUE(complex.start(bucketdelete1));
+	/**/
+	BucketDelete bucketdelete2(BUCKET2, complex);
+	EXPECT_TRUE(complex.start(bucketdelete2));
+	/**/
+	complextestpoll(bucketdelete1);
+	complextestpoll(bucketdelete2);
+	EXPECT_TRUE(bucketdelete1.isSuccessful());
+	EXPECT_TRUE(bucketdelete2.isSuccessful());
+	/**/
+	std::string command = "diff ";
+	command += "unittest.txt";
+	command += " ";
+	command += OBJECT2.getKey();
+	EXPECT_EQ(std::system(command.c_str()), 0);
+	/**/
+	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
+}
+
 }
 }
 }

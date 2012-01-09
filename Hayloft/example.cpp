@@ -305,16 +305,84 @@ static bool multiplexityservice() {
 	return result;
 }
 
-static bool complexity() {
+static bool complexitypoll() {
 	bool result = false;
 
 	do {
 
 		const char * PATH = "unittest.txt";
-		Bucket BUCKET1("Complexity1");
-		Bucket BUCKET2("Complexity2");
-		Object OBJECT1("Complexity1.txt", BUCKET1);
-		Object OBJECT2("Complexity2.txt", BUCKET2);
+		Bucket BUCKET1("ComplexityPoll1");
+		Bucket BUCKET2("ComplexityPoll2");
+		Object OBJECT1("ComplexityPoll1.txt", BUCKET1);
+		Object OBJECT2("ComplexityPoll2.txt", BUCKET2);
+		Complex complex;
+
+		BucketCreate bucketcreate1(BUCKET1, complex);
+		complex.start(bucketcreate1);
+		BucketCreate bucketcreate2(BUCKET2, complex);
+		complex.start(bucketcreate2);
+		while (bucketcreate1 != true) { Thread::yield(); }
+		while (bucketcreate2 != true) { Thread::yield(); }
+		if (!bucketcreate1.isSuccessful()) { break; }
+		if (!bucketcreate2.isSuccessful()) { break; }
+
+		MyObjectPut objectput1(OBJECT1, complex, PATH);
+		complex.start(objectput1);
+		while (objectput1 != true) { Thread::yield(); }
+		if (!objectput1.isSuccessful()) { break; }
+
+		ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
+		complex.start(objectcopy);
+		while (objectcopy != true) { Thread::yield(); }
+		if (!objectcopy.isSuccessful()) { break; }
+
+		MyObjectGet objectget2(OBJECT2, complex, OBJECT2.getKey());
+		complex.start(objectget2);
+		while (objectget2 != true) { Thread::yield(); }
+		if (!objectget2.isSuccessful()) { break; }
+
+		ObjectDelete objectdelete1(OBJECT1, complex);
+		complex.start(objectdelete1);
+		ObjectDelete objectdelete2(OBJECT2, complex);
+		complex.start(objectdelete2);
+		while (objectdelete1 != true) { Thread::yield(); }
+		while (objectdelete2 != true) { Thread::yield(); }
+		if (!objectdelete1.isSuccessful()) { break; }
+		if (!objectdelete2.isSuccessful()) { break; }
+
+		BucketDelete bucketdelete1(BUCKET1, complex);
+		complex.start(bucketdelete1);
+		BucketDelete bucketdelete2(BUCKET2, complex);
+		complex.start(bucketdelete2);
+		while (bucketdelete1 != true) { Thread::yield(); }
+		while (bucketdelete2 != true) { Thread::yield(); }
+		if (!bucketdelete1.isSuccessful()) { break; }
+		if (!bucketdelete2.isSuccessful()) { break; }
+
+		std::string command = "diff ";
+		command += PATH;
+		command += " ";
+		command += OBJECT2.getKey();
+		if (std::system(command.c_str()) < 0) { break; }
+		if (::unlink(OBJECT2.getKey()) < 0) { break; }
+
+		result = true;
+
+	} while (false);
+
+	return result;
+}
+
+static bool complexitywait() {
+	bool result = false;
+
+	do {
+
+		const char * PATH = "unittest.txt";
+		Bucket BUCKET1("ComplexityWait1");
+		Bucket BUCKET2("ComplexityWait2");
+		Object OBJECT1("ComplexityWait1.txt", BUCKET1);
+		Object OBJECT2("ComplexityWait2.txt", BUCKET2);
 		Complex complex;
 
 		BucketCreate bucketcreate1(BUCKET1, complex);
@@ -453,11 +521,19 @@ int main(int argc, char ** argv, char ** envp) {
     	xc = 5;
     }
 
-	fprintf(stderr, "Complex example starting.\n");
-    if (complexity()) {
-    	fprintf(stderr, "Complex example succeeded.\n");
+	fprintf(stderr, "Complex Poll example starting.\n");
+    if (complexitypoll()) {
+    	fprintf(stderr, "Complex Poll example succeeded.\n");
     } else {
-    	fprintf(stderr, "Complex example FAILED!\n");
+    	fprintf(stderr, "Complex Poll example FAILED!\n");
+    	xc = 6;
+    }
+
+	fprintf(stderr, "Complex Wait example starting.\n");
+    if (complexitywait()) {
+    	fprintf(stderr, "Complex Wait example succeeded.\n");
+    } else {
+    	fprintf(stderr, "Complex Wait example FAILED!\n");
     	xc = 6;
     }
 
