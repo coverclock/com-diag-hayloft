@@ -73,7 +73,7 @@ protected:
 
 	Input * taken;
 
-	Octets size;
+	Octets total;
 
 	Octets consumed;
 

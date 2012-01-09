@@ -67,7 +67,7 @@ protected:
 
 	Octets offset;
 
-	Octets size;
+	Octets total;
 
 	Octets produced;
 

@@ -6,8 +6,8 @@
 ################################################################################
 
 PROJECT=hayloft
-MAJOR=2
-MINOR=13
+MAJOR=3
+MINOR=0
 BUILD=0
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
@@ -275,14 +275,6 @@ unittest.log:	unittest
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
 	script -c "time ./unittest --gtest_color=no" unittest.log
 
-PHONY+=run
-
-run:	unittest
-	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT)"; \
-	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
-	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
-	time ./unittest
-
 PHONY+=debug
 
 debug:	unittest
@@ -349,6 +341,31 @@ helgrind:	unittest
 	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
 	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
 	script -c "valgrind --tool=helgrind ./unittest --gtest_color=no" helgrind.log
+
+################################################################################
+# EXAMPLES
+################################################################################
+
+TARGETS+=example
+ARTIFACTS+=example.o
+DELIVERABLES+=example
+
+example:	example.o $(HAYLOFT_LIB) $(DESPERADO_LIB) $(S3_LIB) $(XML2_LIB) $(CURL_LIB) $(OPENSSL_LIB) $(CRYPTO_LIB)
+	$(CXX) -o example example.o $(LDFLAGS)
+
+PHONY+=run
+
+PROJECTS_DIR=${HOME}/projects/hayloft
+COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESSKEYID=$(shell cat ${PROJECTS_DIR}/aws-s3-access-key-id.txt)
+COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRETACCESSKEY=$(shell cat ${PROJECTS_DIR}/aws-s3-secret-access-key.txt)
+COM_DIAG_HAYLOFT_S3_SESSION_BUCKETSUFFIX=$(shell cat ${PROJECTS_DIR}/aws-s3-bucket-suffix.txt)
+COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT=$(shell cat ${PROJECTS_DIR}/aws-s3-user-agent.txt)
+
+run:	example
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT)"; \
+	export COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME="$(COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME)"; \
+	export LD_LIBRARY_PATH=$(HAYLOFT_LIBS):$(DESPERADO_LIBS):$(S3_LIBS); \
+	time ./example -! -i $(COM_DIAG_HAYLOFT_S3_CREDENTIALS_ACCESSKEYID) -k $(COM_DIAG_HAYLOFT_S3_CREDENTIALS_SECRETACCESSKEY) -b $(COM_DIAG_HAYLOFT_S3_SESSION_BUCKETSUFFIX) -u $(COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT)
 
 ################################################################################
 # PATTERNS

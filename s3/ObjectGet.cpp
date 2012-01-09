@@ -45,7 +45,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output & sink,
 , output(&sink)
 , taken(0)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -61,7 +61,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, Output * sinkp
 , output(sinkp)
 , taken(sinkp)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -77,7 +77,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Plex & p
 , output(&sink)
 , taken(0)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -92,7 +92,7 @@ ObjectGet::ObjectGet(const char * keyname, const Bucket & bucket, const Plex & p
 , output(sinkp)
 , taken(sinkp)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -107,7 +107,7 @@ ObjectGet::ObjectGet(const Object & object, Output & sink, Octets objectoffset, 
 , output(&sink)
 , taken(0)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -123,7 +123,7 @@ ObjectGet::ObjectGet(const Object & object, Output * sinkp, /* TAKEN */ Octets o
 , output(sinkp)
 , taken(sinkp)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -139,7 +139,7 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output & sink, Oc
 , output(&sink)
 , taken(0)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -154,7 +154,7 @@ ObjectGet::ObjectGet(const Object & object, const Plex & plex, Output * sinkp, /
 , output(sinkp)
 , taken(sinkp)
 , offset(objectoffset)
-, size(objectsize)
+, total(objectsize)
 , produced(0)
 {
 	initialize();
@@ -187,7 +187,7 @@ void ObjectGet::execute() {
 		key.c_str(),
 		&conditions,
 		offset,
-		size,
+		total,
 		handle,
 		&handler,
 		this
@@ -222,7 +222,7 @@ bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize, boo
 		output = &sink;
 		taken = 0;
 		offset = objectoffset;
-		size = objectsize;
+		total = objectsize;
 		produced = 0;
 		return true;
 	} else {
@@ -236,7 +236,7 @@ bool ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets ob
 		output = sinkp;
 		taken = sinkp;
 		offset = objectoffset;
-		size = objectsize;
+		total = objectsize;
 		produced = 0;
 		return true;
 	} else {
