@@ -28,6 +28,7 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
+#include "com/diag/desperado/errno.h"
 
 namespace com {
 namespace diag {
@@ -370,25 +371,55 @@ TEST_F(ComplexTest, Application) {
 
 struct ObjectPutFactory : public ObjectPut {
 	const char * path;
-	Octets size;
-	explicit ObjectPutFactory(const Object & object, const Plex & plex, const char * inputname, Octets inputsize)
-	: ObjectPut(object, plex, new ::com::diag::desperado::PathInput(inputname), inputsize)
+	bool succeed;
+	explicit ObjectPutFactory(const Object & object, const Plex & plex, const char * inputname)
+	: ObjectPut(object, plex, new ::com::diag::desperado::PathInput(inputname), ::com::diag::hayloft::size(inputname))
 	, path(inputname)
-	, size(inputsize)
+	, succeed(false)
 	{}
 	virtual bool reset(bool force = false) {
-		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), size, force);
+		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), ::com::diag::hayloft::size(path), force);
+	}
+	virtual int put(int bufferSize, void * buffer) {
+		if (succeed) {
+			return ObjectPut::put(bufferSize, buffer);
+		} else if (consumed < (size / 2)) {
+			return ObjectPut::put(bufferSize, buffer);
+		} else {
+			succeed = true;
+			errno = EINVAL;
+			return -1;
+		}
+	}
+	virtual bool retryable(Status final, bool nonexistence = true) {
+		return (final == ::S3StatusAbortedByCallback) ? true : ObjectPut::retryable(final, nonexistence);
 	}
 };
 
 struct ObjectGetFactory : public ObjectGet {
 	const char * path;
+	bool succeed;
 	explicit ObjectGetFactory(const Object & object, const Plex & plex, const char * outputname)
 	: ObjectGet(object, plex, new ::com::diag::desperado::PathOutput(outputname))
 	, path(outputname)
+	, succeed(false)
 	{}
 	virtual bool reset(bool force = false) {
 		return ObjectGet::reset(new ::com::diag::desperado::PathOutput(path), 0, 0, force);
+	}
+	virtual int get(int bufferSize, const void * buffer) {
+		if (succeed) {
+			return ObjectGet::get(bufferSize, buffer);
+		} else if (produced < (size / 2)) {
+			return ObjectGet::get(bufferSize, buffer);;
+		} else {
+			succeed = true;
+			errno = EINVAL;
+			return -1;
+		}
+	}
+	virtual bool retryable(Status final, bool nonexistence = true) {
+		return (final == ::S3StatusAbortedByCallback) ? true : ObjectGet::retryable(final, nonexistence);
 	}
 };
 
@@ -414,7 +445,7 @@ TEST_F(ComplexTest, Factory) {
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	ObjectPutFactory objectput1(OBJECT1, complex, "unittest.txt", size("unittest.txt"));
+	ObjectPutFactory objectput1(OBJECT1, complex, "unittest.txt");
 	EXPECT_TRUE(complex.start(objectput1));
 	EXPECT_TRUE(complex.wait(objectput1));
 	EXPECT_TRUE(objectput1.isSuccessful());

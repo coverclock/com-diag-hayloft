@@ -26,7 +26,7 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	int rc = that->put(bufferSize, buffer);
 	if (rc > 0) { that->consumed += rc; }
 	Logger::instance().debug("ObjectPut@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->consumed);
-	return (rc > 0) ? rc : 0;
+	return rc;
 }
 
 void ObjectPut::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
