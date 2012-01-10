@@ -437,8 +437,8 @@ public:
 	: ObjectPut(object, plex, new PathInput(inputname), size(inputname))
 	, path(inputname)
 	{}
-	virtual bool reset(bool force = false) {
-		return ObjectPut::reset(new PathInput(path), size(path), force);
+	virtual bool reset() {
+		return ObjectPut::reset(new PathInput(path), size(path));
 	}
 };
 
@@ -454,8 +454,8 @@ public:
 	: ObjectGet(object, plex, new PathOutput(outputname))
 	, path(outputname)
 	{}
-	virtual bool reset(bool force = false) {
-		return ObjectGet::reset(new PathOutput(path), 0, 0, force);
+	virtual bool reset() {
+		return ObjectGet::reset(new PathOutput(path), 0, 0);
 	}
 };
 

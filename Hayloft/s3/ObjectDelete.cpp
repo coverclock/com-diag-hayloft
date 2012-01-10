@@ -61,8 +61,8 @@ void ObjectDelete::execute() {
 	);
 }
 
-bool ObjectDelete::start(bool force) {
-	if ((!isBusy()) || force) {
+bool ObjectDelete::start() {
+	if (Object::start()) {
 		execute();
 		return true;
 	} else {

@@ -79,14 +79,14 @@ struct BucketCreateRecoverable : public BucketCreate {
 	, failures(0)
 	, failure(::S3StatusOK)
 	{}
-	virtual bool start(bool force = false) {
+	virtual bool start() {
 		if (failures > 0) {
 			--failures;
 			::S3ErrorDetails errorDetails = { 0 };
 			responseCompleteCallback(failure, &errorDetails, this);
 			return true;
 		} else {
-			return BucketCreate::start(force);
+			return BucketCreate::start();
 		}
 	}
 };
@@ -152,21 +152,29 @@ TEST_F(ComplexTest, Unrecoverable) {
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
-struct ComplexIrrecoverable : public Complex {
-	explicit ComplexIrrecoverable() {
-		RETRIES = 1;
+struct BucketCreateIrrecoverable : public BucketCreateRecoverable {
+	int limit;
+	explicit BucketCreateIrrecoverable(const Bucket & bucket, const Plex & plex)
+	: BucketCreateRecoverable(bucket, plex)
+	, limit(0)
+	{}
+	virtual bool startable(Handle * candidate) {
+		bool result = BucketCreateRecoverable::startable(candidate);
+		if (result) { retries = limit; }
+		return result;
 	}
 };
 
 TEST_F(ComplexTest, Irrecoverable) {
 	Bucket BUCKET("ComplexTestIrrecoverable");
-	ComplexIrrecoverable complex;
+	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
 	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateRecoverable bucketcreate(BUCKET, complex);
+	BucketCreateIrrecoverable bucketcreate(BUCKET, complex);
 	bucketcreate.failures = 2;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
+	bucketcreate.limit = 1;
 	EXPECT_TRUE(complex.start(bucketcreate));
 	EXPECT_TRUE(complex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
@@ -199,7 +207,7 @@ struct BucketCreateUnstartable : public BucketCreate {
 	explicit BucketCreateUnstartable(const Bucket & bucket, const Plex & plex)
 	: BucketCreate(bucket, plex)
 	{}
-	virtual bool start(bool force = false) {
+	virtual bool start() {
 		return false;
 	}
 };
@@ -220,7 +228,7 @@ struct BucketCreateUnresettable : public BucketCreateRecoverable {
 	explicit BucketCreateUnresettable(const Bucket & bucket, const Plex & plex)
 	: BucketCreateRecoverable(bucket, plex)
 	{}
-	virtual bool reset(bool force = false) {
+	virtual bool reset() {
 		return false;
 	}
 };
@@ -247,14 +255,14 @@ struct ObjectPutApplication : public ObjectPut {
 	, failures(0)
 	, failure(::S3StatusOK)
 	{}
-	virtual bool start(bool force = false) {
+	virtual bool start() {
 		if (failures > 0) {
 			--failures;
 			::S3ErrorDetails errorDetails = { 0 };
 			responseCompleteCallback(failure, &errorDetails, this);
 			return true;
 		} else {
-			return ObjectPut::start(force);
+			return ObjectPut::start();
 		}
 	}
 };
@@ -267,14 +275,14 @@ struct ObjectGetApplication : public ObjectGet {
 	, failures(0)
 	, failure(::S3StatusOK)
 	{}
-	virtual bool start(bool force = false) {
+	virtual bool start() {
 		if (failures > 0) {
 			--failures;
 			::S3ErrorDetails errorDetails = { 0 };
 			responseCompleteCallback(failure, &errorDetails, this);
 			return true;
 		} else {
-			return ObjectGet::start(force);
+			return ObjectGet::start();
 		}
 	}
 };
@@ -377,8 +385,8 @@ struct ObjectPutFactory : public ObjectPut {
 	, path(inputname)
 	, succeed(false)
 	{}
-	virtual bool reset(bool force = false) {
-		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), size(path), force);
+	virtual bool reset() {
+		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), size(path));
 	}
 	virtual int put(int bufferSize, void * buffer) {
 		if (succeed) {
@@ -404,8 +412,8 @@ struct ObjectGetFactory : public ObjectGet {
 	, path(outputname)
 	, succeed(false)
 	{}
-	virtual bool reset(bool force = false) {
-		return ObjectGet::reset(new ::com::diag::desperado::PathOutput(path), 0, 0, force);
+	virtual bool reset() {
+		return ObjectGet::reset(new ::com::diag::desperado::PathOutput(path), 0, 0);
 	}
 	virtual int get(int bufferSize, const void * buffer) {
 		if (succeed) {

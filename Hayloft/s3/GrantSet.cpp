@@ -95,8 +95,8 @@ void GrantSet::execute() {
 	);
 }
 
-bool GrantSet::start(bool force) {
-	if ((!isBusy()) || force) {
+bool GrantSet::start() {
+	if (Grant::start()) {
 		execute();
 		return true;
 	} else {

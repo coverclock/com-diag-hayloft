@@ -75,7 +75,7 @@ public:
 	virtual ~LifeCycle();
 
 	/**
-	 * This method is called when the Action constructor is called.
+	 * This method is called when this Action constructor is called.
 	 * Hayloft guarantees that the default implementation does nothing. It can
 	 * be safely overridden by the application for its own purposes. The
 	 * overriding method does not need to call this method.
@@ -83,7 +83,7 @@ public:
 	 * Note that this method is called before any derived objects have been
 	 * constructed.
 	 *
-	 * @param action refers to the Action being constructed.
+	 * @param action refers to this Action being constructed.
 	 */
 	virtual void constructor(Action & action);
 
@@ -101,7 +101,7 @@ public:
 	 * interface, you will find the complete method being called before the
 	 * start method.
 	 *
-	 * @param action refers to the Action receiving the properties response.
+	 * @param action refers to this Action receiving the properties response.
 	 */
 	virtual void start(Action & action);
 
@@ -112,34 +112,34 @@ public:
 	 * the application for its own purposes. The overriding method does not need
 	 * to call this method.
 	 *
-	 * @param action refers to the Action receiving the properties response.
+	 * @param action refers to this Action receiving the properties response.
 	 * @param responseProperties points to a libs3 ::S3ResponseProperties
 	 *        structure.
-	 * @return a status that if ::S3StatusOK allows the Action to continue or
+	 * @return a status that if ::S3StatusOK allows this Action to continue or
 	 *         if anything else such as ::S3StatusAbortedByCallback immediately
-	 *         terminates the Action.
+	 *         terminates this Action.
 	 */
 	virtual Status properties(Action & action, const ::S3ResponseProperties * responseProperties);
 
 	/**
-	 * This method is called when libs3 completes executing the Action.
+	 * This method is called when libs3 completes executing this Action.
 	 * Hayloft guarantees that the default implementation does nothing. It can
 	 * be safely overridden by the application for its own purposes. The
 	 * overridding method does not need to call this method. Hayloft guarantees
-	 * that it will not make a reference to the Action after calling this
-	 * method. Hence, this method may delete the Action providing the
+	 * that it will not make a reference to this Action after calling this
+	 * method. Hence, this method may delete this Action providing the
 	 * application is designed for it to do so. It can also restart the action,
 	 * perhaps based on its status.
 	 *
-	 * @param action refers to the Action being completed.
-	 * @param final is the final libs3 status for the Action. The status has
-	 *        not yet been updated in the Action.
+	 * @param action refers to this Action being completed.
+	 * @param final is the final libs3 status for this Action. The status has
+	 *        not yet been updated in this Action.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
 	virtual void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
 
 	/**
-	 * This method is called when the Action destructor is called.
+	 * This method is called when this Action destructor is called.
 	 * Hayloft guarantees that the default implementation does nothing. It can
 	 * be safely overridden by the application for its own purposes. The
 	 * overriding method does not need to call this method.
@@ -147,7 +147,7 @@ public:
 	 * Note that this method is called after any derived objects have already
 	 * been destroyed.
 	 *
-	 * @param action refers to the Action being destroyed.
+	 * @param action refers to this Action being destroyed.
 	 */
 	virtual void destructor(Action & action);
 

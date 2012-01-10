@@ -31,7 +31,7 @@ class Complex;
  * Action is a C++ object whose state may be altered in the background by a
  * libs3 thread and which presents an asynchronous interface in which the
  * Action has to be explicitly started by the application. Actions can also
- * be used synchronously so that the Action is started and completed all within
+ * be used synchronously so that this Action is started and completed all within
  * the constructor of the derived class.
  */
 class Action {
@@ -43,30 +43,39 @@ class Action {
 public:
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * This is a fake libs3 ::S3Status value that means this Action has a
 	 * transitional status between constructing and starting.
 	 */
 	static const int IDLE = intmaxof(Status);
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * This is a fake libs3 ::S3Status value that means this Action has a
 	 * transitional status between starting or restarting and running.
 	 */
 	static const int PENDING = intmaxof(Status) - 1;
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * This is a fake libs3 ::S3Status value that means this Action has a
 	 * transitional status between running and completing.
 	 */
 	static const int BUSY = intmaxof(Status) - 2;
 
 	/**
-	 * This is a fake libs3 ::S3Status value that means the Action has a
+	 * This is a fake libs3 ::S3Status value that means this Action has a
 	 * transitional status between completing and restarting.
 	 */
 	static const int FINAL = intmaxof(Status) - 3;
 
+	/**
+	 * This is the maximum number of times an Action may be retried before
+	 * deciding we're not getting anywhere. It does not include the initial
+	 * try.
+	 */
+	static const int RETRIES = 4;
+
 protected:
+
+	static bool dontcare;
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
@@ -94,6 +103,10 @@ private:
 
 public:
 
+	/***************************************************************************
+	 * APPLICATION API
+	 **************************************************************************/
+
 	/**
 	 * Ctor. Use this for the synchronous interface. The Action will be
 	 * automatically started in the ctor, and the ctor will block until the
@@ -106,8 +119,8 @@ public:
 
 	/**
 	 * Ctor. Use this for the asynchronous interface. The application is
-	 * responsible for starting the Action, and for insuring that the Plex
-	 * associated with the Action is serviced until the Action completes.
+	 * responsible for starting this Action, and for insuring that the Plex
+	 * associated with this Action is serviced until this Action completes.
 	 * Asynchronous Actions can be restarted and re-executed asynchronously.
 	 *
 	 * This constructor calls the corresponding LifeCycle method.
@@ -150,7 +163,7 @@ public:
 
 	/**
 	 * Return true if this Action is in a state that is retryable, that is, in
-	 * a state that is a result of a temporary failure and in which the Action
+	 * a state that is a result of a temporary failure and in which this Action
 	 * is likely to succeed if it is restarted. Transitional status values,
 	 * ::S3StatusOK which indicates success, and "permanent" failure status
 	 * values such as ::S3StatusHttpErrorNotFound, are not retryable.
@@ -226,104 +239,33 @@ public:
 	const char * getRequestId2() const { return requestid2.c_str(); }
 
 	/**
-	 * Start the Action if it is not busy or forced.
+	 * Start this Action.
 	 *
-	 * The default implementation in the base class does nothing. It is the
-	 * responsibility of the derived classes to call the appropriate LifeCycle
-	 * method when an Action is actually started. (As a point of design, you
-	 * should call it just before the Action is actually started.) In practice,
-	 * they can call the non-virtual execute function in this base class to
-	 * accomplish this. The execute function is non-virtual since it may be
-	 * called from a constructor when the synchronous interface is used, at
-	 * which time construction of the object may not be complete (depending on
-	 * the C++ implementation).
-	 *
-	 * @param force if true cause the start to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start(bool force = false);
+	virtual bool start();
 
 	/**
-	 * Reset the action if it is not busy or forced.
+	 * Reset this Action.
 	 *
-	 * The default implementation in the base class returns success. Derived
-	 * classes may use this to perform some recovery or reinitialization action
-	 * when signaled by a management entity that calls this method before
-	 * restarting the Action. Typically, actions that use input or output
-	 * functors will do whatever is necessary to rewind the input or output
-	 * stream.
-	 *
-	 * @param force if true cause the start to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(bool force = false);
-
-	/**
-	 * Determine if this Action is retryable given the specified status. This
-	 * method in the base class takes a broader view of retryability to
-	 * include not only temporary network failures but possibly convergence
-	 * latency too. Whether this is reasonable for all Actions is up to the
-	 * derived class.
-	 *
-	 * @param final refers to the Status to be evaluated for retryability.
-	 * @param nonexistence is the value returned for statuses indicating
-	 *                     non-existence.
-	 * @return true if retryable, false otherwise.
-	 */
-	virtual bool retryable(Status final, bool nonexistence = true);
+	virtual bool reset();
 
 	/**
 	 * Block the calling thread until this Action is signaled to be complete.
 	 * This method is only useful if the Application executes Actions in a
 	 * background thread.
 	 *
-	 * @param handled if non-null causes the wait to fail if this Action's
-	 *        handle is not equal to the handled value.
+	 * @param candidate if non-null causes this method to fail if this Action's
+	 *        handle is not equal to the candidate value.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool wait(Handle * handled = 0);
+	virtual bool wait(Handle * candidate = 0);
 
-protected:
-
-	/**
-	 * This method is called when a Properties response is returned from S3.
-	 *
-	 * The default implementation in the base class returns ::S3StatusOK to
-	 * allow the Action to continue. If the overriding method returns a status
-	 * other than ::S3StatusOK (like ::S3StatusAbortedByCallback) this Action
-	 * will be immediately terminated and completed with that status.
-	 *
-	 * @param responseProperties points to a libs3 ::S3ResponseProperties
-	 *        structure.
-	 * @return a status that if ::S3StatusOK allows the Action to continue or
-	 *         if anything else such as ::S3StatusAbortedByCallback immediately
-	 *         terminates the Action.
-	 */
-	virtual Status properties(const ::S3ResponseProperties * responseProperties);
-
-	/**
-	 * This method is called when libs3 completes executing the Action.
-	 *
-	 * The default implementation in the base class does nothing. The overriding
-	 * method is allowed to delete this Action (providing the application is
-	 * otherwise designed for it to do so); Hayloft guarantees it will make
-	 * no further reference to it following this call. The overriding method is
-	 * allowed to restart this Action.
-	 *
-	 * @param final is the final libs3 status.
-	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
-	 */
-	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
-
-	/**
-	 * Signal any waiting threads that this Action is complete.
-	 *
-	 * @param final is the value to which the status is set.
-	 * @return true if successful, false otherwise.
-	 */
-	virtual bool signal(Status final);
+	/***************************************************************************
+	 * MANAGEMENT API
+	 **************************************************************************/
 
 	/**
 	 * This returns the current status value with an appropriate memory barrier
@@ -342,6 +284,93 @@ protected:
 	 * @return the prior status value.
 	 */
 	Status state(Status update);
+
+	/**
+	 * Determine if this Action is retryable given the specified status. This
+	 * method takes a broader view of retryability to include not only
+	 * temporary network failures but possibly convergence latency too. Whether
+	 * this is reasonable for all Actions is up to the derived class, which is
+	 * permitted to override this method to implement an alternative strategy.
+	 *
+	 * @param final refers to the Status to be evaluated for retryability.
+	 *        This is not the status that is part of this Action because this
+	 *        decision needs to be made prior to committing a new status
+	 *        value to the status field where it will be visible to
+	 *        polling threads.
+	 * @param nonexistence is the value returned for statuses indicating
+	 *        non-existence.
+	 * @return true if retryable, false otherwise.
+	 */
+	virtual bool retryable(Status final, bool nonexistence = true);
+
+	/**
+	 * Determine if this Action is startable, and if so prepare it to be
+	 * started.
+	 *
+	 * @param candidate if non-null causes this method to fail if this Action's
+	 *        handle is not equal to the candidate value.
+	 * @return true if startable, false otherwise.
+	 */
+	virtual bool startable(Handle * candidate = 0);
+
+	/**
+	 * Determine if this Action is restartable, and if so prepare it to be
+	 * restarted.
+	 *
+	 * @param final refers to the Status to be evaluated for restartability.
+	 *        This is not the status that is part of this Action because this
+	 *        decision needs to be made prior to committing a new status
+	 *        value to the status field where it will be visible to
+	 *        polling threads.
+	 * @param unretryable if true is a clue to the caller that this Action is
+	 *        not restartable because it completed with a unretryable status.
+	 *        The caller may choose to alter its strategy depending on this
+	 *        value.
+	 * @param candidate if non-null causes this method to fail if this Action's
+	 *        handle is not equal to the candidate value.
+	 * @return true if restartable, false otherwise.
+	 */
+	virtual bool restartable(Status final, bool & unretryable = dontcare, Handle * candidate = 0);
+
+	/**
+	 * Signal any waiting threads that this Action is complete.
+	 *
+	 * @param final is the value to which the status is set.
+	 * @return true if successful, false otherwise.
+	 */
+	virtual bool signal(Status final);
+
+protected:
+
+	/**
+	 * This method is called when a Properties response is returned from S3.
+	 *
+	 * The default implementation in the base class returns ::S3StatusOK to
+	 * allow this Action to continue. If the overriding method returns a status
+	 * other than ::S3StatusOK (like ::S3StatusAbortedByCallback) this Action
+	 * will be immediately terminated and completed with that status.
+	 *
+	 * @param responseProperties points to a libs3 ::S3ResponseProperties
+	 *        structure.
+	 * @return a status that if ::S3StatusOK allows this Action to continue or
+	 *         if anything else such as ::S3StatusAbortedByCallback immediately
+	 *         terminates this Action.
+	 */
+	virtual Status properties(const ::S3ResponseProperties * responseProperties);
+
+	/**
+	 * This method is called when libs3 completes executing this Action.
+	 *
+	 * The default implementation in the base class does nothing. The overriding
+	 * method is allowed to delete this Action (providing the application is
+	 * otherwise designed for it to do so); Hayloft guarantees it will make
+	 * no further reference to it following this call. The overriding method is
+	 * allowed to restart this Action.
+	 *
+	 * @param final is the final libs3 status.
+	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
+	 */
+	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
 
 	void execute();
 

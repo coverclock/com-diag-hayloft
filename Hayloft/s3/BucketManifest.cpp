@@ -164,8 +164,8 @@ void BucketManifest::execute() {
 	}
 }
 
-bool BucketManifest::start(bool force) {
-	if ((!isBusy()) || force) {
+bool BucketManifest::start() {
+	if (Bucket::start()) {
 		execute();
 		return true;
 	} else {
@@ -182,8 +182,8 @@ const BucketManifest::Entry * BucketManifest::find(const char * name) const {
 	return entry;
 }
 
-bool BucketManifest::reset(bool force) {
-	if ((!isBusy()) || force) {
+bool BucketManifest::reset() {
+	if (Bucket::reset()) {
 		manifest.clear();
 		common.clear();
 		nextmarker = marker;

@@ -84,8 +84,8 @@ void LogGet::execute() {
 	);
 }
 
-bool LogGet::start(bool force) {
-	if ((!isBusy()) || force) {
+bool LogGet::start() {
+	if (Log::start()) {
 		execute();
 		return true;
 	} else {

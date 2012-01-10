@@ -38,7 +38,7 @@ class Bucket;
  * functor interface, or by overriding the appropriate methods in this object.
  * When Desperado Output functors are used, the functors can be either UNTAKEN
  * (passed by reference) or TAKEN (passed by pointer). In the latter case, the
- * TAKEN functor will be deleted when the Action completes. (Some Desperado
+ * TAKEN functor will be deleted when this Action completes. (Some Desperado
  * Input functors rely on destruction to close the underlying data sink.)
  */
 class ObjectGet : public Object {
@@ -109,7 +109,7 @@ public:
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectoffset is the offset in eight-bit bytes from the beginning
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
@@ -165,7 +165,7 @@ public:
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectoffset is the offset in eight-bit bytes from the beginning
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
@@ -210,7 +210,7 @@ public:
 	 * @param object refers to a Object Action from which this Object Action
 	 *        is configured. This reference is only used during construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectoffset is the offset in eight-bit bytes from the beginning
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
@@ -260,7 +260,7 @@ public:
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectoffset is the offset in eight-bit bytes from the beginning
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
@@ -291,27 +291,22 @@ public:
 	Octets getProduced() const { return produced; }
 
 	/**
-	 * Start the Action if it is not busy or forced.
+	 * Start this Action.
 	 *
-	 * @param force if true cause the start to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start(bool force = false);
+	virtual bool start();
 
 	/**
-	 * Reset the action if it is not busy or forced and none of the data sink
-	 * has been produced. Success means the Action can be retried without a new
-	 * Output functor.
+	 * Reset this Action if none of the data sink has been produced. Success
+	 * means this Action can be retried without a new Output functor.
 	 *
-	 * @param force if true cause the reset to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(bool force = false);
+	virtual bool reset();
 
 	/**
-	 * If the Action is not busy, reset the data sink to a new Output functor.
+	 * Reset this Action by resetting the data sink to a new Output functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sink refers to an Output functor.
@@ -319,27 +314,23 @@ public:
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
 	 *        be retrieved or zero to retrieve the entire object.
-	 * @param force if true cause the reset to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0, bool force = false);
+	virtual bool reset(Output & sink, Octets objectoffset = 0, Octets objectsize = 0);
 
 	/**
-	 * If the Action is not busy, reset the data sink to a new Output functor.
+	 * Reset this Action by resetting the data sink to a new Output functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sinkp points to an Output functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectoffset is the offset in eight-bit bytes from the beginning
 	 *        of the object at which the get begins.
 	 * @param objectsize is the size of the data source in eight-bit bytes to
 	 *        be retrieved or zero to retrieve the entire object.
-	 * @param force if true cause the reset to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0, bool force = false);
+	virtual bool reset(Output * sinkp /* TAKEN */, Octets objectoffset = 0, Octets objectsize = 0);
 
 protected:
 

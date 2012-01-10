@@ -66,8 +66,8 @@ void BucketCreate::execute() {
 	);
 }
 
-bool BucketCreate::start(bool force) {
-	if ((!isBusy()) || force) {
+bool BucketCreate::start() {
+	if (Bucket::start()) {
 		execute();
 		return true;
 	} else {

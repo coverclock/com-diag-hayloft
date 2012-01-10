@@ -52,7 +52,7 @@ static const Logger::Level CONVERGENCE_LOG_LEVEL = Logger::INFORMATION;
 extern bool complete_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, Logger::Level level = CONVERGENCE_LOG_LEVEL);
 
 /**
- * Complete until the state of the Action converges to any non-retryable state.
+ * Complete until the state of this Action converges to any non-retryable state.
  *
  * See complete_generic.
  *
@@ -65,7 +65,7 @@ inline bool complete(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVE
 }
 
 /**
- * Complete until the state of the Action converges to a Success state.
+ * Complete until the state of this Action converges to a Success state.
  *
  * See complete_generic.
  *
@@ -78,7 +78,7 @@ inline bool complete_until_successful(Action & action, Logger::Level level = CON
 }
 
 /**
- * Complete until the state of the Action converges to a Non-existence state.
+ * Complete until the state of this Action converges to a Non-existence state.
  *
  * See complete_generic.
  *
@@ -93,7 +93,7 @@ inline bool complete_until_nonexistent(Action & action, Logger::Level level = CO
 /**
  * Handle the error recovery and consistency convergence logic for an Action
  * by iteratively servicing it until it is complete. Both synchronous and
- * asynchronous Actions are handled. When the Action is asynchronous, this
+ * asynchronous Actions are handled. When this Action is asynchronous, this
  * mechanism is really only useful when that Action is the only one on the
  * Plex, since it only checks the one Action for completion. Truly
  * plexing multiple asynchronous Actions will require a more application
@@ -119,7 +119,7 @@ inline bool complete_until_nonexistent(Action & action, Logger::Level level = CO
 extern bool service_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, int iterations = 100, Milliseconds timeout = 100, Logger::Level level = CONVERGENCE_LOG_LEVEL);
 
 /**
- * Service until the state of the Action converges to any non-retryable state.
+ * Service until the state of this Action converges to any non-retryable state.
  *
  * See service_generic.
  *
@@ -132,7 +132,7 @@ inline bool service(Action & action, Logger::Level level = CONVERGENCE_LOG_LEVEL
 }
 
 /**
- * Service until the state of the Action converges to a Success state.
+ * Service until the state of this Action converges to a Success state.
  *
  * See service_generic.
  *
@@ -145,7 +145,7 @@ inline bool service_until_successful(Action & action, Logger::Level level = CONV
 }
 
 /**
- * Service until the state of the Action converges to a Non-existence state.
+ * Service until the state of this Action converges to a Non-existence state.
  *
  * See service_generic.
  *
