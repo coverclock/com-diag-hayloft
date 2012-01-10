@@ -36,10 +36,6 @@ class Complex;
  */
 class Action {
 
-	friend class LifeCycle;
-
-	friend class Complex;
-
 public:
 
 	/**
@@ -340,15 +336,18 @@ public:
 	 */
 	virtual bool signal(Status final);
 
-protected:
+	/***************************************************************************
+	 * LIFECYCLE API
+	 **************************************************************************/
 
 	/**
 	 * This method is called when a Properties response is returned from S3.
 	 *
 	 * The default implementation in the base class returns ::S3StatusOK to
 	 * allow this Action to continue. If the overriding method returns a status
-	 * other than ::S3StatusOK (like ::S3StatusAbortedByCallback) this Action
-	 * will be immediately terminated and completed with that status.
+	 * other than ::S3StatusOK (::S3StatusAbortedByCallback is the recommended
+	 * alternative) this Action will be immediately terminated and completed
+	 * with that status.
 	 *
 	 * @param responseProperties points to a libs3 ::S3ResponseProperties
 	 *        structure.
@@ -371,6 +370,8 @@ protected:
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
 	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
+
+protected:
 
 	void execute();
 
