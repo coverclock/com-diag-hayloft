@@ -40,7 +40,7 @@ class Bucket;
  * overriding the appropriate methods in this object. When Desperado Input
  * functors are used, the functors can be either UNTAKEN (passed by reference)
  * or TAKEN (passed by pointer). In the latter case, the TAKEN functor will be
- * deleted when the Action completes. (Some Desperado Output functors rely on
+ * deleted when this Action completes. (Some Desperado Output functors rely on
  * destruction to close the underlying data source.)
  */
 class ObjectPut : public Object {
@@ -113,7 +113,7 @@ public:
 	 * @param bucket refers to the Bucket associated with this object. This
 	 *        reference is only used during construction.
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads (or at least
 	 *        not when libs3 was written).
@@ -165,7 +165,7 @@ public:
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads (or at least
 	 *        not when libs3 was written).
@@ -206,7 +206,7 @@ public:
 	 * @param object refers to a Object Action from which this Object Action
 	 *        is configured. This reference is only used during construction.
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads (or at least
 	 *        not when libs3 was written).
@@ -251,7 +251,7 @@ public:
 	 *        Action asynchronously. This reference is only used during
 	 *        construction.
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads (or at least
 	 *        not when libs3 was written).
@@ -280,51 +280,42 @@ public:
 	Octets getConsumed() const { return consumed; }
 
 	/**
-	 * Start the Action if it is not busy or forced.
+	 * Start this Action.
 	 *
-	 * @param force if true cause the start to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start(bool force = false);
+	virtual bool start();
 
 	/**
-	 * Reset the action if it is not busy or forced and none of the data source
-	 * has been consumed. Success means the Action can be retried without a new
-	 * Input functor.
+	 * Reset this Action if none of the data source has been consumed. Success
+	 * means this Action can be retried without a new Input functor.
 	 *
-	 * @param force if true cause the reset to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(bool force = false);
+	virtual bool reset();
 
 	/**
-	 * If the Action is not busy, reset the data source to a new Input functor.
+	 * Reset this Action by resetting the data source to a new Input functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param source refers to an Input functor.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads.
-	 * @param force if true cause the reset to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Input & source, Octets objectsize, bool force = false);
+	virtual bool reset(Input & source, Octets objectsize);
 
 	/**
-	 * If the Action is not busy, reset the data source to a new Input functor.
+	 * Reset this Action by resetting the data source to a new Input functor.
 	 * This can be used in retry and error recover strategies.
 	 *
 	 * @param sourcep points to an Input functor which is TAKEN and deleted when
-	 *        the Action completes.
+	 *        this Action completes.
 	 * @param objectsize is the size of the data source in eight-bit bytes. S3
 	 *        requires this and does not support partial uploads.
-	 * @param force if true cause the reset to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(Input * sourcep /* TAKEN */, Octets objectsize, bool force = false);
+	virtual bool reset(Input * sourcep /* TAKEN */, Octets objectsize);
 
 protected:
 

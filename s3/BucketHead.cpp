@@ -76,8 +76,8 @@ void BucketHead::execute() {
 	);
 }
 
-bool BucketHead::start(bool force) {
-	if ((!isBusy()) || force) {
+bool BucketHead::start() {
+	if (Bucket::start()) {
 		execute();
 		return true;
 	} else {

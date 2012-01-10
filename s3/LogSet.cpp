@@ -79,8 +79,8 @@ void LogSet::execute() {
 	);
 }
 
-bool LogSet::start(bool force) {
-	if ((!isBusy()) || force) {
+bool LogSet::start() {
+	if (Log::start()) {
 		execute();
 		return true;
 	} else {

@@ -203,8 +203,8 @@ void ObjectGet::finalize() {
 	taken = 0;
 }
 
-bool ObjectGet::start(bool force) {
-	if ((!isBusy()) || force) {
+bool ObjectGet::start() {
+	if (Object::start()) {
 		execute();
 		return true;
 	} else {
@@ -212,12 +212,12 @@ bool ObjectGet::start(bool force) {
 	}
 }
 
-bool ObjectGet::reset(bool force) {
-	return (((!isBusy()) || force) && (produced == 0));
+bool ObjectGet::reset() {
+	return (Object::reset() && (produced == 0));
 }
 
-bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize, bool force) {
-	if ((!isBusy()) || force) {
+bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize) {
+	if (Object::reset()) {
 		finalize();
 		output = &sink;
 		taken = 0;
@@ -230,8 +230,8 @@ bool ObjectGet::reset(Output & sink, Octets objectoffset, Octets objectsize, boo
 	}
 }
 
-bool ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets objectsize, bool force) {
-	if ((!isBusy()) || force) {
+bool ObjectGet::reset(Output * sinkp /* TAKEN */, Octets objectoffset, Octets objectsize) {
+	if (Object::reset()) {
 		finalize();
 		output = sinkp;
 		taken = sinkp;

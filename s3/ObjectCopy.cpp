@@ -144,8 +144,8 @@ void ObjectCopy::execute() {
 	);
 }
 
-bool ObjectCopy::start(bool force) {
-	if ((!isBusy()) || force) {
+bool ObjectCopy::start() {
+	if (Object::start()) {
 		execute();
 		return true;
 	} else {

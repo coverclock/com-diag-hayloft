@@ -79,8 +79,8 @@ void ServiceManifest::execute() {
 	);
 }
 
-bool ServiceManifest::start(bool force) {
-	if ((!isBusy()) || force) {
+bool ServiceManifest::start() {
+	if (Service::start()) {
 		execute();
 		return true;
 	} else {
@@ -97,8 +97,8 @@ const ServiceManifest::Entry * ServiceManifest::find(const char * name) const {
 	return entry;
 }
 
-bool ServiceManifest::reset(bool force) {
-	if ((!isBusy()) || force) {
+bool ServiceManifest::reset() {
+	if (Service::reset()) {
 		manifest.clear();
 		return true;
 	} else {

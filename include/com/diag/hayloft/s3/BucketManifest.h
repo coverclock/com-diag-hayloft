@@ -232,19 +232,17 @@ public:
 	);
 
 	/**
-	 * Dtor. If the Action is in the BUSY state this forces the execution of
+	 * Dtor. If this Action is in the BUSY state this forces the execution of
 	 * all Actions on the same Plex and blocks until they all complete.
 	 */
 	virtual ~BucketManifest();
 
 	/**
-	 * Start the Action if it is not busy or forced.
+	 * Start this Action.
 	 *
-	 * @param force if true cause the start to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool start(bool force = false);
+	virtual bool start();
 
 	/**
 	 * Get a constant reference to the Manifest map.
@@ -270,14 +268,12 @@ public:
 	virtual const Entry * find(const char * name) const;
 
 	/**
-	 * Reset the action if it is not busy or forced. This includes clearing
-	 * the Manifest map and the Common list.
+	 * Reset this Action. This includes clearing the Manifest map and the
+	 * Common list.
 	 *
-	 * @param force if true cause the start to be performed even if the Action
-	 *              is busy. This option is used by the management system.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool reset(bool force = false);
+	virtual bool reset();
 
 protected:
 

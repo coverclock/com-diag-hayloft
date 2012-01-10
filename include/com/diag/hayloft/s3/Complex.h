@@ -117,12 +117,6 @@ protected:
 	 */
 	static Milliseconds BACKOFF;
 
-	/**
-	 * This is the maximum number of times an Action may be retried before
-	 * deciding we're not getting anywhere.
-	 */
-	static int RETRIES;
-
 private:
 
 	static Mutex instance;
@@ -198,12 +192,12 @@ public:
 	Status getStatus() const { return status; }
 
 	/**
-	 * Submit the Action to the Complex service thread for processing. Possible
+	 * Submit this Action to the Complex service thread for processing. Possible
 	 * failure modes are: the referenced Action did not reference a Complex
-	 * object as its Plex during construction; or the Action is not in a state
+	 * object as its Plex during construction; or this Action is not in a state
 	 * in which it can be started.
 	 *
-	 * @param action refers to the Action to be submitted.
+	 * @param action refers to this Action to be submitted.
 	 * @return true if successful, false otherwise.
 	 */
 	virtual bool start(Action & action);
@@ -211,12 +205,12 @@ public:
 	/**
 	 * Block the calling thread until the referenced Action is complete.
 	 * Possible failure modes are: the referenced Action did not reference a
-	 * Complex object as its Plex during construction; or the Action is not in
+	 * Complex object as its Plex during construction; or this Action is not in
 	 * a state during which it can be waited upon. When this call returns
 	 * successfully, the referenced Action is guaranteed to have a final
 	 * status which is not retryable.
 	 *
-	 * @param action refers to the Action to be waited upon.
+	 * @param action refers to this Action to be waited upon.
 	 * @return true if successful, false otherwise.
 	 */
 	virtual bool wait(Action & action);

@@ -21,6 +21,8 @@ namespace diag {
 namespace hayloft {
 namespace s3 {
 
+bool Action::dontcare = false;
+
 /*******************************************************************************
  * CALLBACK METHODS FOR LIBS3
  ******************************************************************************/
@@ -47,7 +49,7 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	// this occurs when the Plex used when we were constructed is deleted while
 	// we were busy. We are henceforth a synchronous Action. Wackiness ensues.
 	if (final == ::S3StatusInterrupted) {
-		Logger::instance().error("Action%p: interrupted while busy!\n", that);
+		Logger::instance().error("Action@%p: interrupted while busy!\n", that);
 		that->handle = 0;
 	}
 	Logger::Level level;
@@ -74,7 +76,7 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 }
 
 /*******************************************************************************
- * ACTION PUBLIC API
+ * APPLICATION API
  ******************************************************************************/
 
 Action::Action()
@@ -96,12 +98,12 @@ Action::Action(const Plex & plex)
 Action::~Action() {
 	// We shouldn't call S3_runall_request_context from here because the derived
 	// class destructor has already been invoked. But this is simpler, and if
-	// we're deleting this Action while it is busy, wackiness has already ensued.
-	// This will force this Action to complete, and doing so will also signal
-	// any waiting Threads if the Application is using a multi-threaded Plex.
-	// Valgrind will have a stroke over this, I wager.
+	// we're deleting this Action while it is busy, wackiness has already
+	// ensued. This will force this Action to complete, and doing so will also
+	// signal any waiting Threads if the Application is using a multi-threaded
+	// Plex. Valgrind will have a stroke over this, I wager.
 	if (isBusy()) {
-		Logger::instance().error("Action%p: deleted while busy!\n", this);
+		Logger::instance().error("Action@%p: deleted while busy!\n", this);
 		if (handle != 0) { (void)S3_runall_request_context(handle); }
 	}
 	LifeCycle::instance().destructor(*this);
@@ -113,12 +115,42 @@ Status Action::getStatus(const char ** description) const {
 	return status;
 }
 
-bool Action::start(bool force) {
-	return ((!isBusy()) || force);
+bool Action::start() {
+	return (state() != BUSY);
 }
 
-bool Action::reset(bool force) {
-	return ((!isBusy()) || force);
+bool Action::reset() {
+	return (state() != BUSY);
+}
+
+bool Action::wait(Handle * candidate) {
+	CriticalSection guard(mutex);
+	if ((candidate != 0) && (handle != candidate)) {
+		return false;
+	} else {
+		while ((status == PENDING) || (status == BUSY) || (status == FINAL)) { // IDLE doesn't wait.
+			if (condition.wait(mutex) != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+/*******************************************************************************
+ * MANAGEMENT API
+ ******************************************************************************/
+
+Status Action::state() const {
+	CriticalSection guard(mutex);
+	return status;
+}
+
+Status Action::state(Status update) {
+	CriticalSection guard(mutex);
+	Status previous = status;
+	status = update;
+	return previous;
 }
 
 bool Action::retryable(Status status, bool nonexistence) {
@@ -136,35 +168,46 @@ bool Action::retryable(Status status, bool nonexistence) {
 	return result;
 }
 
-Status Action::state() const {
+bool Action::startable(Handle * candidate) {
 	CriticalSection guard(mutex);
-	return status;
-}
-
-Status Action::state(Status update) {
-	CriticalSection guard(mutex);
-	Status previous = status;
-	status = update;
-	return previous;
-}
-
-bool Action::wait(Handle * handled) {
-	CriticalSection guard(mutex);
-	if ((handled != 0) && (handle != handled)) {
-		return false;
+	Logger & logger = Logger::instance();
+	bool result = false;
+	if ((status == PENDING) || (status == BUSY) || (status == FINAL)) {
+		logger.error("Action@%p: busy!\n", this); // Application error.
+	} else if ((candidate != 0) && (handle != candidate)) {
+		logger.error("Action@%p: wrong handle!\n", this); // Application error.
 	} else {
-		while ((status == PENDING) || (status == BUSY) || (status == FINAL)) { // IDLE doesn't wait.
-			if (condition.wait(mutex) != 0) {
-				return false;
-			}
-		}
-		return true;
+		logger.debug("Action@%p: startable\n", this);
+		status = static_cast<Status>(PENDING);
+		retries = RETRIES;
+		result = true;
 	}
+	return result;
 }
 
-/*******************************************************************************
- * ACTION MANAGEMENT API
- ******************************************************************************/
+bool Action::restartable(Status final, bool & unretryable, Handle * candidate) {
+	CriticalSection guard(mutex);
+	Logger & logger = Logger::instance();
+	bool result = false;
+	status = static_cast<Status>(FINAL);
+	bool clue;
+	if ((clue = !retryable(final))) {
+		logger.debug("Action@%p: not retryable\n", this);
+	} else if ((candidate != 0) && (handle != candidate)) {
+		logger.debug("Action@%p: wrong handle\n", this);
+	} else if (retries <= 0) {
+		logger.debug("Action@%p: too many retries\n", this);
+	} else if (!reset()) {
+		logger.debug("Action@%p: not resettable\n", this);
+	} else {
+		logger.debug("Action@%p: restartable\n", this);
+		status = static_cast<Status>(PENDING);
+		--retries;
+		result = true;
+	}
+	unretryable = clue;
+	return result;
+}
 
 bool Action::signal(Status final) {
 	CriticalSection guard(mutex);
@@ -173,7 +216,7 @@ bool Action::signal(Status final) {
 }
 
 /*******************************************************************************
- * ACTION STUBS THAT A SUBCLASS MAY OVERRIDE
+ * STUBS THAT A SUBCLASS MAY OVERRIDE
  ******************************************************************************/
 
 Status Action::properties(const ::S3ResponseProperties * properties) {
@@ -184,7 +227,7 @@ void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
 }
 
 /*******************************************************************************
- * ACTION UTILITIES
+ * UTILITIES
  ******************************************************************************/
 
 void Action::initialize() {

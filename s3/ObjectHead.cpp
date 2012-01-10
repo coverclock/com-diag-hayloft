@@ -61,8 +61,8 @@ void ObjectHead::execute() {
 	);
 }
 
-bool ObjectHead::start(bool force) {
-	if ((!isBusy()) || force) {
+bool ObjectHead::start() {
+	if (Object::start()) {
 		execute();
 		return true;
 	} else {

@@ -42,8 +42,6 @@ Milliseconds Complex::BACKOFF = 1000;
 
 Milliseconds Complex::MAXIMUM = 5000;
 
-int Complex::RETRIES = 4;
-
 /*******************************************************************************
  * CLASS VARIABLES
  ******************************************************************************/
@@ -141,26 +139,13 @@ bool Complex::wait(Action & action) {
 }
 
 bool Complex::start(Action & action) {
-	Action * actionable = 0;
-	{
-		CriticalSection guard(action.mutex);
-		if (action.handle == complex) {
-			if (!action.isBusy()) {
-				action.status = static_cast<Status>(Action::PENDING);
-				action.retries = RETRIES;
-				actionable = &action;
-			}
-		}
-	}
-	if (actionable != 0) {
-		logger->debug("Complex: Action@%p: starting\n", &action);
+	bool result = false;
+	if (action.startable(complex)) {
 		thread.start();
 		push_back_signal(starting, action);
-		return true;
-	} else {
-		logger->error("Complex: Action@%p: not startable\n", &action);
-		return false;
+		result = true;
 	}
+	return result;
 }
 
 /*******************************************************************************
@@ -235,33 +220,18 @@ Complex::List & Complex::push_back_signal(List & list, Action & action) {
 // This is always called from the context of the Complex Thread since it is
 // invoked by libs3 as a result of the run method calling the libs3 iterate once
 // function. So we don't have to be concerned about changing Complex variables
-// that aren't shared with other Threads.
+// that aren't shared with other Threads. We also don't have to bother
+// signaling.
 void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
-	Action * actionable = 0;
-	{
-		CriticalSection guard(action.mutex);
-		action.status = static_cast<Status>(Action::FINAL);
-		if (!action.retryable(final)) {
-			logger->debug("Complex: Action@%p: not retryable\n", &action);
-			alarm = 0;
-			fibonacci.reset();
-		} else if (action.handle != complex) {
-			logger->error("Complex: Action@%p: not complex\n", &action);
-		} else if (action.retries <= 0) {
-			logger->debug("Complex: Action@%p: too many retries\n", &action);
-		} else if (!action.reset(true)) {
-			logger->error("Complex: Action@%p: reset failed!\n", &action);
-		} else {
-			logger->debug("Complex: Action@%p: restarting\n", &action);
-			action.status = static_cast<Status>(Action::PENDING);
-			--action.retries;
-			actionable = &action;
-		}
-	}
-	if (actionable != 0) {
+	bool unretryable = true;
+	if (action.restartable(final, unretryable, complex)) {
 		push_back(restarting, action);
 	} else {
 		nextlifecycle->complete(action, final, errorDetails);
+		if (unretryable) {
+			alarm = 0;
+			fibonacci.reset();
+		}
 	}
 }
 
@@ -322,7 +292,7 @@ void * Complex::run() {
 				::S3ErrorDetails errorDetails = { 0 };
 				for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
 					logger->debug("Complex: Action@%p: start\n", action);
-					if (!action->start(true)) {
+					if (!action->start()) {
 						logger->error("Complex: Action@%p: start failed!\n", action);
 						nextlifecycle->complete(*action, ::S3StatusInternalError, &errorDetails);
 					}
