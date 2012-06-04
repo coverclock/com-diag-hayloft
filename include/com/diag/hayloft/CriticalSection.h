@@ -12,6 +12,7 @@
  */
 
 #include "com/diag/desperado/CriticalSection.h"
+#include "com/diag/hayloft/Mutex.h"
 
 namespace com {
 namespace diag {
