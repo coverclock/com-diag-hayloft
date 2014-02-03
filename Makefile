@@ -63,7 +63,7 @@ XML2_INC=/usr/include#/libxml2
 # sudo ldconfig ${HOME}/src/Desperadito ${HOME}/src/libs3-2.0/build/deb/usr/lib
 
 APPLICATION_CPPFLAGS=-I$(DESPERADO_INC) -I$(S3_INC)
-APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperadito -L$(S3_LIBS) -ls3 -lxml2 -lcurl -lssl -lcrypto
+APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperaditoxx -ldesperadito -L$(S3_LIBS) -ls3 -lxml2 -lcurl -lssl -lcrypto
 
 ################################################################################
 # UNIT TEST PREREQUISITES
