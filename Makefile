@@ -8,7 +8,7 @@
 PROJECT=hayloft
 MAJOR=3
 MINOR=2
-BUILD=1
+BUILD=2
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
 HTTP_URL=http://www.diag.com/navigation/downloads/Hayloft.html
