@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2011-2012 by the Digital Aggregates Corporation, Colorado, USA
+# Copyright 2011-2013 by the Digital Aggregates Corporation, Colorado, USA
 # Licensed under the terms in README.h
 # Chip Overclock <coverclock@diag.com>
 # http://www.diag.com/navigation/downloads/Hayloft
@@ -8,7 +8,7 @@
 PROJECT=hayloft
 MAJOR=3
 MINOR=2
-BUILD=0
+BUILD=1
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
 HTTP_URL=http://www.diag.com/navigation/downloads/Hayloft.html
@@ -25,8 +25,8 @@ TMP=/tmp
 # DESPERADITO, which is a subset of DESPERADO with a reduced footprint.
 
 DESPERADO_DIR=$(HOME)/src/Desperadito#http://www.diag.com/navigation/downloads/Desperadito.html
-DESPERADO_LIBS=$(DESPERADO_DIR)
-DESPERADO_INC=$(DESPERADO_DIR)/include#/desperado
+DESPERADO_LIBS=$(DESPERADO_DIR)/out/host/lib
+DESPERADO_INC=$(DESPERADO_DIR)/inc
 
 # This is Bryan Ischo's excellent C-based LIBS3 package. I built it using the
 # following command and then access the build artifacts directly from its
@@ -63,7 +63,7 @@ XML2_INC=/usr/include#/libxml2
 # sudo ldconfig ${HOME}/src/Desperadito ${HOME}/src/libs3-2.0/build/deb/usr/lib
 
 APPLICATION_CPPFLAGS=-I$(DESPERADO_INC) -I$(S3_INC)
-APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperadito -L$(S3_LIBS) -ls3 -L$(LIBXML2_LIBS) -lxml2 -L$(CURL_LIBS) -lcurl -L$(OPENSSL_LIBS) -lssl -lcrypto
+APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperadito -L$(S3_LIBS) -ls3 -lxml2 -lcurl -lssl -lcrypto
 
 ################################################################################
 # UNIT TEST PREREQUISITES

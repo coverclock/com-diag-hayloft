@@ -42,17 +42,16 @@
 
 	ABSTRACT
 
-	This file is part of the Digital Aggregates Corporation
-	Hayloft package, which, among other things, presents a C++-based
-	abstraction around Bryan Ischo's excellent C-based libs3 interface
-	to Amazon Web Service (AWS) Simple Storage Service (S3). It is
-	built on top of the Digital Aggregates Corporation Desperadito
-	package, a C++ systems programming library that is a subset of
-	the much larger Desperado package. libs3 is built on top of the
-	cURL, Open SSL, and XML2 libraries, which I acquired through
-	the normal package manager on my server. I've also made patches
-	to libs3 to support the use of the Charles Web Debugging Proxy
-	application by Karl von Randow and cURL verbosity.
+	This file is part of the Digital Aggregates Corporation Hayloft package.
+	Hayloft presents a C++-based object oriented abstraction around Bryan
+	Ischo's excellent C-based libs3 interface to Amazon Web Service (AWS) Simple
+	Storage Service (S3). It is built on top of the Digital Aggregates
+	Corporation Desperadito package, a C++ systems programming library that is
+	a fork from the Corporation's Desperado package. libs3 is built on top of
+	the cURL, Open SSL, and XML2 libraries, which I acquired through the normal
+	package manager on my server. I've also made patches to libs3 to support the
+	use of the Charles Web Debugging Proxy application by Karl von Randow and
+	cURL verbosity.
 
 	This software is an original work of its author.
 
