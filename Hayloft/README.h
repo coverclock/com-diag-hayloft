@@ -32,12 +32,6 @@
 	Alternative commercial licensing terms are available from the copyright
 	holder.
 
-		Digital Aggregates Corporation
-		3440 Youngfield Street, #209
-		Wheat Ridge CO 80033 USA
-		http://www.diag.com
-		mailto:coverclock@diag.com
-
 --------------------------------------------------------------------------------
 
 	ABSTRACT
