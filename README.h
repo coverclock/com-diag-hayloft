@@ -36,7 +36,7 @@
 		3440 Youngfield Street, #209
 		Wheat Ridge CO 80033 USA
 		http://www.diag.com
-		mailto:jsloan@diag.com
+		mailto:coverclock@diag.com
 
 --------------------------------------------------------------------------------
 
