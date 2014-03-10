@@ -12,6 +12,7 @@ BUILD=2
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
 HTTP_URL=http://www.diag.com/navigation/downloads/Hayloft.html
+GIT_URL=https://github.com/coverclock/com-diag-hayloft
 
 TMP=/tmp
 
@@ -427,6 +428,20 @@ dist $(PROJECT)-$(MAJOR).$(MINOR).$(BUILD).tgz:
 	svn export $(SVN_URL) $$TARDIR/$(PROJECT)-$(MAJOR).$(MINOR).$(BUILD); \
 	tar -C $$TARDIR -cvzf - $(PROJECT)-$(MAJOR).$(MINOR).$(BUILD) > $(PROJECT)-$(MAJOR).$(MINOR).$(BUILD).tgz; \
 	rm -rf $$TARDIR
+
+PHONY+=commit dcommit push origin
+
+commit:
+	git commit .
+
+dcommit:
+	git svn dcommit
+
+push:
+	git push origin master
+
+origin:
+	git remote add origin $(GIT_URL)
 
 ################################################################################
 # DOCUMENTATION
