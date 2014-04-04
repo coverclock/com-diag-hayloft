@@ -12,7 +12,7 @@ BUILD=2
 
 SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
 HTTP_URL=http://www.diag.com/navigation/downloads/Hayloft.html
-GIT_URL=https://github.com/coverclock/com-diag-hayloft
+GIT_URL=https://github.com/coverclock/com-diag-hayloft.git
 
 TMP=/tmp
 
