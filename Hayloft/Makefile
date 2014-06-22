@@ -6,13 +6,15 @@
 ################################################################################
 
 PROJECT=hayloft
+TITLE=Hayloft
 MAJOR=3
 MINOR=2
 BUILD=2
 
-SVN_URL=svn://graphite/$(PROJECT)/trunk/Hayloft
-HTTP_URL=http://www.diag.com/navigation/downloads/Hayloft.html
-GIT_URL=https://github.com/coverclock/com-diag-hayloft.git
+SVN_REPO=svn://graphite/$(PROJECT)
+SVN_URL=$(SVN_REPO)/trunk/$(TITLE)
+HTTP_URL=http://www.diag.com/navigation/downloads/$(TITLE).html
+GIT_URL=https://github.com/coverclock/com-diag-$(PROJECT).git
 
 TMP=/tmp
 
@@ -429,7 +431,7 @@ dist $(PROJECT)-$(MAJOR).$(MINOR).$(BUILD).tgz:
 	tar -C $$TARDIR -cvzf - $(PROJECT)-$(MAJOR).$(MINOR).$(BUILD) > $(PROJECT)-$(MAJOR).$(MINOR).$(BUILD).tgz; \
 	rm -rf $$TARDIR
 
-PHONY+=commit dcommit push origin
+PHONY+=commit dcommit push init
 
 commit:
 	git commit .
@@ -440,7 +442,9 @@ dcommit:
 push:
 	git push origin master
 
-origin:
+init:
+	git svn clone -s $(SVN_REPO)
+	git svn show-ignore > .gitignore
 	git remote add origin $(GIT_URL)
 
 ################################################################################
