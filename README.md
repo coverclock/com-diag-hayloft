@@ -61,7 +61,7 @@ Information regarding the Charles Web Debugging Proxy can be found here:
 
     http://www.charlesproxy.com/
 
-Contact:
+CONTACT
 
     Chip Overclock
     Digital Aggregates Corporation
@@ -69,8 +69,6 @@ Contact:
     Wheat Ridge CO 80033 USA
     http://www.diag.com
     mailto:coverclock@diag.com
-
---------------------------------------------------------------------------------
 
 INSTALLATION
 
@@ -85,8 +83,6 @@ Hayloft have been built and tested on the following platform(s):
     AWS S3 API 2006-03-01
 
 See the Makefile for more information.
-
---------------------------------------------------------------------------------
 
 REFERENCES
 
@@ -129,8 +125,6 @@ B. Ischo, s3.c, http://libs3.ischo.com.s3.amazonaws.com/index.html
 J. Sloan, Hayloft, http://www.diag.com/navigation/downloads/Hayloft
 
 J. Sloan, Desperadito, http://www.diag.com/navigation/downloads/Desperadito
-
---------------------------------------------------------------------------------
 
 ENVIRONMENTAL VARIABLES
 
@@ -272,8 +266,6 @@ Pentium server I sometimes see only around 660B/s. I
 suspect this is my broadband provider throttling my
 uplink speed. This will be an issue during ObjectGet
 and ObjectPut Actions.
-
---------------------------------------------------------------------------------
 
 PLEXES
 
