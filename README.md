@@ -3,6 +3,12 @@ com-diag-hayloft
 
 Copyright 2011-2014 by the Digital Aggregates Corporation, Colorado, USA.
 
+NOTE
+
+2017-04-14: if you are just interested in the multithreading C++
+framework used by Hayloft, it has been forked into Grandote:
+<https://github.com/coverclock/com-diag-grandote> .
+
 LICENSE
 
 This file is part of the Digital Aggregates Corporation Hayloft package.
