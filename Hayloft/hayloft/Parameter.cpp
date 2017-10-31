@@ -8,7 +8,7 @@
  */
 
 #include "com/diag/hayloft/Parameter.h"
-#include "com/diag/desperado/Input.h"
+#include "com/diag/grandote/Input.h"
 
 namespace com {
 namespace diag {
@@ -22,18 +22,18 @@ Parameter::Parameter(const std::string & pa)
 : parameter(pa)
 {}
 
-Parameter::Parameter(::com::diag::desperado::Input & input, size_t maximum) {
+Parameter::Parameter(::com::diag::grandote::Input & input, size_t maximum) {
 	initialize(input, maximum);
 }
 
-Parameter::Parameter(::com::diag::desperado::Input * input /* TAKEN */, size_t maximum) {
+Parameter::Parameter(::com::diag::grandote::Input * input /* TAKEN */, size_t maximum) {
 	if (input != 0) {
 		initialize(*input, maximum);
 		delete input;
 	}
 }
 
-void Parameter::initialize(::com::diag::desperado::Input & input, size_t maximum) {
+void Parameter::initialize(::com::diag::grandote::Input & input, size_t maximum) {
 	int ch;
 	while (maximum > 0) {
 		ch = input();

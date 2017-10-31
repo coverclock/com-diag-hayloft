@@ -17,8 +17,8 @@
 #include "com/diag/hayloft/s3/Grant.h"
 #include "com/diag/hayloft/s3/Log.h"
 #include "com/diag/hayloft/Seconds.h"
-#include "com/diag/desperado/Platform.h"
-#include "com/diag/desperado/types.h"
+#include "com/diag/grandote/Platform.h"
+#include "com/diag/grandote/types.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {

@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/CriticalSection.h"
+#include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/hayloft/Mutex.h"
 
 namespace com {
@@ -35,7 +35,7 @@ namespace hayloft {
  * similarly scope-controlled Uncancellable class. (I confess this is mostly
  * an experiment.)
  */
-class CriticalSection : public ::com::diag::desperado::CriticalSection {
+class CriticalSection : public ::com::diag::grandote::CriticalSection {
 
 public:
 
@@ -48,7 +48,7 @@ public:
      *                calling thread cancellable is the default behavior.
      */
     explicit CriticalSection(Mutex& mutexr, bool disable = false)
-    : ::com::diag::desperado::CriticalSection(mutexr, disable)
+    : ::com::diag::grandote::CriticalSection(mutexr, disable)
     {}
 
 };

@@ -11,12 +11,12 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/stdio.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/stdio.h"
 
 namespace com {
 namespace diag {
-namespace desperado {
+namespace grandote {
 class BufferInput;
 class BufferOutput;
 class DataInput;
@@ -70,7 +70,7 @@ Size size(const FILE * fp);
  * @param input refers to a BufferInput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::BufferInput & input);
+Size size(const ::com::diag::grandote::BufferInput & input);
 
 /**
  * Determine the size of a BufferOutput functor.
@@ -78,7 +78,7 @@ Size size(const ::com::diag::desperado::BufferInput & input);
  * @param output refers to a BufferOutput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::BufferOutput & output);
+Size size(const ::com::diag::grandote::BufferOutput & output);
 
 /**
  * Determine the size of a DataInput functor.
@@ -86,7 +86,7 @@ Size size(const ::com::diag::desperado::BufferOutput & output);
  * @param input refers to a DataInput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::DataInput & input);
+Size size(const ::com::diag::grandote::DataInput & input);
 
 /**
  * Determine the size of a DescriptorInput functor.
@@ -94,7 +94,7 @@ Size size(const ::com::diag::desperado::DataInput & input);
  * @param input refers to a DescriptorInput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::DescriptorInput & input);
+Size size(const ::com::diag::grandote::DescriptorInput & input);
 
 /**
  * Determine the size of a DescriptorOutput functor.
@@ -102,7 +102,7 @@ Size size(const ::com::diag::desperado::DescriptorInput & input);
  * @param output refers to a DescriptorOutput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::DescriptorOutput & output);
+Size size(const ::com::diag::grandote::DescriptorOutput & output);
 
 /**
  * Determine the size of a DescriptorInput functor.
@@ -110,7 +110,7 @@ Size size(const ::com::diag::desperado::DescriptorOutput & output);
  * @param input refers to a DescriptorInput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::FileInput & input);
+Size size(const ::com::diag::grandote::FileInput & input);
 
 /**
  * Determine the size of a DescriptorOutput functor.
@@ -118,7 +118,7 @@ Size size(const ::com::diag::desperado::FileInput & input);
  * @param output refers to a DescriptorOutput functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::FileOutput & output);
+Size size(const ::com::diag::grandote::FileOutput & output);
 
 /**
  * Determine the size of a Input functor. (This always fails.)
@@ -126,7 +126,7 @@ Size size(const ::com::diag::desperado::FileOutput & output);
  * @param input refers to a Input functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::Input & input);
+Size size(const ::com::diag::grandote::Input & input);
 
 /**
  * Determine the size of an Output functor. (This always fails.)
@@ -134,7 +134,7 @@ Size size(const ::com::diag::desperado::Input & input);
  * @param output refers to an Output functor.
  * @return the size of the resource if it can be determined, otherwise EOF.
  */
-Size size(const ::com::diag::desperado::Output & output);
+Size size(const ::com::diag::grandote::Output & output);
 
 /**
  * Determine the size of a PacketInput functor.

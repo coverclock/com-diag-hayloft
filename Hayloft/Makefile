@@ -27,9 +27,10 @@ TMP=/tmp
 # with the full blown DESPERADO, but it is quite large. I recommend using
 # DESPERADITO, which is a subset of DESPERADO with a reduced footprint.
 
-DESPERADO_DIR=$(HOME)/src/Desperadito#http://www.diag.com/navigation/downloads/Desperadito.html
+DESPERADO_DIR=$(HOME)/src/com-diag-grandote/Grandote#https://github.com/coverclock/com-diag-grandote
 DESPERADO_LIBS=$(DESPERADO_DIR)/out/host/lib
 DESPERADO_INC=$(DESPERADO_DIR)/inc
+DESPERADO_SRC=$(DESPERADO_DIR)/src
 
 # This is Bryan Ischo's excellent C-based LIBS3 package. I built it using the
 # following command and then access the build artifacts directly from its
@@ -65,7 +66,7 @@ XML2_INC=/usr/include#/libxml2
 # To configure the DESPERADITO and LIBS3 shared objects for use (adjust paths):
 # sudo ldconfig ${HOME}/src/Desperadito ${HOME}/src/libs3-2.0/build/deb/usr/lib
 
-APPLICATION_CPPFLAGS=-I$(DESPERADO_INC) -I$(S3_INC)
+APPLICATION_CPPFLAGS=-I$(DESPERADO_INC) -I$(DESPERADO_SRC) -I$(S3_INC)
 APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperaditoxx -ldesperadito -L$(S3_LIBS) -ls3 -lxml2 -lcurl -lssl -lcrypto
 
 ################################################################################
@@ -77,25 +78,12 @@ APPLICATION_LDFLAGS=-L$(DESPERADO_LIBS) -ldesperaditoxx -ldesperadito -L$(S3_LIB
 # and modify the directory path appropriately both here and in LARIAT that sits
 # on top of it.
 
-GMOCK_DIR=$(HOME)/src/gmock-1.6.0#http://googlemock.googlecode.com/files/gmock-1.6.0.zip
-GMOCK_LIB=$(GMOCK_DIR)/lib/.libs/libgmock.a
-GMOCK_INC=$(GMOCK_DIR)/include
+GTEST_DIR=$(HOME)/src/googletest#https://github.com/google/googletest
+GTEST_LIB=$(GTEST_DIR)/out/googlemock/gtest/libgtest.a
+GTEST_INC=$(GTEST_DIR)/googletest/include
 
-GTEST_DIR=$(GMOCK_DIR)/gtest
-GTEST_LIB=$(GTEST_DIR)/lib/.libs/libgtest.a
-GTEST_INC=$(GTEST_DIR)/include
-
-#GTEST_DIR=$(HOME)/src/gtest-1.6.0#http://googletest.googlecode.com/files/gtest-1.6.0.zip
-#GTEST_LIB=$(GTEST_DIR)/libgtest.a
-#GTEST_INC=$(GTEST_DIR)/include
-
-ifdef GMOCK_LIB
-GTEST_INCS=-I$(GMOCK_INC) -I$(GTEST_INC)
-GTEST_LIBS=$(GMOCK_LIB) $(GTEST_LIB)
-else
 GTEST_INCS=-I$(GTEST_INC)
 GTEST_LIBS=$(GTEST_LIB)
-endif
 
 # LARIAT is a thin wrapper around GTEST that allows you to place resource
 # constraints (in particular, time) around unit tests. This prevents a single
@@ -103,9 +91,9 @@ endif
 # test suite for a large code base. It can be built with either just GTEST or
 # with GMOCK which includes GTEST.
 
-LARIAT_DIR=$(HOME)/src/Lariat#http://www.diag.com/navigation/downloads/Lariat.html
+LARIAT_DIR=$(HOME)/src/com-diag-lariat/Lariat#https://github.com/coverclock/com-diag-lariat
 LARIAT_LIB=$(LARIAT_DIR)/liblariat.a
-LARIAT_INC=$(LARIAT_DIR)/include#/lariat
+LARIAT_INC=$(LARIAT_DIR)/include
 
 # Google recommends static linking GTEST (and GMOCK), so that is what we do
 # with both it and LARIAT.

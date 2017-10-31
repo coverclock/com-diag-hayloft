@@ -11,10 +11,10 @@
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/errno.h"
-#include "com/diag/desperado/ready.h"
-#include "com/diag/desperado/Platform.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/errno.h"
+#include "com/diag/grandote/ready.h"
+#include "com/diag/grandote/Platform.h"
 #include <sys/select.h>
 
 namespace com {
@@ -125,7 +125,7 @@ int Multiplex::ready(Milliseconds timeout) {
 }
 
 int Multiplex::service(Milliseconds timeout, int limit) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
 	int rc;
 	for (int ii = 0; ii < limit; ++ii) {
 		rc = 0;

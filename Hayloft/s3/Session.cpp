@@ -15,7 +15,7 @@
 #include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/CriticalSection.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/grandote/target.h"
 
 namespace com {
 namespace diag {

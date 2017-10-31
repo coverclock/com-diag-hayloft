@@ -13,7 +13,7 @@
 
 #include <string>
 #include "com/diag/hayloft/set.h"
-#include "com/diag/desperado/generics.h"
+#include "com/diag/grandote/generics.h"
 
 namespace com {
 namespace diag {

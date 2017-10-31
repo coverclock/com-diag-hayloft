@@ -14,10 +14,10 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/FileOutput.h"
-#include "com/diag/desperado/LogOutput.h"
-#include "com/diag/desperado/stdlib.h"
-#include "com/diag/desperado/string.h"
+#include "com/diag/grandote/FileOutput.h"
+#include "com/diag/grandote/LogOutput.h"
+#include "com/diag/grandote/stdlib.h"
+#include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {
@@ -134,7 +134,7 @@ TEST_F(LoggerTest, EnableDisable) {
 }
 
 TEST_F(LoggerTest, Initialization) {
-	::com::diag::desperado::Output nulloutput;
+	::com::diag::grandote::Output nulloutput;
 	Logger mylogger;
 	EXPECT_FALSE(mylogger.isEnabled(mylogger.FINEST));
 	EXPECT_FALSE(mylogger.isEnabled(mylogger.FINER));
@@ -318,8 +318,8 @@ TEST_F(LoggerTest, SetMaskEnvironment) {
 	} while (false)
 
 TEST_F(LoggerTest, Logging) {
-	::com::diag::desperado::FileOutput errput(stderr);
-	::com::diag::desperado::LogOutput logput(errput);
+	::com::diag::grandote::FileOutput errput(stderr);
+	::com::diag::grandote::LogOutput logput(errput);
 	Logger mylogger(logput);
 	for (int mask = 0; mask <= 0xffff; mask = (mask == 0) ? 1 : (mask << 1)) {
 		LOGGER_TEST_ENABLEDISABLE_SET(mylogger.FINEST);
@@ -361,8 +361,8 @@ TEST_F(LoggerTest, Logging) {
 
 TEST_F(LoggerTest, Instance) {
 	Logger & l1 = Logger::instance();
-	::com::diag::desperado::FileOutput errput(stderr);
-	::com::diag::desperado::LogOutput logput(errput);
+	::com::diag::grandote::FileOutput errput(stderr);
+	::com::diag::grandote::LogOutput logput(errput);
 	Logger mylogger(logput);
 	EXPECT_NE(&l1, &mylogger);
 	Logger & l2 = Logger::instance(mylogger);

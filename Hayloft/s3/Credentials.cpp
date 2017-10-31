@@ -8,8 +8,8 @@
  */
 
 #include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/Input.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/Input.h"
 #include "com/diag/hayloft/Logger.h"
 
 namespace com {

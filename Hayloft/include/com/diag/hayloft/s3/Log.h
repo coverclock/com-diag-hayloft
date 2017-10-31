@@ -14,7 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Grant.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/grandote/target.h"
 
 namespace com {
 namespace diag {

@@ -15,11 +15,11 @@
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Properties.h"
 #include "com/diag/hayloft/s3/S3.h"
-#include "com/diag/desperado/target.h"
+#include "com/diag/grandote/target.h"
 
 namespace com {
 namespace diag {
-namespace desperado {
+namespace grandote {
 class Input;
 }
 }
@@ -47,7 +47,7 @@ class ObjectPut : public Object {
 
 public:
 
-	typedef ::com::diag::desperado::Input Input;
+	typedef ::com::diag::grandote::Input Input;
 
 protected:
 

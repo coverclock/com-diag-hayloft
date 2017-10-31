@@ -15,10 +15,10 @@
 #include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/errno.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/stdio.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/errno.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/stdio.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -46,7 +46,7 @@ Milliseconds Complex::MAXIMUM = 5000;
  * CLASS VARIABLES
  ******************************************************************************/
 
-::com::diag::desperado::Platform * Complex::platform = 0;
+::com::diag::grandote::Platform * Complex::platform = 0;
 
 Logger * Complex::logger = 0;
 
@@ -65,9 +65,9 @@ Condition Complex::ready;
 
 int Complex::instances = 0;
 
-::com::diag::desperado::ticks_t Complex::numerator = 0;
+::com::diag::grandote::ticks_t Complex::numerator = 0;
 
-::com::diag::desperado::ticks_t Complex::denominator = 0;
+::com::diag::grandote::ticks_t Complex::denominator = 0;
 
 Status Complex::status = ::S3StatusInternalError;
 
@@ -155,7 +155,7 @@ bool Complex::start(Action & action) {
 void Complex::initialize() {
 	CriticalSection guard(instance);
 	if (instances == 0) {
-		platform = &::com::diag::desperado::Platform::instance();
+		platform = &::com::diag::grandote::Platform::instance();
 		logger = &Logger::instance();
 		platform->frequency(numerator, denominator);
 		status = ::S3_create_request_context(&complex);
@@ -423,7 +423,7 @@ void * Complex::run() {
 		// Platform guarantees that even if ticks is zero it will yield the
 		// processor.
 
-		::com::diag::desperado::ticks_t ticks = (delay * (numerator / 1000)) / denominator;
+		::com::diag::grandote::ticks_t ticks = (delay * (numerator / 1000)) / denominator;
 		logger->debug("Complex: delay=%llums=%lluticks\n", delay, ticks);
 		platform->yield(ticks);
 

@@ -18,7 +18,7 @@
 
 namespace com {
 namespace diag {
-namespace desperado {
+namespace grandote {
 class Output;
 }
 }
@@ -45,7 +45,7 @@ class ObjectGet : public Object {
 
 public:
 
-	typedef ::com::diag::desperado::Output Output;
+	typedef ::com::diag::grandote::Output Output;
 
 protected:
 

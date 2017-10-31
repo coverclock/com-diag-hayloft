@@ -15,9 +15,9 @@
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/Parameter.h"
-#include "com/diag/desperado/DataInput.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/stdlib.h"
+#include "com/diag/grandote/DataInput.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/stdlib.h"
 
 namespace com {
 namespace diag {
@@ -197,8 +197,8 @@ TEST_F(CredentialsTest, ExplicitOverridesEnvironment) {
 TEST_F(CredentialsTest, Input) {
 	static const char ID[] = "SSSSSSSSSSTTTTTTTTTT";
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
-	::com::diag::desperado::DataInput idin(ID);
-	::com::diag::desperado::DataInput secretin(SECRET);
+	::com::diag::grandote::DataInput idin(ID);
+	::com::diag::grandote::DataInput secretin(SECRET);
 	Parameter idparm(idin);
 	Parameter secretparm(secretin);
 	Credentials credentials(idparm, secretparm);
@@ -212,8 +212,8 @@ TEST_F(CredentialsTest, Input) {
 TEST_F(CredentialsTest, InputTaken) {
 	static const char ID[] = "SSSSSSSSSSTTTTTTTTTT";
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
-	::com::diag::desperado::DataInput * idinp = new ::com::diag::desperado::DataInput(ID);
-	::com::diag::desperado::DataInput * secretinp = new ::com::diag::desperado::DataInput(SECRET);
+	::com::diag::grandote::DataInput * idinp = new ::com::diag::grandote::DataInput(ID);
+	::com::diag::grandote::DataInput * secretinp = new ::com::diag::grandote::DataInput(SECRET);
 	Parameter idparm(idinp);
 	Parameter secretparm(secretinp);
 	Credentials credentials(idparm, secretparm);

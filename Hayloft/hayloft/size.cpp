@@ -10,13 +10,13 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "com/diag/hayloft/size.h"
-#include "com/diag/desperado/BufferInput.h"
-#include "com/diag/desperado/BufferOutput.h"
-#include "com/diag/desperado/DataInput.h"
-#include "com/diag/desperado/DescriptorInput.h"
-#include "com/diag/desperado/DescriptorOutput.h"
-#include "com/diag/desperado/FileInput.h"
-#include "com/diag/desperado/FileOutput.h"
+#include "com/diag/grandote/BufferInput.h"
+#include "com/diag/grandote/BufferOutput.h"
+#include "com/diag/grandote/DataInput.h"
+#include "com/diag/grandote/DescriptorInput.h"
+#include "com/diag/grandote/DescriptorOutput.h"
+#include "com/diag/grandote/FileInput.h"
+#include "com/diag/grandote/FileOutput.h"
 #include "com/diag/hayloft/Packet.h"
 
 namespace com {
@@ -66,39 +66,39 @@ Size size(const FILE * fp) {
 	return result;
 }
 
-Size size(const ::com::diag::desperado::BufferInput & input) {
+Size size(const ::com::diag::grandote::BufferInput & input) {
 	return input.getLength();
 }
 
-Size size(const ::com::diag::desperado::BufferOutput & output) {
+Size size(const ::com::diag::grandote::BufferOutput & output) {
 	return output.getLength();
 }
 
-Size size(const ::com::diag::desperado::DataInput & input) {
+Size size(const ::com::diag::grandote::DataInput & input) {
 	return input.getLength();
 }
 
-Size size(const ::com::diag::desperado::DescriptorInput & input) {
+Size size(const ::com::diag::grandote::DescriptorInput & input) {
 	return (size(input.getDescriptor()) + input.getPushed());
 }
 
-Size size(const ::com::diag::desperado::DescriptorOutput & output) {
+Size size(const ::com::diag::grandote::DescriptorOutput & output) {
 	return size(output.getDescriptor());
 }
 
-Size size(const ::com::diag::desperado::FileInput & input) {
+Size size(const ::com::diag::grandote::FileInput & input) {
 	return size(input.getFile());
 }
 
-Size size(const ::com::diag::desperado::FileOutput & output) {
+Size size(const ::com::diag::grandote::FileOutput & output) {
 	return size(output.getFile());
 }
 
-Size size(const ::com::diag::desperado::Input & input) {
+Size size(const ::com::diag::grandote::Input & input) {
 	return EOF;
 }
 
-Size size(const ::com::diag::desperado::Output & output) {
+Size size(const ::com::diag::grandote::Output & output) {
 	return EOF;
 }
 

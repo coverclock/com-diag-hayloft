@@ -11,9 +11,9 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/Logger.h"
-#include "com/diag/desperado/Platform.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/Logger.h"
+#include "com/diag/grandote/Platform.h"
 
 namespace com {
 namespace diag {
@@ -25,7 +25,7 @@ namespace hayloft {
  * levels (which turns out to be the transitive closure of logging levels
  * support by common logging systems such as Syslog, Java, and Apache).
  */
-class Logger : public ::com::diag::desperado::Logger {
+class Logger : public ::com::diag::grandote::Logger {
 
 public:
 
@@ -86,7 +86,7 @@ public:
 	 * Ctor.
 	 */
     explicit Logger()
-    : ::com::diag::desperado::Logger(::com::diag::desperado::Platform::instance().log())
+    : ::com::diag::grandote::Logger(::com::diag::grandote::Platform::instance().log())
     , mask(0)
     {
     }
@@ -96,8 +96,8 @@ public:
 	 *
 	 * @param ro refers to an Output functor to which log messages are emitted.
 	 */
-    explicit Logger(::com::diag::desperado::Output & ro)
-    : ::com::diag::desperado::Logger(ro)
+    explicit Logger(::com::diag::grandote::Output & ro)
+    : ::com::diag::grandote::Logger(ro)
     , mask(0)
     {
     }
@@ -115,8 +115,8 @@ public:
 	 * @param ro refers to an Output functor to which log messages are emitted.
      * @return a reference to this object.
      */
-    Logger & setOutput(::com::diag::desperado::Output & ro) {
-    	::com::diag::desperado::Logger logger(ro);
+    Logger & setOutput(::com::diag::grandote::Output & ro) {
+    	::com::diag::grandote::Logger logger(ro);
     	//
     	// Yes, I know this is kinda funky. We just want to reinitialize the
     	// super class portion of ourselves with the new version to set the
@@ -125,15 +125,15 @@ public:
     	//
     	// IMO this is legal and should compile, but does not. Worse, the
     	// diagnostics are completely unhelpful.
-    	//  static_cast<::com::diag::desperado::Logger&>(*this) = logger;
+    	//  static_cast<::com::diag::grandote::Logger&>(*this) = logger;
     	//
     	// Somewhat to my surprise, this compiles and works, invoking the
     	// default assignment operator in the base class to do the copy.
-    	//  ::com::diag::desperado::Logger::operator=(logger);
+    	//  ::com::diag::grandote::Logger::operator=(logger);
     	//
     	// But this is a little less scary looking, and works fine.
     	//
-    	::com::diag::desperado::Logger * that = this;
+    	::com::diag::grandote::Logger * that = this;
     	*that = logger;
     	return *this;
     }
@@ -143,7 +143,7 @@ public:
      *
      * @return the current output functor.
      */
-    ::com::diag::desperado::Output & getOutput() {
+    ::com::diag::grandote::Output & getOutput() {
     	return output();
     }
 
@@ -240,7 +240,7 @@ public:
      *                  as this object calls the show methods of its
      *                  inherited and composited objects.
      */
-    virtual void show(int level = 0, ::com::diag::desperado::Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, ::com::diag::grandote::Output * display = 0, int indent = 0) const;
 
 };
 

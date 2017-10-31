@@ -11,7 +11,7 @@
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/desperado/string.h"
+#include "com/diag/grandote/string.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {

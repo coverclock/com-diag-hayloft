@@ -11,9 +11,9 @@
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/Input.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/errno.h"
+#include "com/diag/grandote/Input.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/errno.h"
 
 namespace com {
 namespace diag {

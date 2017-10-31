@@ -20,8 +20,8 @@
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/Simplex.h"
 #include "com/diag/hayloft/s3/show.h"
-#include "com/diag/desperado/stdlib.h"
-#include "com/diag/desperado/string.h"
+#include "com/diag/grandote/stdlib.h"
+#include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {

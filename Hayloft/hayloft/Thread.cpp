@@ -9,7 +9,7 @@
 
 #include "com/diag/hayloft/Thread.h"
 #include "com/diag/hayloft/Logger.h"
-#include "com/diag/desperado/errno.h"
+#include "com/diag/grandote/errno.h"
 
 namespace com {
 namespace diag {

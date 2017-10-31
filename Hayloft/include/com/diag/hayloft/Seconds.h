@@ -12,8 +12,8 @@
  */
 
 #include "com/diag/hayloft/types.h"
-#include "com/diag/desperado/types.h"
-#include "com/diag/desperado/TimeStamp.h"
+#include "com/diag/grandote/types.h"
+#include "com/diag/grandote/TimeStamp.h"
 
 namespace com {
 namespace diag {
@@ -48,11 +48,11 @@ private:
 
 protected:
 
-	::com::diag::desperado::ticks_t numerator;
+	::com::diag::grandote::ticks_t numerator;
 
-	::com::diag::desperado::ticks_t denominator;
+	::com::diag::grandote::ticks_t denominator;
 
-	::com::diag::desperado::TimeStamp timestamp;
+	::com::diag::grandote::TimeStamp timestamp;
 
 public:
 

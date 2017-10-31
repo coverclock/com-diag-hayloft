@@ -13,7 +13,7 @@
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/unittest/s3/Environment.h"
 
-// Unit tests that use libhayloft and libdesperado.
+// Unit tests that use libhayloft and libgrandote.
 
 #if 1
 #include "com/diag/unittest/Seconds.h"
@@ -70,7 +70,7 @@
 
 // Hooks to clean up singletons just for valgrind.
 
-class Platform : public ::com::diag::desperado::Platform {
+class Platform : public ::com::diag::grandote::Platform {
 public:
 	static void finalize() { delete singleton; singleton = 0; }
 };

@@ -10,7 +10,7 @@
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/Bucket.h"
 #include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/desperado/string.h"
+#include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {

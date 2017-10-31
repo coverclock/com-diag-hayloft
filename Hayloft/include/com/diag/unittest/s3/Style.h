@@ -14,7 +14,7 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Style.h"
-#include "com/diag/desperado/string.h"
+#include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {

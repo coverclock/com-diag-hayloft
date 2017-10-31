@@ -7,13 +7,13 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/stdlib.h"
+#include "com/diag/grandote/stdlib.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/CriticalSection.h"
-#include "com/diag/desperado/LogOutput.h"
-#include "com/diag/desperado/Platform.h"
-#include "com/diag/desperado/uint16_Number.h"
+#include "com/diag/grandote/LogOutput.h"
+#include "com/diag/grandote/Platform.h"
+#include "com/diag/grandote/uint16_Number.h"
 
 namespace com {
 namespace diag {
@@ -68,7 +68,7 @@ Logger & Logger::setMask() {
 	if (string != 0) {
 		Mask value;
 		size_t length;
-		if (::com::diag::desperado::uint16_Number(string, value, length)) {
+		if (::com::diag::grandote::uint16_Number(string, value, length)) {
 			mask = value;
 		}
 	}
@@ -77,20 +77,20 @@ Logger & Logger::setMask() {
 
 ssize_t Logger::emit(const char* buffer, size_t size) {
 	CriticalSection guard(serializer);
-	ssize_t rc = ::com::diag::desperado::Logger::emit(buffer, size);
+	ssize_t rc = ::com::diag::grandote::Logger::emit(buffer, size);
 	(output())();
 	return rc;
 }
 
-void Logger::show(int level, ::com::diag::desperado::Output * display, int indent) const {
-	::com::diag::desperado::Platform& pl = ::com::diag::desperado::Platform::instance();
-	::com::diag::desperado::Print printf(display);
+void Logger::show(int level, ::com::diag::grandote::Output * display, int indent) const {
+	::com::diag::grandote::Platform& pl = ::com::diag::grandote::Platform::instance();
+	::com::diag::grandote::Print printf(display);
     const char* sp = printf.output().indentation(indent);
     char component[sizeof(__FILE__)];
     printf("%s%s(%p)[%lu]:\n",
         sp, pl.component(__FILE__, component, sizeof(component)),
         this, sizeof(*this));
-    ::com::diag::desperado::Logger::show(level, display, indent + 1);
+    ::com::diag::grandote::Logger::show(level, display, indent + 1);
     printf("%s mask=0x%x\n", sp, mask);
 }
 

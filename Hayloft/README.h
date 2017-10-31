@@ -199,7 +199,7 @@
 		(1 << LEVEL) where LEVEL is one of the following log
 		levels. So for example the DEBUG level is enabled if bit
 		(1 << DEBUG) or 0x0010 is set.	The different log levels
-		found in com/diag/desperado/Log.h are the transitive
+		found in com/diag/grandote/Log.h are the transitive
 		closure of common logging mechanisms from GNU/Linux,
 		Apache, Java, etc. The Desperado log levels are mapped
 		to the appropriate log levels in the underlying logging

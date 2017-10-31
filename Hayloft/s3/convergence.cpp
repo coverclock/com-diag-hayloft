@@ -12,8 +12,8 @@
 #include "com/diag/hayloft/s3/Multiplex.h"
 #include "com/diag/hayloft/s3/tostring.h"
 #include "com/diag/hayloft/Fibonacci.h"
-#include "com/diag/desperado/Platform.h"
-#include "com/diag/desperado/types.h"
+#include "com/diag/grandote/Platform.h"
+#include "com/diag/grandote/types.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -22,10 +22,10 @@ namespace hayloft {
 namespace s3 {
 
 bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, Logger::Level level) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
 	Logger & logger = Logger::instance();
-	::com::diag::desperado::ticks_t numerator;
-	::com::diag::desperado::ticks_t denominator;
+	::com::diag::grandote::ticks_t numerator;
+	::com::diag::grandote::ticks_t denominator;
 	platform.frequency(numerator, denominator);
 	delay = ((delay * numerator) / denominator) / 1000;
 	if (action.isIdle()) {
@@ -69,12 +69,12 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 }
 
 bool service_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, int iterations, Milliseconds timeout, Logger::Level level) {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
+	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
 	Logger & logger = Logger::instance();
-	::com::diag::desperado::ticks_t numerator;
-	::com::diag::desperado::ticks_t denominator;
+	::com::diag::grandote::ticks_t numerator;
+	::com::diag::grandote::ticks_t denominator;
 	platform.frequency(numerator, denominator);
-	::com::diag::desperado::ticks_t pause = ((delay * numerator) / denominator) / 1000;
+	::com::diag::grandote::ticks_t pause = ((delay * numerator) / denominator) / 1000;
 	if (action.isIdle()) {
 		action.start();
 	}

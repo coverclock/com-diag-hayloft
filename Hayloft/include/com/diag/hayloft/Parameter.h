@@ -12,12 +12,12 @@
  */
 
 #include <string>
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/generics.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/generics.h"
 
 namespace com {
 namespace diag {
-namespace desperado {
+namespace grandote {
 class Input;
 }
 }
@@ -61,7 +61,7 @@ public:
 	 * @param maximum is the maximum number of characters to consume from the
 	 *        functor.
 	 */
-	explicit Parameter(::com::diag::desperado::Input & input, size_t maximum = intmaxof(size_t));
+	explicit Parameter(::com::diag::grandote::Input & input, size_t maximum = intmaxof(size_t));
 
 	/**
 	 * Ctor.
@@ -72,7 +72,7 @@ public:
 	 * @param maximum is the maximum number of characters to consume from the
 	 *        functor.
 	 */
-	explicit Parameter(::com::diag::desperado::Input * input /* TAKEN */, size_t maximum = intmaxof(size_t));
+	explicit Parameter(::com::diag::grandote::Input * input /* TAKEN */, size_t maximum = intmaxof(size_t));
 
 	/**
 	 * Dtor.
@@ -95,7 +95,7 @@ public:
 
 private:
 
-	void initialize(::com::diag::desperado::Input & input, size_t maximum);
+	void initialize(::com::diag::grandote::Input & input, size_t maximum);
 
 };
 

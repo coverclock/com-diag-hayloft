@@ -12,8 +12,8 @@
 #include <cstdio>
 #include <cstring>
 #include <string>
-#include "com/diag/desperado/PathInput.h"
-#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/grandote/PathInput.h"
+#include "com/diag/grandote/PathOutput.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/size.h"
 #include "com/diag/hayloft/s3/Credentials.h"
@@ -30,8 +30,8 @@
 
 using namespace ::com::diag::hayloft;
 using namespace ::com::diag::hayloft::s3;
-using ::com::diag::desperado::PathInput;
-using ::com::diag::desperado::PathOutput;
+using ::com::diag::grandote::PathInput;
+using ::com::diag::grandote::PathOutput;
 
 static bool synchronicity() {
 	bool result = false;

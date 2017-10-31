@@ -14,8 +14,8 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/Seconds.h"
-#include "com/diag/desperado/stdlib.h"
-#include "com/diag/desperado/generics.h"
+#include "com/diag/grandote/stdlib.h"
+#include "com/diag/grandote/generics.h"
 
 namespace com {
 namespace diag {

@@ -1,0 +1,3 @@
+.cscope.*
+Hayloft/hayloft/*.o
+Hayloft/s3/*.o

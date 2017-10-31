@@ -8,10 +8,10 @@
  */
 
 #include "com/diag/hayloft/Seconds.h"
-#include "com/diag/desperado/Platform.h"
-#include "com/diag/desperado/CommonEra.h"
-#include "com/diag/desperado/LocalTime.h"
-#include "com/diag/desperado/Epoch.h"
+#include "com/diag/grandote/Platform.h"
+#include "com/diag/grandote/CommonEra.h"
+#include "com/diag/grandote/LocalTime.h"
+#include "com/diag/grandote/Epoch.h"
 
 namespace com {
 namespace diag {
@@ -23,15 +23,15 @@ Seconds::Seconds()
 : numerator(0)
 , denominator(0)
 {
-	::com::diag::desperado::Platform::instance().frequency(numerator, denominator);
+	::com::diag::grandote::Platform::instance().frequency(numerator, denominator);
 }
 
 Seconds::~Seconds()
 {}
 
 const char * Seconds::zulu(Epochalseconds seconds, unsigned int & year, unsigned int & month, unsigned int & day, unsigned int & hour, unsigned int & minute, unsigned int & second) {
-	::com::diag::desperado::ticks_t ticks = (seconds * numerator) / denominator;
-	::com::diag::desperado::CommonEra commonera(0);
+	::com::diag::grandote::ticks_t ticks = (seconds * numerator) / denominator;
+	::com::diag::grandote::CommonEra commonera(0);
 	commonera.fromTicks(ticks);
 	year = commonera.getYear();
 	month = commonera.getMonth();
@@ -43,10 +43,10 @@ const char * Seconds::zulu(Epochalseconds seconds, unsigned int & year, unsigned
 }
 
 const char * Seconds::juliet(Epochalseconds seconds, unsigned int & year, unsigned int & month, unsigned int & day, unsigned int & hour, unsigned int & minute, unsigned int & second) {
-	::com::diag::desperado::ticks_t ticks = (seconds * numerator) / denominator;
-	::com::diag::desperado::CommonEra commonera(0);
+	::com::diag::grandote::ticks_t ticks = (seconds * numerator) / denominator;
+	::com::diag::grandote::CommonEra commonera(0);
 	commonera.fromTicks(ticks);
-	::com::diag::desperado::LocalTime localtime;
+	::com::diag::grandote::LocalTime localtime;
 	localtime.fromCommonEra(commonera);
 	year = localtime.getYear();
 	month = localtime.getMonth();
@@ -58,19 +58,19 @@ const char * Seconds::juliet(Epochalseconds seconds, unsigned int & year, unsign
 }
 
 Epochalseconds Seconds::now() const {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
-	::com::diag::desperado::CommonEra commonera(0);
+	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
+	::com::diag::grandote::CommonEra commonera(0);
 	commonera.fromNow();
-	::com::diag::desperado::seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
-	const ::com::diag::desperado::Epoch & epoch = platform.getEpoch();
+	::com::diag::grandote::seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
+	const ::com::diag::grandote::Epoch & epoch = platform.getEpoch();
 	return commoneraseconds - epoch.seconds;
 }
 
 Epochalseconds Seconds::then(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute, unsigned int seconds) const {
-	::com::diag::desperado::Platform & platform = ::com::diag::desperado::Platform::instance();
-	::com::diag::desperado::CommonEra commonera(year, month, day, hour, minute, seconds);
-	::com::diag::desperado::seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
-	const ::com::diag::desperado::Epoch & epoch = platform.getEpoch();
+	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
+	::com::diag::grandote::CommonEra commonera(year, month, day, hour, minute, seconds);
+	::com::diag::grandote::seconds_t commoneraseconds = platform.getLeapSecondTicks() ? commonera.toSeconds() : commonera.toAtomicSeconds();
+	const ::com::diag::grandote::Epoch & epoch = platform.getEpoch();
 	return (commoneraseconds > epoch.seconds) ? commoneraseconds - epoch.seconds : 0;
 }
 

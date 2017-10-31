@@ -5,6 +5,11 @@ Copyright 2011-2014 by the Digital Aggregates Corporation, Colorado, USA.
 
 NOTE
 
+2017-10-31: the libs3 library API has changed since I wrote this code
+six years ago. Perhaps some day I'll revisit it, learn the new AWS S3
+interface, and port this code to the new libs3 API. But for now, it no
+longer builds.
+
 2017-04-14: if you are just interested in the multithreading C++
 framework used by Hayloft, it has been forked into Grandote:
 <https://github.com/coverclock/com-diag-grandote> .
@@ -192,7 +197,7 @@ the sixteen log levels are enabled via the expression
 (1 << LEVEL) where LEVEL is one of the following log
 levels. So for example the DEBUG level is enabled if bit
 (1 << DEBUG) or 0x0010 is set.	The different log levels
-found in com/diag/desperado/Log.h are the transitive
+found in com/diag/grandote/Log.h are the transitive
 closure of common logging mechanisms from GNU/Linux,
 Apache, Java, etc.
 

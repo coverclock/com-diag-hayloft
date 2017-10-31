@@ -19,10 +19,10 @@
 #include "com/diag/hayloft/Uncancellable.h"
 #include "com/diag/hayloft/Condition.h"
 #include "com/diag/hayloft/MemoryBarrier.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/errno.h"
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/generics.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/errno.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/generics.h"
 #include <pthread.h>
 
 namespace com {
@@ -261,7 +261,7 @@ TEST_F(ThreadTest, ExitJoin) {
 
 struct ThreadJoinReturn : public Thread {
 	virtual void * run() {
-		::com::diag::desperado::Platform::instance().yield(::com::diag::desperado::Platform::instance().frequency());
+		::com::diag::grandote::Platform::instance().yield(::com::diag::grandote::Platform::instance().frequency());
 		return 0;
 	}
 };
@@ -483,7 +483,7 @@ struct ThreadMonitor : public Thread {
 	: variable(shared)
 	{}
 	virtual void * run() {
-		::com::diag::desperado::Platform::instance().yield(::com::diag::desperado::Platform::instance().frequency());
+		::com::diag::grandote::Platform::instance().yield(::com::diag::grandote::Platform::instance().frequency());
 		{
 			MyCriticalSection guard(monitormutex);
 			monitorcondition.signal();

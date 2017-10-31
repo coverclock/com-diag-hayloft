@@ -16,9 +16,9 @@
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/desperado/PathInput.h"
+#include "com/diag/grandote/PathInput.h"
 #include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/grandote/PathOutput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/ObjectHead.h"
 #include "com/diag/hayloft/s3/ObjectCopy.h"
@@ -33,7 +33,7 @@
 #include "com/diag/hayloft/s3/Context.h"
 #include "com/diag/hayloft/s3/Access.h"
 #include "com/diag/hayloft/s3/show.h"
-#include "com/diag/desperado/stdlib.h"
+#include "com/diag/grandote/stdlib.h"
 
 namespace com {
 namespace diag {
@@ -149,8 +149,8 @@ TEST_F(ObjectTest, Heap) {
 	Size inputsize = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objectput;
-		::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 		inputsize = size(*input);
 		ASSERT_TRUE(inputsize > 0);
 		objectput = new ObjectPut(OBJECT, *bucketcreate, input /* TAKEN */, inputsize, properties);
@@ -197,8 +197,8 @@ TEST_F(ObjectTest, Heap) {
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			delete objectget;
-			::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
-			ASSERT_NE(output, (::com::diag::desperado::PathOutput*)0);
+			::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
+			ASSERT_NE(output, (::com::diag::grandote::PathOutput*)0);
 			objectget = new ObjectGet(OBJECT, *bucketcreate, output /* TAKEN */);
 			ASSERT_NE(objectget, (ObjectGet*)0);
 			EXPECT_EQ(*objectget, true);
@@ -479,8 +479,8 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize, properties);
@@ -505,8 +505,8 @@ TEST_F(ObjectTest, Complete) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput.reset(input, inputsize);
@@ -554,7 +554,7 @@ TEST_F(ObjectTest, Complete) {
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
-	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+	::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
@@ -578,7 +578,7 @@ TEST_F(ObjectTest, Complete) {
 			if (!objectget.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			output = new ::com::diag::desperado::PathOutput(OBJECT);
+			output = new ::com::diag::grandote::PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
@@ -877,8 +877,8 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput(OBJECT, bucketcreate, simplex, input, inputsize, properties);
@@ -895,8 +895,8 @@ TEST_F(ObjectTest, Simplex) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput.reset(input, inputsize);
@@ -936,7 +936,7 @@ TEST_F(ObjectTest, Simplex) {
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
-	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+	::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, simplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
@@ -952,7 +952,7 @@ TEST_F(ObjectTest, Simplex) {
 			if (!objectget.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			output = new ::com::diag::desperado::PathOutput(OBJECT);
+			output = new ::com::diag::grandote::PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
@@ -1264,8 +1264,8 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize, properties);
@@ -1295,8 +1295,8 @@ TEST_F(ObjectTest, Service) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput.reset(input, inputsize);
@@ -1349,7 +1349,7 @@ TEST_F(ObjectTest, Service) {
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
-	::com::diag::desperado::PathOutput * output = new ::com::diag::desperado::PathOutput(OBJECT);
+	::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
@@ -1378,7 +1378,7 @@ TEST_F(ObjectTest, Service) {
 			if (!objectget.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			output = new ::com::diag::desperado::PathOutput(OBJECT);
+			output = new ::com::diag::grandote::PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
@@ -1628,16 +1628,16 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_EQ(bucketmanifest1.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput1.reset(input, inputsize);
@@ -1660,16 +1660,16 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_NE(bucketmanifest2.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest2.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	input = new ::com::diag::desperado::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+	input = new ::com::diag::grandote::PathInput("unittest.txt");
+	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 	inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput2(OBJECT2, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput2.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::desperado::PathInput*)0);
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput2.reset(input, inputsize);
@@ -1872,13 +1872,13 @@ TEST_F(ObjectTest, Copy) {
 	/**/
 	Properties properties;
 	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 		EXPECT_TRUE(objectput1.start());
@@ -1941,12 +1941,12 @@ TEST_F(ObjectTest, Copy) {
 	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
 	EXPECT_EQ(objecthead2.find("keywordb"), (char *)0);
 	/**/
-	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
+	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
 			logger.configuration("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::desperado::PathOutput(OBJECT2);
+			output2 = new ::com::diag::grandote::PathOutput(OBJECT2);
 			objectget2.reset(output2);
 		} else if (objectget2.isNonexistent()) {
 			logger.configuration("WAITING %d\n", __LINE__);

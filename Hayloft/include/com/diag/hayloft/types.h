@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/target.h"
+#include "com/diag/grandote/target.h"
 
 namespace com {
 namespace diag {

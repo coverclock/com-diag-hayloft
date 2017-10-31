@@ -18,7 +18,7 @@
 #include "com/diag/hayloft/s3/LifeCycle.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
 #include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/grandote/PathOutput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/ObjectHead.h"
 #include "com/diag/hayloft/s3/ObjectCopy.h"
@@ -28,7 +28,7 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/desperado/errno.h"
+#include "com/diag/grandote/errno.h"
 
 namespace com {
 namespace diag {
@@ -309,7 +309,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPutApplication objectput1(OBJECT1, complex, input, inputsize);
 	objectput1.failures = 2;
@@ -320,7 +320,7 @@ TEST_F(ComplexTest, Application) {
 		if (objectput1.isSuccessful()) {
 			break;
 		}
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 	}
@@ -331,7 +331,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(complex.wait(objectcopy));
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
-	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 	ObjectGetApplication objectget2(OBJECT2, complex, output2);
 	objectget2.failures = 3;
 	objectget2.failure = ::S3StatusErrorInternalError;
@@ -341,7 +341,7 @@ TEST_F(ComplexTest, Application) {
 		if (objectget2.isSuccessful()) {
 			break;
 		}
-		output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+		output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 		objectget2.reset(output2);
 	}
 	EXPECT_TRUE(objectget2.isSuccessful());
@@ -381,12 +381,12 @@ struct ObjectPutFactory : public ObjectPut {
 	const char * path;
 	bool succeed;
 	explicit ObjectPutFactory(const Object & object, const Plex & plex, const char * inputname)
-	: ObjectPut(object, plex, new ::com::diag::desperado::PathInput(inputname), size(inputname))
+	: ObjectPut(object, plex, new ::com::diag::grandote::PathInput(inputname), size(inputname))
 	, path(inputname)
 	, succeed(false)
 	{}
 	virtual bool reset() {
-		return ObjectPut::reset(new ::com::diag::desperado::PathInput(path), size(path));
+		return ObjectPut::reset(new ::com::diag::grandote::PathInput(path), size(path));
 	}
 	virtual int put(int bufferSize, void * buffer) {
 		if (succeed) {
@@ -408,12 +408,12 @@ struct ObjectGetFactory : public ObjectGet {
 	const char * path;
 	bool succeed;
 	explicit ObjectGetFactory(const Object & object, const Plex & plex, const char * outputname)
-	: ObjectGet(object, plex, new ::com::diag::desperado::PathOutput(outputname))
+	: ObjectGet(object, plex, new ::com::diag::grandote::PathOutput(outputname))
 	, path(outputname)
 	, succeed(false)
 	{}
 	virtual bool reset() {
-		return ObjectGet::reset(new ::com::diag::desperado::PathOutput(path), 0, 0);
+		return ObjectGet::reset(new ::com::diag::grandote::PathOutput(path), 0, 0);
 	}
 	virtual int get(int bufferSize, const void * buffer) {
 		if (succeed) {

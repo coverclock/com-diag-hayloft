@@ -24,10 +24,10 @@
 
 #include <string>
 #include "gtest/gtest.h"
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/PathInput.h"
-#include "com/diag/desperado/stdlib.h"
-#include "com/diag/desperado/string.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/PathInput.h"
+#include "com/diag/grandote/stdlib.h"
+#include "com/diag/grandote/string.h"
 #include "com/diag/hayloft/Logger.h"
 #include "com/diag/hayloft/s3/Credentials.h"
 #include "com/diag/hayloft/s3/Session.h"
@@ -77,7 +77,7 @@ public:
 			access_key_id = env;
 		} else {
 			char val[Credentials::ACCESS_KEY_ID_LEN + sizeof("\n")];
-			::com::diag::desperado::PathInput input(ACCESS_KEY_ID_FILE.c_str(), "r");
+			::com::diag::grandote::PathInput input(ACCESS_KEY_ID_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
@@ -92,7 +92,7 @@ public:
 			secret_access_key = env;
 		} else {
 			char val[Credentials::SECRET_ACCESS_KEY_LEN + sizeof("\n")];
-			::com::diag::desperado::PathInput input(SECRET_ACCESS_KEY_FILE.c_str(), "r");
+			::com::diag::grandote::PathInput input(SECRET_ACCESS_KEY_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
@@ -107,7 +107,7 @@ public:
 			user_agent = env;
 		} else {
 			char val[S3_MAX_BUCKET_NAME_SIZE + sizeof("\n")];
-			::com::diag::desperado::PathInput input(USER_AGENT_FILE.c_str(), "r");
+			::com::diag::grandote::PathInput input(USER_AGENT_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
@@ -122,7 +122,7 @@ public:
 			bucket_suffix = env;
 		} else {
 			char val[S3_MAX_BUCKET_NAME_SIZE + sizeof("\n")];
-			::com::diag::desperado::PathInput input(BUCKET_SUFFIX_FILE.c_str(), "r");
+			::com::diag::grandote::PathInput input(BUCKET_SUFFIX_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }

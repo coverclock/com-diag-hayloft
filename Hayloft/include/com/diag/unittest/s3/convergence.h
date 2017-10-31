@@ -16,9 +16,9 @@
 #include "com/diag/unittest/Fixture.h"
 #include "com/diag/hayloft/s3/Object.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/desperado/PathInput.h"
+#include "com/diag/grandote/PathInput.h"
 #include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/grandote/PathOutput.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/ObjectHead.h"
 #include "com/diag/hayloft/s3/ObjectCopy.h"
@@ -32,7 +32,7 @@
 #include "com/diag/hayloft/s3/Access.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/convergence.h"
-#include "com/diag/desperado/stdlib.h"
+#include "com/diag/grandote/stdlib.h"
 
 namespace com {
 namespace diag {
@@ -64,13 +64,13 @@ TEST_F(ConvergenceTest, Synchronous) {
 	BucketCreate bucketcreate2(BUCKET2);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -86,12 +86,12 @@ TEST_F(ConvergenceTest, Synchronous) {
 	ObjectHead objecthead2(OBJECT2);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
 	/**/
-	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+			output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
@@ -143,13 +143,13 @@ TEST_F(ConvergenceTest, Complete) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -165,12 +165,12 @@ TEST_F(ConvergenceTest, Complete) {
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
 	/**/
-	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < 10); ++ii) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+			output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
@@ -222,13 +222,13 @@ TEST_F(ConvergenceTest, Service) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -244,12 +244,12 @@ TEST_F(ConvergenceTest, Service) {
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(service_until_successful(objecthead2, LEVEL));
 	/**/
-	::com::diag::desperado::PathOutput * output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::desperado::PathOutput(OBJECT2.getKey());
+			output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);

@@ -14,7 +14,7 @@
 #include <string>
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/Condition.h"
-#include "com/diag/desperado/generics.h"
+#include "com/diag/grandote/generics.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {

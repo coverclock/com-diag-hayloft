@@ -11,7 +11,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/Mutex.h"
+#include "com/diag/grandote/Mutex.h"
 
 namespace com {
 namespace diag {
@@ -26,7 +26,7 @@ class Condition;
  * access the POSIX thread mutex in the Mutex object. Like Desperado Mutex,
  * Hayloft Mutex allows recursive locking by the same thread of control.
  */
-class Mutex : public ::com::diag::desperado::Mutex {
+class Mutex : public ::com::diag::grandote::Mutex {
 
 	friend class Condition;
 

@@ -11,10 +11,10 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/target.h"
-#include "com/diag/desperado/generics.h"
-#include "com/diag/desperado/InputOutput.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/target.h"
+#include "com/diag/grandote/generics.h"
+#include "com/diag/grandote/InputOutput.h"
 
 namespace com {
 namespace diag {
@@ -354,7 +354,7 @@ class Packet;
  * PacketInput implements an Input functor for a Packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class PacketInput : public ::com::diag::desperado::Input {
+class PacketInput : public ::com::diag::grandote::Input {
 
 public:
 
@@ -453,7 +453,7 @@ public:
      *        value is passed from outer to inner objects as this object calls
      *        the show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, com::diag::desperado::Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, ::com::diag::grandote::Output * display = 0, int indent = 0) const;
 
 private:
 
@@ -468,7 +468,7 @@ private:
  * PacketOutput implements an Output functor for a Packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class PacketOutput : public ::com::diag::desperado::Output {
+class PacketOutput : public ::com::diag::grandote::Output {
 
 public:
 
@@ -503,7 +503,7 @@ public:
      * @return the number of octets output if successful (which may be zero),
      *         EOF otherwise.
      */
-    virtual ssize_t operator() (const char * s /* COPIED */, size_t size = com::diag::desperado::Output::maximum_string_length);
+    virtual ssize_t operator() (const char * s /* COPIED */, size_t size = ::com::diag::grandote::Output::maximum_string_length);
 
     /**
      * Format a variable length argument list and output the result.
@@ -557,7 +557,7 @@ public:
      *        value is passed from outer to inner objects as this object calls
      *        the show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, com::diag::desperado::Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, ::com::diag::grandote::Output * display = 0, int indent = 0) const;
 
 private:
 
@@ -579,7 +579,7 @@ private:
  * filled objects into the packet.
  * @author coverclock@diag.com (Chip Overclock)
  */
-class Packet : public ::com::diag::desperado::InputOutput {
+class Packet : public ::com::diag::grandote::InputOutput {
 
 public:
 
@@ -716,7 +716,7 @@ public:
 	 * @param from refers to the input functor.
 	 * @return the number of octets transferred.
 	 */
-	size_t source(::com::diag::desperado::Input& from);
+	size_t source(::com::diag::grandote::Input& from);
 
 	/**
 	 * Tranfers the contents of this object into an output functor using an
@@ -726,7 +726,7 @@ public:
 	 * @param to refers to the output functor.
 	 * @return the number of octets transferred.
 	 */
-	size_t sink(::com::diag::desperado::Output& to);
+	size_t sink(::com::diag::grandote::Output& to);
 
 	/**
 	 * Return the number of octets available to be consumed. This is done at
@@ -754,7 +754,7 @@ public:
      *        value is passed from outer to inner objects as this object calls
      *        the show methods of its inherited and composited objects.
      */
-    virtual void show(int level = 0, ::com::diag::desperado::Output * display = 0, int indent = 0) const;
+    virtual void show(int level = 0, ::com::diag::grandote::Output * display = 0, int indent = 0) const;
 
 private:
 

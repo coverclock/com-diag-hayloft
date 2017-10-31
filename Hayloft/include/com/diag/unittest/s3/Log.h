@@ -20,16 +20,16 @@
 #include "com/diag/hayloft/s3/BucketCreate.h"
 #include "com/diag/hayloft/s3/BucketDelete.h"
 #include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/desperado/PathInput.h"
+#include "com/diag/grandote/PathInput.h"
 #include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/desperado/PathOutput.h"
+#include "com/diag/grandote/PathOutput.h"
 #include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/s3/ObjectDelete.h"
 #include "com/diag/hayloft/s3/show.h"
 #include "com/diag/hayloft/s3/convergence.h"
 #include "com/diag/hayloft/Fibonacci.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/Platform.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/Platform.h"
 #include "com/diag/hayloft/s3/S3.h"
 
 namespace com {
@@ -108,7 +108,7 @@ TEST_F(LogTest, SetGet) {
 		ASSERT_TRUE(complete(logget2));
 		ASSERT_NE(logget2.getTarget(), (char *)0);
 		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
-		::com::diag::desperado::Platform::instance().yield(fibonacci * ::com::diag::desperado::Platform::instance().frequency());
+		::com::diag::grandote::Platform::instance().yield(fibonacci * ::com::diag::grandote::Platform::instance().frequency());
 		EXPECT_TRUE(logget2.start());
 	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
@@ -157,7 +157,7 @@ TEST_F(LogTest, SetGetPrefix) {
 		ASSERT_TRUE(complete(logget2));
 		ASSERT_NE(logget2.getTarget(), (char *)0);
 		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
-		::com::diag::desperado::Platform::instance().yield(fibonacci * ::com::diag::desperado::Platform::instance().frequency());
+		::com::diag::grandote::Platform::instance().yield(fibonacci * ::com::diag::grandote::Platform::instance().frequency());
 		EXPECT_TRUE(logget2.start());
 	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
@@ -194,7 +194,7 @@ TEST_F(LogTest, SetGetApplication) {
 	LogSet logset(bucket, multiplex, log, PREFIX);
 	ASSERT_TRUE(complete(logset));
 	Fibonacci factor;
-	::com::diag::desperado::PathInput * input = new ::com::diag::desperado::PathInput("unittest.txt");
+	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
 	for (int ii = 0; ii < 10; ++ii) {
@@ -202,7 +202,7 @@ TEST_F(LogTest, SetGetApplication) {
 		multiplex.complete();
 		if (!put.isRetryable()) { break; }
 		platform.yield(factor * platform.frequency());
-		input = new ::com::diag::desperado::PathInput("unittest.txt");
+		input = new ::com::diag::grandote::PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(put.reset(input, inputsize));
 	}

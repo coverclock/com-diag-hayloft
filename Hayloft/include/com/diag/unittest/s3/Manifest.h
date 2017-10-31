@@ -21,10 +21,10 @@
 #include "com/diag/hayloft/s3/BucketManifest.h"
 #include "com/diag/hayloft/s3/Complex.h"
 #include "com/diag/hayloft/Seconds.h"
-#include "com/diag/desperado/Input.h"
-#include "com/diag/desperado/stdlib.h"
-#include "com/diag/desperado/string.h"
-#include "com/diag/desperado/stdio.h"
+#include "com/diag/grandote/Input.h"
+#include "com/diag/grandote/stdlib.h"
+#include "com/diag/grandote/string.h"
+#include "com/diag/grandote/stdio.h"
 
 namespace com {
 namespace diag {
@@ -42,7 +42,7 @@ static const int MANIFESTTESTLIMIT = 2500;
 
 static const char MANIFESTTESTBUCKET[] = "ManifestTest";
 
-struct ManifestTestInput : public ::com::diag::desperado::Input {
+struct ManifestTestInput : public ::com::diag::grandote::Input {
 	virtual bool retryable(Status final, bool nonexistence = true) {
 		return false;
 	}

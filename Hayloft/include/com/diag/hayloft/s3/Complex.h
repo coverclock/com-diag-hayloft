@@ -21,11 +21,11 @@
 #include "com/diag/hayloft/Seconds.h"
 #include "com/diag/hayloft/s3/S3.h"
 #include "com/diag/hayloft/types.h"
-#include "com/diag/desperado/types.h"
+#include "com/diag/grandote/types.h"
 
 namespace com {
 namespace diag {
-namespace desperado {
+namespace grandote {
 class Platform;
 }
 }
@@ -86,7 +86,7 @@ protected:
 
 	typedef std::list<Action *> List;
 
-	static ::com::diag::desperado::Platform * platform;
+	static ::com::diag::grandote::Platform * platform;
 
 	static Logger * logger;
 
@@ -127,9 +127,9 @@ private:
 
 	static int instances;
 
-	static ::com::diag::desperado::ticks_t numerator;
+	static ::com::diag::grandote::ticks_t numerator;
 
-	static ::com::diag::desperado::ticks_t denominator;
+	static ::com::diag::grandote::ticks_t denominator;
 
 	static Status status;
 
