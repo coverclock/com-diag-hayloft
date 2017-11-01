@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -16,18 +17,19 @@
 #include "com/diag/hayloft/BucketManifest.h"
 #include "com/diag/hayloft/Grant.h"
 #include "com/diag/hayloft/Log.h"
-#include "com/diag/hayloft/Seconds.h"
+#include "com/diag/grandote/Seconds.h"
 #include "com/diag/grandote/Platform.h"
 #include "com/diag/grandote/types.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
-void show(const ::S3ResponseProperties * response, Logger::Level level) {
+void show(const ::S3ResponseProperties * response, ::com::diag::grandote::MaskableLogger::Level level) {
 	if (response != 0) {
-		Logger & logger = Logger::instance();
+		::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 		if (logger.isEnabled(level)) {
 			if (response->requestId != 0) { logger.log(level, "S3ResponseProperties@%p: requestId=\"%s\"\n", response, response->requestId); }
 			if (response->requestId2 != 0) { logger.log(level, "S3ResponseProperties@%p: requestId2=\"%s\"\n", response, response->requestId2); }
@@ -49,9 +51,9 @@ void show(const ::S3ResponseProperties * response, Logger::Level level) {
 	}
 }
 
-void show(const ::S3ErrorDetails * details, Logger::Level level) {
+void show(const ::S3ErrorDetails * details, ::com::diag::grandote::MaskableLogger::Level level) {
 	if (details != 0) {
-		Logger & logger = Logger::instance();
+		::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 		if (logger.isEnabled(level)) {
 			if (details->message != 0) { logger.log(level, "S3ErrorDetails@%p: message=\"%s\"\n", details, details->message); }
 			if (details->resource != 0) { logger.log(level, "S3ErrorDetails@%p: resource=\"%s\"\n", details, details->resource); }
@@ -69,9 +71,9 @@ void show(const ::S3ErrorDetails * details, Logger::Level level) {
 	}
 }
 
-void show(const ::S3BucketContext * context, Logger::Level level) {
+void show(const ::S3BucketContext * context, ::com::diag::grandote::MaskableLogger::Level level) {
 	if (context != 0) {
-		Logger & logger = Logger::instance();
+		::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 		if (logger.isEnabled(level)) {
 			if (context->hostName != 0) { logger.log(level, "S3BucketContext@%p: hostName=\"%s\"\n", context, context->hostName); }
 			if (context->bucketName != 0) { logger.log(level, "S3BucketContext@%p: bucketName=\"%s\"\n", context, context->bucketName); }
@@ -83,9 +85,9 @@ void show(const ::S3BucketContext * context, Logger::Level level) {
 	}
 }
 
-void show(const ::S3PutProperties * properties, Logger::Level level) {
+void show(const ::S3PutProperties * properties, ::com::diag::grandote::MaskableLogger::Level level) {
 	if (properties != 0) {
-		Logger & logger = Logger::instance();
+		::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 		if (logger.isEnabled(level)) {
 			if (properties->contentType != 0) { logger.log(level, "S3PutProperties@%p: contentType=\"%s\"\n", properties, properties->contentType); }
 			if (properties->md5 != 0) { logger.log(level, "S3PutProperties@%p: md5=\"%s\"\n", properties, properties->md5); }
@@ -107,9 +109,9 @@ void show(const ::S3PutProperties * properties, Logger::Level level) {
 	}
 }
 
-void show(const ::S3GetConditions * conditions, Logger::Level level) {
+void show(const ::S3GetConditions * conditions, ::com::diag::grandote::MaskableLogger::Level level) {
 	if (conditions != 0) {
-		Logger & logger = Logger::instance();
+		::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 		if (logger.isEnabled(level)) {
 			if (conditions->ifModifiedSince >= 0) { logger.log(level, "S3GetConditions@%p: ifModifiedSince=%lld\n", conditions, conditions->ifModifiedSince); }
 			if (conditions->ifNotModifiedSince >= 0) { logger.log(level, "S3GetConditions@%p: ifNotModifiedSince=%lld\n", conditions, conditions->ifNotModifiedSince); }
@@ -119,9 +121,9 @@ void show(const ::S3GetConditions * conditions, Logger::Level level) {
 	}
 }
 
-void show(const ::S3AclGrant * grant, int count, Logger::Level level) {
+void show(const ::S3AclGrant * grant, int count, ::com::diag::grandote::MaskableLogger::Level level) {
 	if (grant != 0) {
-		Logger & logger = Logger::instance();
+		::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 		if (logger.isEnabled(level)) {
 			for (int ii = 0; ii < count; ++ii) {
 				switch (grant->granteeType) {
@@ -156,8 +158,8 @@ void show(const ::S3AclGrant * grant, int count, Logger::Level level) {
 	}
 }
 
-void show(const Object & object, Logger::Level level) {
-	Logger & logger = Logger::instance();
+void show(const Object & object, ::com::diag::grandote::MaskableLogger::Level level) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	if (logger.isEnabled(level)) {
 		std::string uri;
 		logger.log(level, "Object@%p: uri=\"%s\"\n", &object, tostring(object, uri));
@@ -168,7 +170,7 @@ void show(const Object & object, Logger::Level level) {
 		logger.log(level, "Object@%p: contentLength=%llu\n", &object, object.getContentLength());
 		Epochalseconds modified = object.getModificationTime();
 		if (modified >= 0) {
-			Seconds seconds;
+			::com::diag::grandote::Seconds seconds;
 			logger.log(level, "Object@%p: modificationTime=%lld=\"%s\"\n", &object, modified, seconds.zulu(modified));
 		} else {
 			logger.log(level, "Object@%p: modificationTime=%lld\n", &object, modified);
@@ -195,8 +197,8 @@ void show(const Object & object, Logger::Level level) {
 	}
 }
 
-void show(const Bucket & bucket, Logger::Level level) {
-	Logger & logger = Logger::instance();
+void show(const Bucket & bucket, ::com::diag::grandote::MaskableLogger::Level level) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	if (logger.isEnabled(level)) {
 		std::string uri;
 		logger.log(level, "Bucket@%p: uri=\"%s\"\n", &bucket, tostring(bucket, uri));
@@ -220,8 +222,8 @@ void show(const Bucket & bucket, Logger::Level level) {
 	}
 }
 
-void show(const ServiceManifest & manifest, Logger::Level level) {
-	Logger & logger = Logger::instance();
+void show(const ServiceManifest & manifest, ::com::diag::grandote::MaskableLogger::Level level) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	if (logger.isEnabled(level)) {
 		ServiceManifest::Manifest::const_iterator here = manifest.getManifest().begin();
 		ServiceManifest::Manifest::const_iterator there = manifest.getManifest().end();
@@ -229,7 +231,7 @@ void show(const ServiceManifest & manifest, Logger::Level level) {
 		const char * owner;
 		const char * display;
 		Epochalseconds created;
-		Seconds seconds;
+		::com::diag::grandote::Seconds seconds;
 		while (here != there) {
 			canonical = here->second.getCanonical();
 			owner = here->second.getOwnerId();
@@ -241,8 +243,8 @@ void show(const ServiceManifest & manifest, Logger::Level level) {
 	}
 }
 
-void show(const BucketManifest & manifest, Logger::Level level) {
-	Logger & logger = Logger::instance();
+void show(const BucketManifest & manifest, ::com::diag::grandote::MaskableLogger::Level level) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	if (logger.isEnabled(level)) {
 		{
 			BucketManifest::Manifest::const_iterator here = manifest.getManifest().begin();
@@ -253,7 +255,7 @@ void show(const BucketManifest & manifest, Logger::Level level) {
 			Octets size;
 			const char * owner;
 			const char * display;
-			Seconds seconds;
+			::com::diag::grandote::Seconds seconds;
 			while (here != there) {
 				key = here->second.getKey();
 				modified = here->second.getModified();
@@ -276,8 +278,8 @@ void show(const BucketManifest & manifest, Logger::Level level) {
 	}
 }
 
-void show(const Grant & grant, Logger::Level level) {
-	Logger & logger = Logger::instance();
+void show(const Grant & grant, ::com::diag::grandote::MaskableLogger::Level level) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	if (logger.isEnabled(level)) {
 		if (grant.getKeyPointer() != 0) { logger.log(level, "Grant@%p: key=\"%s\"\n", &grant, grant.getKey()); }
 		logger.log(level, "Grant@%p: canonical=\"%s\"\n", &grant, grant.getCanonical());
@@ -304,8 +306,8 @@ void show(const Grant & grant, Logger::Level level) {
 	}
 }
 
-void show(const Log & log, Logger::Level level) {
-	Logger & logger = Logger::instance();
+void show(const Log & log, ::com::diag::grandote::MaskableLogger::Level level) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	if (logger.isEnabled(level)) {
 		logger.log(level, "Log@%p: target=\"%s\"\n", &log, log.getTarget());
 		logger.log(level, "Log@%p: prefix=\"%s\"\n", &log, log.getPrefix());

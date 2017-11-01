@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -25,7 +26,7 @@ Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, voi
 	// Remember, this is actually a write; get is the S3 operation in progress.
 	int rc = that->get(bufferSize, buffer);
 	if (rc > 0) { that->produced += rc; }
-	Logger::instance().debug("ObjectGet@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->produced);
+	::com::diag::grandote::MaskableLogger::instance().debug("ObjectGet@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->produced);
 	return (rc > 0) ? ::S3StatusOK : ::S3StatusAbortedByCallback;
 }
 
@@ -170,7 +171,7 @@ void ObjectGet::initialize() {
 	conditions.ifNotModifiedSince = notsince;
 	conditions.ifMatchETag = ::com::diag::grandote::set(match);
 	conditions.ifNotMatchETag = ::com::diag::grandote::set(notmatch);
-	show(&conditions, Logger::DEBUG);
+	show(&conditions, ::com::diag::grandote::MaskableLogger::DEBUG);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = &responseCompleteCallback;
@@ -179,7 +180,7 @@ void ObjectGet::initialize() {
 
 void ObjectGet::execute() {
 	state(static_cast<Status>(BUSY));
-	Logger::instance().debug("ObjectGet@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("ObjectGet@%p: begin\n", this);
 	Object::execute();
 	::S3_get_object(
 		&context,
@@ -248,7 +249,7 @@ int ObjectGet::get(int bufferSize, const void * buffer) {
 	if (output != 0) {
 		octets = (*output)(buffer, bufferSize, bufferSize);
 		if (octets == EOF) {
-			if (errno != 0) { Logger::instance().error("ObjectGet@%p: failed! errno=%d=\"%s\"\n", this, errno, ::strerror(errno)); }
+			if (errno != 0) { ::com::diag::grandote::MaskableLogger::instance().error("ObjectGet@%p: failed! errno=%d=\"%s\"\n", this, errno, ::strerror(errno)); }
 			finalize();
 			octets = 0;
 		}

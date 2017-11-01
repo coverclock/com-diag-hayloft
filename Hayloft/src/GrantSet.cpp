@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -12,6 +13,7 @@
 #include "com/diag/hayloft/Object.h"
 #include "com/diag/hayloft/show.h"
 #include "com/diag/grandote/string.h"
+#include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {
@@ -67,8 +69,8 @@ void GrantSet::initialize() {
 	state(static_cast<Status>(IDLE));
 	handler.propertiesCallback = Grant::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("GrantSet@%p: owner=\"%s\"\n", this, owner.c_str());
 		logger.debug("GrantSet@%p: display=\"%s\"\n", this, display.c_str());
 	}
@@ -78,8 +80,8 @@ void GrantSet::execute() {
 	state(static_cast<Status>(BUSY));
 	delete [] grants;
 	grants = generate(count);
-	show(grants, count, Logger::DEBUG);
-	Logger::instance().debug("GrantSet@%p: begin\n", this);
+	show(grants, count, ::com::diag::grandote::MaskableLogger::DEBUG);
+	::com::diag::grandote::MaskableLogger::instance().debug("GrantSet@%p: begin\n", this);
 	Grant::execute();
 	S3_set_acl(
 		&context,

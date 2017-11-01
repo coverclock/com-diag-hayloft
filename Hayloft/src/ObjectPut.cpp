@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -24,7 +25,7 @@ int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callb
 	// Remember, this is actually a read; put is the S3 operation in progress.
 	int rc = that->put(bufferSize, buffer);
 	if (rc > 0) { that->consumed += rc; }
-	Logger::instance().debug("ObjectPut@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->consumed);
+	::com::diag::grandote::MaskableLogger::instance().debug("ObjectPut@%p: requested=%d returned=%d total=%d\n", that, bufferSize, rc, that->consumed);
 	return rc;
 }
 
@@ -201,7 +202,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 			pair->value = (here->second).c_str();
 		}
 	}
-	show(&properties, Logger::DEBUG);
+	show(&properties, ::com::diag::grandote::MaskableLogger::DEBUG);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.responseHandler.completeCallback = &responseCompleteCallback;;
@@ -210,7 +211,7 @@ void ObjectPut::initialize(const Properties::Metadata & settings) {
 
 void ObjectPut::execute() {
 	state(static_cast<Status>(BUSY));
-	Logger::instance().debug("ObjectPut@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("ObjectPut@%p: begin\n", this);
 	Object::execute();
 	::S3_put_object(
 		&context,
@@ -275,7 +276,7 @@ int ObjectPut::put(int bufferSize, void * buffer) {
 	if (input != 0) {
 		octets = (*input)(buffer, 1, bufferSize);
 		if (octets == EOF) {
-			if (errno != 0) { Logger::instance().error("ObjectPut@%p: failed! errno=%d=\"%s\"\n", this, errno, ::strerror(errno)); }
+			if (errno != 0) { ::com::diag::grandote::MaskableLogger::instance().error("ObjectPut@%p: failed! errno=%d=\"%s\"\n", this, errno, ::strerror(errno)); }
 			finalize();
 			octets = 0;
 		}

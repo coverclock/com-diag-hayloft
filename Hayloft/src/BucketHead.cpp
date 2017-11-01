@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -59,7 +60,7 @@ void BucketHead::initialize() {
 
 void BucketHead::execute() {
 	state(static_cast<Status>(BUSY));
-	Logger::instance().debug("BucketHead@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("BucketHead@%p: begin\n", this);
 	Bucket::execute();
 	::S3_test_bucket(
 		protocol,

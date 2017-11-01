@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -92,8 +93,8 @@ ObjectCopy::~ObjectCopy() {
 
 void ObjectCopy::initialize(const Properties::Metadata & settings) {
 	state(static_cast<Status>(IDLE));
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("ObjectCopy@%p: tocanonical=\"%s\"\n", this, tocanonical.c_str());
 		logger.debug("ObjectCopy@%p: tokey=\"%s\"\n", this, tokey.c_str());
 	}
@@ -120,14 +121,14 @@ void ObjectCopy::initialize(const Properties::Metadata & settings) {
 			pair->value = (here->second).c_str();
 		}
 	}
-	show(&properties, Logger::DEBUG);
+	show(&properties, ::com::diag::grandote::MaskableLogger::DEBUG);
 	handler.propertiesCallback = Object::handler.propertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;;
 }
 
 void ObjectCopy::execute() {
 	state(static_cast<Status>(BUSY));
-	Logger::instance().debug("ObjectCopy@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("ObjectCopy@%p: begin\n", this);
 	Object::execute();
 	::S3_copy_object(
 		&context,

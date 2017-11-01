@@ -5,7 +5,7 @@
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -77,7 +77,7 @@ protected:
 
 	};
 
-	struct Thread : public ::com::diag::hayloft::Thread {
+	struct Thread : public ::com::diag::grandote::Thread {
 
 		virtual void * run();
 
@@ -87,7 +87,7 @@ protected:
 
 	static ::com::diag::grandote::Platform * platform;
 
-	static MaskableLogger * logger;
+	static ::com::diag::grandote::MaskableLogger * logger;
 
 	/**
 	 * If we have an internal error, like an error return on a system call,
@@ -134,11 +134,11 @@ private:
 
 	static Handle * complex;
 
-	static LifeCycle * nextlifecycle;
+	static ::com::diag::hayloft::LifeCycle * nextlifecycle;
 
 	static LifeCycle lifecycle;
 
-	static ::com::diag::grandote::Thread thread;
+	static Thread thread;
 
 	static List starting;
 

@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -11,6 +12,7 @@
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/string.h"
+#include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {
@@ -90,8 +92,8 @@ Object::Object(const Object & object, const Plex & plex)
 Object::~Object() {}
 
 void Object::initialize() {
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("Object@%p: key=\"%s\"\n", this, key.c_str());
 	}
 	std::memset(&handler, 0, sizeof(handler));
@@ -117,7 +119,7 @@ const char * Object::authenticated(Epochalseconds expires, const char * resource
 		authentic = buffer;
 		result = authentic.c_str();
 	} else {
-		Logger::instance().error("Object@%p: S3_generate_authenticated_query_string failed! status=%d=\"%s\"\n", this, status, tostring(status));
+		::com::diag::grandote::MaskableLogger::instance().error("Object@%p: S3_generate_authenticated_query_string failed! status=%d=\"%s\"\n", this, status, tostring(status));
 	}
 	return result;
 }

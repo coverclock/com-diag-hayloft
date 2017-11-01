@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -20,9 +21,9 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
-bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, Logger::Level level) {
+bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, ::com::diag::grandote::MaskableLogger::Level level) {
 	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	::com::diag::grandote::ticks_t numerator;
 	::com::diag::grandote::ticks_t denominator;
 	platform.frequency(numerator, denominator);
@@ -67,9 +68,9 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 	return result;
 }
 
-bool service_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, int iterations, Milliseconds timeout, Logger::Level level) {
+bool service_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, int iterations, Milliseconds timeout, ::com::diag::grandote::MaskableLogger::Level level) {
 	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	::com::diag::grandote::ticks_t numerator;
 	::com::diag::grandote::ticks_t denominator;
 	platform.frequency(numerator, denominator);

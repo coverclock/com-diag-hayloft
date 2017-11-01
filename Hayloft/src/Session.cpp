@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -21,9 +22,9 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
-static Mutex instancemutex;
+static ::com::diag::grandote::Mutex instancemutex;
 
-static Mutex initializationmutex;
+static ::com::diag::grandote::Mutex initializationmutex;
 
 static Session * instant = 0;
 
@@ -79,7 +80,7 @@ Session::Session(const char * bucketSuffix, const char * userAgentInfo, const En
 	convert_to_lower_case(bucketsuffix);
 	convert_to_lower_case(useragent);
 	convert_to_lower_case(endpoint);
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	logger.debug("Session@%p: bucketsuffix=\"%s\"\n", this, bucketsuffix.c_str());
 	logger.debug("Session@%p: useragent=\"%s\"\n", this, useragent.c_str());
 	logger.debug("Session@%p: endpoint=\"%s\"\n", this, endpoint.c_str());

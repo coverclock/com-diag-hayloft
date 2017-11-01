@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -18,7 +19,7 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
-static Mutex mutex;
+static ::com::diag::grandote::Mutex mutex;
 
 static LifeCycle * instant = 0;
 
@@ -51,26 +52,26 @@ LifeCycle::~LifeCycle() {
 }
 
 void LifeCycle::constructor(Action & action) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: constructor\n", this, &action);
+	::com::diag::grandote::MaskableLogger::instance().debug("LifeCycle@%p: Action@%p: constructor\n", this, &action);
 }
 
 void LifeCycle::start(Action & action) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: start\n", this, &action);
+	::com::diag::grandote::MaskableLogger::instance().debug("LifeCycle@%p: Action@%p: start\n", this, &action);
 }
 
 Status LifeCycle::properties(Action & action, const ::S3ResponseProperties * responseProperties) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: properties\n", this, &action);
+	::com::diag::grandote::MaskableLogger::instance().debug("LifeCycle@%p: Action@%p: properties\n", this, &action);
 	return action.properties(responseProperties);
 }
 
 void LifeCycle::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: complete\n", this, &action);
+	::com::diag::grandote::MaskableLogger::instance().debug("LifeCycle@%p: Action@%p: complete\n", this, &action);
 	action.signal(final); // All polling or waiting Threads can see this.
 	action.complete(final, errorDetails);
 }
 
 void LifeCycle::destructor(Action & action) {
-	Logger::instance().debug("LifeCycle@%p: Action@%p: destructor\n", this, &action);
+	::com::diag::grandote::MaskableLogger::instance().debug("LifeCycle@%p: Action@%p: destructor\n", this, &action);
 }
 
 }

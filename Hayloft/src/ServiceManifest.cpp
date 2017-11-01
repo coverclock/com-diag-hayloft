@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -28,10 +29,10 @@ Status ServiceManifest::listServiceCallback(const char * ownerId, const char * o
 	ServiceManifest * that = static_cast<ServiceManifest*>(callbackData);
 	Status status = that->entry(ownerId, ownerDisplayName, bucketName, creationDateSeconds);
 	if ((bucketName != 0) && (bucketName != '\0')) {
-		Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
+		::com::diag::grandote::MaskableLogger::Level level = (status == ::S3StatusOK) ? ::com::diag::grandote::MaskableLogger::DEBUG : ::com::diag::grandote::MaskableLogger::NOTICE;
 		Entry entry(bucketName, ownerId, ownerDisplayName, creationDateSeconds);
-		Logger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, entry.getCanonical(), entry.getOwnerId(), entry.getOwnerDisplayName(), entry.getCreated());
-		Logger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
+		::com::diag::grandote::MaskableLogger::instance().log(level, "ServiceManifest@%p: bucketName=\"%s\" ownerId=\"%s\" ownerDisplayName=\"%s\" creationDateSeconds=%lld\n", that, entry.getCanonical(), entry.getOwnerId(), entry.getOwnerDisplayName(), entry.getCreated());
+		::com::diag::grandote::MaskableLogger::instance().log(level, "ServiceManifest@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 		if (status == ::S3StatusOK) {
 			that->manifest.insert(Pair(bucketName, entry));
 		}
@@ -65,7 +66,7 @@ void ServiceManifest::initialize() {
 
 void ServiceManifest::execute() {
 	state(static_cast<Status>(BUSY));
-	Logger::instance().debug("ServiceManifest@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("ServiceManifest@%p: begin\n", this);
 	Service::execute();
 	::S3_list_service(
 		protocol,
@@ -106,7 +107,7 @@ bool ServiceManifest::reset() {
 }
 
 Status ServiceManifest::entry(const char * ownerId, const char * ownerDisplayName, const char * bucketName, Epochalseconds creationDateSeconds) {
-	Logger::instance().debug("ServiceManifest%p: entry\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("ServiceManifest%p: entry\n", this);
 	return ::S3StatusOK;
 }
 

@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -29,9 +30,9 @@ BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModifie
 
 Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData) {
 	BucketManifest * that = static_cast<BucketManifest*>(callbackData);
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	Status status = that->entry(isTruncated, nextMarker, contentsCount, contents, commonPrefixesCount, commonPrefixes);
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
+	::com::diag::grandote::MaskableLogger::Level level = (status == ::S3StatusOK) ? ::com::diag::grandote::MaskableLogger::DEBUG : ::com::diag::grandote::MaskableLogger::NOTICE;
 	logger.log(level, "BucketManifest@%p: isTruncated=%d nextMarker=\"%s\" contentsCount=%d commonPrefixesCount=%d\n", that, isTruncated, (nextMarker != 0) ? nextMarker : "(nil)", contentsCount, commonPrefixesCount);
 	that->truncated = (isTruncated != 0);
 	if (contents != 0) {
@@ -131,8 +132,8 @@ BucketManifest::~BucketManifest() {
 
 void BucketManifest::initialize() {
 	state(static_cast<Status>(IDLE));
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("Bucket@%p: prefix=\"%s\"\n", this, prefix.c_str());
 		logger.debug("Bucket@%p: marker=\"%s\"\n", this, nextmarker.c_str());
 		logger.debug("Bucket@%p: delimiter=\"%s\"\n", this, delimiter.c_str());
@@ -148,7 +149,7 @@ void BucketManifest::execute() {
 	Manifest::size_type size = manifest.size();
 	if (maximum > size) {
 		state(static_cast<Status>(BUSY));
-		Logger::instance().debug("BucketManifest@%p: %s\n", this, (size == 0) ? "begin" : "continue");
+		::com::diag::grandote::MaskableLogger::instance().debug("BucketManifest@%p: %s\n", this, (size == 0) ? "begin" : "continue");
 		Bucket::execute();
 		::S3_list_bucket(
 			&context,
@@ -194,7 +195,7 @@ bool BucketManifest::reset() {
 }
 
 Status BucketManifest::entry(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes) {
-	Logger::instance().debug("BucketManifest%p: entry\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("BucketManifest%p: entry\n", this);
 	return ::S3StatusOK;
 }
 

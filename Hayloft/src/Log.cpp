@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -37,8 +38,8 @@ Log::~Log() {
 }
 
 void Log::initialize() {
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("Log@%p: target=\"%s\"\n", this, target.c_str());
 		logger.debug("Log@%p: prefix=\"%s\"\n", this, prefix.c_str());
 	}

@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011-2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -15,6 +16,7 @@
 #include "com/diag/hayloft/types.h"
 #include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/grandote/MaskableLogger.h"
+#include "com/diag/grandote/Seconds.h"
 #include "com/diag/grandote/target.h"
 #include "com/diag/grandote/errno.h"
 #include "com/diag/grandote/string.h"
@@ -47,7 +49,7 @@ Milliseconds Complex::MAXIMUM = 5000;
 
 ::com::diag::grandote::Platform * Complex::platform = 0;
 
-Logger * Complex::logger = 0;
+::com::diag::grandote::MaskableLogger * Complex::logger = 0;
 
 // To avoid deadlock, the locking order of the mutexen must be as follows.
 // 1. Complex::instance
@@ -56,11 +58,11 @@ Logger * Complex::logger = 0;
 // 4. Thread::mutex
 // But we try really hard not to have to lock mutexen in a nested fashion.
 
-Mutex Complex::instance;
+::com::diag::grandote::Mutex Complex::instance;
 
-Mutex Complex::shared;
+::com::diag::grandote::Mutex Complex::shared;
 
-Condition Complex::ready;
+::com::diag::grandote::Condition Complex::ready;
 
 int Complex::instances = 0;
 
@@ -155,12 +157,12 @@ void Complex::initialize() {
 	::com::diag::grandote::CriticalSection guard(instance);
 	if (instances == 0) {
 		platform = &::com::diag::grandote::Platform::instance();
-		logger = &Logger::instance();
+		logger = &::com::diag::grandote::MaskableLogger::instance();
 		platform->frequency(numerator, denominator);
 		status = ::S3_create_request_context(&complex);
 		if (status != S3StatusOK) { logger->error("Complex: S3_create_request_context failed! status=%d=\"%s\"\n", status, tostring(status)); }
-		nextlifecycle = &(LifeCycle::instance());
-		LifeCycle::instance(lifecycle);
+		nextlifecycle = &(::com::diag::hayloft::LifeCycle::instance());
+		Complex::LifeCycle::instance(lifecycle);
 	}
 	++instances;
 }
@@ -169,7 +171,7 @@ void Complex::finalize() {
 	::com::diag::grandote::CriticalSection guard(instance);
 	--instances;
 	if (instances == 0) {
-		LifeCycle::instance(*nextlifecycle);
+		Complex::LifeCycle::instance(*nextlifecycle);
 		thread.notify();
 		ready.signal(); // Do we really need to lock shared for this?
 		thread.join();
@@ -235,7 +237,7 @@ void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * e
 }
 
 void * Complex::run() {
-	Seconds time;
+	::com::diag::grandote::Seconds time;
 
 	logger->debug("Complex: begin\n");
 

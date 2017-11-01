@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -11,6 +12,7 @@
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/Object.h"
 #include "com/diag/hayloft/show.h"
+#include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {
@@ -23,11 +25,11 @@ void LogGet::responseCompleteCallback(Status status, const ::S3ErrorDetails * er
 	that->targetprefix[sizeof(that->targetprefix) - 1] = '\0';
 	that->prefix = that->targetprefix;
 	that->import(that->count, that->grants);
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("LogGet@%p: target=\"%s\"\n", that, that->target.c_str());
 		logger.debug("LogGet@%p: prefix=\"%s\"\n", that, that->prefix.c_str());
-		show(that->grants, that->count, Logger::DEBUG);
+		show(that->grants, that->count, ::com::diag::grandote::MaskableLogger::DEBUG);
 	}
 	that->count = 0;
 	delete [] that->grants;
@@ -69,7 +71,7 @@ void LogGet::execute() {
 	count = 0;
 	delete [] grants;
 	grants = new ::S3AclGrant [S3_MAX_ACL_GRANT_COUNT];
-	Logger::instance().debug("LogGet@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("LogGet@%p: begin\n", this);
 	Log::execute();
 	S3_get_server_access_logging(
 		&context,

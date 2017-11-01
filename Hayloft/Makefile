@@ -132,8 +132,11 @@ LIBS3_ROOT			:=	$(THERE)/$(LIBS3_PROJECT)/build
 LIBS3_HEADERS		:=	$(LIBS3_ROOT)/include
 LIBS3_LIBRARIES		:=	$(LIBS3_ROOT)/lib
 
-LIBS3_CPPFLAGS		:=	-iquote $(LIBS3_HEADERS)
-LIBS3_LDFLAGS		:=	-L$(LIBS3_LIBRARIES) -l$(LIBS3_PROJECT)
+# sudo apt-get install libs3-2 libs3-dev
+# git clone https://github.com/bji/libs3
+
+#LIBS3_CPPFLAGS		:=	-iquote $(LIBS3_HEADERS)
+#LIBS3_LDFLAGS		:=	-L$(LIBS3_LIBRARIES) -l$(LIBS3_PROJECT)
 
 ########## Grandote Configuration
 

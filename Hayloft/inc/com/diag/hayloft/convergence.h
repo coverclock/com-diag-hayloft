@@ -4,7 +4,7 @@
 
 /**
  * @file
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -139,7 +139,7 @@ inline bool service(Action & action, ::com::diag::grandote::MaskableLogger::Leve
  * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool service_until_successful(Action & action, ::com::diag::grandote::Maskable::Level level = CONVERGENCE_LOG_LEVEL) {
+inline bool service_until_successful(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
 	return service_generic(action, true, false, 20, 1000, 100, 1000, level);
 }
 

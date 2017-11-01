@@ -1,7 +1,8 @@
+/* vi: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2011 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
@@ -38,8 +39,8 @@ Container::Container(const char * accessKeyId, const char * secretAccessKey, con
 Container::~Container() {}
 
 void Container::initialize() {
-	Logger & logger = Logger::instance();
-	if (logger.isEnabled(Logger::DEBUG)) {
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
+	if (logger.isEnabled(::com::diag::grandote::MaskableLogger::DEBUG)) {
 		logger.debug("Container@%p: canonical=\"%s\"\n", this, canonical.c_str());
 		logger.debug("Container@%p: style=%d=\"%s\"\n", this, style, tostring(style));
 	}
@@ -50,7 +51,7 @@ void Container::initialize() {
 	context.uriStyle = style;
 	context.accessKeyId = id.c_str();
 	context.secretAccessKey = secret.c_str();
-	show(&context, Logger::DEBUG);
+	show(&context, ::com::diag::grandote::MaskableLogger::DEBUG);
 }
 
 }
