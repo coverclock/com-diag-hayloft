@@ -196,8 +196,8 @@ TEST_F(CredentialsTest, ExplicitOverridesEnvironment) {
 TEST_F(CredentialsTest, Input) {
 	static const char ID[] = "SSSSSSSSSSTTTTTTTTTT";
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
-	::com::diag::grandote::DataInput idin(ID);
-	::com::diag::grandote::DataInput secretin(SECRET);
+	DataInput idin(ID);
+	DataInput secretin(SECRET);
 	Parameter idparm(idin);
 	Parameter secretparm(secretin);
 	Credentials credentials(idparm, secretparm);
@@ -211,8 +211,8 @@ TEST_F(CredentialsTest, Input) {
 TEST_F(CredentialsTest, InputTaken) {
 	static const char ID[] = "SSSSSSSSSSTTTTTTTTTT";
 	static const char SECRET[] = "UUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXX";
-	::com::diag::grandote::DataInput * idinp = new ::com::diag::grandote::DataInput(ID);
-	::com::diag::grandote::DataInput * secretinp = new ::com::diag::grandote::DataInput(SECRET);
+	DataInput * idinp = new DataInput(ID);
+	DataInput * secretinp = new DataInput(SECRET);
 	Parameter idparm(idinp);
 	Parameter secretparm(secretinp);
 	Credentials credentials(idparm, secretparm);

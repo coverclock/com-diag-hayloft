@@ -76,7 +76,7 @@ public:
 			access_key_id = env;
 		} else {
 			char val[Credentials::ACCESS_KEY_ID_LEN + sizeof("\n")];
-			::com::diag::grandote::PathInput input(ACCESS_KEY_ID_FILE.c_str(), "r");
+			PathInput input(ACCESS_KEY_ID_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
@@ -91,7 +91,7 @@ public:
 			secret_access_key = env;
 		} else {
 			char val[Credentials::SECRET_ACCESS_KEY_LEN + sizeof("\n")];
-			::com::diag::grandote::PathInput input(SECRET_ACCESS_KEY_FILE.c_str(), "r");
+			PathInput input(SECRET_ACCESS_KEY_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
@@ -106,7 +106,7 @@ public:
 			user_agent = env;
 		} else {
 			char val[S3_MAX_BUCKET_NAME_SIZE + sizeof("\n")];
-			::com::diag::grandote::PathInput input(USER_AGENT_FILE.c_str(), "r");
+			PathInput input(USER_AGENT_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }
@@ -121,7 +121,7 @@ public:
 			bucket_suffix = env;
 		} else {
 			char val[S3_MAX_BUCKET_NAME_SIZE + sizeof("\n")];
-			::com::diag::grandote::PathInput input(BUCKET_SUFFIX_FILE.c_str(), "r");
+			PathInput input(BUCKET_SUFFIX_FILE.c_str(), "r");
 			size_t len = input(val, sizeof(val));
 			if (len > 0) {
 				if (val[len - 2] == '\n') { val[len - 2] = '\0'; }

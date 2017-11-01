@@ -249,7 +249,7 @@ TEST_F(ComplexTest, Unresettable) {
 struct ObjectPutApplication : public ObjectPut {
 	int failures;
 	Status failure;
-	explicit ObjectPutApplication(const Object & object, const Plex & plex, Input * sourcep, Octets objectsize)
+	explicit ObjectPutApplication(const ::com::diag::hayloft::Object & object, const Plex & plex, Input * sourcep, Octets objectsize)
 	: ObjectPut(object, plex, sourcep, objectsize)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -269,7 +269,7 @@ struct ObjectPutApplication : public ObjectPut {
 struct ObjectGetApplication : public ObjectGet {
 	int failures;
 	Status failure;
-	explicit ObjectGetApplication(const Object & object, const Plex & plex, Output * sinkp)
+	explicit ObjectGetApplication(const ::com::diag::hayloft::Object & object, const Plex & plex, Output * sinkp)
 	: ObjectGet(object, plex, sinkp)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -290,8 +290,8 @@ TEST_F(ComplexTest, Application) {
 	static const int LIMIT = 10;
 	Bucket BUCKET1("ComplexTestApplication1");
 	Bucket BUCKET2("ComplexTestApplication2");
-	Object OBJECT1("Object1.txt", BUCKET1);
-	Object OBJECT2("Object2.txt", BUCKET2);
+	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
+	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
@@ -308,7 +308,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPutApplication objectput1(OBJECT1, complex, input, inputsize);
 	objectput1.failures = 2;
@@ -319,7 +319,7 @@ TEST_F(ComplexTest, Application) {
 		if (objectput1.isSuccessful()) {
 			break;
 		}
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 	}
@@ -330,7 +330,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(complex.wait(objectcopy));
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
-	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGetApplication objectget2(OBJECT2, complex, output2);
 	objectget2.failures = 3;
 	objectget2.failure = ::S3StatusErrorInternalError;
@@ -340,7 +340,7 @@ TEST_F(ComplexTest, Application) {
 		if (objectget2.isSuccessful()) {
 			break;
 		}
-		output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+		output2 = new PathOutput(OBJECT2.getKey());
 		objectget2.reset(output2);
 	}
 	EXPECT_TRUE(objectget2.isSuccessful());
@@ -379,13 +379,13 @@ TEST_F(ComplexTest, Application) {
 struct ObjectPutFactory : public ObjectPut {
 	const char * path;
 	bool succeed;
-	explicit ObjectPutFactory(const Object & object, const Plex & plex, const char * inputname)
-	: ObjectPut(object, plex, new ::com::diag::grandote::PathInput(inputname), size(inputname))
+	explicit ObjectPutFactory(const ::com::diag::hayloft::Object & object, const Plex & plex, const char * inputname)
+	: ObjectPut(object, plex, new PathInput(inputname), size(inputname))
 	, path(inputname)
 	, succeed(false)
 	{}
 	virtual bool reset() {
-		return ObjectPut::reset(new ::com::diag::grandote::PathInput(path), size(path));
+		return ObjectPut::reset(new PathInput(path), size(path));
 	}
 	virtual int put(int bufferSize, void * buffer) {
 		if (succeed) {
@@ -406,13 +406,13 @@ struct ObjectPutFactory : public ObjectPut {
 struct ObjectGetFactory : public ObjectGet {
 	const char * path;
 	bool succeed;
-	explicit ObjectGetFactory(const Object & object, const Plex & plex, const char * outputname)
-	: ObjectGet(object, plex, new ::com::diag::grandote::PathOutput(outputname))
+	explicit ObjectGetFactory(const ::com::diag::hayloft::Object & object, const Plex & plex, const char * outputname)
+	: ObjectGet(object, plex, new PathOutput(outputname))
 	, path(outputname)
 	, succeed(false)
 	{}
 	virtual bool reset() {
-		return ObjectGet::reset(new ::com::diag::grandote::PathOutput(path), 0, 0);
+		return ObjectGet::reset(new PathOutput(path), 0, 0);
 	}
 	virtual int get(int bufferSize, const void * buffer) {
 		if (succeed) {
@@ -433,8 +433,8 @@ struct ObjectGetFactory : public ObjectGet {
 TEST_F(ComplexTest, Factory) {
 	Bucket BUCKET1("ComplexTestFactory1");
 	Bucket BUCKET2("ComplexTestFactory2");
-	Object OBJECT1("Object1.txt", BUCKET1);
-	Object OBJECT2("Object2.txt", BUCKET2);
+	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
+	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
@@ -504,8 +504,8 @@ static void complextestpoll(Action & action) {
 TEST_F(ComplexTest, Polled) {
 	Bucket BUCKET1("ComplexTestPolled1");
 	Bucket BUCKET2("ComplexTestPolled2");
-	Object OBJECT1("Object1.txt", BUCKET1);
-	Object OBJECT2("Object2.txt", BUCKET2);
+	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
+	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);

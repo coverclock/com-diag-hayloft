@@ -35,7 +35,6 @@ TEST_F(ProtocolTest, Stack) {
 	Protocol protocol;
 }
 
-
 TEST_F(ProtocolTest, Default) {
 	Protocol protocol;
 	EXPECT_EQ(protocol.getProtocol(), Protocol::DEFAULT);

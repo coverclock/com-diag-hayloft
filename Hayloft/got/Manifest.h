@@ -64,7 +64,7 @@ TEST_F(ManifestTest, Part1Setup) {
 	for (unsigned int index = 0; index < MANIFESTTESTLIMIT; ++index) {
 		char name[sizeof("OBJECT????.txt")] = { 0 };
 		snprintf(name, sizeof(name), "OBJECT%4.4u.txt", index);
-		Object object(name, bucket);
+		::com::diag::hayloft::Object object(name, bucket);
 		ManifestTestInput input;
 		logger.notice("creating %s\n", name);
 		ObjectPut objectput(object, complex, input, 0);
@@ -214,7 +214,7 @@ TEST_F(ManifestTest, Part9Cleanup) {
 	for (unsigned int index = 0; index < MANIFESTTESTLIMIT; ++index) {
 		char name[sizeof("OBJECT????.txt")] = { 0 };
 		snprintf(name, sizeof(name), "OBJECT%4.4u.txt", index);
-		Object object(name, bucket);
+		::com::diag::hayloft::Object object(name, bucket);
 		ObjectDelete objectdelete(object, complex);
 		logger.notice("deleting %s\n", name);
 		ASSERT_TRUE(complex.start(objectdelete));

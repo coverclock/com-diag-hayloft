@@ -48,8 +48,8 @@ TEST_F(ConvergenceTest, Synchronous) {
 	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestSynchronous1");
 	Bucket BUCKET2("ConvergenceTestSynchronous2");
-	Object OBJECT1("Object1.txt", BUCKET1);
-	Object OBJECT2("Object2.txt", BUCKET2);
+	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
+	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
 	/**/
 	BucketHead buckethead1(BUCKET1);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
@@ -63,13 +63,13 @@ TEST_F(ConvergenceTest, Synchronous) {
 	BucketCreate bucketcreate2(BUCKET2);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -85,12 +85,12 @@ TEST_F(ConvergenceTest, Synchronous) {
 	ObjectHead objecthead2(OBJECT2);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
 	/**/
-	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
@@ -126,8 +126,8 @@ TEST_F(ConvergenceTest, Complete) {
 	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestComplete1");
 	Bucket BUCKET2("ConvergenceTestComplete2");
-	Object OBJECT1("Object1.txt", BUCKET1);
-	Object OBJECT2("Object2.txt", BUCKET2);
+	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
+	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
 	Multiplex multiplex;
 	/**/
 	BucketHead buckethead1(BUCKET1, multiplex);
@@ -142,13 +142,13 @@ TEST_F(ConvergenceTest, Complete) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -164,12 +164,12 @@ TEST_F(ConvergenceTest, Complete) {
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
 	/**/
-	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < 10); ++ii) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
@@ -203,8 +203,8 @@ TEST_F(ConvergenceTest, Complete) {
 TEST_F(ConvergenceTest, Service) {
 	Bucket BUCKET1("ConvergenceTestService1");
 	Bucket BUCKET2("ConvergenceTestService2");
-	Object OBJECT1("Object1.txt", BUCKET1);
-	Object OBJECT2("Object2.txt", BUCKET2);
+	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
+	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
 	static const int LIMIT = 10;
 	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Multiplex multiplex;
@@ -221,13 +221,13 @@ TEST_F(ConvergenceTest, Service) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -243,12 +243,12 @@ TEST_F(ConvergenceTest, Service) {
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(service_until_successful(objecthead2, LEVEL));
 	/**/
-	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
 			printf("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::grandote::PathOutput(OBJECT2.getKey());
+			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
 			printf("WAITING %d\n", __LINE__);
