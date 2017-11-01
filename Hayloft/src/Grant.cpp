@@ -12,6 +12,7 @@
 #include "com/diag/hayloft/Object.h"
 #include "com/diag/grandote/set.h"
 #include "com/diag/grandote/string.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/S3.h"
 
 namespace com {
@@ -23,8 +24,8 @@ int Grant::dontcare = 0;
 Grant::Entry::Entry(::S3GranteeType granteeType, ::S3Permission permissionType, const char * ownerIdOrEmailAddress, const char * ownerDisplayName)
 : type(granteeType)
 , permission(permissionType)
-, owner(((granteeType == ::S3GranteeTypeAmazonCustomerByEmail) || (granteeType == ::S3GranteeTypeCanonicalUser)) ? set(ownerIdOrEmailAddress) : "")
-, display((granteeType == ::S3GranteeTypeCanonicalUser) ? set(ownerDisplayName) : "")
+, owner(((granteeType == ::S3GranteeTypeAmazonCustomerByEmail) || (granteeType == ::S3GranteeTypeCanonicalUser)) ? ::com::diag::grandote::set(ownerIdOrEmailAddress) : "")
+, display((granteeType == ::S3GranteeTypeCanonicalUser) ? ::com::diag::grandote::set(ownerDisplayName) : "")
 {}
 
 Grant::Grant()
@@ -76,7 +77,7 @@ Grant::~Grant() {
 
 void Grant::initialize(const Grant * that) {
 	if (keypointer != 0) {
-		Logger::instance().debug("Grant@%p: key=\"%s\"\n", this, key.c_str());
+		::com::diag::grandote::MaskableLogger::instance().debug("Grant@%p: key=\"%s\"\n", this, key.c_str());
 	}
 	if (that != 0) {
 		this->owner = that->owner;

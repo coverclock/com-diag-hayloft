@@ -12,7 +12,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
@@ -110,7 +110,7 @@ public:
 	 *        taken from the environment. A copy is made of this C string.
 	 * @return a reference to this object.
 	 */
-	Region & setRegion(const char * re = 0) { region = set(re, REGION_ENV(), DEFAULT()); return *this; }
+	Region & setRegion(const char * re = 0) { region = ::com::diag::grandote::set(re, REGION_ENV(), DEFAULT()); return *this; }
 
 };
 

@@ -27,7 +27,7 @@
 #include "com/diag/hayloft/ObjectDelete.h"
 #include "com/diag/hayloft/show.h"
 #include "com/diag/hayloft/convergence.h"
-#include "com/diag/hayloft/Fibonacci.h"
+#include "com/diag/grandote/Fibonacci.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/Platform.h"
 #include "com/diag/hayloft/S3.h"
@@ -102,7 +102,7 @@ TEST_F(LogTest, SetGet) {
 	ASSERT_NE(logset.getPrefix(), (char *)0);
 	EXPECT_EQ(*logset.getPrefix(), '\0');
 	ASSERT_TRUE(complete(logset));
-	Fibonacci fibonacci;
+	::com::diag::grandote::Fibonacci fibonacci;
 	LogGet logget2(bucket, multiplex);
 	for (int ii = 0; ii < 10; ++ii) {
 		ASSERT_TRUE(complete(logget2));
@@ -151,7 +151,7 @@ TEST_F(LogTest, SetGetPrefix) {
 	ASSERT_NE(logset.getPrefix(), (char *)0);
 	EXPECT_EQ(std::strcmp(logset.getPrefix(), PREFIX), 0);
 	ASSERT_TRUE(complete(logset));
-	Fibonacci fibonacci;
+	::com::diag::grandote::Fibonacci fibonacci;
 	LogGet logget2(bucket, multiplex);
 	for (int ii = 0; ii < 10; ++ii) {
 		ASSERT_TRUE(complete(logget2));
@@ -193,7 +193,7 @@ TEST_F(LogTest, SetGetApplication) {
 	ASSERT_TRUE(complete(grant));
 	LogSet logset(bucket, multiplex, log, PREFIX);
 	ASSERT_TRUE(complete(logset));
-	Fibonacci factor;
+	::com::diag::grandote::Fibonacci factor;
 	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);

@@ -11,6 +11,7 @@
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/Input.h"
 #include "com/diag/grandote/MaskableLogger.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
@@ -31,8 +32,8 @@ const char * Credentials::obfuscate(const char * str) {
 }
 
 Credentials::Credentials(const char * accessKeyId, const char * secretAccessKey)
-: id(set(accessKeyId, ACCESS_KEY_ID_ENV(), ""))
-, secret(set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""))
+: id(::com::diag::grandote::set(accessKeyId, ACCESS_KEY_ID_ENV(), ""))
+, secret(::com::diag::grandote::set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""))
 {
 	initialize();
 }

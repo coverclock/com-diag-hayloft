@@ -8,15 +8,16 @@
  */
 
 #include "com/diag/hayloft/Selection.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
 Selection::Selection(const char * namePrefix, const char * nextMarker, const char * nameDelimiter, int maxkeys)
-: prefix(set(namePrefix))
-, marker(set(nextMarker))
-, delimiter(set(nameDelimiter))
+: prefix(::com::diag::grandote::set(namePrefix))
+, marker(::com::diag::grandote::set(nextMarker))
+, delimiter(::com::diag::grandote::set(nameDelimiter))
 , maximum(maxkeys)
 {}
 

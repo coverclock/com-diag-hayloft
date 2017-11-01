@@ -27,20 +27,20 @@ bool Action::dontcare = false;
  ******************************************************************************/
 
 Status Action::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	Action * that = static_cast<Action*>(callbackData);
 	if ((responseProperties->requestId != 0) && (responseProperties->requestId[0] != '\0')) { that->requestid = responseProperties->requestId; }
 	if ((responseProperties->requestId2 != 0) && (responseProperties->requestId2[0] != '\0')) { that->requestid2 = responseProperties->requestId2; }
 	if ((responseProperties->server != 0) && (responseProperties->server[0] != '\0')) { that->server = responseProperties->server; }
 	Status status = LifeCycle::instance().properties(*that, responseProperties);
-	Logger::Level level = (status == ::S3StatusOK) ? Logger::DEBUG : Logger::NOTICE;
+	::com::diag::grandote::MaskableLogger::Level level = (status == ::S3StatusOK) ? ::com::diag::grandote::MaskableLogger::DEBUG : ::com::diag::grandote::MaskableLogger::NOTICE;
 	logger.log(level, "Action@%p: status=%d=\"%s\"\n", that, status, tostring(status));
 	show(responseProperties, level);
 	return status;
 }
 
 void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData) {
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	Action * that = static_cast<Action*>(callbackData);
 	// An ::S3StatusInterrupted means someone destroyed our request context,
 	// a (to us anyway) opaque handle that is used by libs3 and libcurl to
@@ -48,19 +48,19 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	// this occurs when the Plex used when we were constructed is deleted while
 	// we were busy. We are henceforth a synchronous Action. Wackiness ensues.
 	if (final == ::S3StatusInterrupted) {
-		Logger::instance().error("Action@%p: interrupted while busy!\n", that);
+		::com::diag::grandote::MaskableLogger::instance().error("Action@%p: interrupted while busy!\n", that);
 		that->handle = 0;
 	}
-	Logger::Level level;
+	::com::diag::grandote::MaskableLogger::Level level;
 	switch (final) {
 	case ::S3StatusOK:
 	case ::S3StatusErrorNoSuchBucket:
 	case ::S3StatusErrorNoSuchKey: // e.g. ObjectCopy
 	case ::S3StatusHttpErrorNotFound: // a.k.a. 404 e.g. ObjectHead, ObjectGet
-		level = Logger::DEBUG; // Considered to be an application issue.
+		level = ::com::diag::grandote::MaskableLogger::DEBUG; // Considered to be an application issue.
 		break;
 	default:
-		level = Logger::NOTICE; // Considered to be a platform issue.
+		level = ::com::diag::grandote::MaskableLogger::NOTICE; // Considered to be a platform issue.
 		break;
 	}
 	logger.log(level, "Action@%p: status=%d=\"%s\"\n", that, final, tostring(final));
@@ -102,7 +102,7 @@ Action::~Action() {
 	// signal any waiting Threads if the Application is using a multi-threaded
 	// Plex. Valgrind will have a stroke over this, I wager.
 	if (isBusy()) {
-		Logger::instance().error("Action@%p: deleted while busy!\n", this);
+		::com::diag::grandote::MaskableLogger::instance().error("Action@%p: deleted while busy!\n", this);
 		if (handle != 0) { (void)S3_runall_request_context(handle); }
 	}
 	LifeCycle::instance().destructor(*this);
@@ -123,7 +123,7 @@ bool Action::reset() {
 }
 
 bool Action::wait(Handle * candidate) {
-	CriticalSection guard(mutex);
+	::com::diag::grandote::CriticalSection guard(mutex);
 	if ((candidate != 0) && (handle != candidate)) {
 		return false;
 	} else {
@@ -141,12 +141,12 @@ bool Action::wait(Handle * candidate) {
  ******************************************************************************/
 
 Status Action::state() const {
-	CriticalSection guard(mutex);
+	::com::diag::grandote::CriticalSection guard(mutex);
 	return status;
 }
 
 Status Action::state(Status update) {
-	CriticalSection guard(mutex);
+	::com::diag::grandote::CriticalSection guard(mutex);
 	Status previous = status;
 	status = update;
 	return previous;
@@ -168,8 +168,8 @@ bool Action::retryable(Status status, bool nonexistence) {
 }
 
 bool Action::startable(Handle * candidate) {
-	CriticalSection guard(mutex);
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::CriticalSection guard(mutex);
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	bool result = false;
 	if ((status == PENDING) || (status == BUSY) || (status == FINAL)) {
 		logger.error("Action@%p: busy!\n", this); // Application error.
@@ -185,8 +185,8 @@ bool Action::startable(Handle * candidate) {
 }
 
 bool Action::restartable(Status final, bool & unretryable, Handle * candidate) {
-	CriticalSection guard(mutex);
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::CriticalSection guard(mutex);
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	bool result = false;
 	status = static_cast<Status>(FINAL);
 	bool clue;
@@ -209,7 +209,7 @@ bool Action::restartable(Status final, bool & unretryable, Handle * candidate) {
 }
 
 bool Action::signal(Status final) {
-	CriticalSection guard(mutex);
+	::com::diag::grandote::CriticalSection guard(mutex);
 	status = final;
 	return (condition.signal() == 0);
 }
@@ -230,7 +230,7 @@ void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
  ******************************************************************************/
 
 void Action::initialize() {
-	if (handle != 0) { Logger::instance().debug("Action@%p: handle=%p\n", this, handle); }
+	if (handle != 0) { ::com::diag::grandote::MaskableLogger::instance().debug("Action@%p: handle=%p\n", this, handle); }
 	std::memset(&handler, 0, sizeof(handler));
 	handler.propertiesCallback = &responsePropertiesCallback;
 	handler.completeCallback = &responseCompleteCallback;

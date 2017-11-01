@@ -19,8 +19,8 @@ namespace hayloft {
 
 ServiceManifest::Entry::Entry(const char * bucketname, const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
 : canonical(bucketname)
-, owner(set(ownerId))
-, display(set(ownerDisplayName))
+, owner(::com::diag::grandote::set(ownerId))
+, display(::com::diag::grandote::set(ownerDisplayName))
 , created(creationDateSeconds)
 {}
 

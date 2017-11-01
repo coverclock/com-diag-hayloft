@@ -69,7 +69,7 @@ void LogSet::execute() {
 	S3_set_server_access_logging(
 		&context,
 		target.c_str(),
-		set(prefix),
+		::com::diag::grandote::set(prefix),
 		count,
 		grants,
 		handle,

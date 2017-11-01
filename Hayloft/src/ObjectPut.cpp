@@ -180,11 +180,11 @@ ObjectPut::~ObjectPut() {
 void ObjectPut::initialize(const Properties::Metadata & settings) {
 	state(static_cast<Status>(IDLE));
 	std::memset(&properties, 0, sizeof(properties));
-	properties.contentType = set(type);
-	properties.md5 = set(checksum);
-	properties.cacheControl = set(control);
-	properties.contentDispositionFilename = set(filename);
-	properties.contentEncoding = set(encoding);
+	properties.contentType = ::com::diag::grandote::set(type);
+	properties.md5 = ::com::diag::grandote::set(checksum);
+	properties.cacheControl = ::com::diag::grandote::set(control);
+	properties.contentDispositionFilename = ::com::diag::grandote::set(filename);
+	properties.contentEncoding = ::com::diag::grandote::set(encoding);
 	properties.expires = expires;
 	properties.cannedAcl = access;
 	properties.metaDataCount = settings.size();

@@ -24,7 +24,7 @@ Plex::~Plex() {
 }
 
 void Plex::initialize() {
-	Logger::instance().debug("Plex@%p: handle=%p\n", this, handle);
+	::com::diag::grandote::MaskableLogger::instance().debug("Plex@%p: handle=%p\n", this, handle);
 }
 
 }

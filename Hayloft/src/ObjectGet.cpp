@@ -168,8 +168,8 @@ void ObjectGet::initialize() {
 	std::memset(&conditions, 0, sizeof(conditions));
 	conditions.ifModifiedSince = since;
 	conditions.ifNotModifiedSince = notsince;
-	conditions.ifMatchETag = set(match);
-	conditions.ifNotMatchETag = set(notmatch);
+	conditions.ifMatchETag = ::com::diag::grandote::set(match);
+	conditions.ifNotMatchETag = ::com::diag::grandote::set(notmatch);
 	show(&conditions, Logger::DEBUG);
 	std::memset(&handler, 0, sizeof(handler));
 	handler.responseHandler.propertiesCallback = Object::handler.propertiesCallback;

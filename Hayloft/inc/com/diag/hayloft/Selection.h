@@ -12,7 +12,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/generics.h"
 
 namespace com {
@@ -104,7 +104,7 @@ public:
 	 *        or empty value means this selection criteria isn't used.
 	 * @return a reference to this object.
 	 */
-	Selection & setPrefix(const char * namePrefix = 0) { prefix = set(namePrefix); return *this; }
+	Selection & setPrefix(const char * namePrefix = 0) { prefix = ::com::diag::grandote::set(namePrefix); return *this; }
 
 	/**
 	 * Set the nextMarker.
@@ -115,7 +115,7 @@ public:
 	 *        used.
 	 * @return a reference to this object.
 	 */
-	Selection & setMarker(const char * nextMarker = 0) { marker = set(nextMarker); return *this; }
+	Selection & setMarker(const char * nextMarker = 0) { marker = ::com::diag::grandote::set(nextMarker); return *this; }
 
 	/**
 	 * Set the nameDelimiter.
@@ -127,7 +127,7 @@ public:
 	 *        selection criteria isn't used.
 	 * @return a reference to this object.
 	 */
-	Selection & setDelimiter(const char * nameDelimiter = 0) { delimiter = set(nameDelimiter); return *this; }
+	Selection & setDelimiter(const char * nameDelimiter = 0) { delimiter = ::com::diag::grandote::set(nameDelimiter); return *this; }
 
 	/**
 	 * Set the maxkeys.

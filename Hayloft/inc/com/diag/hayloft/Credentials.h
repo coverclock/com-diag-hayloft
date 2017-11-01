@@ -13,7 +13,7 @@
 
 #include <string>
 #include "com/diag/hayloft/types.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
@@ -120,7 +120,7 @@ public:
 	 * @param accessKeyId is the access key ID or if null it is taken from the
 	 *        environment. A copy is made of this C string.
 	 */
-	Credentials & setId(const char * accessKeyId = 0) { id = set(accessKeyId, ACCESS_KEY_ID_ENV(), ""); return *this; }
+	Credentials & setId(const char * accessKeyId = 0) { id = ::com::diag::grandote::set(accessKeyId, ACCESS_KEY_ID_ENV(), ""); return *this; }
 
 	/**
 	 * Set the secret access key.
@@ -128,7 +128,7 @@ public:
 	 * @param secretAccessKey is the secret access key or if null it is taken
 	 *        from the environment. A copy is made of this C string.
 	 */
-	Credentials & setSecret(const char * secretAccessKey = 0) { secret = set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""); return *this; }
+	Credentials & setSecret(const char * secretAccessKey = 0) { secret = ::com::diag::grandote::set(secretAccessKey, SECRET_ACCESS_KEY_ENV(), ""); return *this; }
 
 protected:
 

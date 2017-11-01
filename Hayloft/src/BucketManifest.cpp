@@ -21,10 +21,10 @@ namespace hayloft {
 BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModified, const char * eTag, Octets objectsize, const char * ownerId, const char * ownerDisplayName)
 : key(objectname)
 , modified(lastModified)
-, etag(set(eTag))
+, etag(::com::diag::grandote::set(eTag))
 , size(objectsize)
-, owner(set(ownerId))
-, display(set(ownerDisplayName))
+, owner(::com::diag::grandote::set(ownerId))
+, display(::com::diag::grandote::set(ownerDisplayName))
 {}
 
 Status BucketManifest::listBucketCallback(int isTruncated, const char * nextMarker, int contentsCount, const S3ListBucketContent * contents, int commonPrefixesCount, const char ** commonPrefixes, void * callbackData) {
@@ -152,9 +152,9 @@ void BucketManifest::execute() {
 		Bucket::execute();
 		::S3_list_bucket(
 			&context,
-			set(prefix),
-			set(nextmarker),
-			set(delimiter),
+			::com::diag::grandote::set(prefix),
+			::com::diag::grandote::set(nextmarker),
+			::com::diag::grandote::set(delimiter),
 			maximum - size,
 			handle,
 			&handler,

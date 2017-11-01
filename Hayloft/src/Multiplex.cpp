@@ -48,7 +48,7 @@ Multiplex::~Multiplex() {
 
 void Multiplex::initialize() {
 	if (status != S3StatusOK) {
-		Logger::instance().error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
+		::com::diag::grandote::MaskableLogger::instance().error("Multiplex@%p: S3_create_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 	}
 }
 
@@ -56,14 +56,14 @@ int Multiplex::complete() {
 	int rc = 0;
 	Status status = ::S3_runall_request_context(handle);
 	if (status != S3StatusOK) {
-		Logger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
+		::com::diag::grandote::MaskableLogger::instance().error("Multiplex@%p: S3_runall_request_context failed! status=%d=\"%s\"\n", this, status, tostring(status));
 		rc = (::S3_status_is_retryable(status) != 0) ? RETRY : ERROR;
 	}
 	return rc;
 }
 
 int Multiplex::iterate(int & actions /* static dontcare */) {
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	int rc = 0;
 	int count = 0;
 	Status status = ::S3_runonce_request_context(handle, &count);
@@ -80,7 +80,7 @@ int Multiplex::iterate(int & actions /* static dontcare */) {
 }
 
 int Multiplex::ready(Milliseconds timeout) {
-	Logger & logger = Logger::instance();
+	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	int rc = 0;
 	do {
 		// We really only care about the reads, but we provide all three fd_sets
@@ -143,7 +143,7 @@ int Multiplex::service(Milliseconds timeout, int limit) {
 		if ((rc & RETRY) != 0) { platform.yield(); continue; }
 		if ((rc & READY) == 0) { break; }
 	}
-	Logger::instance().debug("Multiplex@%p: service=0x%x\n", this, rc);
+	::com::diag::grandote::MaskableLogger::instance().debug("Multiplex@%p: service=0x%x\n", this, rc);
 	return rc;
 }
 

@@ -8,13 +8,14 @@
  */
 
 #include "com/diag/hayloft/Region.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
 Region::Region(const char * re)
-: region(set(re, REGION_ENV(), DEFAULT()))
+: region(::com::diag::grandote::set(re, REGION_ENV(), DEFAULT()))
 {}
 
 }

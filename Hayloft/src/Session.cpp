@@ -52,13 +52,13 @@ Session & Session::factory() {
 }
 
 Session & Session::instance(Session & that) {
-	CriticalSection guard(instancemutex);
+	::com::diag::grandote::CriticalSection guard(instancemutex);
 	singleton = &that;
     return *singleton;
 }
 
 Session & Session::instance() {
-	CriticalSection guard(instancemutex);
+	::com::diag::grandote::CriticalSection guard(instancemutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());
@@ -67,13 +67,13 @@ Session & Session::instance() {
 }
 
 Session::Session(const char * bucketSuffix, const char * userAgentInfo, const Endpoint & endPoint, int flags)
-: bucketsuffix(set(bucketSuffix, BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_STR()))
-, useragent(set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
+: bucketsuffix(::com::diag::grandote::set(bucketSuffix, BUCKET_SUFFIX_ENV(), BUCKET_SUFFIX_STR()))
+, useragent(::com::diag::grandote::set(userAgentInfo, USER_AGENT_ENV(), USER_AGENT_STR()))
 , endpoint(endPoint.getEndpoint())
 , status(::S3StatusOK)
 {
 	{
-		CriticalSection guard(initializationmutex);
+		::com::diag::grandote::CriticalSection guard(initializationmutex);
 		status = ::S3_initialize(useragent.c_str(), flags, endpoint.c_str());
 	}
 	convert_to_lower_case(bucketsuffix);

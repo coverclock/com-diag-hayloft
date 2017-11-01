@@ -82,7 +82,7 @@ Complex::List Complex::starting;
 
 Complex::List Complex::restarting;
 
-Fibonacci Complex::fibonacci(1000);
+::com::diag::grandote::Fibonacci Complex::fibonacci(1000);
 
 Epochalseconds Complex::alarm = 0;
 
@@ -152,7 +152,7 @@ bool Complex::start(Action & action) {
  ******************************************************************************/
 
 void Complex::initialize() {
-	CriticalSection guard(instance);
+	::com::diag::grandote::CriticalSection guard(instance);
 	if (instances == 0) {
 		platform = &::com::diag::grandote::Platform::instance();
 		logger = &Logger::instance();
@@ -166,7 +166,7 @@ void Complex::initialize() {
 }
 
 void Complex::finalize() {
-	CriticalSection guard(instance);
+	::com::diag::grandote::CriticalSection guard(instance);
 	--instances;
 	if (instances == 0) {
 		LifeCycle::instance(*nextlifecycle);
@@ -188,7 +188,7 @@ void Complex::finalize() {
 
 // This may be called in the context of the Complex Thread.
 Action * Complex::pop_front(List & list) {
-	CriticalSection guard(shared);
+	::com::diag::grandote::CriticalSection guard(shared);
 	Action * action = 0;
 	if (!list.empty()) {
 		action = list.front();
@@ -199,14 +199,14 @@ Action * Complex::pop_front(List & list) {
 
 // This may be called in the context of the Complex Thread.
 Complex::List & Complex::push_back(List & list, Action & action) {
-	CriticalSection guard(shared);
+	::com::diag::grandote::CriticalSection guard(shared);
 	list.push_back(&action);
 	return list;
 }
 
 // This may be called in the context of the Application Thread.
 Complex::List & Complex::push_back_signal(List & list, Action & action) {
-	CriticalSection guard(shared);
+	::com::diag::grandote::CriticalSection guard(shared);
 	list.push_back(&action);
 	ready.signal();
 	return list;
@@ -321,7 +321,7 @@ void * Complex::run() {
 			// restarting.
 
 			if (active <= 0) {
-				CriticalSection guard(shared);
+				::com::diag::grandote::CriticalSection guard(shared);
 				while (starting.empty() && restarting.empty() && (!thread.notified())) {
 					int error = ready.wait(shared);
 					if (error != 0) {

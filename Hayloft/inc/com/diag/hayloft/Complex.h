@@ -33,8 +33,8 @@ class Platform;
 
 namespace com {
 namespace diag {
-namespace hayloft {
-class Logger;
+namespace grandote {
+class MaskableLogger;
 }
 }
 }
@@ -87,7 +87,7 @@ protected:
 
 	static ::com::diag::grandote::Platform * platform;
 
-	static Logger * logger;
+	static MaskableLogger * logger;
 
 	/**
 	 * If we have an internal error, like an error return on a system call,
@@ -118,11 +118,11 @@ protected:
 
 private:
 
-	static Mutex instance;
+	static ::com::diag::grandote::Mutex instance;
 
-	static Mutex shared;
+	static ::com::diag::grandote::Mutex shared;
 
-	static Condition ready;
+	static ::com::diag::grandote::Condition ready;
 
 	static int instances;
 
@@ -134,17 +134,17 @@ private:
 
 	static Handle * complex;
 
-	static ::com::diag::hayloft::LifeCycle * nextlifecycle;
+	static LifeCycle * nextlifecycle;
 
 	static LifeCycle lifecycle;
 
-	static Thread thread;
+	static ::com::diag::grandote::Thread thread;
 
 	static List starting;
 
 	static List restarting;
 
-	static Fibonacci fibonacci;
+	static ::com::diag::grandote::Fibonacci fibonacci;
 
 	static Epochalseconds alarm;
 

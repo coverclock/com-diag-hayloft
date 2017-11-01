@@ -84,9 +84,9 @@ protected:
 
 	Handle * handle;
 
-	mutable Mutex mutex;
+	mutable ::com::diag::grandote::Mutex mutex;
 
-	Condition condition;
+	::com::diag::grandote::Condition condition;
 
 	int retries;
 

@@ -29,13 +29,13 @@ LifeCycle & LifeCycle::factory() {
 }
 
 LifeCycle & LifeCycle::instance(LifeCycle & that) {
-	CriticalSection guard(mutex);
+	::com::diag::grandote::CriticalSection guard(mutex);
 	singleton = &that;
     return *singleton;
 }
 
 LifeCycle & LifeCycle::instance() {
-	CriticalSection guard(mutex);
+	::com::diag::grandote::CriticalSection guard(mutex);
 	if (singleton == 0) {
 		delete instant;
 		instant = singleton = &(factory());

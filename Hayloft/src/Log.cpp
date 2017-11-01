@@ -19,7 +19,7 @@ namespace hayloft {
 Log::Log(const Bucket & bucket, const Bucket & log, const char * keyprefix, const Grant & grant)
 : Grant(bucket, grant)
 , target(log.getCanonical())
-, prefix(set(keyprefix))
+, prefix(::com::diag::grandote::set(keyprefix))
 {
 	initialize();
 }
@@ -27,7 +27,7 @@ Log::Log(const Bucket & bucket, const Bucket & log, const char * keyprefix, cons
 Log::Log(const Bucket & bucket, const Plex & plex, const Bucket & log, const char * keyprefix, const Grant & grant)
 : Grant(bucket, plex, grant)
 , target(log.getCanonical())
-, prefix(set(keyprefix))
+, prefix(::com::diag::grandote::set(keyprefix))
 {
 	initialize();
 }

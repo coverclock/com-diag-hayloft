@@ -31,7 +31,7 @@ class BucketManifest;
 class Grant;
 class Log;
 
-static const Logger::Level SHOW_LOG_LEVEL = Logger::INFORMATION;
+static const ::com::diag::grandote::MaskableLogger::Level SHOW_LOG_LEVEL = ::com::diag::grandote::MaskableLogger::INFORMATION;
 
 /**
  * Display a libS3 S3ErrorDetails structure.
@@ -39,7 +39,7 @@ static const Logger::Level SHOW_LOG_LEVEL = Logger::INFORMATION;
  * @param details points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3ErrorDetails * details, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ::S3ErrorDetails * details, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display a libS3 S3ResponseProperties structure.
@@ -47,7 +47,7 @@ extern void show(const ::S3ErrorDetails * details, Logger::Level level = SHOW_LO
  * @param response points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3ResponseProperties * response, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ::S3ResponseProperties * response, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display a libS3 S3BucketContext structure.
@@ -55,7 +55,7 @@ extern void show(const ::S3ResponseProperties * response, Logger::Level level = 
  * @param context points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3BucketContext * context, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ::S3BucketContext * context, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display a libS3 S3PutProperties structure.
@@ -63,7 +63,7 @@ extern void show(const ::S3BucketContext * context, Logger::Level level = SHOW_L
  * @param properties points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3PutProperties * properties, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ::S3PutProperties * properties, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display a libS3 S3GetConditions structure.
@@ -71,7 +71,7 @@ extern void show(const ::S3PutProperties * properties, Logger::Level level = SHO
  * @param conditions points to the structure.
  * @param level specifies the logging level.
  */
-extern void show(const ::S3GetConditions * conditions, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ::S3GetConditions * conditions, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display an array of libS3 S3AclGrant structures.
@@ -80,7 +80,7 @@ extern void show(const ::S3GetConditions * conditions, Logger::Level level = SHO
  * @param count is the number of structures (if it is an array).
  * @param level specifies the logging level.
  */
-extern void show(const ::S3AclGrant * grant, int count = 1, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ::S3AclGrant * grant, int count = 1, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display the metadata associated with a Hayloft Object.
@@ -88,7 +88,7 @@ extern void show(const ::S3AclGrant * grant, int count = 1, Logger::Level level 
  * @param object refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const Object & object, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const Object & object, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display the metadata associated with a Hayloft Bucket.
@@ -96,7 +96,7 @@ extern void show(const Object & object, Logger::Level level = SHOW_LOG_LEVEL);
  * @param bucket refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const Bucket & bucket, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const Bucket & bucket, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display the metadata associated with a Hayloft ServiceManifest.
@@ -104,7 +104,7 @@ extern void show(const Bucket & bucket, Logger::Level level = SHOW_LOG_LEVEL);
  * @param manifest refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const ServiceManifest & manifest, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const ServiceManifest & manifest, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display the metadata associated with a Hayloft BucketManifest.
@@ -112,7 +112,7 @@ extern void show(const ServiceManifest & manifest, Logger::Level level = SHOW_LO
  * @param manifest refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const BucketManifest & manifest, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const BucketManifest & manifest, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display the metadata associated with a Hayloft Grant.
@@ -120,7 +120,7 @@ extern void show(const BucketManifest & manifest, Logger::Level level = SHOW_LOG
  * @param grant refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const Grant & grant, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const Grant & grant, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 /**
  * Display the metadata associated with a Hayloft Log.
@@ -128,7 +128,7 @@ extern void show(const Grant & grant, Logger::Level level = SHOW_LOG_LEVEL);
  * @param log refers to the object.
  * @param level specifies the logging level.
  */
-extern void show(const Log & log, Logger::Level level = SHOW_LOG_LEVEL);
+extern void show(const Log & log, ::com::diag::grandote::MaskableLogger::Level level = SHOW_LOG_LEVEL);
 
 }
 }

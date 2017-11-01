@@ -123,7 +123,7 @@ public:
 	 *        condition is not used.
 	 * @return a reference to this object.
 	 */
-	Conditions & setMatch(const char * ifMatchETag = 0) { match = set(ifMatchETag); return *this; }
+	Conditions & setMatch(const char * ifMatchETag = 0) { match = ::com::diag::grandote::set(ifMatchETag); return *this; }
 
 	/**
 	 * Set the ifNotMatchETag condition.
@@ -133,7 +133,7 @@ public:
 	 *        this condition is not used.
 	 * @return a reference to this object.
 	 */
-	Conditions & setNotMatch(const char * ifNotMatchETag = 0) { notmatch = set(ifNotMatchETag); return *this; }
+	Conditions & setNotMatch(const char * ifNotMatchETag = 0) { notmatch = ::com::diag::grandote::set(ifNotMatchETag); return *this; }
 
 };
 

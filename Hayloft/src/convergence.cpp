@@ -30,7 +30,7 @@ bool complete_generic(Action & action, bool converge, bool invert, int tries, Mi
 	if (action.isIdle()) {
 		action.start();
 	}
-	Fibonacci factor;
+	::com::diag::grandote::Fibonacci factor;
 	Handle * handle;
 	int rc;
 	Milliseconds effective;
@@ -77,7 +77,7 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 	if (action.isIdle()) {
 		action.start();
 	}
-	Fibonacci factor;
+	::com::diag::grandote::Fibonacci factor;
 	Handle * handle;
 	int rc;
 	Milliseconds effective;

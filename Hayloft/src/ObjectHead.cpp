@@ -49,7 +49,7 @@ void ObjectHead::initialize() {
 
 void ObjectHead::execute() {
 	state(static_cast<Status>(BUSY));
-	Logger::instance().debug("ObjectHead@%p: begin\n", this);
+	::com::diag::grandote::MaskableLogger::instance().debug("ObjectHead@%p: begin\n", this);
 	Object::execute();
 	::S3_head_object(
 		&context,

@@ -12,7 +12,7 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/S3.h"
 
@@ -96,7 +96,7 @@ public:
 	 *        taken from the environment.
 	 * @return a reference to this object.
 	 */
-	Endpoint & setEndpoint(const char * ep = 0) { endpoint = set(ep, ENDPOINT_ENV(), DEFAULT()); return *this; }
+	Endpoint & setEndpoint(const char * ep = 0) { endpoint = ::com::diag::grandote::set(ep, ENDPOINT_ENV(), DEFAULT()); return *this; }
 
 };
 
