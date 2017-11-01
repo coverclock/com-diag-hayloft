@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_ENDPOINT_
-#define _H_COM_DIAG_UNITTEST_S3_ENDPOINT_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_ENDPOINT_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_ENDPOINT_
 
 /**
  * @file
@@ -12,16 +12,15 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/Endpoint.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture EndpointTest;
@@ -125,7 +124,6 @@ TEST_F(EndpointTest, Settors) {
 	EXPECT_EQ(std::strcmp(endpoint.getEndpoint(), Endpoint::DEFAULT()), 0);
 }
 
-}
 }
 }
 }

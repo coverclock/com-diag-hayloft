@@ -11,24 +11,7 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/lariat/lariat.h"
-#include "com/diag/unittest/s3/Environment.h"
-
-// Unit tests that use libhayloft and libgrandote.
-
-#if 1
-#include "com/diag/unittest/Seconds.h"
-#include "com/diag/unittest/Logger.h"
-#include "com/diag/unittest/Packet.h"
-#include "com/diag/unittest/Parameter.h"
-#include "com/diag/unittest/size.h"
-#include "com/diag/unittest/Fibonacci.h"
-#endif
-
-// Unit tests that also use libpthreads and librt.
-
-#if 1
-#include "com/diag/unittest/Thread.h"
-#endif
+#include "Environment.h"
 
 // Unit tests that also use libs3, libcurl, libssl, and libcrypto. Running
 // valgrind reveals that some of these libraries are not so well behaved.
@@ -37,35 +20,35 @@
 // deliberately used while trying to increase the size of the entropy pool.
 
 #if 1
-#include "com/diag/unittest/s3/sizeof.h"
-#include "com/diag/unittest/s3/Endpoint.h"
-#include "com/diag/unittest/s3/Session.h"
-#include "com/diag/unittest/s3/Credentials.h"
-#include "com/diag/unittest/s3/Protocol.h"
-#include "com/diag/unittest/s3/Style.h"
-#include "com/diag/unittest/s3/Region.h"
-#include "com/diag/unittest/s3/Access.h"
-#include "com/diag/unittest/s3/Context.h"
-#include "com/diag/unittest/s3/Multiplex.h"
-#include "com/diag/unittest/s3/Properties.h"
-#include "com/diag/unittest/s3/Conditions.h"
-#include "com/diag/unittest/s3/Selection.h"
-#include "com/diag/unittest/s3/BucketBase.h"
-#include "com/diag/unittest/s3/ObjectBase.h"
-#include "com/diag/unittest/s3/GrantBase.h"
-#include "com/diag/unittest/s3/LogBase.h"
+#include "sizeof.h"
+#include "Endpoint.h"
+#include "Session.h"
+#include "Credentials.h"
+#include "Protocol.h"
+#include "Style.h"
+#include "Region.h"
+#include "Access.h"
+#include "Context.h"
+#include "Multiplex.h"
+#include "Properties.h"
+#include "Conditions.h"
+#include "Selection.h"
+#include "BucketBase.h"
+#include "ObjectBase.h"
+#include "GrantBase.h"
+#include "LogBase.h"
 #endif
 
 // Unit tests that use S3, perhaps more properly called functional tests.
 
 #if 1
-#include "com/diag/unittest/s3/Bucket.h"
-#include "com/diag/unittest/s3/Object.h"
-#include "com/diag/unittest/s3/convergence.h"
-#include "com/diag/unittest/s3/Grant.h"
-#include "com/diag/unittest/s3/Log.h"
-#include "com/diag/unittest/s3/Complex.h"
-#include "com/diag/unittest/s3/Manifest.h"
+#include "Bucket.h"
+#include "Object.h"
+#include "convergence.h"
+#include "Grant.h"
+#include "Log.h"
+#include "Complex.h"
+#include "Manifest.h"
 #endif
 
 // Hooks to clean up singletons just for valgrind.

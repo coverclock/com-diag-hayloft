@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_SELECTION_
-#define _H__COM_DIAG_UNITTEST_S3_SELECTION_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_SELECTION_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_SELECTION_
 
 /**
  * @file
@@ -12,7 +12,7 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/Selection.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/generics.h"
@@ -21,9 +21,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture SelectionTest;
@@ -84,7 +83,7 @@ TEST_F(SelectionTest, Settors) {
 	EXPECT_EQ(std::strcmp(selection.getDelimiter(), ""), 0);
 	EXPECT_EQ(selection.getMaximum(), intmaxof(int));
 }
-}
+
 }
 }
 }

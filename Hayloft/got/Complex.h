@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_COMPLEX_
-#define _H__COM_DIAG_UNITTEST_S3_COMPLEX_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_COMPLEX_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_COMPLEX_
 
 /**
  * @file
@@ -12,8 +12,8 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/s3/Environment.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Environment.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/Complex.h"
 #include "com/diag/hayloft/LifeCycle.h"
 #include "com/diag/hayloft/ObjectPut.h"
@@ -22,7 +22,7 @@
 #include "com/diag/hayloft/ObjectDelete.h"
 #include "com/diag/hayloft/ObjectHead.h"
 #include "com/diag/hayloft/ObjectCopy.h"
-#include "com/diag/hayloft/size.h"
+#include "com/diag/grandote/size.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/BucketHead.h"
 #include "com/diag/hayloft/BucketCreate.h"
@@ -33,9 +33,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture ComplexTest;
@@ -569,7 +568,6 @@ TEST_F(ComplexTest, Polled) {
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
 }
 
-}
 }
 }
 }

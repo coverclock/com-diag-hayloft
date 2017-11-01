@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_GRANT_
-#define _H__COM_DIAG_UNITTEST_S3_GRANT_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_GRANT_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_GRANT_
 
 /**
  * @file
@@ -12,13 +12,13 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/GrantGet.h"
 #include "com/diag/hayloft/GrantSet.h"
 #include "com/diag/hayloft/ObjectPut.h"
 #include "com/diag/grandote/PathInput.h"
 #include "com/diag/hayloft/ObjectDelete.h"
-#include "com/diag/hayloft/size.h"
+#include "com/diag/grandote/size.h"
 #include "com/diag/hayloft/BucketCreate.h"
 #include "com/diag/hayloft/Access.h"
 #include "com/diag/hayloft/Properties.h"
@@ -30,9 +30,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture GrantTest;
@@ -46,14 +45,14 @@ TEST_F(GrantTest, GetSynchronous) {
 	GrantGet grantgetbucket(bucketcreate);
 	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket);
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput.reset(input, inputsize));
 		EXPECT_TRUE(objectput.start());
@@ -78,7 +77,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 	GrantGet grantgetbucket(bucketcreate, multiplex);
 	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket);
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize);
 	EXPECT_TRUE(objectput.start());
@@ -87,7 +86,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput.reset(input, inputsize));
 		EXPECT_TRUE(objectput.start());
@@ -116,14 +115,14 @@ TEST_F(GrantTest, GetPublicRead) {
 	show(grantgetbucket);
 	Properties properties;
 	properties.setAccess(access);
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput.reset(input, inputsize));
 		EXPECT_TRUE(objectput.start());
@@ -146,14 +145,14 @@ TEST_F(GrantTest, SetGet) {
 	BucketCreate bucketcreate(BUCKET);
 	ASSERT_TRUE(complete(bucketcreate));
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput.reset(input, inputsize));
 		EXPECT_TRUE(objectput.start());
@@ -191,7 +190,6 @@ TEST_F(GrantTest, SetGet) {
 	EXPECT_TRUE(complete(bucketdelete));
 }
 
-}
 }
 }
 }

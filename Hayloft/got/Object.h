@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_OBJECT_
-#define _H__COM_DIAG_UNITTEST_S3_OBJECT_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_OBJECT_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_OBJECT_
 
 /**
  * @file
@@ -13,7 +13,7 @@
 
 #include <string>
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/Object.h"
 #include "com/diag/hayloft/ObjectPut.h"
 #include "com/diag/grandote/PathInput.h"
@@ -38,9 +38,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 // In the unit tests below, we are testing against the actual AWS S3, not a
@@ -149,8 +148,8 @@ TEST_F(ObjectTest, Heap) {
 	Size inputsize = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objectput;
-		::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+		PathInput * input = new PathInput("unittest.txt");
+		ASSERT_NE(input, (PathInput*)0);
 		inputsize = size(*input);
 		ASSERT_TRUE(inputsize > 0);
 		objectput = new ObjectPut(OBJECT, *bucketcreate, input /* TAKEN */, inputsize, properties);
@@ -197,8 +196,8 @@ TEST_F(ObjectTest, Heap) {
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
 			delete objectget;
-			::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
-			ASSERT_NE(output, (::com::diag::grandote::PathOutput*)0);
+			PathOutput * output = new PathOutput(OBJECT);
+			ASSERT_NE(output, (PathOutput*)0);
 			objectget = new ObjectGet(OBJECT, *bucketcreate, output /* TAKEN */);
 			ASSERT_NE(objectget, (ObjectGet*)0);
 			EXPECT_EQ(*objectget, true);
@@ -479,8 +478,8 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+	PathInput * input = new PathInput("unittest.txt");
+	ASSERT_NE(input, (PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize, properties);
@@ -505,8 +504,8 @@ TEST_F(ObjectTest, Complete) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+		input = new PathInput("unittest.txt");
+		ASSERT_NE(input, (PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput.reset(input, inputsize);
@@ -554,7 +553,7 @@ TEST_F(ObjectTest, Complete) {
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
-	::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
+	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
@@ -578,7 +577,7 @@ TEST_F(ObjectTest, Complete) {
 			if (!objectget.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			output = new ::com::diag::grandote::PathOutput(OBJECT);
+			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
@@ -877,8 +876,8 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+	PathInput * input = new PathInput("unittest.txt");
+	ASSERT_NE(input, (PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput(OBJECT, bucketcreate, simplex, input, inputsize, properties);
@@ -895,8 +894,8 @@ TEST_F(ObjectTest, Simplex) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+		input = new PathInput("unittest.txt");
+		ASSERT_NE(input, (PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput.reset(input, inputsize);
@@ -936,7 +935,7 @@ TEST_F(ObjectTest, Simplex) {
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
-	::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
+	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, simplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
@@ -952,7 +951,7 @@ TEST_F(ObjectTest, Simplex) {
 			if (!objectget.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			output = new ::com::diag::grandote::PathOutput(OBJECT);
+			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
@@ -1264,8 +1263,8 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+	PathInput * input = new PathInput("unittest.txt");
+	ASSERT_NE(input, (PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize, properties);
@@ -1295,8 +1294,8 @@ TEST_F(ObjectTest, Service) {
 		if (!objectput.isRetryable()) { break; }
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+		input = new PathInput("unittest.txt");
+		ASSERT_NE(input, (PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput.reset(input, inputsize);
@@ -1349,7 +1348,7 @@ TEST_F(ObjectTest, Service) {
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
-	::com::diag::grandote::PathOutput * output = new ::com::diag::grandote::PathOutput(OBJECT);
+	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
 	EXPECT_EQ(objectget, false);
 	EXPECT_TRUE(objectget.isIdle());
@@ -1378,7 +1377,7 @@ TEST_F(ObjectTest, Service) {
 			if (!objectget.isRetryable()) { break; }
 			logger.configuration("RETRYING %d\n", __LINE__);
 			platform.yield(platform.frequency());
-			output = new ::com::diag::grandote::PathOutput(OBJECT);
+			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
@@ -1628,16 +1627,16 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_EQ(bucketmanifest1.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+	PathInput * input = new PathInput("unittest.txt");
+	ASSERT_NE(input, (PathInput*)0);
 	Size inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+		input = new PathInput("unittest.txt");
+		ASSERT_NE(input, (PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput1.reset(input, inputsize);
@@ -1660,16 +1659,16 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_NE(bucketmanifest2.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest2.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
-	input = new ::com::diag::grandote::PathInput("unittest.txt");
-	ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+	input = new PathInput("unittest.txt");
+	ASSERT_NE(input, (PathInput*)0);
 	inputsize = size(*input);
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput2(OBJECT2, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput2.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
-		ASSERT_NE(input, (::com::diag::grandote::PathInput*)0);
+		input = new PathInput("unittest.txt");
+		ASSERT_NE(input, (PathInput*)0);
 		inputsize = size(*input);
 		EXPECT_TRUE(inputsize > 0);
 		objectput2.reset(input, inputsize);
@@ -1872,13 +1871,13 @@ TEST_F(ObjectTest, Copy) {
 	/**/
 	Properties properties;
 	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 		EXPECT_TRUE(objectput1.start());
@@ -1941,12 +1940,12 @@ TEST_F(ObjectTest, Copy) {
 	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
 	EXPECT_EQ(objecthead2.find("keywordb"), (char *)0);
 	/**/
-	::com::diag::grandote::PathOutput * output2 = new ::com::diag::grandote::PathOutput(OBJECT2);
+	PathOutput * output2 = new PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
 			logger.configuration("RETRYING %d\n", __LINE__);
-			output2 = new ::com::diag::grandote::PathOutput(OBJECT2);
+			output2 = new PathOutput(OBJECT2);
 			objectget2.reset(output2);
 		} else if (objectget2.isNonexistent()) {
 			logger.configuration("WAITING %d\n", __LINE__);
@@ -2016,7 +2015,6 @@ TEST_F(ObjectTest, Copy) {
 	EXPECT_EQ(::unlink(OBJECT2), 0);
 }
 
-}
 }
 }
 }

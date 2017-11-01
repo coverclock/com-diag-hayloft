@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_OBJECT_
-#define _H__COM_DIAG_UNITTEST_S3_OBJECT_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_CONVERGENCE_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_CONVERGENCE_
 
 /**
  * @file
@@ -13,7 +13,7 @@
 
 #include <string>
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/Object.h"
 #include "com/diag/hayloft/ObjectPut.h"
 #include "com/diag/grandote/PathInput.h"
@@ -22,7 +22,7 @@
 #include "com/diag/hayloft/ObjectDelete.h"
 #include "com/diag/hayloft/ObjectHead.h"
 #include "com/diag/hayloft/ObjectCopy.h"
-#include "com/diag/hayloft/size.h"
+#include "com/diag/grandote/size.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/BucketHead.h"
 #include "com/diag/hayloft/BucketCreate.h"
@@ -37,9 +37,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture ConvergenceTest;
@@ -280,7 +279,6 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
 }
 
-}
 }
 }
 }

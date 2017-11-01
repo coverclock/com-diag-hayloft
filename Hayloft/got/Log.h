@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_GRANT_
-#define _H__COM_DIAG_UNITTEST_S3_GRANT_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_GRANT_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_GRANT_
 
 /**
  * @file
@@ -12,7 +12,7 @@
  */
 
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/LogGet.h"
 #include "com/diag/hayloft/LogSet.h"
 #include "com/diag/hayloft/GrantGet.h"
@@ -35,9 +35,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture LogTest;
@@ -102,13 +101,13 @@ TEST_F(LogTest, SetGet) {
 	ASSERT_NE(logset.getPrefix(), (char *)0);
 	EXPECT_EQ(*logset.getPrefix(), '\0');
 	ASSERT_TRUE(complete(logset));
-	::com::diag::grandote::Fibonacci fibonacci;
+	Fibonacci fibonacci;
 	LogGet logget2(bucket, multiplex);
 	for (int ii = 0; ii < 10; ++ii) {
 		ASSERT_TRUE(complete(logget2));
 		ASSERT_NE(logget2.getTarget(), (char *)0);
 		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
-		::com::diag::grandote::Platform::instance().yield(fibonacci * ::com::diag::grandote::Platform::instance().frequency());
+		Platform::instance().yield(fibonacci * Platform::instance().frequency());
 		EXPECT_TRUE(logget2.start());
 	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
@@ -151,13 +150,13 @@ TEST_F(LogTest, SetGetPrefix) {
 	ASSERT_NE(logset.getPrefix(), (char *)0);
 	EXPECT_EQ(std::strcmp(logset.getPrefix(), PREFIX), 0);
 	ASSERT_TRUE(complete(logset));
-	::com::diag::grandote::Fibonacci fibonacci;
+	Fibonacci fibonacci;
 	LogGet logget2(bucket, multiplex);
 	for (int ii = 0; ii < 10; ++ii) {
 		ASSERT_TRUE(complete(logget2));
 		ASSERT_NE(logget2.getTarget(), (char *)0);
 		if (std::strcmp(logget2.getTarget(), log.getCanonical()) == 0) { break; }
-		::com::diag::grandote::Platform::instance().yield(fibonacci * ::com::diag::grandote::Platform::instance().frequency());
+		Platform::instance().yield(fibonacci * Platform::instance().frequency());
 		EXPECT_TRUE(logget2.start());
 	}
 	EXPECT_EQ(std::strcmp(logget2.getTarget(), log.getCanonical()), 0);
@@ -193,8 +192,8 @@ TEST_F(LogTest, SetGetApplication) {
 	ASSERT_TRUE(complete(grant));
 	LogSet logset(bucket, multiplex, log, PREFIX);
 	ASSERT_TRUE(complete(logset));
-	::com::diag::grandote::Fibonacci factor;
-	::com::diag::grandote::PathInput * input = new ::com::diag::grandote::PathInput("unittest.txt");
+	Fibonacci factor;
+	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
 	for (int ii = 0; ii < 10; ++ii) {
@@ -202,7 +201,7 @@ TEST_F(LogTest, SetGetApplication) {
 		multiplex.complete();
 		if (!put.isRetryable()) { break; }
 		platform.yield(factor * platform.frequency());
-		input = new ::com::diag::grandote::PathInput("unittest.txt");
+		input = new PathInput("unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(put.reset(input, inputsize));
 	}
@@ -221,7 +220,6 @@ TEST_F(LogTest, SetGetApplication) {
 	ASSERT_TRUE(complete(logdelete));
 }
 
-}
 }
 }
 }

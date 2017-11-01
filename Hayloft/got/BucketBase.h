@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_S3_BUCKET_
-#define _H__COM_DIAG_UNITTEST_S3_BUCKET_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_BUCKET_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_BUCKET_
 
 /**
  * @file
@@ -13,7 +13,7 @@
 
 #include <string>
 #include "gtest/gtest.h"
-#include "com/diag/unittest/Fixture.h"
+#include "Fixture.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/string.h"
@@ -22,9 +22,8 @@
 namespace com {
 namespace diag {
 namespace unittest {
-namespace s3 {
 
-using namespace ::com::diag::hayloft;
+using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 typedef Fixture BucketBaseTest;
@@ -135,7 +134,6 @@ TEST_F(BucketBaseTest, CopyConstructor) {
 	EXPECT_EQ(source.getProtocol(), sink.getProtocol());
 }
 
-}
 }
 }
 }
