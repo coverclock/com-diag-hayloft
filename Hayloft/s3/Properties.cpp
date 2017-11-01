@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Properties.h"
+#include "com/diag/hayloft/Properties.h"
 #include "com/diag/hayloft/set.h"
 
 namespace com {

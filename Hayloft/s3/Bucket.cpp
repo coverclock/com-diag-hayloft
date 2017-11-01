@@ -8,11 +8,11 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Plex.h"
-#include "com/diag/hayloft/s3/show.h"
-#include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/Plex.h"
+#include "com/diag/hayloft/show.h"
+#include "com/diag/hayloft/tostring.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {

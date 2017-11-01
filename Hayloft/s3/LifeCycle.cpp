@@ -7,12 +7,12 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/LifeCycle.h"
-#include "com/diag/hayloft/s3/Action.h"
-#include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/LifeCycle.h"
+#include "com/diag/hayloft/Action.h"
+#include "com/diag/hayloft/tostring.h"
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/CriticalSection.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {

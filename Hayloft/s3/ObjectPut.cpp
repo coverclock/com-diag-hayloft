@@ -7,10 +7,10 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/ObjectPut.h"
+#include "com/diag/hayloft/show.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/Input.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/errno.h"

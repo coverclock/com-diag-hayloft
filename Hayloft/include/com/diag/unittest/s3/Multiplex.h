@@ -14,8 +14,8 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/s3/Environment.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
-#include "com/diag/hayloft/s3/Simplex.h"
+#include "com/diag/hayloft/Multiplex.h"
+#include "com/diag/hayloft/Simplex.h"
 
 namespace com {
 namespace diag {
@@ -23,7 +23,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 typedef Fixture MultiplexTest;
 

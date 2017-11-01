@@ -7,14 +7,14 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/convergence.h"
-#include "com/diag/hayloft/s3/Action.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
-#include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/convergence.h"
+#include "com/diag/hayloft/Action.h"
+#include "com/diag/hayloft/Multiplex.h"
+#include "com/diag/hayloft/tostring.h"
 #include "com/diag/hayloft/Fibonacci.h"
 #include "com/diag/grandote/Platform.h"
 #include "com/diag/grandote/types.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {

@@ -7,9 +7,9 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Object.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/Object.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {

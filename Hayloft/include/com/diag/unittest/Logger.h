@@ -13,7 +13,7 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/FileOutput.h"
 #include "com/diag/grandote/LogOutput.h"
 #include "com/diag/grandote/stdlib.h"

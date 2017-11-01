@@ -14,12 +14,12 @@
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/ObjectDelete.h"
-#include "com/diag/hayloft/s3/BucketCreate.h"
-#include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/Complex.h"
+#include "com/diag/hayloft/ObjectPut.h"
+#include "com/diag/hayloft/ObjectDelete.h"
+#include "com/diag/hayloft/BucketCreate.h"
+#include "com/diag/hayloft/BucketDelete.h"
+#include "com/diag/hayloft/BucketManifest.h"
+#include "com/diag/hayloft/Complex.h"
 #include "com/diag/hayloft/Seconds.h"
 #include "com/diag/grandote/Input.h"
 #include "com/diag/grandote/stdlib.h"
@@ -32,7 +32,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 typedef Fixture ManifestTest;
 

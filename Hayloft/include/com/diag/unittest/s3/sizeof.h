@@ -14,23 +14,23 @@
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
 
-#include "com/diag/hayloft/s3/BucketCreate.h"
-#include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/BucketHead.h"
-#include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/Complex.h"
-#include "com/diag/hayloft/s3/GrantGet.h"
-#include "com/diag/hayloft/s3/GrantSet.h"
-#include "com/diag/hayloft/s3/LogGet.h"
-#include "com/diag/hayloft/s3/LogSet.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
-#include "com/diag/hayloft/s3/ObjectCopy.h"
-#include "com/diag/hayloft/s3/ObjectDelete.h"
-#include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/hayloft/s3/ObjectHead.h"
-#include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/ServiceManifest.h"
-#include "com/diag/hayloft/s3/Simplex.h"
+#include "com/diag/hayloft/BucketCreate.h"
+#include "com/diag/hayloft/BucketDelete.h"
+#include "com/diag/hayloft/BucketHead.h"
+#include "com/diag/hayloft/BucketManifest.h"
+#include "com/diag/hayloft/Complex.h"
+#include "com/diag/hayloft/GrantGet.h"
+#include "com/diag/hayloft/GrantSet.h"
+#include "com/diag/hayloft/LogGet.h"
+#include "com/diag/hayloft/LogSet.h"
+#include "com/diag/hayloft/Multiplex.h"
+#include "com/diag/hayloft/ObjectCopy.h"
+#include "com/diag/hayloft/ObjectDelete.h"
+#include "com/diag/hayloft/ObjectGet.h"
+#include "com/diag/hayloft/ObjectHead.h"
+#include "com/diag/hayloft/ObjectPut.h"
+#include "com/diag/hayloft/ServiceManifest.h"
+#include "com/diag/hayloft/Simplex.h"
 
 namespace com {
 namespace diag {
@@ -38,7 +38,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 typedef Fixture SizeofTest;
 

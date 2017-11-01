@@ -14,22 +14,22 @@
 #include <string>
 #include "com/diag/grandote/PathInput.h"
 #include "com/diag/grandote/PathOutput.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/size.h"
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Simplex.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
-#include "com/diag/hayloft/s3/Complex.h"
-#include "com/diag/hayloft/s3/BucketCreate.h"
-#include "com/diag/hayloft/s3/ObjectPut.h"
-#include "com/diag/hayloft/s3/ObjectCopy.h"
-#include "com/diag/hayloft/s3/ObjectGet.h"
-#include "com/diag/hayloft/s3/ObjectDelete.h"
-#include "com/diag/hayloft/s3/BucketDelete.h"
+#include "com/diag/hayloft/Credentials.h"
+#include "com/diag/hayloft/Session.h"
+#include "com/diag/hayloft/Simplex.h"
+#include "com/diag/hayloft/Multiplex.h"
+#include "com/diag/hayloft/Complex.h"
+#include "com/diag/hayloft/BucketCreate.h"
+#include "com/diag/hayloft/ObjectPut.h"
+#include "com/diag/hayloft/ObjectCopy.h"
+#include "com/diag/hayloft/ObjectGet.h"
+#include "com/diag/hayloft/ObjectDelete.h"
+#include "com/diag/hayloft/BucketDelete.h"
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 using ::com::diag::grandote::PathInput;
 using ::com::diag::grandote::PathOutput;
 
@@ -442,7 +442,7 @@ public:
 	}
 };
 
-class MyObjectGet : public ::com::diag::hayloft::s3::ObjectGet {
+class MyObjectGet : public ::com::diag::hayloft::ObjectGet {
 private:
 	const char * path;
 public:
@@ -550,19 +550,19 @@ int main(int argc, char ** argv, char ** envp) {
     while ((opt = ::getopt(argc, argv, "b:i:k:u:!?")) >= 0) {
         switch (opt) {
         case 'b':
-			::setenv(::com::diag::hayloft::s3::Session::BUCKET_SUFFIX_ENV(), optarg, !0);
+			::setenv(::com::diag::hayloft::Session::BUCKET_SUFFIX_ENV(), optarg, !0);
             break;
         case 'i':
-			::setenv(::com::diag::hayloft::s3::Credentials::ACCESS_KEY_ID_ENV(), optarg, !0);
+			::setenv(::com::diag::hayloft::Credentials::ACCESS_KEY_ID_ENV(), optarg, !0);
             break;
         case 'k':
-			::setenv(::com::diag::hayloft::s3::Credentials::SECRET_ACCESS_KEY_ENV(), optarg, !0);
+			::setenv(::com::diag::hayloft::Credentials::SECRET_ACCESS_KEY_ENV(), optarg, !0);
            break;
         case 'u':
-			::setenv(::com::diag::hayloft::s3::Session::USER_AGENT_ENV(), optarg, !0);
+			::setenv(::com::diag::hayloft::Session::USER_AGENT_ENV(), optarg, !0);
             break;
         case '!':
-            ::setenv(::com::diag::hayloft::Logger::MASK_ENV(), "0xfff0", !0);
+            ::setenv(::com::diag::grandote::MaskableLogger::MASK_ENV(), "0xfff0", !0);
             Logger::instance().setMask();
             break;
         case '?':

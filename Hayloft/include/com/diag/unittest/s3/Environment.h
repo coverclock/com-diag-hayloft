@@ -28,11 +28,11 @@
 #include "com/diag/grandote/PathInput.h"
 #include "com/diag/grandote/stdlib.h"
 #include "com/diag/grandote/string.h"
-#include "com/diag/hayloft/Logger.h"
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/grandote/MaskableLogger.h"
+#include "com/diag/hayloft/Credentials.h"
+#include "com/diag/hayloft/Session.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {
@@ -40,7 +40,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 class Environment : public ::testing::Environment {
 

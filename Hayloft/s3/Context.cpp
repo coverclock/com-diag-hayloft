@@ -7,7 +7,7 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Context.h"
+#include "com/diag/hayloft/Context.h"
 
 namespace com {
 namespace diag {

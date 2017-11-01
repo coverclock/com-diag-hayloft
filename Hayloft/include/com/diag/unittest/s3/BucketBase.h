@@ -14,10 +14,10 @@
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/string.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {
@@ -25,7 +25,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 typedef Fixture BucketBaseTest;
 

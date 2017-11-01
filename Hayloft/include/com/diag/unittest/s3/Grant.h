@@ -13,19 +13,19 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/GrantGet.h"
-#include "com/diag/hayloft/s3/GrantSet.h"
-#include "com/diag/hayloft/s3/ObjectPut.h"
+#include "com/diag/hayloft/GrantGet.h"
+#include "com/diag/hayloft/GrantSet.h"
+#include "com/diag/hayloft/ObjectPut.h"
 #include "com/diag/grandote/PathInput.h"
-#include "com/diag/hayloft/s3/ObjectDelete.h"
+#include "com/diag/hayloft/ObjectDelete.h"
 #include "com/diag/hayloft/size.h"
-#include "com/diag/hayloft/s3/BucketCreate.h"
-#include "com/diag/hayloft/s3/Access.h"
-#include "com/diag/hayloft/s3/Properties.h"
-#include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/show.h"
-#include "com/diag/hayloft/s3/convergence.h"
+#include "com/diag/hayloft/BucketCreate.h"
+#include "com/diag/hayloft/Access.h"
+#include "com/diag/hayloft/Properties.h"
+#include "com/diag/hayloft/Context.h"
+#include "com/diag/hayloft/BucketDelete.h"
+#include "com/diag/hayloft/show.h"
+#include "com/diag/hayloft/convergence.h"
 
 namespace com {
 namespace diag {
@@ -33,7 +33,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 typedef Fixture GrantTest;
 

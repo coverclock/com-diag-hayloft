@@ -17,7 +17,7 @@
 #include "com/diag/grandote/LogOutput.h"
 #include "com/diag/grandote/Print.h"
 #include "com/diag/grandote/Dump.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {

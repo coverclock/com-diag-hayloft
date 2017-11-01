@@ -7,8 +7,8 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Plex.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/Plex.h"
+#include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {

@@ -7,8 +7,8 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/hayloft/s3/Object.h"
+#include "com/diag/hayloft/tostring.h"
+#include "com/diag/hayloft/Object.h"
 
 namespace com {
 namespace diag {

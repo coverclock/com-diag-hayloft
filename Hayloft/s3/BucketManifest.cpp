@@ -7,9 +7,9 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/BucketManifest.h"
+#include "com/diag/hayloft/tostring.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/generics.h"

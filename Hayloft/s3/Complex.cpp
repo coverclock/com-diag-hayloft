@@ -8,18 +8,18 @@
  */
 
 #include <sys/select.h>
-#include "com/diag/hayloft/s3/Complex.h"
-#include "com/diag/hayloft/s3/LifeCycle.h"
-#include "com/diag/hayloft/s3/Action.h"
-#include "com/diag/hayloft/s3/tostring.h"
+#include "com/diag/hayloft/Complex.h"
+#include "com/diag/hayloft/LifeCycle.h"
+#include "com/diag/hayloft/Action.h"
+#include "com/diag/hayloft/tostring.h"
 #include "com/diag/hayloft/types.h"
 #include "com/diag/hayloft/CriticalSection.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/target.h"
 #include "com/diag/grandote/errno.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/stdio.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {
@@ -73,7 +73,7 @@ Status Complex::status = ::S3StatusInternalError;
 
 Handle * Complex::complex = 0;
 
-::com::diag::hayloft::s3::LifeCycle * Complex::nextlifecycle = 0;
+::com::diag::hayloft::LifeCycle * Complex::nextlifecycle = 0;
 
 Complex::LifeCycle Complex::lifecycle;
 

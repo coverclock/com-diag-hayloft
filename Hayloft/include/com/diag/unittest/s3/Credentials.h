@@ -13,7 +13,7 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/Credentials.h"
+#include "com/diag/hayloft/Credentials.h"
 #include "com/diag/hayloft/Parameter.h"
 #include "com/diag/grandote/DataInput.h"
 #include "com/diag/grandote/string.h"
@@ -25,7 +25,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 typedef Fixture CredentialsTest;
 

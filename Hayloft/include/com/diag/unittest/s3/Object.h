@@ -14,25 +14,25 @@
 #include <string>
 #include "gtest/gtest.h"
 #include "com/diag/unittest/Fixture.h"
-#include "com/diag/hayloft/s3/Object.h"
-#include "com/diag/hayloft/s3/ObjectPut.h"
+#include "com/diag/hayloft/Object.h"
+#include "com/diag/hayloft/ObjectPut.h"
 #include "com/diag/grandote/PathInput.h"
-#include "com/diag/hayloft/s3/ObjectGet.h"
+#include "com/diag/hayloft/ObjectGet.h"
 #include "com/diag/grandote/PathOutput.h"
-#include "com/diag/hayloft/s3/ObjectDelete.h"
-#include "com/diag/hayloft/s3/ObjectHead.h"
-#include "com/diag/hayloft/s3/ObjectCopy.h"
+#include "com/diag/hayloft/ObjectDelete.h"
+#include "com/diag/hayloft/ObjectHead.h"
+#include "com/diag/hayloft/ObjectCopy.h"
 #include "com/diag/hayloft/size.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/BucketHead.h"
-#include "com/diag/hayloft/s3/BucketCreate.h"
-#include "com/diag/hayloft/s3/BucketDelete.h"
-#include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/Multiplex.h"
-#include "com/diag/hayloft/s3/Simplex.h"
-#include "com/diag/hayloft/s3/Context.h"
-#include "com/diag/hayloft/s3/Access.h"
-#include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/BucketHead.h"
+#include "com/diag/hayloft/BucketCreate.h"
+#include "com/diag/hayloft/BucketDelete.h"
+#include "com/diag/hayloft/BucketManifest.h"
+#include "com/diag/hayloft/Multiplex.h"
+#include "com/diag/hayloft/Simplex.h"
+#include "com/diag/hayloft/Context.h"
+#include "com/diag/hayloft/Access.h"
+#include "com/diag/hayloft/show.h"
 #include "com/diag/grandote/stdlib.h"
 
 namespace com {
@@ -41,7 +41,7 @@ namespace unittest {
 namespace s3 {
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft::s3;
+using namespace ::com::diag::hayloft;
 
 // In the unit tests below, we are testing against the actual AWS S3, not a
 // mock. We see two types of failures: RETRYING means it was a recoverable

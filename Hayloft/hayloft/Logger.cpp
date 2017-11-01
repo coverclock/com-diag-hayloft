@@ -8,7 +8,7 @@
  */
 
 #include "com/diag/grandote/stdlib.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/CriticalSection.h"
 #include "com/diag/grandote/LogOutput.h"

@@ -7,19 +7,19 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/show.h"
-#include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/hayloft/s3/Credentials.h"
-#include "com/diag/hayloft/s3/Object.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/ServiceManifest.h"
-#include "com/diag/hayloft/s3/BucketManifest.h"
-#include "com/diag/hayloft/s3/Grant.h"
-#include "com/diag/hayloft/s3/Log.h"
+#include "com/diag/hayloft/show.h"
+#include "com/diag/hayloft/tostring.h"
+#include "com/diag/hayloft/Credentials.h"
+#include "com/diag/hayloft/Object.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/ServiceManifest.h"
+#include "com/diag/hayloft/BucketManifest.h"
+#include "com/diag/hayloft/Grant.h"
+#include "com/diag/hayloft/Log.h"
 #include "com/diag/hayloft/Seconds.h"
 #include "com/diag/grandote/Platform.h"
 #include "com/diag/grandote/types.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {

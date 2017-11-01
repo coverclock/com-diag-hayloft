@@ -7,12 +7,12 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Grant.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/Object.h"
+#include "com/diag/hayloft/Grant.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/Object.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/grandote/string.h"
-#include "com/diag/hayloft/s3/S3.h"
+#include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {

@@ -75,12 +75,12 @@ public:
 	static void finalize() { delete singleton; singleton = 0; }
 };
 
-class Logger : public ::com::diag::hayloft::Logger {
+class Logger : public ::com::diag::grandote::MaskableLogger {
 public:
 	static void finalize() { delete singleton; singleton = 0; }
 };
 
-class Session : public ::com::diag::hayloft::s3::Session {
+class Session : public ::com::diag::hayloft::Session {
 public:
 	static void finalize() { delete singleton; singleton = 0; }
 };

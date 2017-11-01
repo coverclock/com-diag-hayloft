@@ -8,10 +8,10 @@
  */
 
 #include <ctype.h>
-#include "com/diag/hayloft/s3/Session.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/tostring.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/Session.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/tostring.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/set.h"
 #include "com/diag/hayloft/Mutex.h"
 #include "com/diag/hayloft/CriticalSection.h"

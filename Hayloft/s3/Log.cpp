@@ -7,9 +7,9 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/Log.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/hayloft/Log.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/set.h"
 
 namespace com {

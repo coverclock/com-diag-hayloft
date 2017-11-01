@@ -8,7 +8,7 @@
  */
 
 #include "com/diag/hayloft/Thread.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/errno.h"
 
 namespace com {

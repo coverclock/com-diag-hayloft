@@ -7,11 +7,11 @@
  * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
  */
 
-#include "com/diag/hayloft/s3/ObjectCopy.h"
-#include "com/diag/hayloft/s3/Bucket.h"
-#include "com/diag/hayloft/s3/show.h"
+#include "com/diag/hayloft/ObjectCopy.h"
+#include "com/diag/hayloft/Bucket.h"
+#include "com/diag/hayloft/show.h"
 #include "com/diag/hayloft/set.h"
-#include "com/diag/hayloft/Logger.h"
+#include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {
