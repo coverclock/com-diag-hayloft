@@ -13,7 +13,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Plex::Plex(Handle * untaken)
 : handle(untaken)
@@ -28,7 +27,6 @@ void Plex::initialize() {
 	Logger::instance().debug("Plex@%p: handle=%p\n", this, handle);
 }
 
-}
 }
 }
 }

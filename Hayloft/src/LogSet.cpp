@@ -11,13 +11,12 @@
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/Object.h"
 #include "com/diag/hayloft/show.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 void LogSet::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	LogSet * that = static_cast<LogSet*>(callbackData);
@@ -88,7 +87,6 @@ bool LogSet::start() {
 	}
 }
 
-}
 }
 }
 }

@@ -10,7 +10,7 @@
 #include "com/diag/hayloft/ObjectGet.h"
 #include "com/diag/hayloft/show.h"
 #include "com/diag/hayloft/tostring.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/Output.h"
 #include "com/diag/grandote/string.h"
@@ -19,7 +19,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Status ObjectGet::getObjectDataCallback(int bufferSize, const char * buffer, void * callbackData) {
 	ObjectGet * that = static_cast<ObjectGet*>(callbackData);
@@ -257,7 +256,6 @@ int ObjectGet::get(int bufferSize, const void * buffer) {
 	return octets;
 }
 
-}
 }
 }
 }

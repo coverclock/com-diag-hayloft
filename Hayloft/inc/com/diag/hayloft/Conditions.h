@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_CONDITIONS_
-#define _H_COM_DIAG_HAYLOFT_S3_CONDITIONS_
+#ifndef _H_COM_DIAG_HAYLOFT_CONDITIONS_
+#define _H_COM_DIAG_HAYLOFT_CONDITIONS_
 
 /**
  * @file
@@ -13,12 +13,11 @@
 
 #include <string>
 #include "com/diag/hayloft/types.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Conditions are used by ObjectGet Actions to filter Objects that may be
@@ -138,7 +137,6 @@ public:
 
 };
 
-}
 }
 }
 }

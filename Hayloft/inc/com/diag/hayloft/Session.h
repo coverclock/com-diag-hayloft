@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_SESSION_
-#define _H_COM_DIAG_HAYLOFT_S3_SESSION_
+#ifndef _H_COM_DIAG_HAYLOFT_SESSION_
+#define _H_COM_DIAG_HAYLOFT_SESSION_
 
 /**
  * @file
@@ -19,7 +19,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Session initializes libs3 during construction and denitializes it during
@@ -214,7 +213,6 @@ private:
 
 };
 
-}
 }
 }
 }

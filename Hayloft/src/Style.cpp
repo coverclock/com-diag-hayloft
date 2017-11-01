@@ -12,7 +12,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 const ::S3UriStyle Style::DEFAULT;
 
@@ -20,7 +19,6 @@ Style::Style(::S3UriStyle st)
 : style(st)
 {}
 
-}
 }
 }
 }

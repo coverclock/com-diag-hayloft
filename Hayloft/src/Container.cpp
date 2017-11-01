@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 
 Container::Container(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, const char * canonicalBucketName, ::S3Protocol httpProtocol, ::S3UriStyle uriStyle)
@@ -54,7 +53,6 @@ void Container::initialize() {
 	show(&context, Logger::DEBUG);
 }
 
-}
 }
 }
 }

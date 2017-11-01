@@ -12,7 +12,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Selection::Selection(const char * namePrefix, const char * nextMarker, const char * nameDelimiter, int maxkeys)
 : prefix(set(namePrefix))
@@ -21,7 +20,6 @@ Selection::Selection(const char * namePrefix, const char * nextMarker, const cha
 , maximum(maxkeys)
 {}
 
-}
 }
 }
 }

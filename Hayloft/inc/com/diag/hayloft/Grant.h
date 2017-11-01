@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_GRANT_
-#define _H_COM_DIAG_HAYLOFT_S3_GRANT_
+#ifndef _H_COM_DIAG_HAYLOFT_GRANT_
+#define _H_COM_DIAG_HAYLOFT_GRANT_
 
 /**
  * @file
@@ -19,7 +19,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Bucket;
 class Object;
@@ -326,7 +325,6 @@ private:
 
 };
 
-}
 }
 }
 }

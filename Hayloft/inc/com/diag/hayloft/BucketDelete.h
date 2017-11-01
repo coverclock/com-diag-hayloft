@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETDELETE_
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETDELETE_
+#ifndef _H_COM_DIAG_HAYLOFT_BUCKETDELETE_
+#define _H_COM_DIAG_HAYLOFT_BUCKETDELETE_
 
 /**
  * @file
@@ -16,7 +16,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * BucketDelete is a Bucket Action which deletes a bucket.
@@ -107,7 +106,6 @@ private:
 
 };
 
-}
 }
 }
 }

@@ -15,7 +15,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 const size_t Credentials::ACCESS_KEY_ID_LEN;
 
@@ -54,7 +53,6 @@ void Credentials::initialize() {
 	}
 }
 
-}
 }
 }
 }

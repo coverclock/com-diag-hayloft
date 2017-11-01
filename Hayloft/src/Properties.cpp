@@ -8,12 +8,11 @@
  */
 
 #include "com/diag/hayloft/Properties.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Properties::Properties(const char * contentType, const char * md5, const char * cacheControl, const char * contentDispositionFilename, const char * contentEncoding, const Epochalseconds expires, const Access & cannedAcl)
 : type(set(contentType))
@@ -34,7 +33,6 @@ const char * Properties::find(const char * key) const {
 	return value;
 }
 
-}
 }
 }
 }

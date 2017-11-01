@@ -10,14 +10,13 @@
 #include "com/diag/hayloft/Grant.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/Object.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 int Grant::dontcare = 0;
 
@@ -189,7 +188,6 @@ int Grant::import(const Grant & grant) {
 	return grants;
 }
 
-}
 }
 }
 }

@@ -10,7 +10,7 @@
 #include "com/diag/hayloft/Multiplex.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/MaskableLogger.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/errno.h"
 #include "com/diag/grandote/ready.h"
@@ -20,7 +20,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 int Multiplex::dontcare = 0;
 
@@ -148,7 +147,6 @@ int Multiplex::service(Milliseconds timeout, int limit) {
 	return rc;
 }
 
-}
 }
 }
 }

@@ -12,14 +12,13 @@
 #include "com/diag/hayloft/Plex.h"
 #include "com/diag/hayloft/show.h"
 #include "com/diag/hayloft/tostring.h"
-#include "com/diag/hayloft/CriticalSection.h"
+#include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 bool Action::dontcare = false;
 
@@ -242,7 +241,6 @@ void Action::execute() {
 	LifeCycle::instance().start(*this);
 }
 
-}
 }
 }
 }

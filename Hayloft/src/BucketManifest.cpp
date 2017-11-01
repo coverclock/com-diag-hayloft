@@ -10,14 +10,13 @@
 #include "com/diag/hayloft/BucketManifest.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/MaskableLogger.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/generics.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 BucketManifest::Entry::Entry(const char * objectname, Epochalseconds lastModified, const char * eTag, Octets objectsize, const char * ownerId, const char * ownerDisplayName)
 : key(objectname)
@@ -199,7 +198,6 @@ Status BucketManifest::entry(int isTruncated, const char * nextMarker, int conte
 	return ::S3StatusOK;
 }
 
-}
 }
 }
 }

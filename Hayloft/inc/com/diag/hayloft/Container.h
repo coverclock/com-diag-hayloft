@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_CONTAINER_
-#define _H_COM_DIAG_HAYLOFT_S3_CONTAINER_
+#ifndef _H_COM_DIAG_HAYLOFT_CONTAINER_
+#define _H_COM_DIAG_HAYLOFT_CONTAINER_
 
 /**
  * @file
@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Container is a Service that is identified with a canonical name and has a
@@ -124,7 +123,6 @@ private:
 
 };
 
-}
 }
 }
 }

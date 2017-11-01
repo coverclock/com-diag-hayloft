@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_ENDPOINT_
-#define _H_COM_DIAG_HAYLOFT_S3_ENDPOINT_
+#ifndef _H_COM_DIAG_HAYLOFT_ENDPOINT_
+#define _H_COM_DIAG_HAYLOFT_ENDPOINT_
 
 /**
  * @file
@@ -19,7 +19,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Endpoint identifies a particular host name for use in the Uniform Resource
@@ -229,7 +228,6 @@ public:
 
 };
 
-}
 }
 }
 }

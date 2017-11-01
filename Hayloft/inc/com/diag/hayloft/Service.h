@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_SERVICE_
-#define _H_COM_DIAG_HAYLOFT_S3_SERVICE_
+#ifndef _H_COM_DIAG_HAYLOFT_SERVICE_
+#define _H_COM_DIAG_HAYLOFT_SERVICE_
 
 /**
  * @file
@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Service is an Action which is accessed by using an access key ID (like a
@@ -125,7 +124,6 @@ private:
 
 };
 
-}
 }
 }
 }

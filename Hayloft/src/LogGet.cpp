@@ -15,7 +15,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 void LogGet::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	LogGet * that = static_cast<LogGet*>(callbackData);
@@ -93,7 +92,6 @@ bool LogGet::start() {
 	}
 }
 
-}
 }
 }
 }

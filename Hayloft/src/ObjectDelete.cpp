@@ -13,7 +13,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 ObjectDelete::ObjectDelete(const char * keyname, const Bucket & bucket)
 : Object(keyname, bucket)
@@ -70,7 +69,6 @@ bool ObjectDelete::start() {
 	}
 }
 
-}
 }
 }
 }

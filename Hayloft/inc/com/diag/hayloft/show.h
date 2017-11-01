@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_SHOW_
-#define _H_COM_DIAG_HAYLOFT_S3_SHOW_
+#ifndef _H_COM_DIAG_HAYLOFT_SHOW_
+#define _H_COM_DIAG_HAYLOFT_SHOW_
 
 /**
  * @file
@@ -23,7 +23,6 @@ struct S3AclGrant;
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Bucket;
 class Object;
@@ -131,7 +130,6 @@ extern void show(const Grant & grant, Logger::Level level = SHOW_LOG_LEVEL);
  */
 extern void show(const Log & log, Logger::Level level = SHOW_LOG_LEVEL);
 
-}
 }
 }
 }

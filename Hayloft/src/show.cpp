@@ -24,7 +24,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 void show(const ::S3ResponseProperties * response, Logger::Level level) {
 	if (response != 0) {
@@ -315,7 +314,6 @@ void show(const Log & log, Logger::Level level) {
 	}
 }
 
-}
 }
 }
 }

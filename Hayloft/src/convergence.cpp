@@ -11,7 +11,7 @@
 #include "com/diag/hayloft/Action.h"
 #include "com/diag/hayloft/Multiplex.h"
 #include "com/diag/hayloft/tostring.h"
-#include "com/diag/hayloft/Fibonacci.h"
+#include "com/diag/grandote/Fibonacci.h"
 #include "com/diag/grandote/Platform.h"
 #include "com/diag/grandote/types.h"
 #include "com/diag/hayloft/S3.h"
@@ -19,7 +19,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, Logger::Level level) {
 	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
@@ -154,7 +153,6 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 	return result;
 }
 
-}
 }
 }
 }

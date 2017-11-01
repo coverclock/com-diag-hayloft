@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_SIMPLEX_
-#define _H_COM_DIAG_HAYLOFT_S3_SIMPLEX_
+#ifndef _H_COM_DIAG_HAYLOFT_SIMPLEX_
+#define _H_COM_DIAG_HAYLOFT_SIMPLEX_
 
 /**
  * @file
@@ -16,7 +16,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Simplex is one way in which synchronous Actions may be managed. Simplex is a
@@ -45,7 +44,6 @@ public:
 
 };
 
-}
 }
 }
 }

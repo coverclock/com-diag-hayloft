@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_COMPLEX_
-#define _H_COM_DIAG_HAYLOFT_S3_COMPLEX_
+#ifndef _H_COM_DIAG_HAYLOFT_COMPLEX_
+#define _H_COM_DIAG_HAYLOFT_COMPLEX_
 
 /**
  * @file
@@ -14,11 +14,11 @@
 #include <list>
 #include "com/diag/hayloft/Plex.h"
 #include "com/diag/hayloft/LifeCycle.h"
-#include "com/diag/hayloft/Thread.h"
-#include "com/diag/hayloft/Mutex.h"
-#include "com/diag/hayloft/Condition.h"
-#include "com/diag/hayloft/Fibonacci.h"
-#include "com/diag/hayloft/Seconds.h"
+#include "com/diag/grandote/Thread.h"
+#include "com/diag/grandote/Mutex.h"
+#include "com/diag/grandote/Condition.h"
+#include "com/diag/grandote/Fibonacci.h"
+#include "com/diag/grandote/Seconds.h"
 #include "com/diag/hayloft/S3.h"
 #include "com/diag/hayloft/types.h"
 #include "com/diag/grandote/types.h"
@@ -42,7 +42,6 @@ class Logger;
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Action;
 
@@ -217,7 +216,6 @@ public:
 
 };
 
-}
 }
 }
 }

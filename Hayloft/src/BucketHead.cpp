@@ -13,7 +13,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 void BucketHead::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	BucketHead * that = static_cast<BucketHead*>(callbackData);
@@ -85,7 +84,6 @@ bool BucketHead::start() {
 	}
 }
 
-}
 }
 }
 }

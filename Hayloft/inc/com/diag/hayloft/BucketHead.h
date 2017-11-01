@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETHEAD_
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETHEAD_
+#ifndef _H_COM_DIAG_HAYLOFT_BUCKETHEAD_
+#define _H_COM_DIAG_HAYLOFT_BUCKETHEAD_
 
 /**
  * @file
@@ -16,7 +16,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * BucketHead is a Bucket Action which retrieves the meta-data associated with
@@ -125,7 +124,6 @@ private:
 
 };
 
-}
 }
 }
 }

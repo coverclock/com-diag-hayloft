@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_PROTOCOL_
-#define _H_COM_DIAG_HAYLOFT_S3_PROTOCOL_
+#ifndef _H_COM_DIAG_HAYLOFT_PROTOCOL_
+#define _H_COM_DIAG_HAYLOFT_PROTOCOL_
 
 /**
  * @file
@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Protocol specifies which protocol supported by libs3 (and hence Hayloft) to
@@ -99,7 +98,6 @@ public:
 
 };
 
-}
 }
 }
 }

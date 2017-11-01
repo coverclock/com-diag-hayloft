@@ -15,7 +15,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Status Object::responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData) {
 	Object * that = static_cast<Object*>(callbackData);
@@ -123,7 +122,6 @@ const char * Object::authenticated(Epochalseconds expires, const char * resource
 	return result;
 }
 
-}
 }
 }
 }

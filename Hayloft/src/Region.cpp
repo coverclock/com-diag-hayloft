@@ -12,13 +12,11 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Region::Region(const char * re)
 : region(set(re, REGION_ENV(), DEFAULT()))
 {}
 
-}
 }
 }
 }

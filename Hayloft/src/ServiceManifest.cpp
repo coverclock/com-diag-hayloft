@@ -10,13 +10,12 @@
 #include "com/diag/hayloft/ServiceManifest.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/MaskableLogger.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 ServiceManifest::Entry::Entry(const char * bucketname, const char * ownerId, const char * ownerDisplayName, Epochalseconds creationDateSeconds)
 : canonical(bucketname)
@@ -111,7 +110,6 @@ Status ServiceManifest::entry(const char * ownerId, const char * ownerDisplayNam
 	return ::S3StatusOK;
 }
 
-}
 }
 }
 }

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETMANIFEST_
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETMANIFEST_
+#ifndef _H_COM_DIAG_HAYLOFT_BUCKETMANIFEST_
+#define _H_COM_DIAG_HAYLOFT_BUCKETMANIFEST_
 
 /**
  * @file
@@ -19,7 +19,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * BucketManifest is a Bucket Action which retrieves a manifest or table of
@@ -306,7 +305,6 @@ private:
 
 };
 
-}
 }
 }
 }

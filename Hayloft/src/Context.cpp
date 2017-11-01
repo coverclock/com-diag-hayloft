@@ -12,7 +12,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Context::Context(
 	const Credentials & cr,
@@ -29,7 +28,6 @@ Context::Context(
 , access(ac.getAccess())
 {}
 
-}
 }
 }
 }

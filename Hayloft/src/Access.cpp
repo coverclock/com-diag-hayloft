@@ -12,7 +12,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 const ::S3CannedAcl Access::DEFAULT;
 
@@ -20,7 +19,6 @@ Access::Access(::S3CannedAcl cannedAcl)
 : access(cannedAcl)
 {}
 
-}
 }
 }
 }

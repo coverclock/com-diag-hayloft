@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_LOGGET_
-#define _H_COM_DIAG_HAYLOFT_S3_LOGGET_
+#ifndef _H_COM_DIAG_HAYLOFT_LOGGET_
+#define _H_COM_DIAG_HAYLOFT_LOGGET_
 
 /**
  * @file
@@ -18,7 +18,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * LogGet retrieves a relationship (if such a relationship exists) between two
@@ -88,7 +87,6 @@ private:
 
 };
 
-}
 }
 }
 }

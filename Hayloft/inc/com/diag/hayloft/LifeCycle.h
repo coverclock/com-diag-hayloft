@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_LIFECYCLE_
-#define _H_COM_DIAG_HAYLOFT_S3_LIFECYCLE_
+#ifndef _H_COM_DIAG_HAYLOFT_LIFECYCLE_
+#define _H_COM_DIAG_HAYLOFT_LIFECYCLE_
 
 /**
  * @file
@@ -16,7 +16,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Action;
 
@@ -153,7 +152,6 @@ public:
 
 };
 
-}
 }
 }
 }

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_S3_
-#define _H_COM_DIAG_HAYLOFT_S3_S3_
+#ifndef _H_COM_DIAG_HAYLOFT_S3_
+#define _H_COM_DIAG_HAYLOFT_S3_
 
 /**
  * @file
@@ -18,7 +18,6 @@ extern "C" {
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * This type exists mostly because g++ 4.4.3 seems to have issues with
@@ -33,7 +32,6 @@ typedef ::S3Status Status;
  */
 typedef ::S3RequestContext Handle;
 
-}
 }
 }
 }

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_GRANTSET_
-#define _H_COM_DIAG_HAYLOFT_S3_GRANTSET_
+#ifndef _H_COM_DIAG_HAYLOFT_GRANTSET_
+#define _H_COM_DIAG_HAYLOFT_GRANTSET_
 
 /**
  * @file
@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * GrantSet establishes a new access control list for an S3 bucket or object.
@@ -120,7 +119,6 @@ private:
 
 };
 
-}
 }
 }
 }

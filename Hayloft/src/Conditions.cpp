@@ -12,7 +12,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Conditions::Conditions(Epochalseconds ifModifiedSince, Epochalseconds ifNotModifiedSince, const char * ifMatchETag, const char * ifNotMatchETag)
 : since(ifModifiedSince)
@@ -21,7 +20,6 @@ Conditions::Conditions(Epochalseconds ifModifiedSince, Epochalseconds ifNotModif
 , notmatch(set(ifNotMatchETag))
 {}
 
-}
 }
 }
 }

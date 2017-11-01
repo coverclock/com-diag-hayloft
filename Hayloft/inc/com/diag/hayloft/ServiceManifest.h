@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_SERVICEMANIFEST_
-#define _H_COM_DIAG_HAYLOFT_S3_SERVICEMANIFEST_
+#ifndef _H_COM_DIAG_HAYLOFT_SERVICEMANIFEST_
+#define _H_COM_DIAG_HAYLOFT_SERVICEMANIFEST_
 
 /**
  * @file
@@ -21,7 +21,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * ServiceManifest is a Service which retrieves a manifest or table of
@@ -208,7 +207,6 @@ private:
 
 };
 
-}
 }
 }
 }

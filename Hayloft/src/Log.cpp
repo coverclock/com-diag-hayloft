@@ -10,12 +10,11 @@
 #include "com/diag/hayloft/Log.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/grandote/MaskableLogger.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Log::Log(const Bucket & bucket, const Bucket & log, const char * keyprefix, const Grant & grant)
 : Grant(bucket, grant)
@@ -45,7 +44,6 @@ void Log::initialize() {
 	}
 }
 
-}
 }
 }
 }

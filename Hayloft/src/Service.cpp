@@ -15,7 +15,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 Service::Service(const char * accessKeyId, const char * secretAccessKey, const char * endPoint, ::S3Protocol httpProtocol)
 : Action()
@@ -49,7 +48,6 @@ void Service::initialize() {
 	}
 }
 
-}
 }
 }
 }

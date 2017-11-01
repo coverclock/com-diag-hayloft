@@ -13,7 +13,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 const char * tostring(Status status) {
 	const char * result;
@@ -112,7 +111,6 @@ const char * tostring(const Object & object, std::string & uri) {
 	return uri.c_str();
 }
 
-}
 }
 }
 }

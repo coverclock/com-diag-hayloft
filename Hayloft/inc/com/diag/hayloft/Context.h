@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_CONTEXT_
-#define _H_COM_DIAG_HAYLOFT_S3_CONTEXT_
+#ifndef _H_COM_DIAG_HAYLOFT_CONTEXT_
+#define _H_COM_DIAG_HAYLOFT_CONTEXT_
 
 /**
  * @file
@@ -21,7 +21,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Context specifies the context within which an Action may be taken or a
@@ -162,7 +161,6 @@ public:
 
 };
 
-}
 }
 }
 }

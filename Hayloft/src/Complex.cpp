@@ -13,7 +13,7 @@
 #include "com/diag/hayloft/Action.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/hayloft/types.h"
-#include "com/diag/hayloft/CriticalSection.h"
+#include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/target.h"
 #include "com/diag/grandote/errno.h"
@@ -24,7 +24,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /*******************************************************************************
  * TUNABLE VARIABLES
@@ -434,7 +433,6 @@ void * Complex::run() {
 	return 0;
 }
 
-}
 }
 }
 }

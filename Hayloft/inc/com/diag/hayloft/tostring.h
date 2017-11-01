@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_TOSTRING_
-#define _H_COM_DIAG_HAYLOFT_S3_TOSTRING_
+#ifndef _H_COM_DIAG_HAYLOFT_TOSTRING_
+#define _H_COM_DIAG_HAYLOFT_TOSTRING_
 
 /**
  * @file
@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Container;
 class Object;
@@ -88,7 +87,6 @@ extern const char * tostring(const Container & container, std::string & uri);
  */
 extern const char * tostring(const Object & object, std::string & uri);
 
-}
 }
 }
 }

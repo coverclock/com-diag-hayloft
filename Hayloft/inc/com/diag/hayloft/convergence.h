@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_CONVERGENCE_
-#define _H_COM_DIAG_HAYLOFT_S3_CONVERGENCE_
+#ifndef _H_COM_DIAG_HAYLOFT_CONVERGENCE_
+#define _H_COM_DIAG_HAYLOFT_CONVERGENCE_
 
 /**
  * @file
@@ -27,7 +27,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Action;
 
@@ -157,7 +156,6 @@ inline bool service_until_nonexistent(Action & action, Logger::Level level = CON
 	return service_generic(action, true, true, 20, 1000, 100, 1000, level);
 }
 
-}
 }
 }
 }

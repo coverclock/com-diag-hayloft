@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_GRANTGET_
-#define _H_COM_DIAG_HAYLOFT_S3_GRANTGET_
+#ifndef _H_COM_DIAG_HAYLOFT_GRANTGET_
+#define _H_COM_DIAG_HAYLOFT_GRANTGET_
 
 /**
  * @file
@@ -17,7 +17,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * GrantGet retrieves the access control list for an S3 bucket or object.
@@ -108,7 +107,6 @@ private:
 
 };
 
-}
 }
 }
 }

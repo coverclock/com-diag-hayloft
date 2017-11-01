@@ -13,7 +13,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 BucketCreate::BucketCreate(const char * bucketname, const Context & context, const Session & session)
 : Bucket(bucketname, context, session)
@@ -76,7 +75,6 @@ bool BucketCreate::start() {
 }
 
 
-}
 }
 }
 }

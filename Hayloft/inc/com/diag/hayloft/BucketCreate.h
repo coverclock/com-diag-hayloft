@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_BUCKETCREATE_
-#define _H_COM_DIAG_HAYLOFT_S3_BUCKETCREATE_
+#ifndef _H_COM_DIAG_HAYLOFT_BUCKETCREATE_
+#define _H_COM_DIAG_HAYLOFT_BUCKETCREATE_
 
 /**
  * @file
@@ -16,7 +16,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * BucketCreate is a Bucket Action which creates a bucket.
@@ -107,7 +106,6 @@ private:
 
 };
 
-}
 }
 }
 }

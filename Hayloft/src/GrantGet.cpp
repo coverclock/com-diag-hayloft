@@ -15,7 +15,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 void GrantGet::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	GrantGet * that = static_cast<GrantGet*>(callbackData);
@@ -111,7 +110,6 @@ bool GrantGet::start() {
 	}
 }
 
-}
 }
 }
 }

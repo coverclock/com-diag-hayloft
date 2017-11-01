@@ -9,7 +9,7 @@
 
 #include "com/diag/hayloft/ObjectPut.h"
 #include "com/diag/hayloft/show.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/Input.h"
 #include "com/diag/grandote/string.h"
@@ -18,7 +18,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 int ObjectPut::putObjectDataCallback(int bufferSize, char * buffer, void * callbackData) {
 	ObjectPut * that = static_cast<ObjectPut*>(callbackData);
@@ -284,7 +283,6 @@ int ObjectPut::put(int bufferSize, void * buffer) {
 	return octets;
 }
 
-}
 }
 }
 }

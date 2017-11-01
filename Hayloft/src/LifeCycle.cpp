@@ -10,14 +10,13 @@
 #include "com/diag/hayloft/LifeCycle.h"
 #include "com/diag/hayloft/Action.h"
 #include "com/diag/hayloft/tostring.h"
-#include "com/diag/hayloft/Mutex.h"
-#include "com/diag/hayloft/CriticalSection.h"
+#include "com/diag/grandote/Mutex.h"
+#include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/grandote/MaskableLogger.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 static Mutex mutex;
 
@@ -74,7 +73,6 @@ void LifeCycle::destructor(Action & action) {
 	Logger::instance().debug("LifeCycle@%p: Action@%p: destructor\n", this, &action);
 }
 
-}
 }
 }
 }

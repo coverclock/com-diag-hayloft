@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_MULTIPLEX_
-#define _H_COM_DIAG_HAYLOFT_S3_MULTIPLEX_
+#ifndef _H_COM_DIAG_HAYLOFT_MULTIPLEX_
+#define _H_COM_DIAG_HAYLOFT_MULTIPLEX_
 
 /**
  * @file
@@ -18,7 +18,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Multiplex is one way in which asynchronous Actions may be managed. All
@@ -168,7 +167,6 @@ private:
 
 };
 
-}
 }
 }
 }

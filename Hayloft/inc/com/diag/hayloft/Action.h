@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_ACTION_
-#define _H_COM_DIAG_HAYLOFT_S3_ACTION_
+#ifndef _H_COM_DIAG_HAYLOFT_ACTION_
+#define _H_COM_DIAG_HAYLOFT_ACTION_
 
 /**
  * @file
@@ -12,15 +12,14 @@
  */
 
 #include <string>
-#include "com/diag/hayloft/Mutex.h"
-#include "com/diag/hayloft/Condition.h"
+#include "com/diag/grandote/Mutex.h"
+#include "com/diag/grandote/Condition.h"
 #include "com/diag/grandote/generics.h"
 #include "com/diag/hayloft/S3.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Plex;
 class Reaction;
@@ -402,7 +401,6 @@ private:
 
 };
 
-}
 }
 }
 }

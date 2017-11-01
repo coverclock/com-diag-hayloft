@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_OBJECTPUT_
-#define _H_COM_DIAG_HAYLOFT_S3_OBJECTPUT_
+#ifndef _H_COM_DIAG_HAYLOFT_OBJECTPUT_
+#define _H_COM_DIAG_HAYLOFT_OBJECTPUT_
 
 /**
  * @file
@@ -28,7 +28,6 @@ class Input;
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 class Bucket;
 
@@ -347,7 +346,6 @@ private:
 
 };
 
-}
 }
 }
 }

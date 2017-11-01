@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_CREDENTIALS_
-#define _H_COM_DIAG_HAYLOFT_S3_CREDENTIALS_
+#ifndef _H_COM_DIAG_HAYLOFT_CREDENTIALS_
+#define _H_COM_DIAG_HAYLOFT_CREDENTIALS_
 
 /**
  * @file
@@ -18,7 +18,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * Credentials incorporate the access key ID (sort of a login or account number)
@@ -137,7 +136,6 @@ protected:
 
 };
 
-}
 }
 }
 }

@@ -12,15 +12,14 @@
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/tostring.h"
 #include "com/diag/grandote/MaskableLogger.h"
-#include "com/diag/hayloft/set.h"
-#include "com/diag/hayloft/Mutex.h"
-#include "com/diag/hayloft/CriticalSection.h"
+#include "com/diag/grandote/set.h"
+#include "com/diag/grandote/Mutex.h"
+#include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/grandote/target.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 static Mutex instancemutex;
 
@@ -115,7 +114,6 @@ const char * Session::decanonicalize(std::string & decanonical) const {
 	return decanonical.c_str();
 }
 
-}
 }
 }
 }

@@ -1,6 +1,6 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_S3_LOGSET_
-#define _H_COM_DIAG_HAYLOFT_S3_LOGSET_
+#ifndef _H_COM_DIAG_HAYLOFT_LOGSET_
+#define _H_COM_DIAG_HAYLOFT_LOGSET_
 
 /**
  * @file
@@ -18,7 +18,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 /**
  * LogSet establishes a relationship between two S3 buckets, one that is used to
@@ -103,7 +102,6 @@ private:
 
 };
 
-}
 }
 }
 }

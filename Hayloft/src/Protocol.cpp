@@ -12,7 +12,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 const ::S3Protocol Protocol::DEFAULT;
 
@@ -20,7 +19,6 @@ Protocol::Protocol(::S3Protocol scheme)
 : protocol(scheme)
 {}
 
-}
 }
 }
 }

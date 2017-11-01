@@ -18,7 +18,6 @@
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 static const char * canonicalize(const char * name, std::string ** canonical, const Session & session) {
 	*canonical = new std::string(name);
@@ -95,7 +94,6 @@ bool Bucket::isValid() const {
 	return result;
 }
 
-}
 }
 }
 }

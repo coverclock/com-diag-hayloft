@@ -10,14 +10,13 @@
 #include "com/diag/hayloft/ObjectCopy.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/show.h"
-#include "com/diag/hayloft/set.h"
+#include "com/diag/grandote/set.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/string.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
-namespace s3 {
 
 void ObjectCopy::responseCompleteCallback(Status status, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	ObjectCopy * that = static_cast<ObjectCopy*>(callbackData);
@@ -153,7 +152,6 @@ bool ObjectCopy::start() {
 	}
 }
 
-}
 }
 }
 }
