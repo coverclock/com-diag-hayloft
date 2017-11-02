@@ -8,7 +8,7 @@
  * Copyright 2012 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
 #include <string>
@@ -32,6 +32,8 @@ namespace unittest {
 
 using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
+
+typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
 
 typedef Fixture ManifestTest;
 
@@ -64,7 +66,7 @@ TEST_F(ManifestTest, Part1Setup) {
 	for (unsigned int index = 0; index < MANIFESTTESTLIMIT; ++index) {
 		char name[sizeof("OBJECT????.txt")] = { 0 };
 		snprintf(name, sizeof(name), "OBJECT%4.4u.txt", index);
-		::com::diag::hayloft::Object object(name, bucket);
+		HayloftObject object(name, bucket);
 		ManifestTestInput input;
 		logger.notice("creating %s\n", name);
 		ObjectPut objectput(object, complex, input, 0);
@@ -214,7 +216,7 @@ TEST_F(ManifestTest, Part9Cleanup) {
 	for (unsigned int index = 0; index < MANIFESTTESTLIMIT; ++index) {
 		char name[sizeof("OBJECT????.txt")] = { 0 };
 		snprintf(name, sizeof(name), "OBJECT%4.4u.txt", index);
-		::com::diag::hayloft::Object object(name, bucket);
+		HayloftObject object(name, bucket);
 		ObjectDelete objectdelete(object, complex);
 		logger.notice("deleting %s\n", name);
 		ASSERT_TRUE(complex.start(objectdelete));

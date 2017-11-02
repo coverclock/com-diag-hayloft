@@ -8,7 +8,7 @@
  * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
 #include "gtest/gtest.h"
@@ -36,6 +36,8 @@ namespace unittest {
 
 using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
+
+typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
 
 typedef Fixture ComplexTest;
 
@@ -249,7 +251,7 @@ TEST_F(ComplexTest, Unresettable) {
 struct ObjectPutApplication : public ObjectPut {
 	int failures;
 	Status failure;
-	explicit ObjectPutApplication(const ::com::diag::hayloft::Object & object, const Plex & plex, Input * sourcep, Octets objectsize)
+	explicit ObjectPutApplication(const HayloftObject & object, const Plex & plex, Input * sourcep, Octets objectsize)
 	: ObjectPut(object, plex, sourcep, objectsize)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -269,7 +271,7 @@ struct ObjectPutApplication : public ObjectPut {
 struct ObjectGetApplication : public ObjectGet {
 	int failures;
 	Status failure;
-	explicit ObjectGetApplication(const ::com::diag::hayloft::Object & object, const Plex & plex, Output * sinkp)
+	explicit ObjectGetApplication(const HayloftObject & object, const Plex & plex, Output * sinkp)
 	: ObjectGet(object, plex, sinkp)
 	, failures(0)
 	, failure(::S3StatusOK)
@@ -290,8 +292,8 @@ TEST_F(ComplexTest, Application) {
 	static const int LIMIT = 10;
 	Bucket BUCKET1("ComplexTestApplication1");
 	Bucket BUCKET2("ComplexTestApplication2");
-	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
-	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
+	HayloftObject OBJECT1("Object1.txt", BUCKET1);
+	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
@@ -379,7 +381,7 @@ TEST_F(ComplexTest, Application) {
 struct ObjectPutFactory : public ObjectPut {
 	const char * path;
 	bool succeed;
-	explicit ObjectPutFactory(const ::com::diag::hayloft::Object & object, const Plex & plex, const char * inputname)
+	explicit ObjectPutFactory(const HayloftObject & object, const Plex & plex, const char * inputname)
 	: ObjectPut(object, plex, new PathInput(inputname), size(inputname))
 	, path(inputname)
 	, succeed(false)
@@ -406,7 +408,7 @@ struct ObjectPutFactory : public ObjectPut {
 struct ObjectGetFactory : public ObjectGet {
 	const char * path;
 	bool succeed;
-	explicit ObjectGetFactory(const ::com::diag::hayloft::Object & object, const Plex & plex, const char * outputname)
+	explicit ObjectGetFactory(const HayloftObject & object, const Plex & plex, const char * outputname)
 	: ObjectGet(object, plex, new PathOutput(outputname))
 	, path(outputname)
 	, succeed(false)
@@ -433,8 +435,8 @@ struct ObjectGetFactory : public ObjectGet {
 TEST_F(ComplexTest, Factory) {
 	Bucket BUCKET1("ComplexTestFactory1");
 	Bucket BUCKET2("ComplexTestFactory2");
-	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
-	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
+	HayloftObject OBJECT1("Object1.txt", BUCKET1);
+	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
@@ -504,8 +506,8 @@ static void complextestpoll(Action & action) {
 TEST_F(ComplexTest, Polled) {
 	Bucket BUCKET1("ComplexTestPolled1");
 	Bucket BUCKET2("ComplexTestPolled2");
-	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
-	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
+	HayloftObject OBJECT1("Object1.txt", BUCKET1);
+	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	Complex complex;
 	EXPECT_TRUE(complex == true);
 	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);

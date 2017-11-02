@@ -8,7 +8,7 @@
  * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
 #include <string>
@@ -41,6 +41,8 @@ namespace unittest {
 using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
+typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
+
 typedef Fixture ConvergenceTest;
 
 TEST_F(ConvergenceTest, Synchronous) {
@@ -48,8 +50,8 @@ TEST_F(ConvergenceTest, Synchronous) {
 	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestSynchronous1");
 	Bucket BUCKET2("ConvergenceTestSynchronous2");
-	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
-	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
+	HayloftObject OBJECT1("Object1.txt", BUCKET1);
+	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	/**/
 	BucketHead buckethead1(BUCKET1);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
@@ -126,8 +128,8 @@ TEST_F(ConvergenceTest, Complete) {
 	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestComplete1");
 	Bucket BUCKET2("ConvergenceTestComplete2");
-	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
-	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
+	HayloftObject OBJECT1("Object1.txt", BUCKET1);
+	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	Multiplex multiplex;
 	/**/
 	BucketHead buckethead1(BUCKET1, multiplex);
@@ -203,8 +205,8 @@ TEST_F(ConvergenceTest, Complete) {
 TEST_F(ConvergenceTest, Service) {
 	Bucket BUCKET1("ConvergenceTestService1");
 	Bucket BUCKET2("ConvergenceTestService2");
-	::com::diag::hayloft::Object OBJECT1("Object1.txt", BUCKET1);
-	::com::diag::hayloft::Object OBJECT2("Object2.txt", BUCKET2);
+	HayloftObject OBJECT1("Object1.txt", BUCKET1);
+	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	static const int LIMIT = 10;
 	static const Logger::Level LEVEL = Logger::CONFIGURATION;
 	Multiplex multiplex;

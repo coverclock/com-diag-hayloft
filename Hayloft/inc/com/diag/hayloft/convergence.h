@@ -7,7 +7,7 @@
  * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * https://github.com/coverclock/com-diag-hayloft<BR>R>
  *
  * These functions represent my attempts to figure out the error recovery and
  * consistency convergence logic of dealing with S3. A real application

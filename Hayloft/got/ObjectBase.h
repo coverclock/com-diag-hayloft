@@ -8,7 +8,7 @@
  * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
 #include <string>
@@ -25,12 +25,14 @@ namespace unittest {
 using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
+typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
+
 typedef Fixture ObjectBaseTest;
 
 TEST_F(ObjectBaseTest, Heap) {
 	Bucket * bucket = new Bucket("ObjectBaseTestHeap");
-	::com::diag::hayloft::Object * object = new ::com::diag::hayloft::Object("ObjectBaseTestHeapKey", *bucket);
-	ASSERT_NE(object, (::com::diag::hayloft::Object*)0);
+	HayloftObject * object = new HayloftObject("ObjectBaseTestHeapKey", *bucket);
+	ASSERT_NE(object, (HayloftObject*)0);
 	EXPECT_TRUE((*object) == true);
 	EXPECT_FALSE(object->isIdle());
 	EXPECT_FALSE(object->isBusy());
@@ -43,7 +45,7 @@ TEST_F(ObjectBaseTest, Heap) {
 
 TEST_F(ObjectBaseTest, Stack) {
 	Bucket bucket("ObjectBaseTestStack");
-	::com::diag::hayloft::Object object("ObjectBaseTestStackKey", bucket);
+	HayloftObject object("ObjectBaseTestStackKey", bucket);
 	EXPECT_TRUE(object == true);
 	EXPECT_FALSE(object.isIdle());
 	EXPECT_FALSE(object.isBusy());
@@ -53,7 +55,7 @@ TEST_F(ObjectBaseTest, Stack) {
 }
 
 TEST_F(ObjectBaseTest, Temporary) {
-	EXPECT_TRUE(::com::diag::hayloft::Object("ObjectBaseTestTemporaryKey", Bucket("ObjectBaseTestTemporary")) == true);
+	EXPECT_TRUE(HayloftObject("ObjectBaseTestTemporaryKey", Bucket("ObjectBaseTestTemporary")) == true);
 }
 
 TEST_F(ObjectBaseTest, VirtualHostURI) {
@@ -66,7 +68,7 @@ TEST_F(ObjectBaseTest, VirtualHostURI) {
 	Access access;
 	Context context(credentials, region, protocol, style);
 	Bucket bucket("virtualhosturi", context, session);
-	::com::diag::hayloft::Object object("VirtualHost.txt", bucket);
+	HayloftObject object("VirtualHost.txt", bucket);
 	std::string uri;
 	const char * str = tostring(object, uri);
 	ASSERT_NE(str, (char *)0);
@@ -84,7 +86,7 @@ TEST_F(ObjectBaseTest, PathURI) {
 	Access access;
 	Context context(credentials, region, protocol, style);
 	Bucket bucket("pathuri", context, session);
-	::com::diag::hayloft::Object object("Path.txt", bucket);
+	HayloftObject object("Path.txt", bucket);
 	std::string uri;
 	const char * str = tostring(object, uri);
 	ASSERT_NE(str, (char *)0);
@@ -102,7 +104,7 @@ TEST_F(ObjectBaseTest, CopyConstructor) {
 	AccessPublicRead access;
 	Context context(credentials, region, protocol, style, access);
 	Bucket bucket("Bucket", context, session);
-	::com::diag::hayloft::Object source("CopyConstructor", bucket);
+	HayloftObject source("CopyConstructor", bucket);
 	EXPECT_EQ(source.getHandle(), (Handle*)0);
 	EXPECT_TRUE(source == true);
 	EXPECT_FALSE(source.isIdle());
@@ -117,7 +119,7 @@ TEST_F(ObjectBaseTest, CopyConstructor) {
 	EXPECT_EQ(std::strcmp(source.getEndpoint(), Endpoint::ASIA_PACIFIC_NORTHEAST_1()), 0);
 	EXPECT_EQ(source.getProtocol(), ::S3ProtocolHTTP);
 	Multiplex multiplex;
-	::com::diag::hayloft::Object sink(source, multiplex);
+	HayloftObject sink(source, multiplex);
 	EXPECT_NE(sink.getHandle(), (Handle*)0);
 	EXPECT_TRUE(sink == true);
 	EXPECT_FALSE(sink.isIdle());

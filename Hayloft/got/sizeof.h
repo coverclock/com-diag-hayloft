@@ -8,7 +8,7 @@
  * Copyright 2011-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
- * http://www.diag.com/navigation/downloads/Hayloft.html<BR>
+ * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
 #include "gtest/gtest.h"
@@ -38,6 +38,8 @@ namespace unittest {
 using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
+typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
+
 typedef Fixture SizeofTest;
 
 #define PRINT_SIZEOF(_TYPE_) printf("sizeof(%s)=%zu\n", #_TYPE_, sizeof(_TYPE_))
@@ -63,7 +65,7 @@ TEST_F(SizeofTest, Sizeof) {
 	PRINT_SIZEOF(Log);
 	PRINT_SIZEOF(LogGet);
 	PRINT_SIZEOF(LogSet);
-	PRINT_SIZEOF(::com::diag::hayloft::Object);
+	PRINT_SIZEOF(HayloftObject);
 	PRINT_SIZEOF(ObjectCopy);
 	PRINT_SIZEOF(ObjectDelete);
 	PRINT_SIZEOF(ObjectGet);
