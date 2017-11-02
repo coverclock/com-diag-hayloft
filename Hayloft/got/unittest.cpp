@@ -58,7 +58,7 @@ public:
 	static void finalize() { delete singleton; singleton = 0; }
 };
 
-class Logger : public ::com::diag::grandote::MaskableLogger {
+class MaskableLogger : public ::com::diag::grandote::MaskableLogger {
 public:
 	static void finalize() { delete singleton; singleton = 0; }
 };
@@ -71,7 +71,7 @@ public:
 int main(int argc, char ** argv, char **envp) {
 	int rc = ::com::diag::lariat::main(argc, argv, envp);
 	Session::finalize();
-	Logger::finalize();
+	MaskableLogger::finalize();
 	Platform::finalize();
 	return rc;
 }

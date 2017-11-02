@@ -563,7 +563,7 @@ int main(int argc, char ** argv, char ** envp) {
             break;
         case '!':
             ::setenv(::com::diag::grandote::MaskableLogger::MASK_ENV(), "0xfff0", !0);
-            Logger::instance().setMask();
+            MaskableLogger::instance().setMask();
             break;
         case '?':
             usage(program, stderr);

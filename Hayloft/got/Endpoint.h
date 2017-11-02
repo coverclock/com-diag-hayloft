@@ -90,6 +90,7 @@ TEST_F(EndpointTest, SaoPaulo) {
 }
 
 TEST_F(EndpointTest, Environment) {
+    ASSERT_NE(Endpoint::ENDPOINT_ENV(), (char *)0);
 	const char * hostname = std::getenv(Endpoint::ENDPOINT_ENV());
 	static const char * ENDPOINT_VAL = "s4.amazonaws.com";
 	EXPECT_EQ(::setenv(Endpoint::ENDPOINT_ENV(), ENDPOINT_VAL, !0), 0);
@@ -99,7 +100,7 @@ TEST_F(EndpointTest, Environment) {
 	if (hostname != 0) {
 		EXPECT_EQ(::setenv(Endpoint::ENDPOINT_ENV(), hostname, !0), 0);
 		ASSERT_NE(std::getenv(Endpoint::ENDPOINT_ENV()), (char *)0);
-		EXPECT_EQ(std::strcmp(Endpoint::ENDPOINT_ENV(), hostname), 0);
+		EXPECT_EQ(std::strcmp(std::getenv(Endpoint::ENDPOINT_ENV()), hostname), 0);
 	} else {
 		EXPECT_EQ(::unsetenv(Endpoint::ENDPOINT_ENV()), 0);
 		EXPECT_EQ(std::getenv(Endpoint::ENDPOINT_ENV()), (char *)0);

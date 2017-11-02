@@ -878,7 +878,7 @@ depend:	$(TARGETSYNTHESIZED)
 			done; \
 		fi; \
 	done
-	for S in $(BIN_DIR) $(SRC_DIR) $(TST_DIR) $(UTF_DIR) $(GOT_DIR); do \
+	for S in $(SRC_DIR) $(GOT_DIR); do \
 		if [ -d $$S ]; then \
 			for F in $$S/*.cpp; do \
 				D=`dirname $$F`; \
