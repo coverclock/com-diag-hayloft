@@ -1,72 +1,59 @@
---- /home/jsloan/src/libs3-2.0-org/src/request.c	2011-09-28 02:16:09.000000000 -0600
-+++ /home/jsloan/src/libs3-2.0/src/request.c	2012-01-03 13:16:30.170203380 -0700
-@@ -28,6 +28,7 @@
- #include <pthread.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <unistd.h> /* < HAYLOFT coverclock@diag.com 2011-12-12 */
- #include <sys/utsname.h>
- #include "request.h"
- #include "request_context.h"
-@@ -796,6 +797,8 @@ static S3Status setup_curl(Request *requ
-                            const RequestComputedValues *values)
- {
-     CURLcode status;
-+	const char *hayloft_integer; /* < HAYLOFT coverclock@diag.com */
-+	const char *hayloft_proxy; /* < HAYLOFT coverclock@diag.com */
+diff -purN /home/jsloan/src/libs3-2.0-orig/src/request.c /home/jsloan/src/libs3-2.0/src/request.c && false || true
+--- /home/jsloan/src/libs3-2.0-orig/src/request.c	2017-11-02 11:31:16.298814521 -0600
++++ /home/jsloan/src/libs3-2.0/src/request.c	2017-11-02 11:34:37.969880821 -0600
+@@ -805,6 +805,16 @@ static S3Status setup_curl(Request *requ
  
- #define curl_easy_setopt_safe(opt, val)                                 \
-     if ((status = curl_easy_setopt                                      \
-@@ -806,6 +809,13 @@ static S3Status setup_curl(Request *requ
      // Debugging only
      // curl_easy_setopt_safe(CURLOPT_VERBOSE, 1);
-     
-+    /* v HAYLOFT coverclock@diag.com */
-+	hayloft_integer = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE");
-+    if (hayloft_integer != (char *)0) {
-+        curl_easy_setopt_safe(CURLOPT_VERBOSE, atol(hayloft_integer));
++    // v https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
++    {
++        extern char * getenv(const char *);
++        const char * com_diag_hayloft_option;
++        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE");
++       if (com_diag_hayloft_option) {
++            curl_easy_setopt_safe(CURLOPT_VERBOSE, atol(com_diag_hayloft_option));
++       }
 +    }
-+    /* ^ HAYLOFT coverclock@diag.com */
-+    
++    // ^ https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
+     
      // Set private data to request for the benefit of S3RequestContext
      curl_easy_setopt_safe(CURLOPT_PRIVATE, request);
-     
-@@ -837,6 +847,15 @@ static S3Status setup_curl(Request *requ
+@@ -836,6 +846,17 @@ static S3Status setup_curl(Request *requ
+ 
      // xxx todo - support setting the proxy for Curl to use (can't use https
      // for proxies though)
- 
-+    /* v HAYLOFT coverclock@diag.com 2011-12-12 */
-+    hayloft_proxy = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY");
-+    /* Nominally this will be "127.0.0.1:8888" if it exists. */
-+    if (hayloft_proxy != (char *)0) {
-+        curl_easy_setopt_safe(CURLOPT_PROXY, hayloft_proxy);
-+        curl_easy_setopt_safe(CURLOPT_HTTPPROXYTUNNEL, 1L);
++    // v https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
++    {
++        extern char * getenv(const char *);
++        const char * com_diag_hayloft_option;
++        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY");
++       if (com_diag_hayloft_option) {
++            curl_easy_setopt_safe(CURLOPT_PROXY, com_diag_hayloft_option);
++            curl_easy_setopt_safe(CURLOPT_HTTPPROXYTUNNEL, 1L);
++       }
 +    }
-+    /* ^ HAYLOFT coverclock@diag.com 2011-12-12 */
-+
++    // ^ https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
+ 
      // xxx todo - support setting the network interface for Curl to use
  
-     // I think this is useful - we don't need interactive performance, we need
-@@ -864,8 +883,20 @@ static S3Status setup_curl(Request *requ
-     // less than 1K per second for more than 15 seconds.
-     // xxx todo - make these configurable
+@@ -866,6 +887,20 @@ static S3Status setup_curl(Request *requ
      // xxx todo - allow configurable max send and receive speed
--    curl_easy_setopt_safe(CURLOPT_LOW_SPEED_LIMIT, 1024);
--    curl_easy_setopt_safe(CURLOPT_LOW_SPEED_TIME, 15);
-+    /* v HAYLOFT coverclock@diag.com */
-+    hayloft_integer = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT");
-+    if (hayloft_integer != (char *)0) {
-+    	curl_easy_setopt_safe(CURLOPT_LOW_SPEED_LIMIT, atol(hayloft_integer));
-+    } else {
-+    	curl_easy_setopt_safe(CURLOPT_LOW_SPEED_LIMIT, 1024);
+     curl_easy_setopt_safe(CURLOPT_LOW_SPEED_LIMIT, 1024);
+     curl_easy_setopt_safe(CURLOPT_LOW_SPEED_TIME, 15);
++    // v https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
++    {
++        extern char * getenv(const char *);
++        const char * com_diag_hayloft_option;
++        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT");
++       if (com_diag_hayloft_option) {
++            curl_easy_setopt_safe(CURLOPT_LOW_SPEED_LIMIT, atol(com_diag_hayloft_option));
++       }
++        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME");
++       if (com_diag_hayloft_option) {
++            curl_easy_setopt_safe(CURLOPT_LOW_SPEED_TIME, atol(com_diag_hayloft_option));
++       }
 +    }
-+    hayloft_integer = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME");
-+    if (hayloft_integer != (char *)0) {
-+    	curl_easy_setopt_safe(CURLOPT_LOW_SPEED_TIME, atol(hayloft_integer));
-+    } else {
-+    	curl_easy_setopt_safe(CURLOPT_LOW_SPEED_TIME, 15);
-+    }
-+    /* ^ HAYLOFT coverclock@diag.com */
++    // ^ https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
  
      // Append standard headers
  #define append_standard_header(fieldName)                               \

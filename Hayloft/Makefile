@@ -123,7 +123,7 @@ include $(TARGETMAKEFILE)
 
 ########## libs3 Configuration
 
-LIBS3_TITLE			:=	libs3
+LIBS3_TITLE			:=	libs3-2.0
 
 LIBS3_PROJECT		:=	$(shell echo $(LIBS3_TITLE) | tr '[A-Z]' '[a-z]')
 LIBS3_SYMBOL		:=	$(shell echo $(LIBS3_TITLE) | tr '[a-z]' '[A-Z]')
@@ -132,13 +132,16 @@ LIBS3_ROOT			:=	$(THERE)/$(LIBS3_PROJECT)/build
 LIBS3_HEADERS		:=	$(LIBS3_ROOT)/include
 LIBS3_LIBRARIES		:=	$(LIBS3_ROOT)/lib
 
-# sudo apt-get install libs3-2 libs3-dev
-# git clone https://github.com/bji/libs3
+# git clone https://github.com/bji/libs3 -b 2.0 libs3-2.0
+# cd libs3-2.0
+# patch -b -p5 < $(ROOT)/com-diag-hayloft/Hayloft/libs3-2.0.patch
+# make -f GNUMakefile all
+LIBS3_CPPFLAGS		:=	-I$(LIBS3_HEADERS)
+LIBS3_LDFLAGS		:=	-L$(LIBS3_LIBRARIES) -ls3 -lcurl -lssl -lcrypto -lxml2
 
-#LIBS3_CPPFLAGS		:=	-iquote $(LIBS3_HEADERS)
-LIBS3_CPPFLAGS		:=
-#LIBS3_LDFLAGS		:=	-L$(LIBS3_LIBRARIES) -l$(LIBS3_PROJECT)
-LIBS3_LDFLAGS		:=	-ls3
+# sudo apt-get install libs3-2 libs3-dev
+#LIBS3_CPPFLAGS		:=
+#LIBS3_LDFLAGS		:=	-ls3
 
 ########## Grandote Configuration
 
@@ -827,7 +830,7 @@ manpages:
 .PHONY:	patch
 
 patch:	$(OLD) $(NEW)
-	diff -purN $(OLD) $(NEW)
+	diff -purN $(OLD) $(NEW) && false || true
 
 ########## Rules
 
