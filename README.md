@@ -47,7 +47,6 @@ RESOURCES
 <https://github.com/coverclock/com-diag-grandote>    
 <https://github.com/coverclock/com-diag-diminuto>    
 <https://github.com/bji/libs3>    
-<https://www.charlesproxy.com>    
 
 CONTACT
 
@@ -60,7 +59,7 @@ Wheat Ridge CO 80033 USA
 
 TARGET
 
-Hayloft have been built and tested on the following targets.
+Hayloft has been built and tested on the following targets.
 
 "Nickel"    
 Intel NUC5i7RYH    
