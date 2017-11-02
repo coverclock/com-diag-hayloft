@@ -941,6 +941,5 @@ TEST_F(BucketTest, Manifest) {
 }
 }
 }
-}
 
 #endif

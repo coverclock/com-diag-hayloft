@@ -262,6 +262,19 @@ TEST_F(CredentialsTest, Settors) {
 	credentials.setId().setSecret();
 }
 
+TEST_F(CredentialsTest, Final) {
+    ASSERT_NE(Credentials::ACCESS_KEY_ID_ENV(), (char *)0);
+    EXPECT_NE(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
+#if 0
+    fprintf(stderr, "id=\"%s\"\n", std::getenv(Credentials::ACCESS_KEY_ID_ENV()));
+#endif
+    ASSERT_NE(Credentials::SECRET_ACCESS_KEY_ENV(), (char *)0);
+    EXPECT_NE(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
+#if 0
+    fprintf(stderr, "secret=\"%s\"\n", std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
+#endif
+}
+
 }
 }
 }

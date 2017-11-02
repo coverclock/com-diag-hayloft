@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_OBJECT_
-#define _H_COM_DIAG_HAYLOFT_UNITTEST_OBJECT_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_OBJECTBASE_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_OBJECTBASE_
 
 /**
  * @file

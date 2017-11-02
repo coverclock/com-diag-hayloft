@@ -22,7 +22,7 @@
 #include "com/diag/hayloft/ObjectDelete.h"
 #include "com/diag/hayloft/ObjectHead.h"
 #include "com/diag/hayloft/ObjectCopy.h"
-#include "com/diag/hayloft/size.h"
+#include "com/diag/grandote/size.h"
 #include "com/diag/hayloft/Bucket.h"
 #include "com/diag/hayloft/BucketHead.h"
 #include "com/diag/hayloft/BucketCreate.h"
