@@ -10,9 +10,9 @@ diff -purN /home/jsloan/src/libs3-2.0-orig/src/request.c /home/jsloan/src/libs3-
 +        extern char * getenv(const char *);
 +        const char * com_diag_hayloft_option;
 +        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE");
-+       if (com_diag_hayloft_option) {
++        if (com_diag_hayloft_option) {
 +            curl_easy_setopt_safe(CURLOPT_VERBOSE, atol(com_diag_hayloft_option));
-+       }
++        }
 +    }
 +    // ^ https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
      
@@ -27,10 +27,10 @@ diff -purN /home/jsloan/src/libs3-2.0-orig/src/request.c /home/jsloan/src/libs3-
 +        extern char * getenv(const char *);
 +        const char * com_diag_hayloft_option;
 +        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY");
-+       if (com_diag_hayloft_option) {
++        if (com_diag_hayloft_option) {
 +            curl_easy_setopt_safe(CURLOPT_PROXY, com_diag_hayloft_option);
 +            curl_easy_setopt_safe(CURLOPT_HTTPPROXYTUNNEL, 1L);
-+       }
++        }
 +    }
 +    // ^ https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
  
@@ -45,13 +45,13 @@ diff -purN /home/jsloan/src/libs3-2.0-orig/src/request.c /home/jsloan/src/libs3-
 +        extern char * getenv(const char *);
 +        const char * com_diag_hayloft_option;
 +        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_LIMIT");
-+       if (com_diag_hayloft_option) {
++        if (com_diag_hayloft_option) {
 +            curl_easy_setopt_safe(CURLOPT_LOW_SPEED_LIMIT, atol(com_diag_hayloft_option));
-+       }
++        }
 +        com_diag_hayloft_option = getenv("COM_DIAG_HAYLOFT_LIBS3_CURL_LOW_SPEED_TIME");
-+       if (com_diag_hayloft_option) {
++        if (com_diag_hayloft_option) {
 +            curl_easy_setopt_safe(CURLOPT_LOW_SPEED_TIME, atol(com_diag_hayloft_option));
-+       }
++        }
 +    }
 +    // ^ https://github.com/coverclock/com-diag-hayloft coverclock@diag.com 2017-11-02
  
