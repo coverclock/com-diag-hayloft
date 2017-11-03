@@ -47,7 +47,7 @@ typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
 typedef Fixture ConvergenceTest;
 
 TEST_F(ConvergenceTest, Synchronous) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestSynchronous1");
 	Bucket BUCKET2("ConvergenceTestSynchronous2");
@@ -125,7 +125,7 @@ TEST_F(ConvergenceTest, Synchronous) {
 }
 
 TEST_F(ConvergenceTest, Complete) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestComplete1");
 	Bucket BUCKET2("ConvergenceTestComplete2");
@@ -208,7 +208,7 @@ TEST_F(ConvergenceTest, Service) {
 	Bucket BUCKET2("ConvergenceTestService2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Multiplex multiplex;
 	/**/

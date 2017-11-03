@@ -16,3 +16,9 @@ scope:
 rescope:
 	rm -f .cscope*
 	cscope.sh
+
+.PHONY:	descope
+
+descope:
+	rm -f .cscope*
+	cscope.sh .

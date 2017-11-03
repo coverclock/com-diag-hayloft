@@ -128,13 +128,14 @@ to each bucket name specified in any of the Bucket constructors
 (BucketCreate, etc.) prior to the bucket name being canonicalized by
 Hayloft. Canonicalized bucket names have to be globally unique and
 form a legal internet Domain Name Service (DNS) domain name. Although
-domain names are case insensitive, S3 requires that they be all lower
-case. I recommend using your DNS domain name with a leading dot as a
-bucket suffix, for example ".foo.bar.com". An application creating
-a bucket using BucketCreate("Me") and using the default end point
-name and the default virtual path style URL will hence see the name
-canonicalized into an S3 bucket name "me.foo.bar.com.s3.amazonaws.com".
-Canonicalized bucket names are what you will see in a ServiceManifest.
+domain names are case insensitive, S3 requires that they be all
+lower case. Furthermore, when using HTTPS, the security certificate
+only works if your bucket name contains no periods. I use a suffix
+like "-hayloft-diag-com".  An application creating a bucket using
+BucketCreate("Me") and using the default end point name and the default
+virtual path style URL will hence see the name canonicalized into an S3
+bucket name "me-hayloft-diag-com.s3.amazonaws.com".  Canonicalized bucket
+names are what you will see in a ServiceManifest.
 
     COM_DIAG_HAYLOFT_S3_SESSION_USERAGENT
 

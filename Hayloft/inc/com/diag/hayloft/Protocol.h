@@ -29,7 +29,11 @@ public:
 	/**
 	 * This is the default protocol.
 	 */
+#if defined(COM_DIAG_HAYLOFT_DEBUG)
+	static const ::S3Protocol DEFAULT = ::S3ProtocolHTTP;
+#else
 	static const ::S3Protocol DEFAULT = ::S3ProtocolHTTPS;
+#endif
 
 protected:
 

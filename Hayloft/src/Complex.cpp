@@ -72,7 +72,7 @@ int Complex::instances = 0;
 
 Status Complex::status = ::S3StatusInternalError;
 
-Handle * Complex::complex = 0;
+Handle * Complex::komplex = 0;
 
 ::com::diag::hayloft::LifeCycle * Complex::nextlifecycle = 0;
 
@@ -127,7 +127,7 @@ void * Complex::Thread::run() {
 Complex::Complex()
 {
 	initialize();
-	handle = complex;
+	handle = komplex;
 	logger->debug("Complex@%p: handle=%p\n", this, handle);
 }
 
@@ -136,12 +136,12 @@ Complex::~Complex() {
 }
 
 bool Complex::wait(Action & action) {
-	return action.wait(complex);
+	return action.wait(komplex);
 }
 
 bool Complex::start(Action & action) {
 	bool result = false;
-	if (action.startable(complex)) {
+	if (action.startable(komplex)) {
 		thread.start();
 		push_back_signal(starting, action);
 		result = true;
@@ -159,7 +159,7 @@ void Complex::initialize() {
 		platform = &::com::diag::grandote::Platform::instance();
 		logger = &::com::diag::grandote::MaskableLogger::instance();
 		platform->frequency(numerator, denominator);
-		status = ::S3_create_request_context(&complex);
+		status = ::S3_create_request_context(&komplex);
 		if (status != S3StatusOK) { logger->error("Complex: S3_create_request_context failed! status=%d=\"%s\"\n", status, tostring(status)); }
 		nextlifecycle = &(::com::diag::hayloft::LifeCycle::instance());
 		Complex::LifeCycle::instance(lifecycle);
@@ -175,8 +175,8 @@ void Complex::finalize() {
 		thread.notify();
 		ready.signal(); // Do we really need to lock shared for this?
 		thread.join();
-		S3_destroy_request_context(complex); // Forces all pending Actions to complete.
-		complex = 0;
+		S3_destroy_request_context(komplex); // Forces all pending Actions to complete.
+		komplex = 0;
 		Action * action;
 		::S3ErrorDetails errorDetails = { 0 };
 		for (Action * action = pop_front(starting); action != 0; action = pop_front(starting)) {
@@ -225,7 +225,7 @@ Complex::List & Complex::push_back_signal(List & list, Action & action) {
 // signaling.
 void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
 	bool unretryable = true;
-	if (action.restartable(final, unretryable, complex)) {
+	if (action.restartable(final, unretryable, komplex)) {
 		push_back(restarting, action);
 	} else {
 		nextlifecycle->complete(action, final, errorDetails);
@@ -309,7 +309,7 @@ void * Complex::run() {
 			// so it can read.
 
 			int active = 0;
-			Status result = ::S3_runonce_request_context(complex, &active);
+			Status result = ::S3_runonce_request_context(komplex, &active);
 			if (result != S3StatusOK) {
 				logger->error("Complex: S3_runonce_request_context failed! status=%d=\"%s\"\n", result, tostring(result));
 				break;
@@ -348,7 +348,7 @@ void * Complex::run() {
 			FD_ZERO(&exceptions);
 
 			int maxfd = -1;
-			result = ::S3_get_request_context_fdsets(complex, &reads, &writes, &exceptions, &maxfd);
+			result = ::S3_get_request_context_fdsets(komplex, &reads, &writes, &exceptions, &maxfd);
 			if (result != ::S3StatusOK) {
 				logger->error("Complex: S3_get_request_context_fdsets failed! status=%d=\"%s\"\n", result, tostring(result));
 				break;
@@ -370,7 +370,7 @@ void * Complex::run() {
 			// don't wait at all. Note that we don't use Fibonacci scaling here
 			// but instead rely on the function to tell us the maximum delay.
 
-			Milliseconds timeout = ::S3_get_request_context_timeout(complex);
+			Milliseconds timeout = ::S3_get_request_context_timeout(komplex);
 			if (timeout < 0) { timeout = TIMEOUT; }
 			if (timeout > MAXIMUM) { timeout = MAXIMUM; }
 

@@ -132,7 +132,7 @@ private:
 
 	static Status status;
 
-	static Handle * complex;
+	static Handle * komplex;
 
 	static ::com::diag::hayloft::LifeCycle * nextlifecycle;
 

@@ -296,45 +296,45 @@ static bool complexitypoll() {
 		PathInput input(PATH);
 		Octets length = size(PATH);
 		PathOutput output(OBJECT2.getKey());
-		Complex complex;
+		Complex komplex;
 
-		BucketCreate bucketcreate1(BUCKET1, complex);
-		complex.start(bucketcreate1);
-		BucketCreate bucketcreate2(BUCKET2, complex);
-		complex.start(bucketcreate2);
+		BucketCreate bucketcreate1(BUCKET1, komplex);
+		komplex.start(bucketcreate1);
+		BucketCreate bucketcreate2(BUCKET2, komplex);
+		komplex.start(bucketcreate2);
 		while (bucketcreate1 != true) { Thread::yield(); }
 		while (bucketcreate2 != true) { Thread::yield(); }
 		if (!bucketcreate1.isSuccessful()) { break; }
 		if (!bucketcreate2.isSuccessful()) { break; }
 
-		ObjectPut objectput1(OBJECT1, complex, input, length);
-		complex.start(objectput1);
+		ObjectPut objectput1(OBJECT1, komplex, input, length);
+		komplex.start(objectput1);
 		while (objectput1 != true) { Thread::yield(); }
 		if (!objectput1.isSuccessful()) { break; }
 
-		ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
-		complex.start(objectcopy);
+		ObjectCopy objectcopy(OBJECT1, OBJECT2, komplex);
+		komplex.start(objectcopy);
 		while (objectcopy != true) { Thread::yield(); }
 		if (!objectcopy.isSuccessful()) { break; }
 
-		ObjectGet objectget2(OBJECT2, complex, output);
-		complex.start(objectget2);
+		ObjectGet objectget2(OBJECT2, komplex, output);
+		komplex.start(objectget2);
 		while (objectget2 != true) { Thread::yield(); }
 		if (!objectget2.isSuccessful()) { break; }
 
-		ObjectDelete objectdelete1(OBJECT1, complex);
-		complex.start(objectdelete1);
-		ObjectDelete objectdelete2(OBJECT2, complex);
-		complex.start(objectdelete2);
+		ObjectDelete objectdelete1(OBJECT1, komplex);
+		komplex.start(objectdelete1);
+		ObjectDelete objectdelete2(OBJECT2, komplex);
+		komplex.start(objectdelete2);
 		while (objectdelete1 != true) { Thread::yield(); }
 		while (objectdelete2 != true) { Thread::yield(); }
 		if (!objectdelete1.isSuccessful()) { break; }
 		if (!objectdelete2.isSuccessful()) { break; }
 
-		BucketDelete bucketdelete1(BUCKET1, complex);
-		complex.start(bucketdelete1);
-		BucketDelete bucketdelete2(BUCKET2, complex);
-		complex.start(bucketdelete2);
+		BucketDelete bucketdelete1(BUCKET1, komplex);
+		komplex.start(bucketdelete1);
+		BucketDelete bucketdelete2(BUCKET2, komplex);
+		komplex.start(bucketdelete2);
 		while (bucketdelete1 != true) { Thread::yield(); }
 		while (bucketdelete2 != true) { Thread::yield(); }
 		if (!bucketdelete1.isSuccessful()) { break; }
@@ -367,47 +367,47 @@ static bool complexitywait() {
 		PathInput input(PATH);
 		Octets length = size(PATH);
 		PathOutput output(OBJECT2.getKey());
-		Complex complex;
+		Complex komplex;
 
-		BucketCreate bucketcreate1(BUCKET1, complex);
-		complex.start(bucketcreate1);
-		BucketCreate bucketcreate2(BUCKET2, complex);
-		complex.start(bucketcreate2);
-		complex.wait(bucketcreate1);
-		complex.wait(bucketcreate2);
+		BucketCreate bucketcreate1(BUCKET1, komplex);
+		komplex.start(bucketcreate1);
+		BucketCreate bucketcreate2(BUCKET2, komplex);
+		komplex.start(bucketcreate2);
+		komplex.wait(bucketcreate1);
+		komplex.wait(bucketcreate2);
 		if (!bucketcreate1.isSuccessful()) { break; }
 		if (!bucketcreate2.isSuccessful()) { break; }
 
-		ObjectPut objectput1(OBJECT1, complex, input, length);
-		complex.start(objectput1);
-		complex.wait(objectput1);
+		ObjectPut objectput1(OBJECT1, komplex, input, length);
+		komplex.start(objectput1);
+		komplex.wait(objectput1);
 		if (!objectput1.isSuccessful()) { break; }
 
-		ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
-		complex.start(objectcopy);
-		complex.wait(objectcopy);
+		ObjectCopy objectcopy(OBJECT1, OBJECT2, komplex);
+		komplex.start(objectcopy);
+		komplex.wait(objectcopy);
 		if (!objectcopy.isSuccessful()) { break; }
 
-		ObjectGet objectget2(OBJECT2, complex, output);
-		complex.start(objectget2);
-		complex.wait(objectget2);
+		ObjectGet objectget2(OBJECT2, komplex, output);
+		komplex.start(objectget2);
+		komplex.wait(objectget2);
 		if (!objectget2.isSuccessful()) { break; }
 
-		ObjectDelete objectdelete1(OBJECT1, complex);
-		complex.start(objectdelete1);
-		ObjectDelete objectdelete2(OBJECT2, complex);
-		complex.start(objectdelete2);
-		complex.wait(objectdelete1);
-		complex.wait(objectdelete2);
+		ObjectDelete objectdelete1(OBJECT1, komplex);
+		komplex.start(objectdelete1);
+		ObjectDelete objectdelete2(OBJECT2, komplex);
+		komplex.start(objectdelete2);
+		komplex.wait(objectdelete1);
+		komplex.wait(objectdelete2);
 		if (!objectdelete1.isSuccessful()) { break; }
 		if (!objectdelete2.isSuccessful()) { break; }
 
-		BucketDelete bucketdelete1(BUCKET1, complex);
-		complex.start(bucketdelete1);
-		BucketDelete bucketdelete2(BUCKET2, complex);
-		complex.start(bucketdelete2);
-		complex.wait(bucketdelete1);
-		complex.wait(bucketdelete2);
+		BucketDelete bucketdelete1(BUCKET1, komplex);
+		komplex.start(bucketdelete1);
+		BucketDelete bucketdelete2(BUCKET2, komplex);
+		komplex.start(bucketdelete2);
+		komplex.wait(bucketdelete1);
+		komplex.wait(bucketdelete2);
 		if (!bucketdelete1.isSuccessful()) { break; }
 		if (!bucketdelete2.isSuccessful()) { break; }
 
@@ -469,47 +469,47 @@ static bool complexityrecoverable() {
 		Bucket BUCKET2("ComplexityRecoverable2");
 		Object OBJECT1("ComplexityRecoverable1.txt", BUCKET1);
 		Object OBJECT2("ComplexityRecoverable2.txt", BUCKET2);
-		Complex complex;
+		Complex komplex;
 
-		BucketCreate bucketcreate1(BUCKET1, complex);
-		complex.start(bucketcreate1);
-		BucketCreate bucketcreate2(BUCKET2, complex);
-		complex.start(bucketcreate2);
-		complex.wait(bucketcreate1);
-		complex.wait(bucketcreate2);
+		BucketCreate bucketcreate1(BUCKET1, komplex);
+		komplex.start(bucketcreate1);
+		BucketCreate bucketcreate2(BUCKET2, komplex);
+		komplex.start(bucketcreate2);
+		komplex.wait(bucketcreate1);
+		komplex.wait(bucketcreate2);
 		if (!bucketcreate1.isSuccessful()) { break; }
 		if (!bucketcreate2.isSuccessful()) { break; }
 
-		MyObjectPut objectput1(OBJECT1, complex, PATH);
-		complex.start(objectput1);
-		complex.wait(objectput1);
+		MyObjectPut objectput1(OBJECT1, komplex, PATH);
+		komplex.start(objectput1);
+		komplex.wait(objectput1);
 		if (!objectput1.isSuccessful()) { break; }
 
-		ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
-		complex.start(objectcopy);
-		complex.wait(objectcopy);
+		ObjectCopy objectcopy(OBJECT1, OBJECT2, komplex);
+		komplex.start(objectcopy);
+		komplex.wait(objectcopy);
 		if (!objectcopy.isSuccessful()) { break; }
 
-		MyObjectGet objectget2(OBJECT2, complex, OBJECT2.getKey());
-		complex.start(objectget2);
-		complex.wait(objectget2);
+		MyObjectGet objectget2(OBJECT2, komplex, OBJECT2.getKey());
+		komplex.start(objectget2);
+		komplex.wait(objectget2);
 		if (!objectget2.isSuccessful()) { break; }
 
-		ObjectDelete objectdelete1(OBJECT1, complex);
-		complex.start(objectdelete1);
-		ObjectDelete objectdelete2(OBJECT2, complex);
-		complex.start(objectdelete2);
-		complex.wait(objectdelete1);
-		complex.wait(objectdelete2);
+		ObjectDelete objectdelete1(OBJECT1, komplex);
+		komplex.start(objectdelete1);
+		ObjectDelete objectdelete2(OBJECT2, komplex);
+		komplex.start(objectdelete2);
+		komplex.wait(objectdelete1);
+		komplex.wait(objectdelete2);
 		if (!objectdelete1.isSuccessful()) { break; }
 		if (!objectdelete2.isSuccessful()) { break; }
 
-		BucketDelete bucketdelete1(BUCKET1, complex);
-		complex.start(bucketdelete1);
-		BucketDelete bucketdelete2(BUCKET2, complex);
-		complex.start(bucketdelete2);
-		complex.wait(bucketdelete1);
-		complex.wait(bucketdelete2);
+		BucketDelete bucketdelete1(BUCKET1, komplex);
+		komplex.start(bucketdelete1);
+		BucketDelete bucketdelete2(BUCKET2, komplex);
+		komplex.start(bucketdelete2);
+		komplex.wait(bucketdelete1);
+		komplex.wait(bucketdelete2);
 		if (!bucketdelete1.isSuccessful()) { break; }
 		if (!bucketdelete2.isSuccessful()) { break; }
 

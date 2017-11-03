@@ -48,7 +48,7 @@ typedef Fixture BucketTest;
 
 TEST_F(BucketTest, Heap) {
 	static const char BUCKET[] = "BucketTestHeap";
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; buckethead->isRetryable() && (ii < LIMIT); ++ii) {
@@ -150,7 +150,7 @@ TEST_F(BucketTest, Heap) {
 
 TEST_F(BucketTest, Stack) {
 	static const char BUCKET[] = "BucketTestStack";
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
@@ -242,7 +242,7 @@ TEST_F(BucketTest, Stack) {
 
 TEST_F(BucketTest, Explicit) {
 	static const char BUCKET[] = "BucketTestExplicit";
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	EndpointNorthernCalifornia endpoint;
 	Session session(".test.diag.com", "test.diag.com", endpoint);
 	Credentials credentials(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
@@ -341,7 +341,7 @@ TEST_F(BucketTest, Explicit) {
 
 TEST_F(BucketTest, Complete) {
 	static const char BUCKET[] = "BucketTestComplete";
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	Multiplex multiplex;
 	{
 		BucketHead buckethead(BUCKET, multiplex);
@@ -517,7 +517,7 @@ TEST_F(BucketTest, Complete) {
 
 TEST_F(BucketTest, Simplex) {
 	static const char BUCKET[] = "BucketTestSimplex";
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	Simplex simplex;
 	{
 		BucketHead buckethead(BUCKET, simplex);
@@ -653,8 +653,8 @@ TEST_F(BucketTest, Simplex) {
 
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
-	static const int LIMIT = 60;
-	static const Milliseconds TIMEOUT = 1000;
+	static const int LIMIT = Fixture::limit(60);
+	static const Milliseconds TIMEOUT = Fixture::timeout(1000);
 	Multiplex multiplex;
 	{
 		BucketHead buckethead(BUCKET, multiplex);
@@ -854,7 +854,7 @@ TEST_F(BucketTest, Service) {
 }
 
 TEST_F(BucketTest, Manifest) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	const char BUCKET1[] = "BucketTestManifest1";
 	const char BUCKET2[] = "BucketTestManifest2";
 	ServiceManifest servicemanifest1;

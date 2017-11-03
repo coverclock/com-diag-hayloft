@@ -59,7 +59,7 @@ using namespace ::com::diag::hayloft;
 typedef Fixture ObjectTest;
 
 TEST_F(ObjectTest, Heap) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestHeap";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -345,7 +345,7 @@ TEST_F(ObjectTest, Heap) {
 }
 
 TEST_F(ObjectTest, Complete) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestComplete";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -775,7 +775,7 @@ TEST_F(ObjectTest, Complete) {
 }
 
 TEST_F(ObjectTest, Simplex) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestSimplex";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -1109,8 +1109,8 @@ TEST_F(ObjectTest, Simplex) {
 }
 
 TEST_F(ObjectTest, Service) {
-	static const Milliseconds TIMEOUT = 1000;
-	static const int LIMIT = 60;
+	static const int LIMIT = Fixture::limit(60);
+	static const Milliseconds TIMEOUT = Fixture::timeout(1000);
 	static const char BUCKET[] = "ObjectTestService";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -1600,7 +1600,7 @@ TEST_F(ObjectTest, Service) {
 }
 
 TEST_F(ObjectTest, Manifest) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestManifest";
 	static const char OBJECT1[] = "Object1.txt";
 	static const char OBJECT2[] = "Object2.txt";
@@ -1851,7 +1851,7 @@ TEST_F(ObjectTest, Copy) {
 	static const char BUCKET2[] = "ObjectTestCopy2";
 	static const char OBJECT1[] = "Object1.txt";
 	static const char OBJECT2[] = "Object2.txt";
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);

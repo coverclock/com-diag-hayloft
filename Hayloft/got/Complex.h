@@ -42,32 +42,32 @@ typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
 typedef Fixture ComplexTest;
 
 TEST_F(ComplexTest, Stack) {
-	Complex complex1;
-	EXPECT_TRUE(complex1 == true);
-	EXPECT_EQ(complex1.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex1.getHandle(), (Handle*)0);
-	Complex complex2;
-	EXPECT_TRUE(complex2 == true);
-	EXPECT_EQ(complex2.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex2.getHandle(), (Handle*)0);
+	Complex komplex1;
+	EXPECT_TRUE(komplex1 == true);
+	EXPECT_EQ(komplex1.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex1.getHandle(), (Handle*)0);
+	Complex komplex2;
+	EXPECT_TRUE(komplex2 == true);
+	EXPECT_EQ(komplex2.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex2.getHandle(), (Handle*)0);
 }
 
 TEST_F(ComplexTest, Success) {
 	Bucket BUCKET("ComplexTestSuccess");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreate bucketcreate(BUCKET, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreate bucketcreate(BUCKET, komplex);
 	EXPECT_FALSE(bucketcreate == true);
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_TRUE(bucketcreate == true);
 	EXPECT_TRUE(bucketcreate.isSuccessful());
-	BucketDelete bucketdelete(BUCKET, complex);
+	BucketDelete bucketdelete(BUCKET, komplex);
 	EXPECT_FALSE(bucketdelete == true);
-	EXPECT_TRUE(complex.start(bucketdelete));
-	EXPECT_TRUE(complex.wait(bucketdelete));
+	EXPECT_TRUE(komplex.start(bucketdelete));
+	EXPECT_TRUE(komplex.wait(bucketdelete));
 	EXPECT_TRUE(bucketdelete == true);
 	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
@@ -94,62 +94,62 @@ struct BucketCreateRecoverable : public BucketCreate {
 
 TEST_F(ComplexTest, Recoverable) {
 	Bucket BUCKET("ComplexTestRecoverable");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateRecoverable bucketcreate(BUCKET, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateRecoverable bucketcreate(BUCKET, komplex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_TRUE(bucketcreate.isSuccessful());
-	BucketDelete bucketdelete(BUCKET, complex);
-	EXPECT_TRUE(complex.start(bucketdelete));
-	EXPECT_TRUE(complex.wait(bucketdelete));
+	BucketDelete bucketdelete(BUCKET, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete));
+	EXPECT_TRUE(komplex.wait(bucketdelete));
 	EXPECT_TRUE(bucketdelete.isSuccessful());
 }
 
 TEST_F(ComplexTest, Recoverables) {
 	Bucket BUCKET1("ComplexTestRecoverables1");
 	Bucket BUCKET2("ComplexTestRecoverables2");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateRecoverable bucketcreate1(BUCKET1, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateRecoverable bucketcreate1(BUCKET1, komplex);
 	bucketcreate1.failures = 2;
 	bucketcreate1.failure = ::S3StatusErrorInternalError;
-	BucketCreateRecoverable bucketcreate2(BUCKET2, complex);
+	BucketCreateRecoverable bucketcreate2(BUCKET2, komplex);
 	bucketcreate2.failures = 3;
 	bucketcreate2.failure = ::S3StatusErrorInternalError;
-	EXPECT_TRUE(complex.start(bucketcreate1));
-	EXPECT_TRUE(complex.start(bucketcreate2));
-	EXPECT_TRUE(complex.wait(bucketcreate1));
-	EXPECT_TRUE(complex.wait(bucketcreate2));
+	EXPECT_TRUE(komplex.start(bucketcreate1));
+	EXPECT_TRUE(komplex.start(bucketcreate2));
+	EXPECT_TRUE(komplex.wait(bucketcreate1));
+	EXPECT_TRUE(komplex.wait(bucketcreate2));
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
-	BucketDelete bucketdelete1(BUCKET1, complex);
-	BucketDelete bucketdelete2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketdelete1));
-	EXPECT_TRUE(complex.start(bucketdelete2));
-	EXPECT_TRUE(complex.wait(bucketdelete1));
-	EXPECT_TRUE(complex.wait(bucketdelete2));
+	BucketDelete bucketdelete1(BUCKET1, komplex);
+	BucketDelete bucketdelete2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete1));
+	EXPECT_TRUE(komplex.start(bucketdelete2));
+	EXPECT_TRUE(komplex.wait(bucketdelete1));
+	EXPECT_TRUE(komplex.wait(bucketdelete2));
 	EXPECT_TRUE(bucketdelete1.isSuccessful());
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 }
 
 TEST_F(ComplexTest, Unrecoverable) {
 	Bucket BUCKET("ComplexTestUnrecoverable");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateRecoverable bucketcreate(BUCKET, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateRecoverable bucketcreate(BUCKET, komplex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusAbortedByCallback;
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
@@ -168,16 +168,16 @@ struct BucketCreateIrrecoverable : public BucketCreateRecoverable {
 
 TEST_F(ComplexTest, Irrecoverable) {
 	Bucket BUCKET("ComplexTestIrrecoverable");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateIrrecoverable bucketcreate(BUCKET, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateIrrecoverable bucketcreate(BUCKET, komplex);
 	bucketcreate.failures = 2;
 	bucketcreate.failure = ::S3StatusErrorInternalError;
 	bucketcreate.limit = 1;
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
@@ -192,15 +192,15 @@ struct BucketCreateUnretryable : public BucketCreateRecoverable {
 
 TEST_F(ComplexTest, Unretryable) {
 	Bucket BUCKET("ComplexTestUnretryable");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateUnretryable bucketcreate(BUCKET, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateUnretryable bucketcreate(BUCKET, komplex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusConnectionFailed;
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
@@ -215,13 +215,13 @@ struct BucketCreateUnstartable : public BucketCreate {
 
 TEST_F(ComplexTest, Unstartable) {
 	Bucket BUCKET("ComplexTestUnstartable");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateUnstartable bucketcreate(BUCKET, complex);
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateUnstartable bucketcreate(BUCKET, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
@@ -236,15 +236,15 @@ struct BucketCreateUnresettable : public BucketCreateRecoverable {
 
 TEST_F(ComplexTest, Unresettable) {
 	Bucket BUCKET("ComplexTestUnresettable");
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
-	BucketCreateUnresettable bucketcreate(BUCKET, complex);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
+	BucketCreateUnresettable bucketcreate(BUCKET, komplex);
 	bucketcreate.failures = 1;
 	bucketcreate.failure = ::S3StatusConnectionFailed;
-	EXPECT_TRUE(complex.start(bucketcreate));
-	EXPECT_TRUE(complex.wait(bucketcreate));
+	EXPECT_TRUE(komplex.start(bucketcreate));
+	EXPECT_TRUE(komplex.wait(bucketcreate));
 	EXPECT_FALSE(bucketcreate.isSuccessful());
 }
 
@@ -289,35 +289,35 @@ struct ObjectGetApplication : public ObjectGet {
 };
 
 TEST_F(ComplexTest, Application) {
-	static const int LIMIT = 10;
+	static const int LIMIT = Fixture::limit(10);
 	Bucket BUCKET1("ComplexTestApplication1");
 	Bucket BUCKET2("ComplexTestApplication2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
 	/**/
-	BucketCreate bucketcreate1(BUCKET1, complex);
-	EXPECT_TRUE(complex.start(bucketcreate1));
+	BucketCreate bucketcreate1(BUCKET1, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate1));
 	/**/
-	BucketCreate bucketcreate2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketcreate2));
+	BucketCreate bucketcreate2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate2));
 	/**/
-	EXPECT_TRUE(complex.wait(bucketcreate1));
-	EXPECT_TRUE(complex.wait(bucketcreate2));
+	EXPECT_TRUE(komplex.wait(bucketcreate1));
+	EXPECT_TRUE(komplex.wait(bucketcreate2));
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
 	PathInput * input = new PathInput("unittest.txt");
 	Size inputsize = size(*input);
-	ObjectPutApplication objectput1(OBJECT1, complex, input, inputsize);
+	ObjectPutApplication objectput1(OBJECT1, komplex, input, inputsize);
 	objectput1.failures = 2;
 	objectput1.failure = ::S3StatusErrorInternalError;
 	for (int ii = 0; ii < LIMIT; ++ii) {
-		EXPECT_TRUE(complex.start(objectput1));
-		EXPECT_TRUE(complex.wait(objectput1));
+		EXPECT_TRUE(komplex.start(objectput1));
+		EXPECT_TRUE(komplex.wait(objectput1));
 		if (objectput1.isSuccessful()) {
 			break;
 		}
@@ -327,18 +327,18 @@ TEST_F(ComplexTest, Application) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
-	ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
-	EXPECT_TRUE(complex.start(objectcopy));
-	EXPECT_TRUE(complex.wait(objectcopy));
+	ObjectCopy objectcopy(OBJECT1, OBJECT2, komplex);
+	EXPECT_TRUE(komplex.start(objectcopy));
+	EXPECT_TRUE(komplex.wait(objectcopy));
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
-	ObjectGetApplication objectget2(OBJECT2, complex, output2);
+	ObjectGetApplication objectget2(OBJECT2, komplex, output2);
 	objectget2.failures = 3;
 	objectget2.failure = ::S3StatusErrorInternalError;
 	for (int ii = 0; ii < LIMIT; ++ii) {
-		EXPECT_TRUE(complex.start(objectget2));
-		EXPECT_TRUE(complex.wait(objectget2));
+		EXPECT_TRUE(komplex.start(objectget2));
+		EXPECT_TRUE(komplex.wait(objectget2));
 		if (objectget2.isSuccessful()) {
 			break;
 		}
@@ -347,25 +347,25 @@ TEST_F(ComplexTest, Application) {
 	}
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
-	ObjectDelete objectdelete1(OBJECT1, complex);
-	EXPECT_TRUE(complex.start(objectdelete1));
+	ObjectDelete objectdelete1(OBJECT1, komplex);
+	EXPECT_TRUE(komplex.start(objectdelete1));
 	/**/
-	ObjectDelete objectdelete2(OBJECT2, complex);
-	EXPECT_TRUE(complex.start(objectdelete2));
+	ObjectDelete objectdelete2(OBJECT2, komplex);
+	EXPECT_TRUE(komplex.start(objectdelete2));
 	/**/
-	EXPECT_TRUE(complex.wait(objectdelete1));
-	EXPECT_TRUE(complex.wait(objectdelete2));
+	EXPECT_TRUE(komplex.wait(objectdelete1));
+	EXPECT_TRUE(komplex.wait(objectdelete2));
 	EXPECT_TRUE(objectdelete1.isSuccessful());
 	EXPECT_TRUE(objectdelete2.isSuccessful());
 	/**/
-	BucketDelete bucketdelete1(BUCKET1, complex);
-	EXPECT_TRUE(complex.start(bucketdelete1));
+	BucketDelete bucketdelete1(BUCKET1, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete1));
 	/**/
-	BucketDelete bucketdelete2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketdelete2));
+	BucketDelete bucketdelete2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete2));
 	/**/
-	EXPECT_TRUE(complex.wait(bucketdelete1));
-	EXPECT_TRUE(complex.wait(bucketdelete2));
+	EXPECT_TRUE(komplex.wait(bucketdelete1));
+	EXPECT_TRUE(komplex.wait(bucketdelete2));
 	EXPECT_TRUE(bucketdelete1.isSuccessful());
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 	/**/
@@ -437,56 +437,56 @@ TEST_F(ComplexTest, Factory) {
 	Bucket BUCKET2("ComplexTestFactory2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
 	/**/
-	BucketCreate bucketcreate1(BUCKET1, complex);
-	EXPECT_TRUE(complex.start(bucketcreate1));
+	BucketCreate bucketcreate1(BUCKET1, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate1));
 	/**/
-	BucketCreate bucketcreate2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketcreate2));
+	BucketCreate bucketcreate2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate2));
 	/**/
-	EXPECT_TRUE(complex.wait(bucketcreate1));
-	EXPECT_TRUE(complex.wait(bucketcreate2));
+	EXPECT_TRUE(komplex.wait(bucketcreate1));
+	EXPECT_TRUE(komplex.wait(bucketcreate2));
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	ObjectPutFactory objectput1(OBJECT1, complex, "unittest.txt");
-	EXPECT_TRUE(complex.start(objectput1));
-	EXPECT_TRUE(complex.wait(objectput1));
+	ObjectPutFactory objectput1(OBJECT1, komplex, "unittest.txt");
+	EXPECT_TRUE(komplex.start(objectput1));
+	EXPECT_TRUE(komplex.wait(objectput1));
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
-	ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
-	EXPECT_TRUE(complex.start(objectcopy));
-	EXPECT_TRUE(complex.wait(objectcopy));
+	ObjectCopy objectcopy(OBJECT1, OBJECT2, komplex);
+	EXPECT_TRUE(komplex.start(objectcopy));
+	EXPECT_TRUE(komplex.wait(objectcopy));
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
-	ObjectGetFactory objectget2(OBJECT2, complex, OBJECT2.getKey());
-	EXPECT_TRUE(complex.start(objectget2));
-	EXPECT_TRUE(complex.wait(objectget2));
+	ObjectGetFactory objectget2(OBJECT2, komplex, OBJECT2.getKey());
+	EXPECT_TRUE(komplex.start(objectget2));
+	EXPECT_TRUE(komplex.wait(objectget2));
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
-	ObjectDelete objectdelete1(OBJECT1, complex);
-	EXPECT_TRUE(complex.start(objectdelete1));
+	ObjectDelete objectdelete1(OBJECT1, komplex);
+	EXPECT_TRUE(komplex.start(objectdelete1));
 	/**/
-	ObjectDelete objectdelete2(OBJECT2, complex);
-	EXPECT_TRUE(complex.start(objectdelete2));
+	ObjectDelete objectdelete2(OBJECT2, komplex);
+	EXPECT_TRUE(komplex.start(objectdelete2));
 	/**/
-	EXPECT_TRUE(complex.wait(objectdelete1));
-	EXPECT_TRUE(complex.wait(objectdelete2));
+	EXPECT_TRUE(komplex.wait(objectdelete1));
+	EXPECT_TRUE(komplex.wait(objectdelete2));
 	EXPECT_TRUE(objectdelete1.isSuccessful());
 	EXPECT_TRUE(objectdelete2.isSuccessful());
 	/**/
-	BucketDelete bucketdelete1(BUCKET1, complex);
-	EXPECT_TRUE(complex.start(bucketdelete1));
+	BucketDelete bucketdelete1(BUCKET1, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete1));
 	/**/
-	BucketDelete bucketdelete2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketdelete2));
+	BucketDelete bucketdelete2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete2));
 	/**/
-	EXPECT_TRUE(complex.wait(bucketdelete1));
-	EXPECT_TRUE(complex.wait(bucketdelete2));
+	EXPECT_TRUE(komplex.wait(bucketdelete1));
+	EXPECT_TRUE(komplex.wait(bucketdelete2));
 	EXPECT_TRUE(bucketdelete1.isSuccessful());
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 	/**/
@@ -499,7 +499,7 @@ TEST_F(ComplexTest, Factory) {
 	EXPECT_EQ(::unlink(OBJECT2.getKey()), 0);
 }
 
-static void complextestpoll(Action & action) {
+static void komplextestpoll(Action & action) {
 	while (action != true) { Thread::yield(); }
 }
 
@@ -508,56 +508,56 @@ TEST_F(ComplexTest, Polled) {
 	Bucket BUCKET2("ComplexTestPolled2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
-	Complex complex;
-	EXPECT_TRUE(complex == true);
-	EXPECT_EQ(complex.getStatus(), ::S3StatusOK);
-	EXPECT_NE(complex.getHandle(), (Handle*)0);
+	Complex komplex;
+	EXPECT_TRUE(komplex == true);
+	EXPECT_EQ(komplex.getStatus(), ::S3StatusOK);
+	EXPECT_NE(komplex.getHandle(), (Handle*)0);
 	/**/
-	BucketCreate bucketcreate1(BUCKET1, complex);
-	EXPECT_TRUE(complex.start(bucketcreate1));
+	BucketCreate bucketcreate1(BUCKET1, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate1));
 	/**/
-	BucketCreate bucketcreate2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketcreate2));
+	BucketCreate bucketcreate2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketcreate2));
 	/**/
-	complextestpoll(bucketcreate1);
-	complextestpoll(bucketcreate2);
+	komplextestpoll(bucketcreate1);
+	komplextestpoll(bucketcreate2);
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	ObjectPutFactory objectput1(OBJECT1, complex, "unittest.txt");
-	EXPECT_TRUE(complex.start(objectput1));
-	complextestpoll(objectput1);
+	ObjectPutFactory objectput1(OBJECT1, komplex, "unittest.txt");
+	EXPECT_TRUE(komplex.start(objectput1));
+	komplextestpoll(objectput1);
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
-	ObjectCopy objectcopy(OBJECT1, OBJECT2, complex);
-	EXPECT_TRUE(complex.start(objectcopy));
-	complextestpoll(objectcopy);
+	ObjectCopy objectcopy(OBJECT1, OBJECT2, komplex);
+	EXPECT_TRUE(komplex.start(objectcopy));
+	komplextestpoll(objectcopy);
 	EXPECT_TRUE(objectcopy.isSuccessful());
 	/**/
-	ObjectGetFactory objectget2(OBJECT2, complex, OBJECT2.getKey());
-	EXPECT_TRUE(complex.start(objectget2));
-	complextestpoll(objectget2);
+	ObjectGetFactory objectget2(OBJECT2, komplex, OBJECT2.getKey());
+	EXPECT_TRUE(komplex.start(objectget2));
+	komplextestpoll(objectget2);
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
-	ObjectDelete objectdelete1(OBJECT1, complex);
-	EXPECT_TRUE(complex.start(objectdelete1));
+	ObjectDelete objectdelete1(OBJECT1, komplex);
+	EXPECT_TRUE(komplex.start(objectdelete1));
 	/**/
-	ObjectDelete objectdelete2(OBJECT2, complex);
-	EXPECT_TRUE(complex.start(objectdelete2));
+	ObjectDelete objectdelete2(OBJECT2, komplex);
+	EXPECT_TRUE(komplex.start(objectdelete2));
 	/**/
-	complextestpoll(objectdelete1);
-	complextestpoll(objectdelete2);
+	komplextestpoll(objectdelete1);
+	komplextestpoll(objectdelete2);
 	EXPECT_TRUE(objectdelete1.isSuccessful());
 	EXPECT_TRUE(objectdelete2.isSuccessful());
 	/**/
-	BucketDelete bucketdelete1(BUCKET1, complex);
-	EXPECT_TRUE(complex.start(bucketdelete1));
+	BucketDelete bucketdelete1(BUCKET1, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete1));
 	/**/
-	BucketDelete bucketdelete2(BUCKET2, complex);
-	EXPECT_TRUE(complex.start(bucketdelete2));
+	BucketDelete bucketdelete2(BUCKET2, komplex);
+	EXPECT_TRUE(komplex.start(bucketdelete2));
 	/**/
-	complextestpoll(bucketdelete1);
-	complextestpoll(bucketdelete2);
+	komplextestpoll(bucketdelete1);
+	komplextestpoll(bucketdelete2);
 	EXPECT_TRUE(bucketdelete1.isSuccessful());
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 	/**/

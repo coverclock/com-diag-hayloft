@@ -1,6 +1,6 @@
 /* vim: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_UNITTEST_FIXTURE_
-#define _H_COM_DIAG_UNITTEST_FIXTURE_
+#ifndef _H_COM_DIAG_HAYLOFT_UNITTEST_FIXTURE_
+#define _H_COM_DIAG_HAYLOFT_UNITTEST_FIXTURE_
 
 /**
  * @file
@@ -12,12 +12,14 @@
  */
 
 #include "gtest/gtest.h"
+#include "com/diag/hayloft/types.h"
 #include "com/diag/grandote/stdio.h"
 #include "com/diag/grandote/FileOutput.h"
 #include "com/diag/grandote/LogOutput.h"
 #include "com/diag/grandote/Print.h"
 #include "com/diag/grandote/Dump.h"
 #include "com/diag/grandote/MaskableLogger.h"
+#include "com/diag/grandote/stdlib.h"
 
 namespace com {
 namespace diag {
@@ -27,6 +29,20 @@ using namespace ::com::diag::grandote;
 using namespace ::com::diag::hayloft;
 
 class Test : public ::testing::Test {
+
+public:
+
+    static inline int limit(int def) {
+        static const char LIMIT[] = "COM_DIAG_HAYLOFT_UNITTEST_LIMIT";
+        const char * val = std::getenv(LIMIT);
+        return (val != (char *)0) ? std::atoi(val) : def;
+    }
+
+    static inline Milliseconds timeout(Milliseconds def) {
+        static const char LIMIT[] = "COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT";
+        const char * val = std::getenv(LIMIT);
+        return (val != (char *)0) ? std::atoll(val) : def;
+    }
 
 protected:
 
@@ -144,7 +160,7 @@ protected:
  * can always choose the other on specific test cases, or even create your
  * own by deriving your own class.
 */
-#if 1
+#if 0
 typedef Terse Fixture;
 #else
 typedef Verbose Fixture;

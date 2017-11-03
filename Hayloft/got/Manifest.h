@@ -56,10 +56,10 @@ TEST_F(ManifestTest, Part0Disable) {
 
 TEST_F(ManifestTest, Part1Setup) {
 	if (!manifesttestenable) { return; }
-	Complex complex;
+	Complex komplex;
 	Bucket bucket(MANIFESTTESTBUCKET);
-	BucketCreate bucketcreate(bucket, complex);
-	ASSERT_TRUE(complex.start(bucketcreate));
+	BucketCreate bucketcreate(bucket, komplex);
+	ASSERT_TRUE(komplex.start(bucketcreate));
 	ASSERT_TRUE(bucketcreate.wait());
 	ASSERT_TRUE(bucketcreate == true);
 	ASSERT_TRUE(bucketcreate.isSuccessful());
@@ -69,8 +69,8 @@ TEST_F(ManifestTest, Part1Setup) {
 		HayloftObject object(name, bucket);
 		ManifestTestInput input;
 		logger.notice("creating %s\n", name);
-		ObjectPut objectput(object, complex, input, 0);
-		ASSERT_TRUE(complex.start(objectput));
+		ObjectPut objectput(object, komplex, input, 0);
+		ASSERT_TRUE(komplex.start(objectput));
 		ASSERT_TRUE(objectput.wait());
 		ASSERT_TRUE(objectput == true);
 		ASSERT_TRUE(objectput.isSuccessful());
@@ -79,10 +79,10 @@ TEST_F(ManifestTest, Part1Setup) {
 
 TEST_F(ManifestTest, Part21Manifest) {
 	if (!manifesttestenable) { return; }
-	Complex complex;
+	Complex komplex;
 	Bucket bucket(MANIFESTTESTBUCKET);
-	BucketManifest bucketmanifest(bucket, complex);
-	ASSERT_TRUE(complex.start(bucketmanifest));
+	BucketManifest bucketmanifest(bucket, komplex);
+	ASSERT_TRUE(komplex.start(bucketmanifest));
 	ASSERT_TRUE(bucketmanifest.wait());
 	ASSERT_TRUE(bucketmanifest == true);
 	ASSERT_TRUE(bucketmanifest.isSuccessful());
@@ -114,11 +114,11 @@ TEST_F(ManifestTest, Part21Manifest) {
 
 TEST_F(ManifestTest, Part22Prefix) {
 	if (!manifesttestenable) { return; }
-	Complex complex;
+	Complex komplex;
 	Bucket bucket(MANIFESTTESTBUCKET);
 	Selection selection("OBJECT1");
-	BucketManifest bucketmanifest(bucket, complex, selection);
-	ASSERT_TRUE(complex.start(bucketmanifest));
+	BucketManifest bucketmanifest(bucket, komplex, selection);
+	ASSERT_TRUE(komplex.start(bucketmanifest));
 	ASSERT_TRUE(bucketmanifest.wait());
 	ASSERT_TRUE(bucketmanifest == true);
 	ASSERT_TRUE(bucketmanifest.isSuccessful());
@@ -150,11 +150,11 @@ TEST_F(ManifestTest, Part22Prefix) {
 
 TEST_F(ManifestTest, Part23Next) {
 	if (!manifesttestenable) { return; }
-	Complex complex;
+	Complex komplex;
 	Bucket bucket(MANIFESTTESTBUCKET);
 	Selection selection(0, "OBJECT0499.txt", 0, 1500);
-	BucketManifest bucketmanifest(bucket, complex, selection);
-	ASSERT_TRUE(complex.start(bucketmanifest));
+	BucketManifest bucketmanifest(bucket, komplex, selection);
+	ASSERT_TRUE(komplex.start(bucketmanifest));
 	ASSERT_TRUE(bucketmanifest.wait());
 	ASSERT_TRUE(bucketmanifest == true);
 	ASSERT_TRUE(bucketmanifest.isSuccessful());
@@ -186,11 +186,11 @@ TEST_F(ManifestTest, Part23Next) {
 
 TEST_F(ManifestTest, Part24Common) {
 	if (!manifesttestenable) { return; }
-	Complex complex;
+	Complex komplex;
 	Bucket bucket(MANIFESTTESTBUCKET);
 	Selection selection("OBJECT1", 0, ".txt");
-	BucketManifest bucketmanifest(bucket, complex, selection);
-	ASSERT_TRUE(complex.start(bucketmanifest));
+	BucketManifest bucketmanifest(bucket, komplex, selection);
+	ASSERT_TRUE(komplex.start(bucketmanifest));
 	ASSERT_TRUE(bucketmanifest.wait());
 	ASSERT_TRUE(bucketmanifest == true);
 	ASSERT_TRUE(bucketmanifest.isSuccessful());
@@ -211,21 +211,21 @@ TEST_F(ManifestTest, Part24Common) {
 
 TEST_F(ManifestTest, Part9Cleanup) {
 	if (!manifesttestenable) { return; }
-	Complex complex;
+	Complex komplex;
 	Bucket bucket(MANIFESTTESTBUCKET);
 	for (unsigned int index = 0; index < MANIFESTTESTLIMIT; ++index) {
 		char name[sizeof("OBJECT????.txt")] = { 0 };
 		snprintf(name, sizeof(name), "OBJECT%4.4u.txt", index);
 		HayloftObject object(name, bucket);
-		ObjectDelete objectdelete(object, complex);
+		ObjectDelete objectdelete(object, komplex);
 		logger.notice("deleting %s\n", name);
-		ASSERT_TRUE(complex.start(objectdelete));
+		ASSERT_TRUE(komplex.start(objectdelete));
 		ASSERT_TRUE(objectdelete.wait());
 		ASSERT_TRUE(objectdelete == true);
 		ASSERT_TRUE(objectdelete.isSuccessful());
 	}
-	BucketDelete bucketdelete(bucket, complex);
-	ASSERT_TRUE(complex.start(bucketdelete));
+	BucketDelete bucketdelete(bucket, komplex);
+	ASSERT_TRUE(komplex.start(bucketdelete));
 	ASSERT_TRUE(bucketdelete.wait());
 	ASSERT_TRUE(bucketdelete == true);
 	ASSERT_TRUE(bucketdelete.isSuccessful());
