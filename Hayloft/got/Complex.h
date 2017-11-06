@@ -310,7 +310,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	PathInput * input = new PathInput("unittest.txt");
+	PathInput * input = new PathInput("dat/unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPutApplication objectput1(OBJECT1, komplex, input, inputsize);
 	objectput1.failures = 2;
@@ -321,7 +321,7 @@ TEST_F(ComplexTest, Application) {
 		if (objectput1.isSuccessful()) {
 			break;
 		}
-		input = new PathInput("unittest.txt");
+		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
 		objectput1.reset(input, inputsize);
 	}
@@ -370,7 +370,7 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 	/**/
 	std::string command = "diff ";
-	command += "unittest.txt";
+	command += "dat/unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
@@ -453,7 +453,7 @@ TEST_F(ComplexTest, Factory) {
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	ObjectPutFactory objectput1(OBJECT1, komplex, "unittest.txt");
+	ObjectPutFactory objectput1(OBJECT1, komplex, "dat/unittest.txt");
 	EXPECT_TRUE(komplex.start(objectput1));
 	EXPECT_TRUE(komplex.wait(objectput1));
 	EXPECT_TRUE(objectput1.isSuccessful());
@@ -491,7 +491,7 @@ TEST_F(ComplexTest, Factory) {
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 	/**/
 	std::string command = "diff ";
-	command += "unittest.txt";
+	command += "dat/unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
@@ -524,7 +524,7 @@ TEST_F(ComplexTest, Polled) {
 	EXPECT_TRUE(bucketcreate1.isSuccessful());
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
-	ObjectPutFactory objectput1(OBJECT1, komplex, "unittest.txt");
+	ObjectPutFactory objectput1(OBJECT1, komplex, "dat/unittest.txt");
 	EXPECT_TRUE(komplex.start(objectput1));
 	komplextestpoll(objectput1);
 	EXPECT_TRUE(objectput1.isSuccessful());
@@ -562,7 +562,7 @@ TEST_F(ComplexTest, Polled) {
 	EXPECT_TRUE(bucketdelete2.isSuccessful());
 	/**/
 	std::string command = "diff ";
-	command += "unittest.txt";
+	command += "dat/unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);

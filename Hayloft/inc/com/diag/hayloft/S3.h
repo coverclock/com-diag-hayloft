@@ -12,11 +12,7 @@
  */
 
 extern "C" {
-#if 0
-#include "libs3.h"
-#else
 #include <libs3.h>
-#endif
 }
 
 namespace com {

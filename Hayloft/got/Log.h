@@ -193,7 +193,7 @@ TEST_F(LogTest, SetGetApplication) {
 	LogSet logset(bucket, multiplex, log, PREFIX);
 	ASSERT_TRUE(complete(logset));
 	Fibonacci factor;
-	PathInput * input = new PathInput("unittest.txt");
+	PathInput * input = new PathInput("dat/unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
 	for (int ii = 0; ii < 10; ++ii) {
@@ -201,7 +201,7 @@ TEST_F(LogTest, SetGetApplication) {
 		multiplex.complete();
 		if (!put.isRetryable()) { break; }
 		platform.yield(factor * platform.frequency());
-		input = new PathInput("unittest.txt");
+		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(put.reset(input, inputsize));
 	}

@@ -43,7 +43,7 @@ static bool synchronicity() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("Synchronicity1");
 		Bucket BUCKET2("Synchronicity2");
 		Object OBJECT1("Synchronicity1.txt", BUCKET1);
@@ -95,7 +95,7 @@ static bool simplexity() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("Simplexity1");
 		Bucket BUCKET2("Simplexity2");
 		Object OBJECT1("Simplexity1.txt", BUCKET1);
@@ -157,7 +157,7 @@ static bool multiplexitycomplete() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("MultiplexityComplete1");
 		Bucket BUCKET2("MultiplexityComplete2");
 		Object OBJECT1("MultiplexityComplete1.txt", BUCKET1);
@@ -225,7 +225,7 @@ static bool multiplexityservice() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("MultiplexityService1");
 		Bucket BUCKET2("MultiplexityService2");
 		Object OBJECT1("MultiplexityService1.txt", BUCKET1);
@@ -293,7 +293,7 @@ static bool complexitypoll() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("ComplexityPoll1");
 		Bucket BUCKET2("ComplexityPoll2");
 		Object OBJECT1("ComplexityPoll1.txt", BUCKET1);
@@ -364,7 +364,7 @@ static bool complexitywait() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("ComplexityWait1");
 		Bucket BUCKET2("ComplexityWait2");
 		Object OBJECT1("ComplexityWait1.txt", BUCKET1);
@@ -469,7 +469,7 @@ static bool complexityrecoverable() {
 
 	do {
 
-		const char * PATH = "unittest.txt";
+		const char * PATH = "dat/unittest.txt";
 		Bucket BUCKET1("ComplexityRecoverable1");
 		Bucket BUCKET2("ComplexityRecoverable2");
 		Object OBJECT1("ComplexityRecoverable1.txt", BUCKET1);
@@ -579,6 +579,20 @@ int main(int argc, char ** argv, char ** envp) {
             ::exit(1);
             break;
         }
+    }
+
+    if (::getenv(Credentials::ACCESS_KEY_ID_ENV()) == (char *)0) {
+    	fprintf(stderr, "Access key id UNDEFINED!\n");
+        xc = 1;
+    }
+
+    if (::getenv(Credentials::SECRET_ACCESS_KEY_ENV()) == (char *)0) {
+    	fprintf(stderr, "Secret access key UNDEFINED!\n");
+        xc = 1;
+    }
+
+    if (xc != 0) {
+        ::exit(xc);
     }
 
 	fprintf(stderr, "Synchronous example starting.\n");

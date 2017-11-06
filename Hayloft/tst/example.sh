@@ -4,4 +4,4 @@ exec out/host/bin/example \
 	-i $(cat $HOME/projects/hayloft/aws-s3-access-key-id.txt) \
 	-k $(cat $HOME/projects/hayloft/aws-s3-secret-access-key.txt) \
 	-u $(cat $HOME/projects/hayloft/aws-s3-user-agent.txt) \
-	-b $(cat $HOME/projects/hayloft/aws-s3-bucket-suffix.txt)
+	-b -example-hayloft-diag-com

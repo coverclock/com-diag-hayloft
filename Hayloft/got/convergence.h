@@ -66,13 +66,13 @@ TEST_F(ConvergenceTest, Synchronous) {
 	BucketCreate bucketcreate2(BUCKET2);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	PathInput * input = new PathInput("unittest.txt");
+	PathInput * input = new PathInput("dat/unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new PathInput("unittest.txt");
+		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -116,7 +116,7 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
-	command += "unittest.txt";
+	command += "dat/unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
@@ -145,13 +145,13 @@ TEST_F(ConvergenceTest, Complete) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
-	PathInput * input = new PathInput("unittest.txt");
+	PathInput * input = new PathInput("dat/unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new PathInput("unittest.txt");
+		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -195,7 +195,7 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
-	command += "unittest.txt";
+	command += "dat/unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);
@@ -224,13 +224,13 @@ TEST_F(ConvergenceTest, Service) {
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
 	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
 	/**/
-	PathInput * input = new PathInput("unittest.txt");
+	PathInput * input = new PathInput("dat/unittest.txt");
 	Size inputsize = size(*input);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
 		platform.yield(platform.frequency());
-		input = new PathInput("unittest.txt");
+		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
 		EXPECT_TRUE(objectput1.reset(input, inputsize));
 		EXPECT_TRUE(objectput1.start());
@@ -274,7 +274,7 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(service_until_successful(bucketdelete2, LEVEL));
 	/**/
 	std::string command = "diff ";
-	command += "unittest.txt";
+	command += "dat/unittest.txt";
 	command += " ";
 	command += OBJECT2.getKey();
 	EXPECT_EQ(std::system(command.c_str()), 0);

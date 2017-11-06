@@ -45,7 +45,11 @@ public:
 	 * any case, the DevGuide indicates that one should use all lower case
 	 * bucket names.
 	 */
+#if !0
 	static const ::S3UriStyle DEFAULT = ::S3UriStyleVirtualHost;
+#else
+	static const ::S3UriStyle DEFAULT = ::S3UriStylePath;
+#endif
 
 	/**
 	 * Ctor.
