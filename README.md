@@ -148,7 +148,7 @@ This string is the default AWS region to use. If not specified, the
 United States Standard region is used (which is actually specified by
 omitting the region parameter altogether in messages to S3).
 
-    COM_DIAG_HAYLOFT_LOGGER_MASK
+    COM_DIAG_GRANDOTE_LOGGER_MASK
 
 If specified, this string contains a sixteen bit number, encoded using
 the normal C syntax rules for octal, decimal, or hexadecimal numbers, to
@@ -157,7 +157,8 @@ of the sixteen log levels are enabled via the expression (1 << LEVEL)
 where LEVEL is one of the following log levels. So for example the DEBUG
 level is enabled if bit (1 << DEBUG) or 0x0010 is set.	The different
 log levels found in com/diag/grandote/Log.h are the transitive closure
-of common logging mechanisms from GNU/Linux, Apache, Java, etc.
+of common logging mechanisms from GNU/Linux, Apache, Java, etc. (This is
+implemented in the Grandote library.)
 
     ENUMERATION		VALUE	MASK
 

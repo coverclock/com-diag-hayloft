@@ -14,7 +14,7 @@ namespace com {
 namespace diag {
 namespace hayloft {
 
-const ::S3Protocol Protocol::DEFAULT;
+const ::S3Protocol Protocol::DEFAULT = (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) ?  ::S3ProtocolHTTP : ::S3ProtocolHTTPS;
 
 Protocol::Protocol(::S3Protocol scheme)
 : protocol(scheme)

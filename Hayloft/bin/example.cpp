@@ -1,7 +1,8 @@
+/* vim: set ts=4 expandtab shiftwidth=4: */
 /**
  * @file
  *
- * Copyright 2012 Digital Aggregates Corporation, Colorado, USA<BR>
+ * Copyright 2012-2017 Digital Aggregates Corporation, Colorado, USA<BR>
  * Licensed under the terms in README.h<BR>
  * Chip Overclock (coverclock@diag.com)<BR>
  * https://github.com/coverclock/com-diag-hayloft<BR>R>
@@ -15,7 +16,8 @@
 #include "com/diag/grandote/PathInput.h"
 #include "com/diag/grandote/PathOutput.h"
 #include "com/diag/grandote/MaskableLogger.h"
-#include "com/diag/hayloft/size.h"
+#include "com/diag/grandote/size.h"
+#include "com/diag/grandote/Thread.h"
 #include "com/diag/hayloft/Credentials.h"
 #include "com/diag/hayloft/Session.h"
 #include "com/diag/hayloft/Simplex.h"
@@ -29,9 +31,12 @@
 #include "com/diag/hayloft/BucketDelete.h"
 
 using namespace ::com::diag::hayloft;
-using namespace ::com::diag::hayloft;
 using ::com::diag::grandote::PathInput;
 using ::com::diag::grandote::PathOutput;
+using ::com::diag::grandote::Thread;
+using ::com::diag::grandote::MaskableLogger;
+
+#define size(_ARGUMENT_)  ::com::diag::grandote::size(_ARGUMENT_)
 
 static bool synchronicity() {
 	bool result = false;
@@ -442,7 +447,7 @@ public:
 	}
 };
 
-class MyObjectGet : public ::com::diag::hayloft::ObjectGet {
+class MyObjectGet : public ObjectGet {
 private:
 	const char * path;
 public:
@@ -530,46 +535,47 @@ static bool complexityrecoverable() {
 static void usage(const char * program, FILE * stream)
 {
     fprintf(stream, "\n");
-    fprintf(stream, "usage: %s [ -b BUCKET_SUFFIX ] [ -i ACCESS_KEY_ID ] [ -k SECRET_ACCESS_KEY ] [ -u USER_AGENT ] [ -! ] [ -? ]\n", program);
+    fprintf(stream, "usage: %s [ -b BUCKET_SUFFIX ] [ -i ACCESS_KEY_ID ] [ -k SECRET_ACCESS_KEY ] [ -u USER_AGENT ] [ -d ] [ -? ]\n", program);
     fprintf(stream, "       -b BUCKET_SUFFIX     Append BUCKET_SUFFIX to every canonical bucket name.\n");
+    fprintf(stream, "       -d                   Enable debug output.\n");
+    fprintf(stream, "       -h                   Display menu and exit.\n");
     fprintf(stream, "       -i ACCESS_KEY_ID     Use ACCESS_KEY_ID to authenticate with AWS.\n");
     fprintf(stream, "       -k SECRET_ACCESS_KEY Use SECRET_ACCESS_KEY to authenticate with AWS.\n");
     fprintf(stream, "       -u USER_AGENT        Specify USER_AGENT in every AWS operation.\n");
-    fprintf(stream, "       -!                   Enable debug output.\n");
-    fprintf(stream, "       -?                   Display menu.\n");
 }
 
 int main(int argc, char ** argv, char ** envp) {
-	int xc = 0;
+    int xc = 0;
 
     const char * program = strrchr(argv[0], '/');
     program = (program == (char *)0) ? argv[0] : program + 1;
 
-	const char * value;
+    const char * value;
     int opt;
-    while ((opt = ::getopt(argc, argv, "b:i:k:u:!?")) >= 0) {
+    while ((opt = ::getopt(argc, argv, "b:dhi:k:u:")) >= 0) {
         switch (opt) {
         case 'b':
-			::setenv(::com::diag::hayloft::Session::BUCKET_SUFFIX_ENV(), optarg, !0);
+            ::setenv(Session::BUCKET_SUFFIX_ENV(), optarg, !0);
             break;
-        case 'i':
-			::setenv(::com::diag::hayloft::Credentials::ACCESS_KEY_ID_ENV(), optarg, !0);
-            break;
-        case 'k':
-			::setenv(::com::diag::hayloft::Credentials::SECRET_ACCESS_KEY_ENV(), optarg, !0);
-           break;
-        case 'u':
-			::setenv(::com::diag::hayloft::Session::USER_AGENT_ENV(), optarg, !0);
-            break;
-        case '!':
-            ::setenv(::com::diag::grandote::MaskableLogger::MASK_ENV(), "0xfff0", !0);
+        case 'd':
+            ::setenv(MaskableLogger::MASK_ENV(), "0xfff0", !0);
             MaskableLogger::instance().setMask();
             break;
-        case '?':
-            usage(program, stderr);
+        case 'h':
+            usage(program, stdout);
+            ::exit(0);
+            break;
+        case 'i':
+			::setenv(Credentials::ACCESS_KEY_ID_ENV(), optarg, !0);
+            break;
+        case 'k':
+			::setenv(Credentials::SECRET_ACCESS_KEY_ENV(), optarg, !0);
+           break;
+        case 'u':
+			::setenv(Session::USER_AGENT_ENV(), optarg, !0);
             break;
         default:
-        	usage(program, stderr);
+            usage(program, stderr);
             ::exit(1);
             break;
         }

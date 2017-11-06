@@ -11,8 +11,10 @@
  * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
+#include "com/diag/grandote/stdlib.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/S3.h"
+#include "Debug.h"
 
 namespace com {
 namespace diag {
@@ -29,11 +31,7 @@ public:
 	/**
 	 * This is the default protocol.
 	 */
-#if defined(COM_DIAG_HAYLOFT_DEBUG)
-	static const ::S3Protocol DEFAULT = ::S3ProtocolHTTP;
-#else
-	static const ::S3Protocol DEFAULT = ::S3ProtocolHTTPS;
-#endif
+	static const ::S3Protocol DEFAULT; /* ::S3ProtocolHTTP or ::S3ProtocolHTTPS */
 
 protected:
 

@@ -44,11 +44,11 @@
 #if 1
 #include "Bucket.h"
 #include "Object.h"
-#include "convergence.h"
 #include "Grant.h"
 #include "Log.h"
 #include "Complex.h"
 #include "Manifest.h"
+#include "convergence.h"
 #endif
 
 // Hooks to clean up singletons just for valgrind.

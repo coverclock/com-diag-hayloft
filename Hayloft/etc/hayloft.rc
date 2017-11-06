@@ -1,0 +1,9 @@
+export COM_DIAG_DIMINUTO_LOG_MASK=0
+export COM_DIAG_GRANDOTE_LOGGER_MASK=0
+export COM_DIAG_HAYLOFT_LIBS3_CURL_VERBOSE=0
+#export COM_DIAG_HAYLOFT_DEBUG=1
+#export COM_DIAG_HAYLOFT_UNITTEST_LIMIT=60
+#export COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT=1000
+export S3_ACCESS_KEY_ID=$(cat $HOME/projects/hayloft/aws-s3-access-key-id.txt)
+export S3_SECRET_ACCESS_KEY=$(cat $HOME/projects/hayloft/aws-s3-secret-access-key.txt)
+export PATH=$HOME/src/libs3-2.0/build/bin:$PATH

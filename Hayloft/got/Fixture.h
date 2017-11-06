@@ -20,6 +20,7 @@
 #include "com/diag/grandote/Dump.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/stdlib.h"
+#include "Debug.h"
 
 namespace com {
 namespace diag {
@@ -119,14 +120,14 @@ public:
 
 };
 
-class Terse : public Test {
+class Fixture : public Test {
 
 protected:
 
 	virtual void SetUp() {
 		output = &(logger.getOutput());
 		logger.setOutput(logput);
-		mask = terse();
+		mask = (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) ? verbose() : terse();
 		logger.setMask();
 	}
 
@@ -136,35 +137,6 @@ protected:
 	}
 
 };
-
-class Verbose : public Test {
-
-protected:
-
-	virtual void SetUp() {
-		output = &(logger.getOutput());
-		logger.setOutput(logput);
-		mask = verbose();
-		logger.setMask();
-	}
-
-	virtual void TearDown() {
-		restore(mask);
-		logger.setOutput(*output);
-	}
-
-};
-
-/**
- * This type is the default logging strategy. Choose Verbose or Terse. You
- * can always choose the other on specific test cases, or even create your
- * own by deriving your own class.
-*/
-#if 0
-typedef Terse Fixture;
-#else
-typedef Verbose Fixture;
-#endif
 
 }
 }
