@@ -25,7 +25,7 @@ typedef int64_t Epochalseconds;
 /**
  * Size encoded in units of eight-bit bytes.
  */
-typedef uint64_t Octets;
+typedef int64_t Octets;
 
 /**
  * Duration in milliseconds.

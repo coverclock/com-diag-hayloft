@@ -50,6 +50,7 @@ static bool synchronicity() {
 		Object OBJECT2("Synchronicity2.txt", BUCKET2);
 		PathInput input(PATH);
 		Octets length = size(PATH);
+        if (length < 0) { break; }
 		PathOutput output(OBJECT2.getKey());
 
 		BucketCreate bucketcreate1(BUCKET1);
@@ -102,6 +103,7 @@ static bool simplexity() {
 		Object OBJECT2("Simplexity2.txt", BUCKET2);
 		PathInput input(PATH);
 		Octets length = size(PATH);
+        if (length < 0) { break; }
 		PathOutput output(OBJECT2.getKey());
 		Simplex simplex;
 
@@ -164,6 +166,7 @@ static bool multiplexitycomplete() {
 		Object OBJECT2("MultiplexityComplete2.txt", BUCKET2);
 		PathInput input(PATH);
 		Octets length = size(PATH);
+        if (length < 0) { break; }
 		PathOutput output(OBJECT2.getKey());
 		Multiplex multiplex;
 
@@ -232,6 +235,7 @@ static bool multiplexityservice() {
 		Object OBJECT2("MultiplexityService2.txt", BUCKET2);
 		PathInput input(PATH);
 		Octets length = size(PATH);
+        if (length < 0) { break; }
 		PathOutput output(OBJECT2.getKey());
 		Multiplex multiplex;
 
@@ -300,6 +304,7 @@ static bool complexitypoll() {
 		Object OBJECT2("ComplexityPoll2.txt", BUCKET2);
 		PathInput input(PATH);
 		Octets length = size(PATH);
+        if (length < 0) { break; }
 		PathOutput output(OBJECT2.getKey());
 		Complex komplex;
 
@@ -371,6 +376,7 @@ static bool complexitywait() {
 		Object OBJECT2("ComplexityWait2.txt", BUCKET2);
 		PathInput input(PATH);
 		Octets length = size(PATH);
+        if (length < 0) { break; }
 		PathOutput output(OBJECT2.getKey());
 		Complex komplex;
 

@@ -67,7 +67,9 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -146,7 +148,9 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
 		printf("RETRYING %d\n", __LINE__);
@@ -225,7 +229,9 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		printf("RETRYING %d\n", __LINE__);

@@ -194,7 +194,9 @@ TEST_F(LogTest, SetGetApplication) {
 	ASSERT_TRUE(complete(logset));
 	Fibonacci factor;
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut put(OBJECT, bucket, multiplex, input, inputsize);
 	for (int ii = 0; ii < 10; ++ii) {
 		EXPECT_TRUE(put.start());

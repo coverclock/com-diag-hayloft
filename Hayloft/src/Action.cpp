@@ -106,7 +106,7 @@ Action::~Action() {
 	// Plex. Valgrind will have a stroke over this, I wager.
 	if (isBusy()) {
 		::com::diag::grandote::MaskableLogger::instance().error("Action@%p: deleted while busy!\n", this);
-		if (handle != 0) { (void)S3_runall_request_context(handle); }
+		if (handle != 0) { (void)::S3_runall_request_context(handle); }
 	}
 	LifeCycle::instance().destructor(*this);
 }
@@ -159,8 +159,10 @@ Status Action::state(Status update) {
         /* Do othing. */
     } else if ((FINAL <= update) && (update <= IDLE)) {
         /* Do nothing. */
+#if 0
     } else if (std::getenv(COM_DIAG_HAYLOFT_DEBUG) == 0) {
         /* Do nothing. */
+#endif
     } else {
 	     ::com::diag::grandote::MaskableLogger::instance().notice("Action@%p: update=%d\n", this, update);
     }

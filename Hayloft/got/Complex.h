@@ -311,7 +311,9 @@ TEST_F(ComplexTest, Application) {
 	EXPECT_TRUE(bucketcreate2.isSuccessful());
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPutApplication objectput1(OBJECT1, komplex, input, inputsize);
 	objectput1.failures = 2;
 	objectput1.failure = ::S3StatusErrorInternalError;

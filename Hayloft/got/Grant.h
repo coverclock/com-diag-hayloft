@@ -46,7 +46,9 @@ TEST_F(GrantTest, GetSynchronous) {
 	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket);
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
@@ -78,7 +80,9 @@ TEST_F(GrantTest, GetAsynchronous) {
 	ASSERT_TRUE(complete(grantgetbucket));
 	show(grantgetbucket);
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput(OBJECT, bucketcreate, multiplex, input, inputsize);
 	EXPECT_TRUE(objectput.start());
 	for (int ii = 0; ii < LIMIT; ++ii) {
@@ -116,7 +120,9 @@ TEST_F(GrantTest, GetPublicRead) {
 	Properties properties;
 	properties.setAccess(access);
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
@@ -146,7 +152,9 @@ TEST_F(GrantTest, SetGet) {
 	ASSERT_TRUE(complete(bucketcreate));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }

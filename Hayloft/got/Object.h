@@ -1872,7 +1872,9 @@ TEST_F(ObjectTest, Copy) {
 	Properties properties;
 	properties.insert("KeywordA", "ValueA").insert("KeywordB", "ValueB");
 	PathInput * input = new PathInput("dat/unittest.txt");
+    ASSERT_FALSE(input == (PathInput *)0);
 	Size inputsize = size(*input);
+    ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
