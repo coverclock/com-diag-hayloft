@@ -18,7 +18,7 @@
 #include "com/diag/grandote/DataInput.h"
 #include "com/diag/grandote/string.h"
 #include "com/diag/grandote/stdlib.h"
-#include "Debug.h"
+#include "com/diag/hayloft/Debug.h"
 
 namespace com {
 namespace diag {
@@ -266,12 +266,12 @@ TEST_F(CredentialsTest, Settors) {
 TEST_F(CredentialsTest, Final) {
     ASSERT_NE(Credentials::ACCESS_KEY_ID_ENV(), (char *)0);
     EXPECT_NE(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), (char *)0);
-    if (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) {
+    if (Debugging) {
         fprintf(stderr, "%s=\"%s\"\n", Credentials::ACCESS_KEY_ID_ENV(),  std::getenv(Credentials::ACCESS_KEY_ID_ENV()));
     }
     ASSERT_NE(Credentials::SECRET_ACCESS_KEY_ENV(), (char *)0);
     EXPECT_NE(std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()), (char *)0);
-    if (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) {
+    if (Debugging) {
         fprintf(stderr, "%s=\"%s\"\n", Credentials::SECRET_ACCESS_KEY_ENV(), std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
     }
 }

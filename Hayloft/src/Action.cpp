@@ -8,7 +8,6 @@
  * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
-#include "Debug.h"
 #include "com/diag/hayloft/Action.h"
 #include "com/diag/hayloft/LifeCycle.h"
 #include "com/diag/hayloft/Plex.h"
@@ -149,23 +148,10 @@ Status Action::state() const {
 }
 
 Status Action::state(Status update) {
+	::com::diag::grandote::CriticalSection guard(mutex);
     Status previous;
-    {
-	    ::com::diag::grandote::CriticalSection guard(mutex);
-	    previous = status;
-	    status = update;
-    }
-    if (update == ::S3StatusOK) {
-        /* Do othing. */
-    } else if ((FINAL <= update) && (update <= IDLE)) {
-        /* Do nothing. */
-#if 0
-    } else if (std::getenv(COM_DIAG_HAYLOFT_DEBUG) == 0) {
-        /* Do nothing. */
-#endif
-    } else {
-	     ::com::diag::grandote::MaskableLogger::instance().notice("Action@%p: update=%d\n", this, update);
-    }
+	previous = status;
+	status = update;
 	return previous;
 }
 

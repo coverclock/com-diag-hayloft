@@ -1,6 +1,4 @@
 /* vi: set ts=4 expandtab shiftwidth=4: */
-#ifndef _H_COM_DIAG_HAYLOFT_DEBUG_
-#define _H_COM_DIAG_HAYLOFT_DEBUG_
 
 /**
  * @file
@@ -11,14 +9,14 @@
  * https://github.com/coverclock/com-diag-hayloft<BR>R>
  */
 
+#include "com/diag/hayloft/Debug.h"
+
 namespace com {
 namespace diag {
 namespace hayloft {
 
-static const char * COM_DIAG_HAYLOFT_DEBUG = "COM_DIAG_HAYLOFT_DEBUG";
+Debug Debugging;
 
 }
 }
 }
-
-#endif

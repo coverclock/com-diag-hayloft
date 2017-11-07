@@ -14,7 +14,7 @@
 #include "com/diag/grandote/stdlib.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/hayloft/S3.h"
-#include "Debug.h"
+#include "com/diag/hayloft/Debug.h"
 
 namespace com {
 namespace diag {

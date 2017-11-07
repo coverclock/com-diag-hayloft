@@ -9,12 +9,13 @@
  */
 
 #include "com/diag/hayloft/Protocol.h"
+#include "com/diag/hayloft/Debug.h"
 
 namespace com {
 namespace diag {
 namespace hayloft {
 
-const ::S3Protocol Protocol::DEFAULT = (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) ?  ::S3ProtocolHTTP : ::S3ProtocolHTTPS;
+const ::S3Protocol Protocol::DEFAULT = Debugging ? ::S3ProtocolHTTP : ::S3ProtocolHTTPS;
 
 Protocol::Protocol(::S3Protocol scheme)
 : protocol(scheme)

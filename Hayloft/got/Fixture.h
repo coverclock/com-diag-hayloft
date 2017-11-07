@@ -20,7 +20,7 @@
 #include "com/diag/grandote/Dump.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/stdlib.h"
-#include "Debug.h"
+#include "com/diag/hayloft/Debug.h"
 
 namespace com {
 namespace diag {
@@ -127,7 +127,7 @@ protected:
 	virtual void SetUp() {
 		output = &(logger.getOutput());
 		logger.setOutput(logput);
-		mask = (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) ? verbose() : terse();
+		mask = Debugging ? verbose() : terse();
 		logger.setMask();
 	}
 

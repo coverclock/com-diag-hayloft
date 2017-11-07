@@ -14,7 +14,7 @@
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/set.h"
 #include "com/diag/grandote/stdlib.h"
-#include "Debug.h"
+#include "com/diag/hayloft/Debug.h"
 
 namespace com {
 namespace diag {
@@ -27,7 +27,7 @@ const size_t Credentials::SECRET_ACCESS_KEY_LEN;
 static const char EXS[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 const char * Credentials::obfuscate(const char * str) {
-    if (std::getenv(COM_DIAG_HAYLOFT_DEBUG) != (char *)0) {
+    if (Debugging) {
 	    return str;
     } else {
 	    return &EXS[sizeof(EXS) - 1 - ::strnlen(str, sizeof(EXS) - 1)];
