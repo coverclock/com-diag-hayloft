@@ -13,6 +13,7 @@
 #include "com/diag/hayloft/Plex.h"
 #include "com/diag/hayloft/show.h"
 #include "com/diag/hayloft/tostring.h"
+#include "com/diag/hayloft/Debug.h"
 #include "com/diag/grandote/CriticalSection.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/string.h"
@@ -143,16 +144,28 @@ bool Action::wait(Handle * candidate) {
  ******************************************************************************/
 
 Status Action::state() const {
-	::com::diag::grandote::CriticalSection guard(mutex);
-	return status;
+    Status temporary;
+    {
+	    ::com::diag::grandote::CriticalSection guard(mutex);
+        temporary = status;
+    }
+    if (Debugging) {
+        ::com::diag::grandote::MaskableLogger::instance().debug("Action@%p: state()=%d\n", this, temporary);
+    }
+	return temporary;
 }
 
 Status Action::state(Status update) {
-	::com::diag::grandote::CriticalSection guard(mutex);
-    Status previous;
-	previous = status;
-	status = update;
-	return previous;
+    Status temporary;
+    {
+	    ::com::diag::grandote::CriticalSection guard(mutex);
+	    temporary = status;
+	    status = update;
+    }
+    if (Debugging) {
+        ::com::diag::grandote::MaskableLogger::instance().debug("Action@%p: state(%d)=%d\n", this, update, temporary);
+    }
+	return temporary;
 }
 
 bool Action::retryable(Status status, bool nonexistence) {

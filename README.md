@@ -6,9 +6,13 @@ Copyright 2011-2017 by the Digital Aggregates Corporation, Colorado, USA.
 NOTA BENE
 
 2017-11-02: This code worked when I wrote it six years ago in 2011. Today
-it is broken and I am trying to figure out what's changed. While it
-builds against libs3-2.0, the same library and even version I used in
-2011, and communicates with AWS S3, the unit test suite fails.
+it is broken and I am trying to figure out what's changed. While it builds
+against libs3-2.0, the same library and even version I used in 2011,
+and communicates with AWS S3, the unit test suite based on Google Test
+fails. But the example application - intended to be used as a "Hello,
+World!" kind of coding sample for users of Hayloft - works just fine. The
+difference between the example and the unit tests should be my clue,
+but so far it eludes me.
 
 LICENSE
 

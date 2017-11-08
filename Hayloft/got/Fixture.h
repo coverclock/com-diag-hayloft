@@ -13,6 +13,8 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/hayloft/types.h"
+#include "com/diag/hayloft/Debug.h"
+#include "com/diag/hayloft/Multiplex.h"
 #include "com/diag/grandote/stdio.h"
 #include "com/diag/grandote/FileOutput.h"
 #include "com/diag/grandote/LogOutput.h"
@@ -20,7 +22,6 @@
 #include "com/diag/grandote/Dump.h"
 #include "com/diag/grandote/MaskableLogger.h"
 #include "com/diag/grandote/stdlib.h"
-#include "com/diag/hayloft/Debug.h"
 
 namespace com {
 namespace diag {
@@ -33,16 +34,34 @@ class Test : public ::testing::Test {
 
 public:
 
+    static inline const char * NOLIMIT() { return "COM_DIAG_HAYLOFT_UNITTEST_NOLIMIT"; }
+
+    static inline const char * LIMIT() { return "COM_DIAG_HAYLOFT_UNITTEST_LIMIT"; }
+
+    static inline const char * NOTIMEOUT() { return "COM_DIAG_HAYLOFT_UNITTEST_NOTIMEOUT"; }
+
+    static inline const char * TIMEOUT() { return "COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT"; }
+
     static inline int limit(int def) {
-        static const char LIMIT[] = "COM_DIAG_HAYLOFT_UNITTEST_LIMIT";
-        const char * val = std::getenv(LIMIT);
-        return (val != (char *)0) ? std::atoi(val) : def;
+        if (std::getenv(NOLIMIT()) != (char *)0) {
+            return Multiplex::LIMIT;
+        }
+        const char * val;
+        if ((val = std::getenv(LIMIT())) != (char *)0) {
+            return std::atoi(val);
+        }
+        return def;
     }
 
     static inline Milliseconds timeout(Milliseconds def) {
-        static const char LIMIT[] = "COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT";
-        const char * val = std::getenv(LIMIT);
-        return (val != (char *)0) ? std::atoll(val) : def;
+        if (std::getenv(NOTIMEOUT()) != (char *)0) {
+            return Multiplex::TIMEOUT;
+        }
+        const char * val;
+        if ((val = std::getenv(TIMEOUT())) != (char *)0) {
+            return std::atoll(val);
+        }
+        return def;
     }
 
 protected:
