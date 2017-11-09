@@ -864,6 +864,7 @@ TEST_F(BucketTest, Manifest) {
 		EXPECT_TRUE(servicemanifest1.start());
 	}
 	EXPECT_EQ(servicemanifest1.getManifest().size(), 0);
+    show(servicemanifest1);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.configuration("RETRYING %d\n", __LINE__);
@@ -877,6 +878,7 @@ TEST_F(BucketTest, Manifest) {
 		EXPECT_TRUE(servicemanifest2.start());
 	}
 	EXPECT_EQ(servicemanifest2.getManifest().size(), 1);
+    show(servicemanifest2);
 	EXPECT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
@@ -891,11 +893,12 @@ TEST_F(BucketTest, Manifest) {
 		EXPECT_TRUE(servicemanifest3.start());
 	}
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 2);
+	show(servicemanifest3);
 	EXPECT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
-	show(servicemanifest3);
 	EXPECT_TRUE(servicemanifest3.reset());
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 0);
+	show(servicemanifest3);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete1(BUCKET1);
@@ -915,6 +918,7 @@ TEST_F(BucketTest, Manifest) {
 		EXPECT_TRUE(servicemanifest4.start());
 	}
 	EXPECT_EQ(servicemanifest4.getManifest().size(), 1);
+	show(servicemanifest4);
 	EXPECT_EQ(servicemanifest4.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest4.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete2(BUCKET2);
@@ -934,6 +938,7 @@ TEST_F(BucketTest, Manifest) {
 		EXPECT_TRUE(servicemanifest5.start());
 	}
 	EXPECT_EQ(servicemanifest5.getManifest().size(), 0);
+	show(servicemanifest5);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 }

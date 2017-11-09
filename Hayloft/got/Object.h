@@ -1624,6 +1624,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest1.isSuccessful());
 	EXPECT_EQ(bucketmanifest1.getManifest().size(), 0);
+    show(bucketmanifest1);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1656,6 +1657,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest2.isSuccessful());
 	EXPECT_EQ(bucketmanifest2.getManifest().size(), 1);
+    show(bucketmanifest2);
 	EXPECT_NE(bucketmanifest2.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest2.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1688,11 +1690,12 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest3.isSuccessful());
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 2);
+    show(bucketmanifest3);
 	EXPECT_NE(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
-	show(bucketmanifest3);
 	EXPECT_TRUE(bucketmanifest3.reset());
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 0);
+	show(bucketmanifest3);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1709,6 +1712,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest4.isSuccessful());
 	EXPECT_EQ(bucketmanifest4.getManifest().size(), 1);
+	show(bucketmanifest4);
 	EXPECT_NE(bucketmanifest4.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest4.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1725,6 +1729,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest5.isSuccessful());
 	EXPECT_EQ(bucketmanifest5.getManifest().size(), 1);
+	show(bucketmanifest5);
 	EXPECT_EQ(bucketmanifest5.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest5.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1741,6 +1746,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest6.isSuccessful());
 	EXPECT_EQ(bucketmanifest6.getManifest().size(), 2);
+	show(bucketmanifest6);
 	EXPECT_NE(bucketmanifest6.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest6.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1757,6 +1763,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest7.isSuccessful());
 	EXPECT_EQ(bucketmanifest7.getManifest().size(), 1);
+	show(bucketmanifest7);
 	EXPECT_EQ(bucketmanifest7.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest7.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1773,6 +1780,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest8.isSuccessful());
 	EXPECT_EQ(bucketmanifest8.getManifest().size(), 0);
+	show(bucketmanifest8);
 	EXPECT_EQ(bucketmanifest8.getCommon().size(), 1);
 	EXPECT_EQ(bucketmanifest8.getCommon().front(), "Object");
 	/**/
@@ -1800,6 +1808,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest9.isSuccessful());
 	EXPECT_EQ(bucketmanifest9.getManifest().size(), 1);
+	show(bucketmanifest9);
 	EXPECT_EQ(bucketmanifest9.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest9.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1827,6 +1836,7 @@ TEST_F(ObjectTest, Manifest) {
 	}
 	ASSERT_TRUE(bucketmanifest10.isSuccessful());
 	EXPECT_EQ(bucketmanifest10.getManifest().size(), 0);
+	show(bucketmanifest10);
 	EXPECT_EQ(bucketmanifest10.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest10.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
