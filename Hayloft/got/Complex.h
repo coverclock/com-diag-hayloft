@@ -185,7 +185,7 @@ struct BucketCreateUnretryable : public BucketCreateRecoverable {
 	explicit BucketCreateUnretryable(const Bucket & bucket, const Plex & plex)
 	: BucketCreateRecoverable(bucket, plex)
 	{}
-	virtual bool retryable(Status final, bool nonexistence = true) {
+	virtual bool retryable(Status ultimate, bool nonexistence = true) {
 		return false;
 	}
 };
@@ -289,7 +289,6 @@ struct ObjectGetApplication : public ObjectGet {
 };
 
 TEST_F(ComplexTest, Application) {
-	static const int LIMIT = Fixture::limit(10);
 	Bucket BUCKET1("ComplexTestApplication1");
 	Bucket BUCKET2("ComplexTestApplication2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
@@ -402,8 +401,8 @@ struct ObjectPutFactory : public ObjectPut {
 			return -1;
 		}
 	}
-	virtual bool retryable(Status final, bool nonexistence = true) {
-		return (final == ::S3StatusAbortedByCallback) ? true : ObjectPut::retryable(final, nonexistence);
+	virtual bool retryable(Status ultimate, bool nonexistence = true) {
+		return (ultimate == ::S3StatusAbortedByCallback) ? true : ObjectPut::retryable(ultimate, nonexistence);
 	}
 };
 
@@ -429,8 +428,8 @@ struct ObjectGetFactory : public ObjectGet {
 			return -1;
 		}
 	}
-	virtual bool retryable(Status final, bool nonexistence = true) {
-		return (final == ::S3StatusAbortedByCallback) ? true : ObjectGet::retryable(final, nonexistence);
+	virtual bool retryable(Status ultimate, bool nonexistence = true) {
+		return (ultimate == ::S3StatusAbortedByCallback) ? true : ObjectGet::retryable(ultimate, nonexistence);
 	}
 };
 

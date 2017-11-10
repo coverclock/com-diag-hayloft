@@ -48,11 +48,11 @@ typedef Fixture BucketTest;
 
 TEST_F(BucketTest, Heap) {
 	static const char BUCKET[] = "BucketTestHeap";
-	static const int LIMIT = Fixture::limit(10);
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; buckethead->isRetryable() && (ii < LIMIT); ++ii) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			delete buckethead;
 			buckethead = new BucketHead(BUCKET);
@@ -66,10 +66,11 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_FALSE(buckethead->isSuccessful());
 		delete buckethead;
 	}
+#endif
 	{
 		BucketCreate * bucketcreate = new BucketCreate(BUCKET);
 		for (int ii = 0; bucketcreate->isRetryable() && (ii < LIMIT); ++ii) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			delete bucketcreate;
 			bucketcreate = new BucketCreate(BUCKET);
@@ -83,13 +84,14 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_TRUE(bucketcreate->isSuccessful());
 		delete bucketcreate;
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; (buckethead->isRetryable() || (!buckethead->isSuccessful())) && (ii < LIMIT); ++ii) {
 			if (buckethead->isRetryable()) {
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			} else if (!buckethead->isSuccessful()) {
-				logger.configuration("WAITING %d\n", __LINE__);
+				logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			}
 			platform.yield(platform.frequency());
 			delete buckethead;
@@ -104,13 +106,14 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_TRUE(buckethead->isSuccessful());
 		delete buckethead;
 	}
+#endif
 	{
 		BucketDelete * bucketdelete = new BucketDelete(BUCKET);
 		for (int ii = 0; (bucketdelete->isRetryable() || bucketdelete->isNonexistent()) && (ii < LIMIT); ++ii) {
 			if (bucketdelete->isRetryable()) {
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			} else if (bucketdelete->isNonexistent()) {
-				logger.configuration("WAITING %d\n", __LINE__);
+				logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			}
 			platform.yield(platform.frequency());
 			delete bucketdelete;
@@ -125,13 +128,14 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_TRUE(bucketdelete->isSuccessful());
 		delete bucketdelete;
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; (buckethead->isRetryable() || buckethead->isSuccessful()) && (ii < LIMIT); ++ii) {
 			if (buckethead->isRetryable()) {
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			} else if (buckethead->isSuccessful()) {
-				logger.configuration("WAITING %d\n", __LINE__);
+				logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			}
 			platform.yield(platform.frequency());
 			delete buckethead;
@@ -146,15 +150,16 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_FALSE(buckethead->isSuccessful());
 		delete buckethead;
 	}
+#endif
 }
 
 TEST_F(BucketTest, Stack) {
 	static const char BUCKET[] = "BucketTestStack";
-	static const int LIMIT = Fixture::limit(10);
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			EXPECT_TRUE(buckethead.start());
 		}
@@ -166,10 +171,11 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketCreate bucketcreate(BUCKET);
 		for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			EXPECT_TRUE(bucketcreate.start());
 		}
@@ -181,13 +187,14 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
 			if (buckethead.isRetryable()) {
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			} else if (!buckethead.isSuccessful()) {
-				logger.configuration("WAITING %d\n", __LINE__);
+				logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			}
 			platform.yield(platform.frequency());
 			EXPECT_TRUE(buckethead.start());
@@ -200,13 +207,14 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketDelete bucketdelete(BUCKET);
 		for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
 			if (bucketdelete.isRetryable()) {
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			} else if (bucketdelete.isNonexistent()) {
-				logger.configuration("WAITING %d\n", __LINE__);
+				logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			}
 			platform.yield(platform.frequency());
 			EXPECT_TRUE(bucketdelete.start());
@@ -219,13 +227,14 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
 			if (buckethead.isRetryable()) {
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			} else if (buckethead.isSuccessful()) {
-				logger.configuration("WAITING %d\n", __LINE__);
+				logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			}
 			platform.yield(platform.frequency());
 			EXPECT_TRUE(buckethead.start());
@@ -238,11 +247,11 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 }
 
 TEST_F(BucketTest, Explicit) {
 	static const char BUCKET[] = "BucketTestExplicit";
-	static const int LIMIT = Fixture::limit(10);
 	EndpointNorthernCalifornia endpoint;
 	Session session(".test.diag.com", "test.diag.com", endpoint);
 	Credentials credentials(std::getenv(Credentials::ACCESS_KEY_ID_ENV()), std::getenv(Credentials::SECRET_ACCESS_KEY_ENV()));
@@ -252,9 +261,10 @@ TEST_F(BucketTest, Explicit) {
 	AccessPublicRead access;
 	Context context(credentials, constraint, protocol, style, access);
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, context, session);
 	for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(buckethead.start());
 	}
@@ -265,10 +275,11 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, context, session);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate.start());
 	}
@@ -280,12 +291,13 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(bucketcreate.isNonexistent());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_TRUE(buckethead.start());
 	for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (!buckethead.isSuccessful()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(buckethead.start());
@@ -301,13 +313,14 @@ TEST_F(BucketTest, Explicit) {
 	ASSERT_NE(buckethead.getRegion(), (char *)0);
 	ASSERT_NE(bucketcreate.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(buckethead.getRegion(), bucketcreate.getRegion()), 0);
+#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, context, session);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete.start());
@@ -320,12 +333,13 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_TRUE(buckethead.start());
 	for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (buckethead.isSuccessful()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(buckethead.start());
@@ -337,12 +351,13 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 }
 
 TEST_F(BucketTest, Complete) {
 	static const char BUCKET[] = "BucketTestComplete";
-	static const int LIMIT = Fixture::limit(10);
 	Multiplex multiplex;
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -364,7 +379,7 @@ TEST_F(BucketTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -374,6 +389,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketCreate bucketcreate(BUCKET, multiplex);
 		EXPECT_FALSE(bucketcreate == true);
@@ -395,7 +411,7 @@ TEST_F(BucketTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -405,6 +421,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -427,11 +444,11 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (buckethead.isSuccessful()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -441,6 +458,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketDelete bucketdelete(BUCKET, multiplex);
 		EXPECT_FALSE(bucketdelete == true);
@@ -463,11 +481,11 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!bucketdelete.isNonexistent()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -477,6 +495,7 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -499,11 +518,11 @@ TEST_F(BucketTest, Complete) {
 				EXPECT_EQ(multiplex.complete(), 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!buckethead.isSuccessful()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -513,12 +532,13 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 }
 
 TEST_F(BucketTest, Simplex) {
 	static const char BUCKET[] = "BucketTestSimplex";
-	static const int LIMIT = Fixture::limit(10);
 	Simplex simplex;
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, simplex);
 		EXPECT_FALSE(buckethead == true);
@@ -532,7 +552,7 @@ TEST_F(BucketTest, Simplex) {
 			EXPECT_TRUE(buckethead.start());
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -542,6 +562,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketCreate bucketcreate(BUCKET, simplex);
 		EXPECT_FALSE(bucketcreate == true);
@@ -555,7 +576,7 @@ TEST_F(BucketTest, Simplex) {
 			EXPECT_TRUE(bucketcreate.start());
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -565,6 +586,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, simplex);
 		EXPECT_FALSE(buckethead == true);
@@ -579,11 +601,11 @@ TEST_F(BucketTest, Simplex) {
 				EXPECT_TRUE(buckethead.start());
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (buckethead.isSuccessful()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -593,6 +615,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketDelete bucketdelete(BUCKET, simplex);
 		EXPECT_FALSE(bucketdelete == true);
@@ -607,11 +630,11 @@ TEST_F(BucketTest, Simplex) {
 				EXPECT_TRUE(bucketdelete.start());
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!bucketdelete.isNonexistent()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -621,6 +644,7 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, simplex);
 		EXPECT_FALSE(buckethead == true);
@@ -635,11 +659,11 @@ TEST_F(BucketTest, Simplex) {
 				EXPECT_TRUE(buckethead.start());
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!buckethead.isSuccessful()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -649,13 +673,13 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 }
 
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
-	static const int LIMIT = Fixture::limit(60);
-	static const Milliseconds TIMEOUT = Fixture::timeout(1000);
 	Multiplex multiplex;
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -677,12 +701,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int ll = 0; (buckethead != true) && (ll < LIMIT); ++ll) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(buckethead == true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -692,6 +716,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketCreate bucketcreate(BUCKET, multiplex);
 		EXPECT_FALSE(bucketcreate == true);
@@ -713,12 +738,12 @@ TEST_F(BucketTest, Service) {
 			int bits = 0;
 			for (int ll = 0; (bucketcreate != true) && (ll < LIMIT); ++ll) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_TRUE(bucketcreate == true);
 			if (!bucketcreate.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketcreate.isIdle());
@@ -728,6 +753,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -750,16 +776,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int ll = 0; (buckethead != true) && (ll < LIMIT); ++ll) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					logger.configuration("TIMEDOUT %d\n", __LINE__);
+					logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (buckethead.isSuccessful()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -769,6 +795,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
+#endif
 	{
 		BucketDelete bucketdelete(BUCKET, multiplex);
 		EXPECT_FALSE(bucketdelete == true);
@@ -791,16 +818,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int ll = 0; (bucketdelete != true) && (ll < LIMIT); ++ll) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					logger.configuration("TIMEDOUT %d\n", __LINE__);
+					logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(bucketdelete == true);
 				if (!bucketdelete.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!bucketdelete.isNonexistent()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(bucketdelete.isIdle());
@@ -810,6 +837,7 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -832,16 +860,16 @@ TEST_F(BucketTest, Service) {
 				int bits = 0;
 				for (int ll = 0; (buckethead != true) && (ll < LIMIT); ++ll) {
 					if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-					logger.configuration("TIMEDOUT %d\n", __LINE__);
+					logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 				}
 				EXPECT_EQ(bits, 0);
 				EXPECT_TRUE(buckethead == true);
 				if (!buckethead.isRetryable()) { break; }
-				logger.configuration("RETRYING %d\n", __LINE__);
+				logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 				platform.yield(platform.frequency());
 			}
 			if (!buckethead.isSuccessful()) { break; }
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		EXPECT_FALSE(buckethead.isIdle());
@@ -851,94 +879,94 @@ TEST_F(BucketTest, Service) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
+#endif
 }
 
 TEST_F(BucketTest, Manifest) {
-	static const int LIMIT = Fixture::limit(10);
 	const char BUCKET1[] = "BucketTestManifest1";
 	const char BUCKET2[] = "BucketTestManifest2";
 	ServiceManifest servicemanifest1;
 	for (int ii = 0; servicemanifest1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(servicemanifest1.start());
 	}
 	EXPECT_EQ(servicemanifest1.getManifest().size(), 0);
-    show(servicemanifest1);
+    show(servicemanifest1, MaskableLogger::NOTICE);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate1.start());
 	}
 	ServiceManifest servicemanifest2;
 	for (int ii = 0; servicemanifest2.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(servicemanifest2.start());
 	}
 	EXPECT_EQ(servicemanifest2.getManifest().size(), 1);
-    show(servicemanifest2);
+    show(servicemanifest2, MaskableLogger::NOTICE);
 	EXPECT_NE(servicemanifest2.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate2.start());
 	}
 	ServiceManifest servicemanifest3;
 	for (int ii = 0; servicemanifest3.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(servicemanifest3.start());
 	}
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 2);
-	show(servicemanifest3);
+	show(servicemanifest3, MaskableLogger::NOTICE);
 	EXPECT_NE(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_TRUE(servicemanifest3.reset());
 	EXPECT_EQ(servicemanifest3.getManifest().size(), 0);
-	show(servicemanifest3);
+	show(servicemanifest3, MaskableLogger::NOTICE);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest3.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete1(BUCKET1);
 	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete1.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete1.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete1.start());
 	}
 	ServiceManifest servicemanifest4;
 	for (int ii = 0; servicemanifest4.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(servicemanifest4.start());
 	}
 	EXPECT_EQ(servicemanifest4.getManifest().size(), 1);
-	show(servicemanifest4);
+	show(servicemanifest4, MaskableLogger::NOTICE);
 	EXPECT_EQ(servicemanifest4.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_NE(servicemanifest4.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 	BucketDelete bucketdelete2(BUCKET2);
 	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete2.start());
 	}
 	ServiceManifest servicemanifest5;
 	for (int ii = 0; servicemanifest5.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(servicemanifest5.start());
 	}
 	EXPECT_EQ(servicemanifest5.getManifest().size(), 0);
-	show(servicemanifest5);
+	show(servicemanifest5, MaskableLogger::NOTICE);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate1.getCanonical()), (ServiceManifest::Entry *)0);
 	EXPECT_EQ(servicemanifest5.find(bucketcreate2.getCanonical()), (ServiceManifest::Entry *)0);
 }

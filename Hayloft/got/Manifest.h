@@ -44,7 +44,7 @@ static const int MANIFESTTESTLIMIT = 2500;
 static const char MANIFESTTESTBUCKET[] = "ManifestTest";
 
 struct ManifestTestInput : public Input {
-	virtual bool retryable(Status final, bool nonexistence = true) {
+	virtual bool retryable(Status ultimate, bool nonexistence = true) {
 		return false;
 	}
 };

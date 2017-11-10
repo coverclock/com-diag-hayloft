@@ -14,7 +14,7 @@ fi
 # Unfortunately this approach to setting the id and secret cause them
 # to show up in the process list when doing a "ps" command. So be aware
 # of this when running on a shared server.
-out/host/bin/example \
+exec out/host/bin/example \
 	-i $(cat $HOME/projects/hayloft/aws-s3-access-key-id.txt) \
 	-k $(cat $HOME/projects/hayloft/aws-s3-secret-access-key.txt) \
 	-u $(cat $HOME/projects/hayloft/aws-s3-user-agent.txt) \

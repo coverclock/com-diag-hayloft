@@ -37,7 +37,6 @@ using namespace ::com::diag::hayloft;
 typedef Fixture GrantTest;
 
 TEST_F(GrantTest, GetSynchronous) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "GrantTestGetSynchronous";
 	static const char OBJECT[] = "Object.txt";
 	BucketCreate bucketcreate(BUCKET);
@@ -52,7 +51,7 @@ TEST_F(GrantTest, GetSynchronous) {
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+		printf("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -70,7 +69,6 @@ TEST_F(GrantTest, GetSynchronous) {
 }
 
 TEST_F(GrantTest, GetAsynchronous) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "GrantTestGetAsynchronous";
 	static const char OBJECT[] = "Object.txt";
 	Multiplex multiplex;
@@ -88,7 +86,7 @@ TEST_F(GrantTest, GetAsynchronous) {
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		multiplex.complete();
 		if (!objectput.isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+		printf("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -106,7 +104,6 @@ TEST_F(GrantTest, GetAsynchronous) {
 }
 
 TEST_F(GrantTest, GetPublicRead) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "GrantTestGetPublicRead";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -126,7 +123,7 @@ TEST_F(GrantTest, GetPublicRead) {
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize, properties);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+		printf("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -144,7 +141,6 @@ TEST_F(GrantTest, GetPublicRead) {
 }
 
 TEST_F(GrantTest, SetGet) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "GrantTestSetGet";
 	static const char OBJECT[] = "Object.txt";
 	/**/
@@ -158,7 +154,7 @@ TEST_F(GrantTest, SetGet) {
 	ObjectPut objectput(OBJECT, bucketcreate, input, inputsize);
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		if (!objectput.isRetryable()) { break; }
-		printf("RETRYING %d\n", __LINE__);
+		printf("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);

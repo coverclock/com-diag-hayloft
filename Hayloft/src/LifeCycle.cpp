@@ -64,10 +64,10 @@ Status LifeCycle::properties(Action & action, const ::S3ResponseProperties * res
 	return action.properties(responseProperties);
 }
 
-void LifeCycle::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
+void LifeCycle::complete(Action & action, Status ultimate, const ::S3ErrorDetails * errorDetails) {
 	::com::diag::grandote::MaskableLogger::instance().debug("LifeCycle@%p: Action@%p: complete\n", this, &action);
-	action.signal(final); // All polling or waiting Threads can see this.
-	action.complete(final, errorDetails);
+	action.signal(ultimate); // All polling or waiting Threads can see this.
+	action.complete(ultimate, errorDetails);
 }
 
 void LifeCycle::destructor(Action & action) {

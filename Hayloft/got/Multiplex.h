@@ -57,7 +57,7 @@ TEST_F(MultiplexTest, Iterate) {
 TEST_F(MultiplexTest, Ready) {
 	Multiplex multiplex;
 	EXPECT_TRUE(multiplex == true);
-	EXPECT_EQ(multiplex.ready(), 0);
+	EXPECT_EQ(multiplex.ready(), Multiplex::PENDING);
 }
 
 TEST_F(MultiplexTest, Plex) {

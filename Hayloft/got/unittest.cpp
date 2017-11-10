@@ -11,7 +11,20 @@
 
 #include "gtest/gtest.h"
 #include "com/diag/lariat/lariat.h"
+#include "com/diag/hayloft/types.h"
 #include "Environment.h"
+#include "Fixture.h"
+
+namespace com {
+namespace diag {
+namespace unittest {
+
+static const int LIMIT = Fixture::limit(60);
+static const Milliseconds TIMEOUT = Fixture::timeout(60000);
+
+}
+}
+}
 
 // Unit tests that also use libs3, libcurl, libssl, and libcrypto. Running
 // valgrind reveals that some of these libraries are not so well behaved.
@@ -48,6 +61,11 @@
 #include "Log.h"
 #include "Complex.h"
 #include "Manifest.h"
+#endif
+
+// Experimental tests regarding eventual consistency.
+
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 #include "convergence.h"
 #endif
 

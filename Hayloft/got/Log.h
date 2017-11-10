@@ -210,12 +210,12 @@ TEST_F(LogTest, SetGetApplication) {
 	ASSERT_TRUE(put.isSuccessful());
 	BucketManifest manifest1(bucket, multiplex);
 	ASSERT_TRUE(complete(manifest1));
-	show(manifest1);
+	show(manifest1, MaskableLogger::NOTICE);
 	ObjectDelete objectdelete(put, multiplex);
 	ASSERT_TRUE(complete(objectdelete));
 	BucketManifest manifest2(log, multiplex);
 	ASSERT_TRUE(complete(manifest2));
-	show(manifest2);
+	show(manifest2, MaskableLogger::NOTICE);
 	BucketDelete bucketdelete(bucket, multiplex);
 	ASSERT_TRUE(complete(bucketdelete));
 	BucketDelete logdelete(log, multiplex);

@@ -3,17 +3,6 @@ com-diag-hayloft
 
 Copyright 2011-2017 by the Digital Aggregates Corporation, Colorado, USA.
 
-NOTA BENE
-
-2017-11-02: This code worked when I wrote it six years ago in 2011. Today
-it is broken and I am trying to figure out what's changed. While it builds
-against libs3-2.0, the same library and even version I used in 2011,
-and communicates with AWS S3, the unit test suite based on Google Test
-fails. But the example application - intended to be used as a "Hello,
-World!" kind of coding sample for users of Hayloft - works just fine. The
-difference between the example and the unit tests should be my clue,
-but so far it eludes me.
-
 LICENSE
 
 This software is licensed under the terms of the GNU General Public
@@ -21,11 +10,40 @@ License (GNU GPL) version 3 as published by the Free Software Foundation
 (FSF).  Alternative commercial licensing terms are available from the
 copyright holder.
 
+NOTA BENE (2017)
+
+This code worked when I wrote it six years ago in 2011. Today it is
+broken and I am trying to figure out what's changed. While it builds
+against libs3-2.0, the same library and even version I used in 2011,
+and communicates with AWS S3, the unit test suite based on Google Test
+fails. But the example application - intended to be used as a "Hello,
+World!" kind of coding sample for users of Hayloft - works just fine.
+
+The difference between the example and the unit tests is predominantly
+that the unit test suite does a lot of operations to test for the presence
+(absence) of a bucket or object it just created (deleted). Even though
+the bucket create (delete) or object put (delete) may have completed
+successfully, it appears that there is now significant time lag (minutes)
+before the subsequent presence (absence) check can succeed; for example,
+libs3 returns a "Bucket Not Found" status, but few minutes later, using
+the "s3 list" command, the bucket is present.
+
+I suspect this is another issue in the realm of eventual consistency, and
+consistency convergence, in distributed systems, something I experimented
+with when I first wrote this software. I recall that back in 2011 the
+unit test suite failed from time to time in a similar manner when I ran
+it during the Christmas holiday season; that's probably not a coincidence.
+
 ABSTRACT
 
 This file is part of the Digital Aggregates Corporation Hayloft package.
 Hayloft presents a C++-based object oriented abstraction to the Amazon
-Web Service (AWS) Simple Storage System (S3).
+Web Service (AWS) Simple Storage System (S3). Why C++? Because part of
+my original goal was to develop an experimental framework that could be
+used in embedded applications. However, since I wrote this code in 2011,
+the Linux-based embedded targets that I've worked on professionally have
+become so powerful that there may be little reason not to use higher level
+languages like Python for embedded S3 applications.
 
 DEPENDENCIES
 
@@ -105,6 +123,38 @@ Amazon Web Services
 
 R. Fielding et al., "Hypertext Transfer Protocol -- HTTP/1.1", RFC2616,
 The Internet Society, June 1999
+
+USEFUL COMMANDS AND FILES
+
+    out/host/tst/unittest [ -d ]
+
+Runs the Google Test-based unit test suite, optionally with debugging
+enabled. (Be forewarned that enabling debugging cause the unit test
+suite to generate a humongous amount of output when it runs.)
+
+    out/host/tst/example [ -d ]
+
+Runs the example application, optionally with debugging enabled.
+
+    out/host/tst/cleanup
+
+Deletes buckets and objects used by the unit test suite and by the example
+application. Useful if either program doesn't complete normally.
+
+    . etc/libs3.rc
+
+Sets the environmental variables needed by the s3 utility that is part
+of the libs3 framework.
+
+    $HOME/projects/hayloft/aws-s3-access-key-id.txt
+    $HOME/projects/hayloft/aws-s3-bucket-suffix.txt
+    $HOME/projects/hayloft/aws-s3-secret-access-key.txt
+    $HOME/projects/hayloft/aws-s3-user-agent.txt
+
+Contain the S3 authentication strings, bucket suffix string, and user agent
+name that are required by the comamnds described above. The unit test suite,
+for example, sets the environmental variables described below from the
+contents of these files.
 
 ENVIRONMENTAL VARIABLES
 
@@ -192,6 +242,24 @@ implemented in the Grandote library.)
 
 The Desperado log levels are mapped to the appropriate log levels in the
 underlying logging mechanism. For example, SYSLOG has eight log levels.
+
+    COM_DIAG_HAYLOFT_UNITTEST_NOLIMIT
+    COM_DIAG_HAYLOFT_UNITTEST_LIMIT
+    COM_DIAG_HAYLOFT_UNITTEST_NOTIMEOUT
+    COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT
+
+These environmental variables can be used with the unit test suite to
+place a timeout (in milliseconds) for servicing each individual Bucket or
+Object request, and a limit (in iterations) for serving multiple Bucket
+or Object requests. Defining the NOLIMIT and NOTIMEOUT environmental
+variables (regardless of value) uses the maximum possible values.
+
+    COM_DIAG_HAYLOFT_DEBUG
+
+Enables debug mode in the Hayloft framework and in the unit test suite.
+Several Hayloft functions alter their behavior if this environmental
+variable is defined (regardless of value). For example, HTTP is used as
+the default protocol instead of HTTPS.
 
     COM_DIAG_HAYLOFT_LIBS3_CURL_PROXY
 

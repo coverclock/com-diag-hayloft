@@ -104,8 +104,8 @@ Status Complex::LifeCycle::properties(Action & action, const ::S3ResponsePropert
 	return Complex::nextlifecycle->properties(action, properties);
 }
 
-void Complex::LifeCycle::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
-	Complex::complete(action, final, errorDetails);
+void Complex::LifeCycle::complete(Action & action, Status ultimate, const ::S3ErrorDetails * errorDetails) {
+	Complex::complete(action, ultimate, errorDetails);
 }
 
 void Complex::LifeCycle::destructor(Action & action) {
@@ -223,12 +223,12 @@ Complex::List & Complex::push_back_signal(List & list, Action & action) {
 // function. So we don't have to be concerned about changing Complex variables
 // that aren't shared with other Threads. We also don't have to bother
 // signaling.
-void Complex::complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails) {
+void Complex::complete(Action & action, Status ultimate, const ::S3ErrorDetails * errorDetails) {
 	bool unretryable = true;
-	if (action.restartable(final, unretryable, komplex)) {
+	if (action.restartable(ultimate, unretryable, komplex)) {
 		push_back(restarting, action);
 	} else {
-		nextlifecycle->complete(action, final, errorDetails);
+		nextlifecycle->complete(action, ultimate, errorDetails);
 		if (unretryable) {
 			alarm = 0;
 			fibonacci.reset();

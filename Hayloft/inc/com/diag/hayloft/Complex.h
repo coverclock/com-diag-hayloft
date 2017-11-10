@@ -156,7 +156,7 @@ protected:
 
 	static void * run();
 
-	static void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
+	static void complete(Action & action, Status ultimate, const ::S3ErrorDetails * errorDetails);
 
 	static Action * pop_front(List & list);
 
@@ -206,7 +206,7 @@ public:
 	 * Possible failure modes are: the referenced Action did not reference a
 	 * Complex object as its Plex during construction; or this Action is not in
 	 * a state during which it can be waited upon. When this call returns
-	 * successfully, the referenced Action is guaranteed to have a final
+	 * successfully, the referenced Action is guaranteed to have a ultimate
 	 * status which is not retryable.
 	 *
 	 * @param action refers to this Action to be waited upon.

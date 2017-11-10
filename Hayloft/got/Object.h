@@ -59,7 +59,6 @@ using namespace ::com::diag::hayloft;
 typedef Fixture ObjectTest;
 
 TEST_F(ObjectTest, Heap) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestHeap";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -68,6 +67,7 @@ TEST_F(ObjectTest, Heap) {
 	Properties properties;
 	properties.setAccess(access);
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead * buckethead = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete buckethead;
@@ -75,7 +75,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(buckethead, (BucketHead*)0);
 		EXPECT_EQ(*buckethead, true);
 		if (!buckethead->isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead->isIdle());
@@ -85,6 +85,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(buckethead->isNonexistent());
 	ASSERT_FALSE(buckethead->isSuccessful());
 	delete buckethead;
+#endif
 	/**/
 	BucketCreate * bucketcreate = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
@@ -93,7 +94,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(bucketcreate, (Bucket*)0);
 		EXPECT_EQ(*bucketcreate, true);
 		if (!bucketcreate->isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate->isIdle());
@@ -103,6 +104,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(bucketcreate->isNonexistent());
 	ASSERT_TRUE(bucketcreate->isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	buckethead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -111,11 +113,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(buckethead, (BucketHead*)0);
 			EXPECT_EQ(*buckethead, true);
 			if (!buckethead->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead->isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead->isIdle());
@@ -125,7 +127,9 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(buckethead->isNonexistent());
 	ASSERT_TRUE(buckethead->isSuccessful());
 	delete buckethead;
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead * objecthead = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objecthead;
@@ -133,7 +137,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(objecthead, (ObjectHead*)0);
 		EXPECT_EQ(*objecthead, true);
 		if (!objecthead->isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -143,6 +147,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(objecthead->isNonexistent());
 	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
+#endif
 	/**/
 	ObjectPut * objectput = 0;
 	Size inputsize = 0;
@@ -156,7 +161,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(objectput, (ObjectPut*)0);
 		EXPECT_EQ(*objectput, true);
 		if (!objectput->isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectput->isIdle());
@@ -167,6 +172,7 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(objectput->isSuccessful());
 	delete objectput;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	objecthead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -175,11 +181,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead->isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -189,8 +195,9 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(objecthead->isNonexistent());
 	ASSERT_TRUE(objecthead->isSuccessful());
 	ASSERT_NE(objecthead->authenticated(), (char *)0);
-	logger.configuration("URL=\"%s\"\n", objecthead->authenticated());
+	logger.notice("URL=\"%s\"\n", objecthead->authenticated());
 	delete objecthead;
+#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/SynchronousHeap.txt */
 	ObjectGet * objectget = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -202,11 +209,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objectget, (ObjectGet*)0);
 			EXPECT_EQ(*objectget, true);
 			if (!objectget->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objectget->isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget->isIdle());
@@ -217,6 +224,7 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(objectget->isSuccessful());
 	delete objectget;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	objecthead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -225,11 +233,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead->isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -239,6 +247,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(objecthead->isNonexistent());
 	ASSERT_TRUE(objecthead->isSuccessful());
 	delete objecthead;
+#endif
 	/**/
 	ObjectDelete * objectdelete = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -248,11 +257,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objectdelete, (ObjectDelete*)0);
 			EXPECT_EQ(*objectdelete, true);
 			if (!objectdelete->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete->isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete->isIdle());
@@ -263,6 +272,7 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(objectdelete->isSuccessful());
 	delete objectdelete;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	objecthead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -271,11 +281,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead->isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -286,6 +296,7 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
 	delete bucketcreate;
+#endif
 	/**/
 	BucketDelete * bucketdelete = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -295,11 +306,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(bucketdelete, (Bucket*)0);
 			EXPECT_EQ(*bucketdelete, true);
 			if (!bucketdelete->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete->isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete->isIdle());
@@ -310,6 +321,7 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(bucketdelete->isSuccessful());
 	delete bucketdelete;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	buckethead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -318,11 +330,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(buckethead, (BucketHead*)0);
 			EXPECT_EQ(*buckethead, true);
 			if (!buckethead->isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead->isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead->isIdle());
@@ -332,6 +344,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(buckethead->isNonexistent());
 	ASSERT_FALSE(buckethead->isSuccessful());
 	delete buckethead;
+#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -345,7 +358,6 @@ TEST_F(ObjectTest, Heap) {
 }
 
 TEST_F(ObjectTest, Complete) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestComplete";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -355,6 +367,7 @@ TEST_F(ObjectTest, Complete) {
 	properties.setAccess(access);
 	Multiplex multiplex;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, multiplex, context);
 	EXPECT_EQ(buckethead, false);
 	EXPECT_TRUE(buckethead.isIdle());
@@ -375,7 +388,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -384,6 +397,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -405,7 +419,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -414,6 +428,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -434,11 +449,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -447,7 +462,9 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_FALSE(buckethead.isNonexistent());
 	ASSERT_TRUE(buckethead.isSuccessful());
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
@@ -468,7 +485,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -477,6 +494,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
+#endif
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
 	ASSERT_NE(input, (PathInput*)0);
@@ -502,7 +520,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -517,6 +535,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectput.isNonexistent());
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -537,11 +556,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -551,7 +570,8 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
-	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
+	logger.notice("URL=\"%s\"\n", objecthead.authenticated());
+#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -575,13 +595,13 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget.isIdle());
@@ -591,6 +611,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -611,11 +632,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -624,6 +645,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
+#endif
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
@@ -646,11 +668,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete.isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -660,6 +682,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectdelete.isNonexistent());
 	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -680,11 +703,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -693,6 +716,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
+#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -715,11 +739,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete.isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -729,6 +753,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -749,11 +774,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -762,6 +787,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -775,7 +801,6 @@ TEST_F(ObjectTest, Complete) {
 }
 
 TEST_F(ObjectTest, Simplex) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestSimplex";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -785,6 +810,7 @@ TEST_F(ObjectTest, Simplex) {
 	properties.setAccess(access);
 	Simplex simplex;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, simplex, context);
 	EXPECT_EQ(buckethead, false);
 	EXPECT_TRUE(buckethead.isIdle());
@@ -797,7 +823,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(buckethead.start());
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -806,6 +832,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, simplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -819,7 +846,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(bucketcreate.start());
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -828,6 +855,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -840,11 +868,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(buckethead.start());
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -853,7 +881,9 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_FALSE(buckethead.isNonexistent());
 	ASSERT_TRUE(buckethead.isSuccessful());
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead(OBJECT, bucketcreate, simplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
@@ -866,7 +896,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(objecthead.start());
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -875,6 +905,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
+#endif
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
 	ASSERT_NE(input, (PathInput*)0);
@@ -892,7 +923,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(objectput.start());
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -907,6 +938,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objectput.isNonexistent());
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -919,11 +951,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objecthead.start());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -933,7 +965,8 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
-	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
+	logger.notice("URL=\"%s\"\n", objecthead.authenticated());
+#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, simplex, output);
@@ -949,13 +982,13 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objectget.start());
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget.isIdle());
@@ -965,6 +998,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -977,11 +1011,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objecthead.start());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -990,6 +1024,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
+#endif
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, simplex);
 	EXPECT_EQ(objectdelete, false);
@@ -1004,11 +1039,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objectdelete.start());
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete.isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -1018,6 +1053,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objectdelete.isNonexistent());
 	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1030,11 +1066,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objecthead.start());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1043,6 +1079,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
+#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, simplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -1057,11 +1094,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(bucketdelete.start());
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete.isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -1071,6 +1108,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -1083,11 +1121,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(buckethead.start());
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1096,6 +1134,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -1109,8 +1148,6 @@ TEST_F(ObjectTest, Simplex) {
 }
 
 TEST_F(ObjectTest, Service) {
-	static const int LIMIT = Fixture::limit(60);
-	static const Milliseconds TIMEOUT = Fixture::timeout(1000);
 	static const char BUCKET[] = "ObjectTestService";
 	static const char OBJECT[] = "Object.txt";
 	AccessPublicRead access;
@@ -1120,6 +1157,7 @@ TEST_F(ObjectTest, Service) {
 	properties.setAccess(access);
 	Multiplex multiplex;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, multiplex, context);
 	EXPECT_EQ(buckethead, false);
 	EXPECT_TRUE(buckethead.isIdle());
@@ -1140,12 +1178,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (buckethead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.configuration("TIMEDOUT %d\n", __LINE__);
+			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1154,6 +1192,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -1175,12 +1214,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (bucketcreate != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.configuration("TIMEDOUT %d\n", __LINE__);
+			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -1189,6 +1228,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -1209,16 +1249,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (buckethead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1227,7 +1267,9 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_FALSE(buckethead.isNonexistent());
 	ASSERT_TRUE(buckethead.isSuccessful());
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
@@ -1248,12 +1290,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.configuration("TIMEDOUT %d\n", __LINE__);
+			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1262,6 +1304,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
+#endif
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
 	ASSERT_NE(input, (PathInput*)0);
@@ -1287,12 +1330,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (objectput != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.configuration("TIMEDOUT %d\n", __LINE__);
+			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -1307,6 +1350,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectput.isNonexistent());
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1327,16 +1371,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1346,7 +1390,8 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
-	logger.configuration("URL=\"%s\"\n", objecthead.authenticated());
+	logger.notice("URL=\"%s\"\n", objecthead.authenticated());
+#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -1370,18 +1415,18 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget.isIdle());
@@ -1391,6 +1436,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1411,16 +1457,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1429,6 +1475,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
+#endif
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
@@ -1451,16 +1498,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objectdelete != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete.isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -1470,6 +1517,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectdelete.isNonexistent());
 	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1490,16 +1538,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1508,6 +1556,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
+#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -1530,16 +1579,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (bucketdelete != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete.isNonexistent()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -1549,6 +1598,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -1569,16 +1619,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (buckethead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.configuration("TIMEDOUT %d\n", __LINE__);
+				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead.isSuccessful()) { break; }
-		logger.configuration("WAITING %d\n", __LINE__);
+		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1587,6 +1637,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
+#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -1600,13 +1651,12 @@ TEST_F(ObjectTest, Service) {
 }
 
 TEST_F(ObjectTest, Manifest) {
-	static const int LIMIT = Fixture::limit(10);
 	static const char BUCKET[] = "ObjectTestManifest";
 	static const char OBJECT1[] = "Object1.txt";
 	static const char OBJECT2[] = "Object2.txt";
 	BucketCreate bucketcreate(BUCKET);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate.start());
 	}
@@ -1615,16 +1665,16 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest1(BUCKET);
 	for (int ii = 0; (bucketmanifest1.isRetryable() || bucketmanifest1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest1.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest1.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest1.start());
 	}
 	ASSERT_TRUE(bucketmanifest1.isSuccessful());
 	EXPECT_EQ(bucketmanifest1.getManifest().size(), 0);
-    show(bucketmanifest1);
+    show(bucketmanifest1, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest1.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1634,7 +1684,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -1648,16 +1698,16 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest2(BUCKET);
 	for (int ii = 0; (bucketmanifest2.isRetryable() || bucketmanifest2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest2.start());
 	}
 	ASSERT_TRUE(bucketmanifest2.isSuccessful());
 	EXPECT_EQ(bucketmanifest2.getManifest().size(), 1);
-    show(bucketmanifest2);
+    show(bucketmanifest2, MaskableLogger::NOTICE);
 	EXPECT_NE(bucketmanifest2.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest2.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1667,7 +1717,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput2(OBJECT2, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput2.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -1681,21 +1731,21 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest3(BUCKET);
 	for (int ii = 0; (bucketmanifest3.isRetryable() || bucketmanifest3.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest3.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest3.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest3.start());
 	}
 	ASSERT_TRUE(bucketmanifest3.isSuccessful());
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 2);
-    show(bucketmanifest3);
+    show(bucketmanifest3, MaskableLogger::NOTICE);
 	EXPECT_NE(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
 	EXPECT_TRUE(bucketmanifest3.reset());
 	EXPECT_EQ(bucketmanifest3.getManifest().size(), 0);
-	show(bucketmanifest3);
+	show(bucketmanifest3, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest3.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1703,16 +1753,16 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest4(BUCKET, selection4);
 	for (int ii = 0; (bucketmanifest4.isRetryable() || bucketmanifest4.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest4.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest4.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest4.start());
 	}
 	ASSERT_TRUE(bucketmanifest4.isSuccessful());
 	EXPECT_EQ(bucketmanifest4.getManifest().size(), 1);
-	show(bucketmanifest4);
+	show(bucketmanifest4, MaskableLogger::NOTICE);
 	EXPECT_NE(bucketmanifest4.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest4.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1720,16 +1770,16 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest5(BUCKET, selection5);
 	for (int ii = 0; (bucketmanifest5.isRetryable() || bucketmanifest5.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest5.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest5.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest5.start());
 	}
 	ASSERT_TRUE(bucketmanifest5.isSuccessful());
 	EXPECT_EQ(bucketmanifest5.getManifest().size(), 1);
-	show(bucketmanifest5);
+	show(bucketmanifest5, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest5.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest5.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1737,16 +1787,16 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest6(BUCKET, selection6);
 	for (int ii = 0; (bucketmanifest6.isRetryable() || bucketmanifest6.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest6.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest6.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest6.start());
 	}
 	ASSERT_TRUE(bucketmanifest6.isSuccessful());
 	EXPECT_EQ(bucketmanifest6.getManifest().size(), 2);
-	show(bucketmanifest6);
+	show(bucketmanifest6, MaskableLogger::NOTICE);
 	EXPECT_NE(bucketmanifest6.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest6.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1754,16 +1804,16 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest7(BUCKET, selection7);
 	for (int ii = 0; (bucketmanifest7.isRetryable() || bucketmanifest7.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest7.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest7.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest7.start());
 	}
 	ASSERT_TRUE(bucketmanifest7.isSuccessful());
 	EXPECT_EQ(bucketmanifest7.getManifest().size(), 1);
-	show(bucketmanifest7);
+	show(bucketmanifest7, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest7.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest7.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
@@ -1771,25 +1821,25 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest8(BUCKET, selection8);
 	for (int ii = 0; (bucketmanifest8.isRetryable() || bucketmanifest8.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest8.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest8.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest8.start());
 	}
 	ASSERT_TRUE(bucketmanifest8.isSuccessful());
 	EXPECT_EQ(bucketmanifest8.getManifest().size(), 0);
-	show(bucketmanifest8);
+	show(bucketmanifest8, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest8.getCommon().size(), 1);
 	EXPECT_EQ(bucketmanifest8.getCommon().front(), "Object");
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete1.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete1.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete1.start());
@@ -1799,25 +1849,25 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest9(BUCKET);
 	for (int ii = 0; (bucketmanifest9.isRetryable() || bucketmanifest9.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest9.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest9.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest9.start());
 	}
 	ASSERT_TRUE(bucketmanifest9.isSuccessful());
 	EXPECT_EQ(bucketmanifest9.getManifest().size(), 1);
-	show(bucketmanifest9);
+	show(bucketmanifest9, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest9.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_NE(bucketmanifest9.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
 	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete2.start());
@@ -1827,25 +1877,25 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest10(BUCKET);
 	for (int ii = 0; (bucketmanifest10.isRetryable() || bucketmanifest10.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest10.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest10.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest10.start());
 	}
 	ASSERT_TRUE(bucketmanifest10.isSuccessful());
 	EXPECT_EQ(bucketmanifest10.getManifest().size(), 0);
-	show(bucketmanifest10);
+	show(bucketmanifest10, MaskableLogger::NOTICE);
 	EXPECT_EQ(bucketmanifest10.find(OBJECT1), (BucketManifest::Entry *)0);
 	EXPECT_EQ(bucketmanifest10.find(OBJECT2), (BucketManifest::Entry *)0);
 	/**/
 	BucketDelete bucketdelete(BUCKET);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete.start());
@@ -1861,10 +1911,9 @@ TEST_F(ObjectTest, Copy) {
 	static const char BUCKET2[] = "ObjectTestCopy2";
 	static const char OBJECT1[] = "Object1.txt";
 	static const char OBJECT2[] = "Object2.txt";
-	static const int LIMIT = Fixture::limit(10);
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate1.start());
 	}
@@ -1872,7 +1921,7 @@ TEST_F(ObjectTest, Copy) {
 	/**/
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate2.start());
 	}
@@ -1887,7 +1936,7 @@ TEST_F(ObjectTest, Copy) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -1897,12 +1946,13 @@ TEST_F(ObjectTest, Copy) {
 	ASSERT_TRUE(objectput1.isSuccessful());
 	show(objectput1);
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
 	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objecthead1.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objecthead1.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objecthead1.start());
@@ -1916,6 +1966,7 @@ TEST_F(ObjectTest, Copy) {
 	EXPECT_EQ(std::strcmp(objecthead1.find("keyworda"), "ValueA"), 0);
 	ASSERT_NE(objecthead1.find("keywordb"), (char *)0);
 	EXPECT_EQ(std::strcmp(objecthead1.find("keywordb"), "ValueB"), 0);
+#endif
 	/**/
 	// I could have just used bucketcreate1 and bucketcreate2 but I wanted to
 	// try just using the base class since I intended it to be used this way.
@@ -1923,7 +1974,7 @@ TEST_F(ObjectTest, Copy) {
 	Bucket bucket2(BUCKET2);
 	ObjectCopy objectcopy(OBJECT1, bucket1, OBJECT2, bucket2);
 	for (int ii = 0; objectcopy.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.configuration("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectcopy.start());
 	}
@@ -1935,12 +1986,13 @@ TEST_F(ObjectTest, Copy) {
 	// a bug in my code (entirely possible) that doesn't seem to happen either.
 	// If you want them, you're going to have to do an OBJECT HEAD.
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2, bucket2);
 	for (int ii = 0; (objecthead2.isRetryable() || objecthead2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objecthead2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objecthead2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objecthead2.start());
@@ -1951,16 +2003,17 @@ TEST_F(ObjectTest, Copy) {
 	// sink object.
 	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
 	EXPECT_EQ(objecthead2.find("keywordb"), (char *)0);
+#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2);
 			objectget2.reset(output2);
 		} else if (objectget2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());
@@ -1973,9 +2026,9 @@ TEST_F(ObjectTest, Copy) {
 	ObjectDelete objectdelete1(OBJECT1, bucket1);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete1.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete1.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete1.start());
@@ -1985,9 +2038,9 @@ TEST_F(ObjectTest, Copy) {
 	ObjectDelete objectdelete2(OBJECT2, bucket2);
 	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete2.start());
@@ -1997,9 +2050,9 @@ TEST_F(ObjectTest, Copy) {
 	BucketDelete bucketdelete1(BUCKET1);
 	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete1.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete1.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete1.start());
@@ -2009,9 +2062,9 @@ TEST_F(ObjectTest, Copy) {
 	BucketDelete bucketdelete2(BUCKET2);
 	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete2.isRetryable()) {
-			logger.configuration("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete2.isNonexistent()) {
-			logger.configuration("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete2.start());

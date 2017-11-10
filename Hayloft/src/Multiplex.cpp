@@ -100,7 +100,11 @@ int Multiplex::ready(Milliseconds timeout) {
 			break;
 		}
 		logger.debug("Multiplex@%p: maxfd=%d\n", this, maxfd);
+        // If libs3 returns -1 for maxfds then it hasn't started any socket
+        // operations yet. No point in doing a select(2) since it will block
+        // until the timeout - which might be quite large - expires. 
 		if (maxfd < 0) {
+            rc |= PENDING;
 			break;
 		}
 		Milliseconds maximum = ::S3_get_request_context_timeout(handle);
@@ -115,9 +119,13 @@ int Multiplex::ready(Milliseconds timeout) {
 		}
 		// This is really inefficient but it is the only reliable way to do it
 		// without cracking open the fd_set structure and relying on its
-		// specific implementation.
+		// specific implementation. However, we only need to find *one* ready
+        // file descriptor and we're done.
 		for (int fd = 0; fd <= maxfd; ++fd) {
-			if (FD_ISSET(fd, &reads) || FD_ISSET(fd, &writes) || FD_ISSET(fd, &exceptions)) { rc |= READY; break; }
+			if (FD_ISSET(fd, &reads) || FD_ISSET(fd, &writes) || FD_ISSET(fd, &exceptions)) {
+                rc |= READY;
+                break;
+            }
 		}
 	} while (false);
 	logger.debug("Multiplex@%p: ready=0x%x\n", this, rc);
@@ -142,7 +150,9 @@ int Multiplex::service(Milliseconds timeout, int limit) {
 		rc |= ready(timeout);
 		if ((rc & ERROR) != 0) { break; }
 		if ((rc & RETRY) != 0) { platform.yield(); continue; }
-		if ((rc & READY) == 0) { break; }
+		if ((rc & READY) != 0) { continue; }
+		if ((rc & PENDING) == 0) { break; }
+        break;
 	}
 	::com::diag::grandote::MaskableLogger::instance().debug("Multiplex@%p: service=0x%x\n", this, rc);
 	return rc;

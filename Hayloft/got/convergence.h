@@ -47,18 +47,21 @@ typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
 typedef Fixture ConvergenceTest;
 
 TEST_F(ConvergenceTest, Synchronous) {
-	static const int LIMIT = Fixture::limit(10);
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestSynchronous1");
 	Bucket BUCKET2("ConvergenceTestSynchronous2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead1(BUCKET1);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead2(BUCKET1);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
+#endif
 	/**/
 	BucketCreate bucketcreate1(BUCKET1);
 	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
@@ -72,7 +75,7 @@ TEST_F(ConvergenceTest, Synchronous) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -81,24 +84,28 @@ TEST_F(ConvergenceTest, Synchronous) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1);
 	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
+#endif
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2);
 	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
+#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());
@@ -127,7 +134,6 @@ TEST_F(ConvergenceTest, Synchronous) {
 }
 
 TEST_F(ConvergenceTest, Complete) {
-	static const int LIMIT = Fixture::limit(10);
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestComplete1");
 	Bucket BUCKET2("ConvergenceTestComplete2");
@@ -135,11 +141,15 @@ TEST_F(ConvergenceTest, Complete) {
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	Multiplex multiplex;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead1(BUCKET1, multiplex);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead2(BUCKET1, multiplex);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
+#endif
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
 	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
@@ -153,7 +163,7 @@ TEST_F(ConvergenceTest, Complete) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -162,24 +172,28 @@ TEST_F(ConvergenceTest, Complete) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1, multiplex);
 	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
+#endif
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2, multiplex);
 	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
+#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < 10); ++ii) {
 		if (objectget2.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());
@@ -212,15 +226,18 @@ TEST_F(ConvergenceTest, Service) {
 	Bucket BUCKET2("ConvergenceTestService2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
-	static const int LIMIT = Fixture::limit(10);
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Multiplex multiplex;
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead1(BUCKET1, multiplex);
 	EXPECT_TRUE(service_until_nonexistent(buckethead1, LEVEL));
+#endif
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead2(BUCKET1, multiplex);
 	EXPECT_TRUE(service_until_nonexistent(buckethead2, LEVEL));
+#endif
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
 	EXPECT_TRUE(service_until_successful(bucketcreate1, LEVEL));
@@ -234,7 +251,7 @@ TEST_F(ConvergenceTest, Service) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		printf("RETRYING %d\n", __LINE__);
+		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -243,24 +260,28 @@ TEST_F(ConvergenceTest, Service) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1, multiplex);
 	EXPECT_TRUE(service_until_successful(objecthead1, LEVEL));
+#endif
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2, multiplex);
 	EXPECT_TRUE(service_until_successful(objectcopy, LEVEL));
 	/**/
+#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(service_until_successful(objecthead2, LEVEL));
+#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
-			printf("RETRYING %d\n", __LINE__);
+			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
-			printf("WAITING %d\n", __LINE__);
+			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());

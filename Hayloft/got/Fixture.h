@@ -34,31 +34,31 @@ class Test : public ::testing::Test {
 
 public:
 
-    static inline const char * NOLIMIT() { return "COM_DIAG_HAYLOFT_UNITTEST_NOLIMIT"; }
+    static inline const char * NOLIMIT_ENV() { return "COM_DIAG_HAYLOFT_UNITTEST_NOLIMIT"; }
 
-    static inline const char * LIMIT() { return "COM_DIAG_HAYLOFT_UNITTEST_LIMIT"; }
+    static inline const char * LIMIT_ENV() { return "COM_DIAG_HAYLOFT_UNITTEST_LIMIT"; }
 
-    static inline const char * NOTIMEOUT() { return "COM_DIAG_HAYLOFT_UNITTEST_NOTIMEOUT"; }
+    static inline const char * NOTIMEOUT_ENV() { return "COM_DIAG_HAYLOFT_UNITTEST_NOTIMEOUT"; }
 
-    static inline const char * TIMEOUT() { return "COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT"; }
+    static inline const char * TIMEOUT_ENV() { return "COM_DIAG_HAYLOFT_UNITTEST_TIMEOUT"; }
 
     static inline int limit(int def) {
-        if (std::getenv(NOLIMIT()) != (char *)0) {
+        if (std::getenv(NOLIMIT_ENV()) != (char *)0) {
             return Multiplex::LIMIT;
         }
         const char * val;
-        if ((val = std::getenv(LIMIT())) != (char *)0) {
+        if ((val = std::getenv(LIMIT_ENV())) != (char *)0) {
             return std::atoi(val);
         }
         return def;
     }
 
     static inline Milliseconds timeout(Milliseconds def) {
-        if (std::getenv(NOTIMEOUT()) != (char *)0) {
+        if (std::getenv(NOTIMEOUT_ENV()) != (char *)0) {
             return Multiplex::TIMEOUT;
         }
         const char * val;
-        if ((val = std::getenv(TIMEOUT())) != (char *)0) {
+        if ((val = std::getenv(TIMEOUT_ENV())) != (char *)0) {
             return std::atoll(val);
         }
         return def;

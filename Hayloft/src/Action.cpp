@@ -42,7 +42,7 @@ Status Action::responsePropertiesCallback(const ::S3ResponseProperties * respons
 	return status;
 }
 
-void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData) {
+void Action::responseCompleteCallback(Status ultimate, const ::S3ErrorDetails * errorDetails, void * callbackData) {
 	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	Action * that = static_cast<Action*>(callbackData);
 	// An ::S3StatusInterrupted means someone destroyed our request context,
@@ -50,12 +50,12 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 	// manage active Actions when using the asynchronous interface. Typically
 	// this occurs when the Plex used when we were constructed is deleted while
 	// we were busy. We are henceforth a synchronous Action. Wackiness ensues.
-	if (final == ::S3StatusInterrupted) {
+	if (ultimate == ::S3StatusInterrupted) {
 		::com::diag::grandote::MaskableLogger::instance().error("Action@%p: interrupted while busy!\n", that);
 		that->handle = 0;
 	}
 	::com::diag::grandote::MaskableLogger::Level level;
-	switch (final) {
+	switch (ultimate) {
 	case ::S3StatusOK:
 	case ::S3StatusErrorNoSuchBucket:
 	case ::S3StatusErrorNoSuchKey: // e.g. ObjectCopy
@@ -66,13 +66,13 @@ void Action::responseCompleteCallback(Status final, const ::S3ErrorDetails * err
 		level = ::com::diag::grandote::MaskableLogger::NOTICE; // Considered to be a platform issue.
 		break;
 	}
-	logger.log(level, "Action@%p: status=%d=\"%s\"\n", that, final, tostring(final));
+	logger.log(level, "Action@%p: status=%d=\"%s\"\n", that, ultimate, tostring(ultimate));
 	show(errorDetails, level);
 	logger.debug("Action@%p: end\n", that);
 	// The application is permitted to delete or re-start the Action in the
 	// LifeCycle method or in the Action method called by the LifeCycle
 	// method.
-	LifeCycle::instance().complete(*that, final, errorDetails);
+	LifeCycle::instance().complete(*that, ultimate, errorDetails);
 	// Not safe to reference object fields or methods after this point since
 	// the application may have deleted the Action.
 }
@@ -200,13 +200,13 @@ bool Action::startable(Handle * candidate) {
 	return result;
 }
 
-bool Action::restartable(Status final, bool & unretryable, Handle * candidate) {
+bool Action::restartable(Status ultimate, bool & unretryable, Handle * candidate) {
 	::com::diag::grandote::CriticalSection guard(mutex);
 	::com::diag::grandote::MaskableLogger & logger = ::com::diag::grandote::MaskableLogger::instance();
 	bool result = false;
 	status = static_cast<Status>(FINAL);
 	bool clue;
-	if ((clue = !retryable(final))) {
+	if ((clue = !retryable(ultimate))) {
 		logger.debug("Action@%p: not retryable\n", this);
 	} else if ((candidate != 0) && (handle != candidate)) {
 		logger.debug("Action@%p: wrong handle\n", this);
@@ -224,9 +224,9 @@ bool Action::restartable(Status final, bool & unretryable, Handle * candidate) {
 	return result;
 }
 
-bool Action::signal(Status final) {
+bool Action::signal(Status ultimate) {
 	::com::diag::grandote::CriticalSection guard(mutex);
-	status = final;
+	status = ultimate;
 	return (condition.signal() == 0);
 }
 
@@ -238,7 +238,7 @@ Status Action::properties(const ::S3ResponseProperties * properties) {
 	return ::S3StatusOK;
 }
 
-void Action::complete(Status final, const ::S3ErrorDetails * errorDetails) {
+void Action::complete(Status ultimate, const ::S3ErrorDetails * errorDetails) {
 }
 
 /*******************************************************************************

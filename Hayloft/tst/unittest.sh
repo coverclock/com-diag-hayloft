@@ -9,4 +9,4 @@ elif [[ "$1" == "-d" ]]; then
 else
 	:
 fi
-out/host/got/unittest
+exec out/host/got/unittest

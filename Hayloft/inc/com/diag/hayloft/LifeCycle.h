@@ -131,11 +131,11 @@ public:
 	 * perhaps based on its status.
 	 *
 	 * @param action refers to this Action being completed.
-	 * @param final is the final libs3 status for this Action. The status has
-	 *        not yet been updated in this Action.
+	 * @param ultimate is the ultiamte libs3 status for this Action. The status
+     *        has not yet been updated in this Action.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
-	virtual void complete(Action & action, Status final, const ::S3ErrorDetails * errorDetails);
+	virtual void complete(Action & action, Status ultimate, const ::S3ErrorDetails * errorDetails);
 
 	/**
 	 * This method is called when this Action destructor is called.

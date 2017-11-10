@@ -74,7 +74,7 @@ protected:
 
 	static Status responsePropertiesCallback(const ::S3ResponseProperties * responseProperties, void * callbackData);
 
-	static void responseCompleteCallback(Status final, const ::S3ErrorDetails * errorDetails, void * callbackData);
+	static void responseCompleteCallback(Status ultimate, const ::S3ErrorDetails * errorDetails, void * callbackData);
 
 	std::string server;
 
@@ -135,8 +135,8 @@ public:
 	virtual ~Action();
 
 	/**
-	 * Return true if this Action has achieved a final (non-transitional) state.
-	 * @return true if this Action has achieved a final state.
+	 * Return true if this Action has achieved a ultimate (non-transitional) state.
+	 * @return true if this Action has achieved a ultimate state.
 	 */
 	operator bool() const { Status status = state(); return ((status != IDLE) && (status != BUSY) && (status != PENDING)  && (status != FINAL)); }
 
@@ -287,7 +287,7 @@ public:
 	 * this is reasonable for all Actions is up to the derived class, which is
 	 * permitted to override this method to implement an alternative strategy.
 	 *
-	 * @param final refers to the Status to be evaluated for retryability.
+	 * @param ultimate refers to the Status to be evaluated for retryability.
 	 *        This is not the status that is part of this Action because this
 	 *        decision needs to be made prior to committing a new status
 	 *        value to the status field where it will be visible to
@@ -296,7 +296,7 @@ public:
 	 *        non-existence.
 	 * @return true if retryable, false otherwise.
 	 */
-	virtual bool retryable(Status final, bool nonexistence = true);
+	virtual bool retryable(Status ultimate, bool nonexistence = true);
 
 	/**
 	 * Determine if this Action is startable, and if so prepare it to be
@@ -312,7 +312,7 @@ public:
 	 * Determine if this Action is restartable, and if so prepare it to be
 	 * restarted.
 	 *
-	 * @param final refers to the Status to be evaluated for restartability.
+	 * @param ultimate refers to the Status to be evaluated for restartability.
 	 *        This is not the status that is part of this Action because this
 	 *        decision needs to be made prior to committing a new status
 	 *        value to the status field where it will be visible to
@@ -325,15 +325,15 @@ public:
 	 *        handle is not equal to the candidate value.
 	 * @return true if restartable, false otherwise.
 	 */
-	virtual bool restartable(Status final, bool & unretryable = dontcare, Handle * candidate = 0);
+	virtual bool restartable(Status ultimtate, bool & unretryable = dontcare, Handle * candidate = 0);
 
 	/**
 	 * Signal any waiting threads that this Action is complete.
 	 *
-	 * @param final is the value to which the status is set.
+	 * @param ultimate is the value to which the status is set.
 	 * @return true if successful, false otherwise.
 	 */
-	virtual bool signal(Status final);
+	virtual bool signal(Status ultimate);
 
 	/***************************************************************************
 	 * LIFECYCLE API
@@ -365,10 +365,10 @@ public:
 	 * no further reference to it following this call. The overriding method is
 	 * allowed to restart this Action.
 	 *
-	 * @param final is the final libs3 status.
+	 * @param ultimate is the ultimate libs3 status.
 	 * @param errorDetails points to a libs3 ::S3ErrorDetails structure.
 	 */
-	virtual void complete(Status final, const ::S3ErrorDetails * errorDetails);
+	virtual void complete(Status ultimate, const ::S3ErrorDetails * errorDetails);
 
 protected:
 
