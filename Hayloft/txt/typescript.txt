@@ -1,0 +1,434 @@
+Script started on Fri 10 Nov 2017 11:46:15 AM MST
+]0;jsloan@nickel: ~/src/com-diag-hayloft/Hayloft[01;32mjsloan@nickel[00m:[01;34m~/src/com-diag-hayloft/Hayloft[00m$ u[Kout/host/tst/unittest
+[0;32m[==========] [mRunning 146 tests from 22 test cases.
+[0;32m[----------] [mGlobal test environment set-up.
+[0;32m[----------] [m1 test from SizeofTest
+[0;32m[ RUN      ] [mSizeofTest.Sizeof
+sizeof(Access)=16
+sizeof(Action)=256
+sizeof(Bucket)=520
+sizeof(BucketCreate)=520
+sizeof(BucketDelete)=520
+sizeof(BucketHead)=560
+sizeof(BucketManifest)=752
+sizeof(Complex)=16
+sizeof(Conditions)=88
+sizeof(Container)=440
+sizeof(Context)=120
+sizeof(Credentials)=72
+sizeof(Endpoint)=40
+sizeof(Grant)=568
+sizeof(GrantGet)=856
+sizeof(GrantSet)=600
+sizeof(Multiplex)=32
+sizeof(Log)=632
+sizeof(LogGet)=1944
+sizeof(LogSet)=664
+sizeof(HayloftObject)=648
+sizeof(ObjectCopy)=1000
+sizeof(ObjectDelete)=648
+sizeof(ObjectGet)=824
+sizeof(ObjectHead)=648
+sizeof(ObjectPut)=944
+sizeof(Plex)=16
+sizeof(Properties)=232
+sizeof(Protocol)=16
+sizeof(Region)=40
+sizeof(Selection)=112
+sizeof(Service)=360
+sizeof(ServiceManifest)=432
+sizeof(Session)=112
+sizeof(Simplex)=16
+sizeof(Style)=16
+[0;32m[       OK ] [mSizeofTest.Sizeof (0 ms)
+[0;32m[----------] [m1 test from SizeofTest (0 ms total)
+
+[0;32m[----------] [m14 tests from EndpointTest
+[0;32m[ RUN      ] [mEndpointTest.Heap
+[0;32m[       OK ] [mEndpointTest.Heap (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Stack
+[0;32m[       OK ] [mEndpointTest.Stack (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Default
+[0;32m[       OK ] [mEndpointTest.Default (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Ireland
+[0;32m[       OK ] [mEndpointTest.Ireland (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.NorthernCalifornia
+[0;32m[       OK ] [mEndpointTest.NorthernCalifornia (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Singapore
+[0;32m[       OK ] [mEndpointTest.Singapore (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Tokyo
+[0;32m[       OK ] [mEndpointTest.Tokyo (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.UnitedStates
+[0;32m[       OK ] [mEndpointTest.UnitedStates (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.NorthernVirginia
+[0;32m[       OK ] [mEndpointTest.NorthernVirginia (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Oregon
+[0;32m[       OK ] [mEndpointTest.Oregon (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.SaoPaulo
+[0;32m[       OK ] [mEndpointTest.SaoPaulo (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Environment
+[0;32m[       OK ] [mEndpointTest.Environment (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.DefaultFunctionArgument
+[0;32m[       OK ] [mEndpointTest.DefaultFunctionArgument (0 ms)
+[0;32m[ RUN      ] [mEndpointTest.Settors
+[0;32m[       OK ] [mEndpointTest.Settors (0 ms)
+[0;32m[----------] [m14 tests from EndpointTest (0 ms total)
+
+[0;32m[----------] [m6 tests from SessionTest
+[0;32m[ RUN      ] [mSessionTest.Heap
+[0;32m[       OK ] [mSessionTest.Heap (1 ms)
+[0;32m[ RUN      ] [mSessionTest.Stack
+[0;32m[       OK ] [mSessionTest.Stack (1 ms)
+[0;32m[ RUN      ] [mSessionTest.Environment
+[0;32m[       OK ] [mSessionTest.Environment (0 ms)
+[0;32m[ RUN      ] [mSessionTest.Explicit
+[0;32m[       OK ] [mSessionTest.Explicit (0 ms)
+[0;32m[ RUN      ] [mSessionTest.Instance
+[0;32m[       OK ] [mSessionTest.Instance (0 ms)
+[0;32m[ RUN      ] [mSessionTest.Canonicalization
+[0;32m[       OK ] [mSessionTest.Canonicalization (0 ms)
+[0;32m[----------] [m6 tests from SessionTest (2 ms total)
+
+[0;32m[----------] [m13 tests from CredentialsTest
+[0;32m[ RUN      ] [mCredentialsTest.Heap
+[0;32m[       OK ] [mCredentialsTest.Heap (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.Explicit
+[0;32m[       OK ] [mCredentialsTest.Explicit (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.ExplicitShort
+2017-11-10 18:46:23.420097Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (19!=20)
+2017-11-10 18:46:23.420118Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (39!=40)
+[0;32m[       OK ] [mCredentialsTest.ExplicitShort (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.ExplicitLong
+2017-11-10 18:46:23.420133Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (21!=20)
+2017-11-10 18:46:23.420138Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (41!=40)
+[0;32m[       OK ] [mCredentialsTest.ExplicitLong (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.Environment
+[0;32m[       OK ] [mCredentialsTest.Environment (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.EnvironmentShort
+2017-11-10 18:46:23.420164Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (19!=20)
+2017-11-10 18:46:23.420169Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (39!=40)
+[0;32m[       OK ] [mCredentialsTest.EnvironmentShort (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.EnvironmentLong
+2017-11-10 18:46:23.420184Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (21!=20)
+2017-11-10 18:46:23.420189Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (41!=40)
+[0;32m[       OK ] [mCredentialsTest.EnvironmentLong (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.ExplicitOverridesEnvironment
+[0;32m[       OK ] [mCredentialsTest.ExplicitOverridesEnvironment (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.Input
+[0;32m[       OK ] [mCredentialsTest.Input (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.InputTaken
+[0;32m[       OK ] [mCredentialsTest.InputTaken (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.Missing
+2017-11-10 18:46:23.420239Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (0!=20)
+2017-11-10 18:46:23.420244Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (0!=40)
+[0;32m[       OK ] [mCredentialsTest.Missing (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.Settors
+[0;32m[       OK ] [mCredentialsTest.Settors (0 ms)
+[0;32m[ RUN      ] [mCredentialsTest.Final
+[0;32m[       OK ] [mCredentialsTest.Final (0 ms)
+[0;32m[----------] [m13 tests from CredentialsTest (0 ms total)
+
+[0;32m[----------] [m7 tests from ProtocolTest
+[0;32m[ RUN      ] [mProtocolTest.Heap
+[0;32m[       OK ] [mProtocolTest.Heap (0 ms)
+[0;32m[ RUN      ] [mProtocolTest.Stack
+[0;32m[       OK ] [mProtocolTest.Stack (0 ms)
+[0;32m[ RUN      ] [mProtocolTest.Default
+[0;32m[       OK ] [mProtocolTest.Default (0 ms)
+[0;32m[ RUN      ] [mProtocolTest.Secure
+[0;32m[       OK ] [mProtocolTest.Secure (0 ms)
+[0;32m[ RUN      ] [mProtocolTest.Unsecure
+[0;32m[       OK ] [mProtocolTest.Unsecure (0 ms)
+[0;32m[ RUN      ] [mProtocolTest.DefaultFunctionArgument
+[0;32m[       OK ] [mProtocolTest.DefaultFunctionArgument (0 ms)
+[0;32m[ RUN      ] [mProtocolTest.Settors
+[0;32m[       OK ] [mProtocolTest.Settors (0 ms)
+[0;32m[----------] [m7 tests from ProtocolTest (0 ms total)
+
+[0;32m[----------] [m7 tests from StyleTest
+[0;32m[ RUN      ] [mStyleTest.Heap
+[0;32m[       OK ] [mStyleTest.Heap (0 ms)
+[0;32m[ RUN      ] [mStyleTest.Stack
+[0;32m[       OK ] [mStyleTest.Stack (0 ms)
+[0;32m[ RUN      ] [mStyleTest.Default
+[0;32m[       OK ] [mStyleTest.Default (0 ms)
+[0;32m[ RUN      ] [mStyleTest.VirtualHost
+[0;32m[       OK ] [mStyleTest.VirtualHost (0 ms)
+[0;32m[ RUN      ] [mStyleTest.Path
+[0;32m[       OK ] [mStyleTest.Path (0 ms)
+[0;32m[ RUN      ] [mStyleTest.DefaultFunctionArgument
+[0;32m[       OK ] [mStyleTest.DefaultFunctionArgument (0 ms)
+[0;32m[ RUN      ] [mStyleTest.Settors
+[0;32m[       OK ] [mStyleTest.Settors (0 ms)
+[0;32m[----------] [m7 tests from StyleTest (0 ms total)
+
+[0;32m[----------] [m14 tests from RegionTest
+[0;32m[ RUN      ] [mRegionTest.Heap
+[0;32m[       OK ] [mRegionTest.Heap (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Stack
+[0;32m[       OK ] [mRegionTest.Stack (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Default
+[0;32m[       OK ] [mRegionTest.Default (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Ireland
+[0;32m[       OK ] [mRegionTest.Ireland (0 ms)
+[0;32m[ RUN      ] [mRegionTest.NorthernCalifornia
+[0;32m[       OK ] [mRegionTest.NorthernCalifornia (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Singapore
+[0;32m[       OK ] [mRegionTest.Singapore (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Tokyo
+[0;32m[       OK ] [mRegionTest.Tokyo (0 ms)
+[0;32m[ RUN      ] [mRegionTest.UnitedStates
+[0;32m[       OK ] [mRegionTest.UnitedStates (0 ms)
+[0;32m[ RUN      ] [mRegionTest.NorthernVirginia
+[0;32m[       OK ] [mRegionTest.NorthernVirginia (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Oregon
+[0;32m[       OK ] [mRegionTest.Oregon (0 ms)
+[0;32m[ RUN      ] [mRegionTest.SaoPaulo
+[0;32m[       OK ] [mRegionTest.SaoPaulo (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Environment
+[0;32m[       OK ] [mRegionTest.Environment (0 ms)
+[0;32m[ RUN      ] [mRegionTest.DefaultFunctionArgument
+[0;32m[       OK ] [mRegionTest.DefaultFunctionArgument (0 ms)
+[0;32m[ RUN      ] [mRegionTest.Settors
+[0;32m[       OK ] [mRegionTest.Settors (0 ms)
+[0;32m[----------] [m14 tests from RegionTest (0 ms total)
+
+[0;32m[----------] [m9 tests from AccessTest
+[0;32m[ RUN      ] [mAccessTest.Heap
+[0;32m[       OK ] [mAccessTest.Heap (0 ms)
+[0;32m[ RUN      ] [mAccessTest.Stack
+[0;32m[       OK ] [mAccessTest.Stack (0 ms)
+[0;32m[ RUN      ] [mAccessTest.Default
+[0;32m[       OK ] [mAccessTest.Default (0 ms)
+[0;32m[ RUN      ] [mAccessTest.Private
+[0;32m[       OK ] [mAccessTest.Private (0 ms)
+[0;32m[ RUN      ] [mAccessTest.PublicRead
+[0;32m[       OK ] [mAccessTest.PublicRead (0 ms)
+[0;32m[ RUN      ] [mAccessTest.PublicReadWrite
+[0;32m[       OK ] [mAccessTest.PublicReadWrite (0 ms)
+[0;32m[ RUN      ] [mAccessTest.AuthenticatedRead
+[0;32m[       OK ] [mAccessTest.AuthenticatedRead (0 ms)
+[0;32m[ RUN      ] [mAccessTest.DefaultFunctionArgument
+[0;32m[       OK ] [mAccessTest.DefaultFunctionArgument (0 ms)
+[0;32m[ RUN      ] [mAccessTest.Settors
+[0;32m[       OK ] [mAccessTest.Settors (0 ms)
+[0;32m[----------] [m9 tests from AccessTest (0 ms total)
+
+[0;32m[----------] [m5 tests from ContextTest
+[0;32m[ RUN      ] [mContextTest.Heap
+[0;32m[       OK ] [mContextTest.Heap (0 ms)
+[0;32m[ RUN      ] [mContextTest.Stack
+[0;32m[       OK ] [mContextTest.Stack (0 ms)
+[0;32m[ RUN      ] [mContextTest.Implicit
+[0;32m[       OK ] [mContextTest.Implicit (0 ms)
+[0;32m[ RUN      ] [mContextTest.Explicit
+[0;32m[       OK ] [mContextTest.Explicit (0 ms)
+[0;32m[ RUN      ] [mContextTest.Settors
+[0;32m[       OK ] [mContextTest.Settors (0 ms)
+[0;32m[----------] [m5 tests from ContextTest (0 ms total)
+
+[0;32m[----------] [m7 tests from MultiplexTest
+[0;32m[ RUN      ] [mMultiplexTest.Heap
+[0;32m[       OK ] [mMultiplexTest.Heap (0 ms)
+[0;32m[ RUN      ] [mMultiplexTest.Stack
+[0;32m[       OK ] [mMultiplexTest.Stack (0 ms)
+[0;32m[ RUN      ] [mMultiplexTest.Complete
+[0;32m[       OK ] [mMultiplexTest.Complete (0 ms)
+[0;32m[ RUN      ] [mMultiplexTest.Iterate
+[0;32m[       OK ] [mMultiplexTest.Iterate (0 ms)
+[0;32m[ RUN      ] [mMultiplexTest.Ready
+[0;32m[       OK ] [mMultiplexTest.Ready (0 ms)
+[0;32m[ RUN      ] [mMultiplexTest.Plex
+[0;32m[       OK ] [mMultiplexTest.Plex (0 ms)
+[0;32m[ RUN      ] [mMultiplexTest.Simplex
+[0;32m[       OK ] [mMultiplexTest.Simplex (0 ms)
+[0;32m[----------] [m7 tests from MultiplexTest (0 ms total)
+
+[0;32m[----------] [m4 tests from PropertiesTest
+[0;32m[ RUN      ] [mPropertiesTest.Heap
+[0;32m[       OK ] [mPropertiesTest.Heap (0 ms)
+[0;32m[ RUN      ] [mPropertiesTest.Stack
+[0;32m[       OK ] [mPropertiesTest.Stack (0 ms)
+[0;32m[ RUN      ] [mPropertiesTest.Explicit
+[0;32m[       OK ] [mPropertiesTest.Explicit (0 ms)
+[0;32m[ RUN      ] [mPropertiesTest.Settors
+[0;32m[       OK ] [mPropertiesTest.Settors (0 ms)
+[0;32m[----------] [m4 tests from PropertiesTest (0 ms total)
+
+[0;32m[----------] [m4 tests from ConditionsTest
+[0;32m[ RUN      ] [mConditionsTest.Heap
+[0;32m[       OK ] [mConditionsTest.Heap (0 ms)
+[0;32m[ RUN      ] [mConditionsTest.Stack
+[0;32m[       OK ] [mConditionsTest.Stack (0 ms)
+[0;32m[ RUN      ] [mConditionsTest.Explicit
+[0;32m[       OK ] [mConditionsTest.Explicit (0 ms)
+[0;32m[ RUN      ] [mConditionsTest.Settors
+[0;32m[       OK ] [mConditionsTest.Settors (0 ms)
+[0;32m[----------] [m4 tests from ConditionsTest (0 ms total)
+
+[0;32m[----------] [m4 tests from SelectionTest
+[0;32m[ RUN      ] [mSelectionTest.Heap
+[0;32m[       OK ] [mSelectionTest.Heap (0 ms)
+[0;32m[ RUN      ] [mSelectionTest.Stack
+[0;32m[       OK ] [mSelectionTest.Stack (1 ms)
+[0;32m[ RUN      ] [mSelectionTest.Explicit
+[0;32m[       OK ] [mSelectionTest.Explicit (0 ms)
+[0;32m[ RUN      ] [mSelectionTest.Settors
+[0;32m[       OK ] [mSelectionTest.Settors (0 ms)
+[0;32m[----------] [m4 tests from SelectionTest (1 ms total)
+
+[0;32m[----------] [m6 tests from BucketBaseTest
+[0;32m[ RUN      ] [mBucketBaseTest.Heap
+[0;32m[       OK ] [mBucketBaseTest.Heap (0 ms)
+[0;32m[ RUN      ] [mBucketBaseTest.Stack
+[0;32m[       OK ] [mBucketBaseTest.Stack (0 ms)
+[0;32m[ RUN      ] [mBucketBaseTest.Temporary
+[0;32m[       OK ] [mBucketBaseTest.Temporary (0 ms)
+[0;32m[ RUN      ] [mBucketBaseTest.VirtualHostURI
+URI="https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com"
+[0;32m[       OK ] [mBucketBaseTest.VirtualHostURI (0 ms)
+[0;32m[ RUN      ] [mBucketBaseTest.PathURI
+URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com"
+[0;32m[       OK ] [mBucketBaseTest.PathURI (0 ms)
+[0;32m[ RUN      ] [mBucketBaseTest.CopyConstructor
+[0;32m[       OK ] [mBucketBaseTest.CopyConstructor (0 ms)
+[0;32m[----------] [m6 tests from BucketBaseTest (0 ms total)
+
+[0;32m[----------] [m6 tests from ObjectBaseTest
+[0;32m[ RUN      ] [mObjectBaseTest.Heap
+[0;32m[       OK ] [mObjectBaseTest.Heap (0 ms)
+[0;32m[ RUN      ] [mObjectBaseTest.Stack
+[0;32m[       OK ] [mObjectBaseTest.Stack (0 ms)
+[0;32m[ RUN      ] [mObjectBaseTest.Temporary
+[0;32m[       OK ] [mObjectBaseTest.Temporary (0 ms)
+[0;32m[ RUN      ] [mObjectBaseTest.VirtualHostURI
+URI="https://virtualhosturi.virtualhost.diag.com.s3-eu-west-1.amazonaws.com/VirtualHost.txt"
+[0;32m[       OK ] [mObjectBaseTest.VirtualHostURI (0 ms)
+[0;32m[ RUN      ] [mObjectBaseTest.PathURI
+URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt"
+[0;32m[       OK ] [mObjectBaseTest.PathURI (0 ms)
+[0;32m[ RUN      ] [mObjectBaseTest.CopyConstructor
+[0;32m[       OK ] [mObjectBaseTest.CopyConstructor (0 ms)
+[0;32m[----------] [m6 tests from ObjectBaseTest (0 ms total)
+
+[0;32m[----------] [m1 test from GrantBaseTest
+[0;32m[ RUN      ] [mGrantBaseTest.Sanity
+[0;32m[       OK ] [mGrantBaseTest.Sanity (0 ms)
+[0;32m[----------] [m1 test from GrantBaseTest (0 ms total)
+
+[0;32m[----------] [m2 tests from LogBaseTest
+[0;32m[ RUN      ] [mLogBaseTest.NoPrefix
+[0;32m[       OK ] [mLogBaseTest.NoPrefix (0 ms)
+[0;32m[ RUN      ] [mLogBaseTest.Prefix
+[0;32m[       OK ] [mLogBaseTest.Prefix (0 ms)
+[0;32m[----------] [m2 tests from LogBaseTest (0 ms total)
+
+[0;32m[----------] [m7 tests from BucketTest
+[0;32m[ RUN      ] [mBucketTest.Heap
+[0;32m[       OK ] [mBucketTest.Heap (1915 ms)
+[0;32m[ RUN      ] [mBucketTest.Stack
+[0;32m[       OK ] [mBucketTest.Stack (989 ms)
+[0;32m[ RUN      ] [mBucketTest.Explicit
+[0;32m[       OK ] [mBucketTest.Explicit (1363 ms)
+[0;32m[ RUN      ] [mBucketTest.Complete
+[0;32m[       OK ] [mBucketTest.Complete (1079 ms)
+[0;32m[ RUN      ] [mBucketTest.Simplex
+[0;32m[       OK ] [mBucketTest.Simplex (1533 ms)
+[0;32m[ RUN      ] [mBucketTest.Service
+[0;32m[       OK ] [mBucketTest.Service (1504 ms)
+[0;32m[ RUN      ] [mBucketTest.Manifest
+2017-11-10 18:46:32.207749Z [NOTE] ServiceManifest@0x7fffd3bc87c0: canonical="buckettestmanifest1-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364792="2017-11-11T01:46:32Z"
+2017-11-10 18:46:32.571444Z [NOTE] ServiceManifest@0x7fffd3bc8970: canonical="buckettestmanifest1-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364792="2017-11-11T01:46:32Z"
+2017-11-10 18:46:32.571501Z [NOTE] ServiceManifest@0x7fffd3bc8970: canonical="buckettestmanifest2-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364793="2017-11-11T01:46:33Z"
+2017-11-10 18:46:33.410766Z [NOTE] ServiceManifest@0x7fffd3bc8b20: canonical="buckettestmanifest2-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364793="2017-11-11T01:46:33Z"
+[0;32m[       OK ] [mBucketTest.Manifest (2534 ms)
+[0;32m[----------] [m7 tests from BucketTest (10918 ms total)
+
+[0;32m[----------] [m6 tests from ObjectTest
+[0;32m[ RUN      ] [mObjectTest.Heap
+[0;32m[       OK ] [mObjectTest.Heap (2108 ms)
+[0;32m[ RUN      ] [mObjectTest.Complete
+[0;32m[       OK ] [mObjectTest.Complete (2941 ms)
+[0;32m[ RUN      ] [mObjectTest.Simplex
+[0;32m[       OK ] [mObjectTest.Simplex (2280 ms)
+[0;32m[ RUN      ] [mObjectTest.Service
+[0;32m[       OK ] [mObjectTest.Service (2433 ms)
+[0;32m[ RUN      ] [mObjectTest.Manifest
+2017-11-10 18:46:45.179276Z [NOTE] BucketManifest@0x7fffd3bc7520: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
+2017-11-10 18:46:45.756345Z [NOTE] BucketManifest@0x7fffd3bc7810: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
+2017-11-10 18:46:45.756369Z [NOTE] BucketManifest@0x7fffd3bc7810: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
+2017-11-10 18:46:45.828760Z [NOTE] BucketManifest@0x7fffd3bc7b00: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
+2017-11-10 18:46:45.908953Z [NOTE] BucketManifest@0x7fffd3bc7df0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
+2017-11-10 18:46:46.014680Z [NOTE] BucketManifest@0x7fffd3bc80e0: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
+2017-11-10 18:46:46.014702Z [NOTE] BucketManifest@0x7fffd3bc80e0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
+2017-11-10 18:46:46.188186Z [NOTE] BucketManifest@0x7fffd3bc83d0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
+2017-11-10 18:46:46.474819Z [NOTE] BucketManifest@0x7fffd3bc89b0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
+[0;32m[       OK ] [mObjectTest.Manifest (2890 ms)
+[0;32m[ RUN      ] [mObjectTest.Copy
+[0;32m[       OK ] [mObjectTest.Copy (3329 ms)
+[0;32m[----------] [m6 tests from ObjectTest (15981 ms total)
+
+[0;32m[----------] [m4 tests from GrantTest
+[0;32m[ RUN      ] [mGrantTest.GetSynchronous
+[0;32m[       OK ] [mGrantTest.GetSynchronous (1973 ms)
+[0;32m[ RUN      ] [mGrantTest.GetAsynchronous
+[0;32m[       OK ] [mGrantTest.GetAsynchronous (3327 ms)
+[0;32m[ RUN      ] [mGrantTest.GetPublicRead
+[0;32m[       OK ] [mGrantTest.GetPublicRead (2391 ms)
+[0;32m[ RUN      ] [mGrantTest.SetGet
+[0;32m[       OK ] [mGrantTest.SetGet (3277 ms)
+[0;32m[----------] [m4 tests from GrantTest (10968 ms total)
+
+[0;32m[----------] [m12 tests from ComplexTest
+[0;32m[ RUN      ] [mComplexTest.Stack
+[0;32m[       OK ] [mComplexTest.Stack (0 ms)
+[0;32m[ RUN      ] [mComplexTest.Success
+[0;32m[       OK ] [mComplexTest.Success (4838 ms)
+[0;32m[ RUN      ] [mComplexTest.Recoverable
+2017-11-10 18:47:06.127101Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Recoverable (7117 ms)
+[0;32m[ RUN      ] [mComplexTest.Recoverables
+2017-11-10 18:47:13.243845Z [NOTE] Action@0x7fffd3bc92d0: status=63="ErrorInternalError"
+2017-11-10 18:47:13.243871Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+2017-11-10 18:47:15.244158Z [NOTE] Action@0x7fffd3bc92d0: status=63="ErrorInternalError"
+2017-11-10 18:47:15.244214Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+2017-11-10 18:47:18.246567Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Recoverables (11909 ms)
+[0;32m[ RUN      ] [mComplexTest.Unrecoverable
+2017-11-10 18:47:25.152770Z [NOTE] Action@0x7fffd3bc94e0: status=47="AbortedByCallback"
+[0;32m[       OK ] [mComplexTest.Unrecoverable (1 ms)
+[0;32m[ RUN      ] [mComplexTest.Irrecoverable
+2017-11-10 18:47:25.153455Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+2017-11-10 18:47:27.153787Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Irrecoverable (2001 ms)
+[0;32m[ RUN      ] [mComplexTest.Unretryable
+2017-11-10 18:47:27.154659Z [NOTE] Action@0x7fffd3bc94e0: status=46="ConnectionFailed"
+[0;32m[       OK ] [mComplexTest.Unretryable (1 ms)
+[0;32m[ RUN      ] [mComplexTest.Unstartable
+2017-11-10 18:47:27.155392Z [ERRR] Complex: Action@0x7fffd3bc94f0: start failed!
+[0;32m[       OK ] [mComplexTest.Unstartable (0 ms)
+[0;32m[ RUN      ] [mComplexTest.Unresettable
+2017-11-10 18:47:27.156127Z [NOTE] Action@0x7fffd3bc94e0: status=46="ConnectionFailed"
+[0;32m[       OK ] [mComplexTest.Unresettable (1 ms)
+[0;32m[ RUN      ] [mComplexTest.Application
+2017-11-10 18:47:29.706197Z [NOTE] Action@0x7fffd3bc8f50: status=63="ErrorInternalError"
+2017-11-10 18:47:31.706573Z [NOTE] Action@0x7fffd3bc8f50: status=63="ErrorInternalError"
+2017-11-10 18:47:39.445724Z [NOTE] Action@0x7fffd3bc8c10: status=63="ErrorInternalError"
+2017-11-10 18:47:41.446078Z [NOTE] Action@0x7fffd3bc8c10: status=63="ErrorInternalError"
+2017-11-10 18:47:44.446540Z [NOTE] Action@0x7fffd3bc8c10: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Application (25098 ms)
+[0;32m[ RUN      ] [mComplexTest.Factory
+2017-11-10 18:47:57.038263Z [NOTE] Action@0x7fffd3bc8f50: status=47="AbortedByCallback"
+2017-11-10 18:48:02.983251Z [NOTE] Action@0x7fffd3bc8c00: status=47="AbortedByCallback"
+[0;32m[       OK ] [mComplexTest.Factory (16255 ms)
+[0;32m[ RUN      ] [mComplexTest.Polled
+2017-11-10 18:48:13.283128Z [NOTE] Action@0x7fffd3bc8f50: status=47="AbortedByCallback"
+2017-11-10 18:48:20.079421Z [NOTE] Action@0x7fffd3bc8c00: status=47="AbortedByCallback"
+[0;32m[       OK ] [mComplexTest.Polled (17214 ms)
+[0;32m[----------] [m12 tests from ComplexTest (84436 ms total)
+
+[0;32m[----------] [m7 tests from ManifestTest
+[0;32m[ RUN      ] [mManifestTest.Part0Disable
+2017-11-10 18:48:25.724260Z [NOTE] ManifestTest is disabled; to run, execute subsequent sub-tests individually.
+[0;32m[       OK ] [mManifestTest.Part0Disable (0 ms)
+[0;32m[ RUN      ] [mManifestTest.Part1Setu

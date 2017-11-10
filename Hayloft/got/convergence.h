@@ -75,7 +75,7 @@ TEST_F(ConvergenceTest, Synchronous) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -101,11 +101,11 @@ TEST_F(ConvergenceTest, Synchronous) {
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());
@@ -163,7 +163,7 @@ TEST_F(ConvergenceTest, Complete) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < 10); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -189,11 +189,11 @@ TEST_F(ConvergenceTest, Complete) {
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < 10); ++ii) {
 		if (objectget2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());
@@ -251,7 +251,7 @@ TEST_F(ConvergenceTest, Service) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -277,11 +277,11 @@ TEST_F(ConvergenceTest, Service) {
 	ObjectGet objectget2(OBJECT2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2.getKey());
 			EXPECT_TRUE(objectget2.reset(output2));
 		} else if (objectget2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());

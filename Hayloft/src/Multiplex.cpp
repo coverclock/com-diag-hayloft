@@ -77,6 +77,7 @@ int Multiplex::iterate(int & actions /* static dontcare */) {
 		rc |= PENDING;
 	}
 	actions = count;
+	logger.debug("Multiplex@%p: iterate=0x%x\n", this, rc);
 	return rc;
 }
 
@@ -132,6 +133,16 @@ int Multiplex::ready(Milliseconds timeout) {
 	return rc;
 }
 
+/*
+ * The value timeout is how long, in milliseconds,  we should wait on the
+ * select(2) for data from AWS S3  to arrive on any open socket. The value
+ * limit, is how many iterations we should drive the cURL state machine.
+ * Neither of these values makes any difference unless [1] there is at least
+ * one pending context known to libs3, *and* there are either open sockets
+ * that are ready *or* no sockets have been opened yet but (presumably) will
+ * be. No iterations will be performed at all if libs3 and libcurl agree that
+ * there is no work to be done.
+ */
 int Multiplex::service(Milliseconds timeout, int limit) {
 	::com::diag::grandote::Platform & platform = ::com::diag::grandote::Platform::instance();
 	int rc;
@@ -152,7 +163,11 @@ int Multiplex::service(Milliseconds timeout, int limit) {
 		if ((rc & RETRY) != 0) { platform.yield(); continue; }
 		if ((rc & READY) != 0) { continue; }
 		if ((rc & PENDING) == 0) { break; }
-        break;
+        // If we've reached this point, libs3 has told us is has pending
+        // operations to perform, but libcurl has no sockets open. We need
+        // to continue to drive the state machine until either we have no
+        // pending actions, or open sockets but none that are ready, or we've
+        // reached our limit of patience.
 	}
 	::com::diag::grandote::MaskableLogger::instance().debug("Multiplex@%p: service=0x%x\n", this, rc);
 	return rc;

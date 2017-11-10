@@ -10,30 +10,6 @@ License (GNU GPL) version 3 as published by the Free Software Foundation
 (FSF).  Alternative commercial licensing terms are available from the
 copyright holder.
 
-NOTA BENE (2017)
-
-This code worked when I wrote it six years ago in 2011. Today it is
-broken and I am trying to figure out what's changed. While it builds
-against libs3-2.0, the same library and even version I used in 2011,
-and communicates with AWS S3, the unit test suite based on Google Test
-fails. But the example application - intended to be used as a "Hello,
-World!" kind of coding sample for users of Hayloft - works just fine.
-
-The difference between the example and the unit tests is predominantly
-that the unit test suite does a lot of operations to test for the presence
-(absence) of a bucket or object it just created (deleted). Even though
-the bucket create (delete) or object put (delete) may have completed
-successfully, it appears that there is now significant time lag (minutes)
-before the subsequent presence (absence) check can succeed; for example,
-libs3 returns a "Bucket Not Found" status, but few minutes later, using
-the "s3 list" command, the bucket is present.
-
-I suspect this is another issue in the realm of eventual consistency, and
-consistency convergence, in distributed systems, something I experimented
-with when I first wrote this software. I recall that back in 2011 the
-unit test suite failed from time to time in a similar manner when I ran
-it during the Christmas holiday season; that's probably not a coincidence.
-
 ABSTRACT
 
 This file is part of the Digital Aggregates Corporation Hayloft package.
@@ -62,6 +38,40 @@ Hayloft can be used with the standard libs3-2 available as an Ubuntu
 package. But I chose to build it from scratch to patch in support for
 enabling verbose debugging in libcurl and to support the use of the
 Charles Web Debugging Proxy.
+
+NOTA BENE (2017)
+
+This code worked when I wrote it six years ago in 2011. When I revisited
+it in 2017, it was horribly broken. Maybe I shouldn't be surprised,
+since so much has changed in the deep stack of frameworks, libraries,
+and technologies on which Hayloft depends. But the most mysterious thing
+is that while the extensive unit test suite that had always worked in 2011
+now failed miserably, the example application - a sort of "Hello, World!"
+application that served as an example of how to use Hayloft in a C++
+application that used AWS S3 - worked just fine.
+
+Ultimately this turned out to be several issues, which is usually the way
+with these sorts of things.
+
+The first was a subtle change in behavior in libcurl, which is used by
+libs3 to communicate with AWS. The fix was to change the decision making
+in Hayloft about whether it should return to the caller or continue
+driving the underlying cURL state machine in multiplexed operations. I
+believe this bug has been fixed.
+
+The second was in the realm of eventual consistency, and consistency
+convergence, in distributed systems, something I experimented with when
+I first wrote this software. For example: you can create a bucket. But if
+you immediately check to see if the bucket exists, you may get a response
+that it does not. But if you then check a few minutes later, it's there.
+This could still be a bug in  my code, but I suspect it's a change in
+behavior in AWS. I recall that back in 2011 the unit test suite failed
+from time to time in a similar manner when I ran it during the peak
+Christmas shopping season; that's probably not a coincidence. For the
+time being I have disabled the portions of the unit test suite that
+assume  a faster speed of consistency convergence. I'll continue to
+ponder a solution to this; it may be simply iterating on the existence
+checks until they succeed or some lengthy timeout is reached.
 
 RESOURCES
 

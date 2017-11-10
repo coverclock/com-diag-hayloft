@@ -75,7 +75,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(buckethead, (BucketHead*)0);
 		EXPECT_EQ(*buckethead, true);
 		if (!buckethead->isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead->isIdle());
@@ -94,7 +94,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(bucketcreate, (Bucket*)0);
 		EXPECT_EQ(*bucketcreate, true);
 		if (!bucketcreate->isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate->isIdle());
@@ -113,11 +113,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(buckethead, (BucketHead*)0);
 			EXPECT_EQ(*buckethead, true);
 			if (!buckethead->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead->isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead->isIdle());
@@ -137,7 +137,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(objecthead, (ObjectHead*)0);
 		EXPECT_EQ(*objecthead, true);
 		if (!objecthead->isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -161,7 +161,7 @@ TEST_F(ObjectTest, Heap) {
 		ASSERT_NE(objectput, (ObjectPut*)0);
 		EXPECT_EQ(*objectput, true);
 		if (!objectput->isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectput->isIdle());
@@ -181,11 +181,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead->isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -209,11 +209,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objectget, (ObjectGet*)0);
 			EXPECT_EQ(*objectget, true);
 			if (!objectget->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objectget->isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget->isIdle());
@@ -233,11 +233,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead->isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -257,11 +257,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objectdelete, (ObjectDelete*)0);
 			EXPECT_EQ(*objectdelete, true);
 			if (!objectdelete->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete->isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete->isIdle());
@@ -281,11 +281,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(objecthead, (ObjectHead*)0);
 			EXPECT_EQ(*objecthead, true);
 			if (!objecthead->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead->isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead->isIdle());
@@ -306,11 +306,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(bucketdelete, (Bucket*)0);
 			EXPECT_EQ(*bucketdelete, true);
 			if (!bucketdelete->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete->isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete->isIdle());
@@ -330,11 +330,11 @@ TEST_F(ObjectTest, Heap) {
 			ASSERT_NE(buckethead, (BucketHead*)0);
 			EXPECT_EQ(*buckethead, true);
 			if (!buckethead->isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead->isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead->isIdle());
@@ -388,7 +388,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -419,7 +419,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -449,11 +449,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -485,7 +485,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -520,7 +520,7 @@ TEST_F(ObjectTest, Complete) {
 		EXPECT_EQ(multiplex.complete(), 0);
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -556,11 +556,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -595,13 +595,13 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget.isIdle());
@@ -632,11 +632,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -668,11 +668,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete.isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -703,11 +703,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -739,11 +739,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete.isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -774,11 +774,11 @@ TEST_F(ObjectTest, Complete) {
 			EXPECT_EQ(multiplex.complete(), 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -823,7 +823,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(buckethead.start());
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -846,7 +846,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(bucketcreate.start());
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -868,11 +868,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(buckethead.start());
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -896,7 +896,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(objecthead.start());
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -923,7 +923,7 @@ TEST_F(ObjectTest, Simplex) {
 		EXPECT_TRUE(objectput.start());
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -951,11 +951,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objecthead.start());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -982,13 +982,13 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objectget.start());
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget.isIdle());
@@ -1011,11 +1011,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objecthead.start());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1039,11 +1039,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objectdelete.start());
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete.isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -1066,11 +1066,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(objecthead.start());
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1094,11 +1094,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(bucketdelete.start());
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete.isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -1121,11 +1121,11 @@ TEST_F(ObjectTest, Simplex) {
 			EXPECT_TRUE(buckethead.start());
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1178,12 +1178,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (buckethead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+			logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(buckethead, true);
 		if (!buckethead.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1214,12 +1214,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (bucketcreate != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+			logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(bucketcreate, true);
 		if (!bucketcreate.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketcreate.isIdle());
@@ -1249,16 +1249,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (buckethead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (buckethead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1290,12 +1290,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+			logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objecthead, true);
 		if (!objecthead.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1330,12 +1330,12 @@ TEST_F(ObjectTest, Service) {
 		int bits = 0;
 		for (int kk = 0; (objectput != true) && (kk < LIMIT); ++kk) {
 			if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-			logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+			logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 		}
 		EXPECT_EQ(bits, 0);
 		EXPECT_EQ(objectput, true);
 		if (!objectput.isRetryable()) { break; }
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -1371,16 +1371,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1415,18 +1415,18 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objectget != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objectget, true);
 			if (!objectget.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 			output = new PathOutput(OBJECT);
 			objectget.reset(output);
 		}
 		if (objectget.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectget.isIdle());
@@ -1457,16 +1457,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1498,16 +1498,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objectdelete != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objectdelete, true);
 			if (!objectdelete.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objectdelete.isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objectdelete.isIdle());
@@ -1538,16 +1538,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (objecthead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(objecthead, true);
 			if (!objecthead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!objecthead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(objecthead.isIdle());
@@ -1579,16 +1579,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (bucketdelete != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(bucketdelete, true);
 			if (!bucketdelete.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!bucketdelete.isNonexistent()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(bucketdelete.isIdle());
@@ -1619,16 +1619,16 @@ TEST_F(ObjectTest, Service) {
 			int bits = 0;
 			for (int kk = 0; (buckethead != true) && (kk < LIMIT); ++kk) {
 				if ((bits = multiplex.service(TIMEOUT, LIMIT)) <= 0) { break; }
-				logger.notice("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
+				logger.debug("TIMEDOUT %s@%d\n", __FILE__, __LINE__);
 			}
 			EXPECT_EQ(bits, 0);
 			EXPECT_EQ(buckethead, true);
 			if (!buckethead.isRetryable()) { break; }
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			platform.yield(platform.frequency());
 		}
 		if (!buckethead.isSuccessful()) { break; }
-		logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 	}
 	EXPECT_FALSE(buckethead.isIdle());
@@ -1656,7 +1656,7 @@ TEST_F(ObjectTest, Manifest) {
 	static const char OBJECT2[] = "Object2.txt";
 	BucketCreate bucketcreate(BUCKET);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate.start());
 	}
@@ -1665,9 +1665,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest1(BUCKET);
 	for (int ii = 0; (bucketmanifest1.isRetryable() || bucketmanifest1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest1.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest1.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest1.start());
@@ -1684,7 +1684,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -1698,9 +1698,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest2(BUCKET);
 	for (int ii = 0; (bucketmanifest2.isRetryable() || bucketmanifest2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest2.start());
@@ -1717,7 +1717,7 @@ TEST_F(ObjectTest, Manifest) {
 	EXPECT_TRUE(inputsize > 0);
 	ObjectPut objectput2(OBJECT2, bucketcreate, input, inputsize);
 	for (int ii = 0; objectput2.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		ASSERT_NE(input, (PathInput*)0);
@@ -1731,9 +1731,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest3(BUCKET);
 	for (int ii = 0; (bucketmanifest3.isRetryable() || bucketmanifest3.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest3.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest3.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest3.start());
@@ -1753,9 +1753,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest4(BUCKET, selection4);
 	for (int ii = 0; (bucketmanifest4.isRetryable() || bucketmanifest4.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest4.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest4.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest4.start());
@@ -1770,9 +1770,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest5(BUCKET, selection5);
 	for (int ii = 0; (bucketmanifest5.isRetryable() || bucketmanifest5.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest5.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest5.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest5.start());
@@ -1787,9 +1787,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest6(BUCKET, selection6);
 	for (int ii = 0; (bucketmanifest6.isRetryable() || bucketmanifest6.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest6.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest6.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest6.start());
@@ -1804,9 +1804,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest7(BUCKET, selection7);
 	for (int ii = 0; (bucketmanifest7.isRetryable() || bucketmanifest7.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest7.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest7.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest7.start());
@@ -1821,9 +1821,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest8(BUCKET, selection8);
 	for (int ii = 0; (bucketmanifest8.isRetryable() || bucketmanifest8.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest8.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest8.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest8.start());
@@ -1837,9 +1837,9 @@ TEST_F(ObjectTest, Manifest) {
 	ObjectDelete objectdelete1(OBJECT1, bucketcreate);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete1.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete1.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete1.start());
@@ -1849,9 +1849,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest9(BUCKET);
 	for (int ii = 0; (bucketmanifest9.isRetryable() || bucketmanifest9.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest9.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest9.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest9.start());
@@ -1865,9 +1865,9 @@ TEST_F(ObjectTest, Manifest) {
 	ObjectDelete objectdelete2(OBJECT2, bucketcreate);
 	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete2.start());
@@ -1877,9 +1877,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketManifest bucketmanifest10(BUCKET);
 	for (int ii = 0; (bucketmanifest10.isRetryable() || bucketmanifest10.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketmanifest10.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketmanifest10.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketmanifest10.start());
@@ -1893,9 +1893,9 @@ TEST_F(ObjectTest, Manifest) {
 	BucketDelete bucketdelete(BUCKET);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete.start());
@@ -1913,7 +1913,7 @@ TEST_F(ObjectTest, Copy) {
 	static const char OBJECT2[] = "Object2.txt";
 	BucketCreate bucketcreate1(BUCKET1);
 	for (int ii = 0; bucketcreate1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate1.start());
 	}
@@ -1921,7 +1921,7 @@ TEST_F(ObjectTest, Copy) {
 	/**/
 	BucketCreate bucketcreate2(BUCKET2);
 	for (int ii = 0; bucketcreate2.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketcreate2.start());
 	}
@@ -1936,7 +1936,7 @@ TEST_F(ObjectTest, Copy) {
     ASSERT_FALSE(inputsize < 0);
 	ObjectPut objectput1(OBJECT1, bucketcreate1, input, inputsize, properties);
 	for (int ii = 0; objectput1.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		input = new PathInput("dat/unittest.txt");
 		inputsize = size(*input);
@@ -1950,9 +1950,9 @@ TEST_F(ObjectTest, Copy) {
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
 	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objecthead1.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objecthead1.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objecthead1.start());
@@ -1974,7 +1974,7 @@ TEST_F(ObjectTest, Copy) {
 	Bucket bucket2(BUCKET2);
 	ObjectCopy objectcopy(OBJECT1, bucket1, OBJECT2, bucket2);
 	for (int ii = 0; objectcopy.isRetryable() && (ii < LIMIT); ++ii) {
-		logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectcopy.start());
 	}
@@ -1990,9 +1990,9 @@ TEST_F(ObjectTest, Copy) {
 	ObjectHead objecthead2(OBJECT2, bucket2);
 	for (int ii = 0; (objecthead2.isRetryable() || objecthead2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objecthead2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objecthead2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objecthead2.start());
@@ -2009,11 +2009,11 @@ TEST_F(ObjectTest, Copy) {
 	ObjectGet objectget2(OBJECT2, bucket2, output2);
 	for (int ii = 0; (objectget2.isRetryable() || objectget2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectget2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 			output2 = new PathOutput(OBJECT2);
 			objectget2.reset(output2);
 		} else if (objectget2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectget2.start());
@@ -2026,9 +2026,9 @@ TEST_F(ObjectTest, Copy) {
 	ObjectDelete objectdelete1(OBJECT1, bucket1);
 	for (int ii = 0; (objectdelete1.isRetryable() || objectdelete1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete1.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete1.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete1.start());
@@ -2038,9 +2038,9 @@ TEST_F(ObjectTest, Copy) {
 	ObjectDelete objectdelete2(OBJECT2, bucket2);
 	for (int ii = 0; (objectdelete2.isRetryable() || objectdelete2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objectdelete2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (objectdelete2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(objectdelete2.start());
@@ -2050,9 +2050,9 @@ TEST_F(ObjectTest, Copy) {
 	BucketDelete bucketdelete1(BUCKET1);
 	for (int ii = 0; (bucketdelete1.isRetryable() || bucketdelete1.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete1.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete1.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete1.start());
@@ -2062,9 +2062,9 @@ TEST_F(ObjectTest, Copy) {
 	BucketDelete bucketdelete2(BUCKET2);
 	for (int ii = 0; (bucketdelete2.isRetryable() || bucketdelete2.isNonexistent()) && (ii < LIMIT); ++ii) {
 		if (bucketdelete2.isRetryable()) {
-			logger.notice("RETRYING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
 		} else if (bucketdelete2.isNonexistent()) {
-			logger.notice("WAITING %s@%d\n", __FILE__, __LINE__);
+			logger.debug("WAITING %s@%d\n", __FILE__, __LINE__);
 		}
 		platform.yield(platform.frequency());
 		EXPECT_TRUE(bucketdelete2.start());

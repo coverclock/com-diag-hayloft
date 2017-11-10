@@ -12,15 +12,20 @@
 #include "gtest/gtest.h"
 #include "com/diag/lariat/lariat.h"
 #include "com/diag/hayloft/types.h"
+#include "com/diag/grandote/generics.h"
 #include "Environment.h"
 #include "Fixture.h"
+
+#if 0
+#define COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
+#endif
 
 namespace com {
 namespace diag {
 namespace unittest {
 
-static const int LIMIT = Fixture::limit(60);
-static const Milliseconds TIMEOUT = Fixture::timeout(60000);
+static const int LIMIT = Fixture::limit(intmaxof(int));
+static const Milliseconds TIMEOUT = Fixture::timeout(60000); /* one minute */
 
 }
 }
