@@ -431,4 +431,20 @@ URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt"
 [0;32m[ RUN      ] [mManifestTest.Part0Disable
 2017-11-10 18:48:25.724260Z [NOTE] ManifestTest is disabled; to run, execute subsequent sub-tests individually.
 [0;32m[       OK ] [mManifestTest.Part0Disable (0 ms)
-[0;32m[ RUN      ] [mManifestTest.Part1Setu
+[0;32m[ RUN      ] [mManifestTest.Part1Setup
+[0;32m[       OK ] [mManifestTest.Part1Setup (0 ms)
+[0;32m[ RUN      ] [mManifestTest.Part21Manifest
+[0;32m[       OK ] [mManifestTest.Part21Manifest (0 ms)
+[0;32m[ RUN      ] [mManifestTest.Part22Prefix
+[0;32m[       OK ] [mManifestTest.Part22Prefix (0 ms)
+[0;32m[ RUN      ] [mManifestTest.Part23Next
+[0;32m[       OK ] [mManifestTest.Part23Next (0 ms)
+[0;32m[ RUN      ] [mManifestTest.Part24Common
+[0;32m[       OK ] [mManifestTest.Part24Common (0 ms)
+[0;32m[ RUN      ] [mManifestTest.Part9Cleanup
+[0;32m[       OK ] [mManifestTest.Part9Cleanup (0 ms)
+[0;32m[----------] [m7 tests from ManifestTest (0 ms total)
+
+[0;32m[----------] [mGlobal test environment tear-down
+[0;32m[==========] [m146 tests from 22 test cases ran. (122306 ms total)
+[0;32m[  PASSED  ] [m146 tests.
