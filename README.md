@@ -57,21 +57,18 @@ The first was a subtle change in behavior in libcurl, which is used by
 libs3 to communicate with AWS. The fix was to change the decision making
 in Hayloft about whether it should return to the caller or continue
 driving the underlying cURL state machine in multiplexed operations. I
-believe this bug has been fixed.
+believe this bug - which was in a couple of places - has been fixed.
 
 The second was in the realm of eventual consistency, and consistency
 convergence, in distributed systems, something I experimented with when
-I first wrote this software. For example: you can create a bucket. But if
-you immediately check to see if the bucket exists, you may get a response
-that it does not. But if you then check a few minutes later, it's there.
-This could still be a bug in  my code, but I suspect it's a change in
-behavior in AWS. I recall that back in 2011 the unit test suite failed
-from time to time in a similar manner when I ran it during the peak
-Christmas shopping season; that's probably not a coincidence. For the
-time being I have disabled the portions of the unit test suite that
-assume  a faster speed of consistency convergence. I'll continue to
-ponder a solution to this; it may be simply iterating on the existence
-checks until they succeed or some lengthy timeout is reached.
+I first wrote this software. For example: you can create a bucket. But
+if you immediately check to see if the bucket exists, you may get a
+response that it does not. But if you then check a few minutes later,
+it's there.  I recall that back in 2011 the unit test suite failed from
+time to time in a similar manner when I ran it during the peak Christmas
+shopping season; that's probably not a coincidence. Addressing this has
+mostly been a matter of tuning the unit tests to wait longer for
+consistency to converge.
 
 RESOURCES
 

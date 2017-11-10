@@ -67,7 +67,6 @@ TEST_F(ObjectTest, Heap) {
 	Properties properties;
 	properties.setAccess(access);
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead * buckethead = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete buckethead;
@@ -85,7 +84,6 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(buckethead->isNonexistent());
 	ASSERT_FALSE(buckethead->isSuccessful());
 	delete buckethead;
-#endif
 	/**/
 	BucketCreate * bucketcreate = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
@@ -104,7 +102,6 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(bucketcreate->isNonexistent());
 	ASSERT_TRUE(bucketcreate->isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	buckethead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -127,9 +124,7 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(buckethead->isNonexistent());
 	ASSERT_TRUE(buckethead->isSuccessful());
 	delete buckethead;
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead * objecthead = 0;
 	for (int ii = 0; ii < LIMIT; ++ii) {
 		delete objecthead;
@@ -147,7 +142,6 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(objecthead->isNonexistent());
 	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
-#endif
 	/**/
 	ObjectPut * objectput = 0;
 	Size inputsize = 0;
@@ -172,7 +166,6 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(objectput->isSuccessful());
 	delete objectput;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	objecthead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -197,7 +190,6 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_NE(objecthead->authenticated(), (char *)0);
 	logger.notice("URL=\"%s\"\n", objecthead->authenticated());
 	delete objecthead;
-#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/SynchronousHeap.txt */
 	ObjectGet * objectget = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -224,7 +216,6 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(objectget->isSuccessful());
 	delete objectget;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	objecthead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -247,7 +238,6 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_FALSE(objecthead->isNonexistent());
 	ASSERT_TRUE(objecthead->isSuccessful());
 	delete objecthead;
-#endif
 	/**/
 	ObjectDelete * objectdelete = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -272,7 +262,6 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(objectdelete->isSuccessful());
 	delete objectdelete;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	objecthead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -296,7 +285,6 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_FALSE(objecthead->isSuccessful());
 	delete objecthead;
 	delete bucketcreate;
-#endif
 	/**/
 	BucketDelete * bucketdelete = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
@@ -321,7 +309,6 @@ TEST_F(ObjectTest, Heap) {
 	ASSERT_TRUE(bucketdelete->isSuccessful());
 	delete bucketdelete;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	buckethead = 0;
 	for (int jj = 0; jj < LIMIT; ++jj) {
 		for (int ii = 0; ii < LIMIT; ++ii) {
@@ -344,7 +331,6 @@ TEST_F(ObjectTest, Heap) {
 	EXPECT_TRUE(buckethead->isNonexistent());
 	ASSERT_FALSE(buckethead->isSuccessful());
 	delete buckethead;
-#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -367,7 +353,6 @@ TEST_F(ObjectTest, Complete) {
 	properties.setAccess(access);
 	Multiplex multiplex;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, multiplex, context);
 	EXPECT_EQ(buckethead, false);
 	EXPECT_TRUE(buckethead.isIdle());
@@ -397,7 +382,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -428,7 +412,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -462,9 +445,7 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_FALSE(buckethead.isNonexistent());
 	ASSERT_TRUE(buckethead.isSuccessful());
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
@@ -494,7 +475,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
-#endif
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
 	ASSERT_NE(input, (PathInput*)0);
@@ -535,7 +515,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectput.isNonexistent());
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -571,7 +550,6 @@ TEST_F(ObjectTest, Complete) {
 	ASSERT_TRUE(objecthead.isSuccessful());
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.notice("URL=\"%s\"\n", objecthead.authenticated());
-#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -611,7 +589,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -645,7 +622,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
-#endif
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
@@ -682,7 +658,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objectdelete.isNonexistent());
 	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -716,7 +691,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
-#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -753,7 +727,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -787,7 +760,6 @@ TEST_F(ObjectTest, Complete) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -810,7 +782,6 @@ TEST_F(ObjectTest, Simplex) {
 	properties.setAccess(access);
 	Simplex simplex;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, simplex, context);
 	EXPECT_EQ(buckethead, false);
 	EXPECT_TRUE(buckethead.isIdle());
@@ -832,7 +803,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, simplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -855,7 +825,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -881,9 +850,7 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_FALSE(buckethead.isNonexistent());
 	ASSERT_TRUE(buckethead.isSuccessful());
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead(OBJECT, bucketcreate, simplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
@@ -905,7 +872,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
-#endif
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
 	ASSERT_NE(input, (PathInput*)0);
@@ -938,7 +904,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objectput.isNonexistent());
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -966,7 +931,6 @@ TEST_F(ObjectTest, Simplex) {
 	ASSERT_TRUE(objecthead.isSuccessful());
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.notice("URL=\"%s\"\n", objecthead.authenticated());
-#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, simplex, output);
@@ -998,7 +962,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1024,7 +987,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
-#endif
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, simplex);
 	EXPECT_EQ(objectdelete, false);
@@ -1053,7 +1015,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objectdelete.isNonexistent());
 	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1079,7 +1040,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
-#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, simplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -1108,7 +1068,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -1134,7 +1093,6 @@ TEST_F(ObjectTest, Simplex) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -1157,7 +1115,6 @@ TEST_F(ObjectTest, Service) {
 	properties.setAccess(access);
 	Multiplex multiplex;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, multiplex, context);
 	EXPECT_EQ(buckethead, false);
 	EXPECT_TRUE(buckethead.isIdle());
@@ -1192,7 +1149,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, multiplex, context);
 	EXPECT_EQ(bucketcreate, false);
@@ -1228,7 +1184,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(bucketcreate.isInaccessible());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -1267,9 +1222,7 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_FALSE(buckethead.isNonexistent());
 	ASSERT_TRUE(buckethead.isSuccessful());
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objecthead, false);
 	EXPECT_TRUE(objecthead.isIdle());
@@ -1304,7 +1257,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
-#endif
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
 	ASSERT_NE(input, (PathInput*)0);
@@ -1350,7 +1302,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectput.isNonexistent());
 	ASSERT_TRUE(objectput.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1391,7 +1342,6 @@ TEST_F(ObjectTest, Service) {
 	ASSERT_TRUE(objecthead.isSuccessful());
 	ASSERT_NE(objecthead.authenticated(), (char *)0);
 	logger.notice("URL=\"%s\"\n", objecthead.authenticated());
-#endif
 	/* http://objecttest.hayloft.diag.com.s3.amazonaws.com/AsynchronousStackComplete.txt */
 	PathOutput * output = new PathOutput(OBJECT);
 	ObjectGet objectget(OBJECT, bucketcreate, multiplex, output);
@@ -1436,7 +1386,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectget.isNonexistent());
 	EXPECT_TRUE(objectget.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1475,7 +1424,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_FALSE(objecthead.isNonexistent());
 	ASSERT_TRUE(objecthead.isSuccessful());
-#endif
 	/**/
 	ObjectDelete objectdelete(OBJECT, bucketcreate, multiplex);
 	EXPECT_EQ(objectdelete, false);
@@ -1517,7 +1465,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objectdelete.isNonexistent());
 	ASSERT_TRUE(objectdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(objecthead, true);
 	EXPECT_FALSE(objecthead.isIdle());
 	EXPECT_FALSE(objecthead.isBusy());
@@ -1556,7 +1503,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(objecthead.isInaccessible());
 	EXPECT_TRUE(objecthead.isNonexistent());
 	ASSERT_FALSE(objecthead.isSuccessful());
-#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, multiplex);
 	EXPECT_EQ(bucketdelete, false);
@@ -1598,7 +1544,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_EQ(buckethead, true);
 	EXPECT_FALSE(buckethead.isIdle());
 	EXPECT_FALSE(buckethead.isBusy());
@@ -1637,7 +1582,6 @@ TEST_F(ObjectTest, Service) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	Size outputsize = size(OBJECT);
 	EXPECT_EQ(inputsize, outputsize);
@@ -1946,7 +1890,6 @@ TEST_F(ObjectTest, Copy) {
 	ASSERT_TRUE(objectput1.isSuccessful());
 	show(objectput1);
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1, bucketcreate1);
 	for (int ii = 0; (objecthead1.isRetryable() || objecthead1.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objecthead1.isRetryable()) {
@@ -1966,7 +1909,6 @@ TEST_F(ObjectTest, Copy) {
 	EXPECT_EQ(std::strcmp(objecthead1.find("keyworda"), "ValueA"), 0);
 	ASSERT_NE(objecthead1.find("keywordb"), (char *)0);
 	EXPECT_EQ(std::strcmp(objecthead1.find("keywordb"), "ValueB"), 0);
-#endif
 	/**/
 	// I could have just used bucketcreate1 and bucketcreate2 but I wanted to
 	// try just using the base class since I intended it to be used this way.
@@ -1986,7 +1928,6 @@ TEST_F(ObjectTest, Copy) {
 	// a bug in my code (entirely possible) that doesn't seem to happen either.
 	// If you want them, you're going to have to do an OBJECT HEAD.
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2, bucket2);
 	for (int ii = 0; (objecthead2.isRetryable() || objecthead2.isNonexistent()) &&  (ii < LIMIT); ++ii) {
 		if (objecthead2.isRetryable()) {
@@ -2003,7 +1944,6 @@ TEST_F(ObjectTest, Copy) {
 	// sink object.
 	EXPECT_EQ(objecthead2.find("keyworda"), (char *)0);
 	EXPECT_EQ(objecthead2.find("keywordb"), (char *)0);
-#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2);
 	ObjectGet objectget2(OBJECT2, bucket2, output2);

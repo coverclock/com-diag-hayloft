@@ -94,32 +94,27 @@ bool service_generic(Action & action, bool converge, bool invert, int tries, Mil
 					logger.log(level, "failing@%p\n", &action);
 					break;
 				} else if ((rc & Multiplex::RETRY) != 0) {
-					// Still uh oh. But libs3 thinks it might work if we RETRY.
+					// Still uh oh. But libs3 thinks it might work if we try
+                    // again..
 					logger.log(level, "repeating@%p\n", &action);
 					continue;
+				} else if ((rc & Multiplex::READY) != 0) {
+                    // There are PENDING Actions *and* sockets with data
+                    // READY to be read.
+                    continue;
 				} else if ((rc & Multiplex::PENDING) == 0) {
-					// There are no PENDING Actions. Either all PENDING Actions
-					// have completed, successfully or not, or something is
-					// seriously amiss. Fall through to the checks below that
-					// figure our what to do for this specific Action.
-				} else if ((rc & Multiplex::READY) == 0) {
-					// We have Actions PENDING but there is no READY responses
-					// from S3. That work may be PENDING Actions other than the
-					// only Action we care about. Selfish bastards we are.
-					// Still, useful to note that we're waiting on S3 to
-					// respond.
-					logger.log(level, "waiting@%p\n", &action);
-				} else {
-					// We have PENDING Actions, and READY responses from S3.
-					// That work may be PENDING Actions other than the only
-					// Action we care about. Still selfish bastards.
-				}
-				if (action.isBusy()) {
-					// This Action is still BUSY. Keep processing. We don't have
-					// to code a delay here since the service() method itself
-					// has a built-in delay.
+					// There are no PENDING Actions nor are there any open
+                    // sockets at all. Not only is there nothing to do,
+                    // there is no future possibility of anything to do.
+                    // Fall through.
+				} else if (action.isBusy()) {
+					// This Action is still BUSY. Keep processing.
+					logger.log(level, "iterating@%p\n", &action);
+                    platform.yield();
 					continue;
-				}
+				} else {
+                    // This Action is not BUSY. Fall through.
+                }
 			}
 		}
 		// It should be impossible for the Action to be BUSY at this point.

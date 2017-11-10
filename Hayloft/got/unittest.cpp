@@ -16,10 +16,6 @@
 #include "Environment.h"
 #include "Fixture.h"
 
-#if 0
-#define COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
-#endif
-
 namespace com {
 namespace diag {
 namespace unittest {
@@ -70,7 +66,7 @@ static const Milliseconds TIMEOUT = Fixture::timeout(60000); /* one minute */
 
 // Experimental tests regarding eventual consistency.
 
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
+#if 1
 #include "convergence.h"
 #endif
 

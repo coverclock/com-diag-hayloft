@@ -23,6 +23,7 @@
 
 #include "com/diag/hayloft/types.h"
 #include "com/diag/grandote/MaskableLogger.h"
+#include "com/diag/grandote/generics.h"
 
 namespace com {
 namespace diag {
@@ -48,7 +49,7 @@ static const ::com::diag::grandote::MaskableLogger::Level CONVERGENCE_LOG_LEVEL 
  * @param level is the logging level.
  * @return true if the desired state was achieved.
  */
-extern bool complete_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL);
+extern bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, ::com::diag::grandote::MaskableLogger::Level level);
 
 /**
  * Complete until the state of this Action converges to any non-retryable state.
@@ -60,7 +61,7 @@ extern bool complete_generic(Action & action, bool converge = true, bool invert 
  * @return true any non-retryable state was achieved.
  */
 inline bool complete(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return complete_generic(action, false, false, 20, 1000, level);
+	return complete_generic(action, false, false, 30, 20000, level);
 }
 
 /**
@@ -73,7 +74,7 @@ inline bool complete(Action & action, ::com::diag::grandote::MaskableLogger::Lev
  * @return true if a Success state was achieved.
  */
 inline bool complete_until_successful(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return complete_generic(action, true, false, 20, 1000, level);
+	return complete_generic(action, true, false, 30, 20000, level);
 }
 
 /**
@@ -86,7 +87,7 @@ inline bool complete_until_successful(Action & action, ::com::diag::grandote::Ma
  * @return true if a Non-existence state was achieved.
  */
 inline bool complete_until_nonexistent(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return complete_generic(action, true, true, 20, 1000, level);
+	return complete_generic(action, true, true, 30, 20000, level);
 }
 
 /**
@@ -115,7 +116,7 @@ inline bool complete_until_nonexistent(Action & action, ::com::diag::grandote::M
  * @param level is the logging level.
  * @return true if the desired state was achieved.
  */
-extern bool service_generic(Action & action, bool converge = true, bool invert = false, int tries = 20, Milliseconds delay = 1000, int iterations = 100, Milliseconds timeout = 100, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL);
+extern bool service_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, int iterations, Milliseconds timeout, ::com::diag::grandote::MaskableLogger::Level level);
 
 /**
  * Service until the state of this Action converges to any non-retryable state.
@@ -127,7 +128,7 @@ extern bool service_generic(Action & action, bool converge = true, bool invert =
  * @return true any non-retryable state was achieved.
  */
 inline bool service(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return service_generic(action, false, false, 20, 1000, 100, 1000, level);
+	return service_generic(action, false, false, 30, 20000, intmaxof(int), 60000, level);
 }
 
 /**
@@ -140,7 +141,7 @@ inline bool service(Action & action, ::com::diag::grandote::MaskableLogger::Leve
  * @return true if a Success state was achieved.
  */
 inline bool service_until_successful(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return service_generic(action, true, false, 20, 1000, 100, 1000, level);
+	return service_generic(action, true, false, 30, 20000, intmaxof(int), 60000, level);
 }
 
 /**
@@ -153,7 +154,7 @@ inline bool service_until_successful(Action & action, ::com::diag::grandote::Mas
  * @return true if a Non-existence state was achieved.
  */
 inline bool service_until_nonexistent(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return service_generic(action, true, true, 20, 1000, 100, 1000, level);
+	return service_generic(action, true, true, 30, 20000, intmaxof(int), 60000, level);
 }
 
 }

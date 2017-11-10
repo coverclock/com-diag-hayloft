@@ -1,4 +1,6 @@
-[0;32m[==========] [mRunning 146 tests from 22 test cases.
+Script started on Fri 10 Nov 2017 02:32:06 PM MST
+]0;jsloan@nickel: ~/src/com-diag-hayloft/Hayloft[01;32mjsloan@nickel[00m:[01;34m~/src/com-diag-hayloft/Hayloft[00m$ out/host/tst/unittest
+[0;32m[==========] [mRunning 149 tests from 23 test cases.
 [0;32m[----------] [mGlobal test environment set-up.
 [0;32m[----------] [m1 test from SizeofTest
 [0;32m[ RUN      ] [mSizeofTest.Sizeof
@@ -74,9 +76,9 @@ sizeof(Style)=16
 
 [0;32m[----------] [m6 tests from SessionTest
 [0;32m[ RUN      ] [mSessionTest.Heap
-[0;32m[       OK ] [mSessionTest.Heap (1 ms)
+[0;32m[       OK ] [mSessionTest.Heap (2 ms)
 [0;32m[ RUN      ] [mSessionTest.Stack
-[0;32m[       OK ] [mSessionTest.Stack (1 ms)
+[0;32m[       OK ] [mSessionTest.Stack (0 ms)
 [0;32m[ RUN      ] [mSessionTest.Environment
 [0;32m[       OK ] [mSessionTest.Environment (0 ms)
 [0;32m[ RUN      ] [mSessionTest.Explicit
@@ -93,22 +95,22 @@ sizeof(Style)=16
 [0;32m[ RUN      ] [mCredentialsTest.Explicit
 [0;32m[       OK ] [mCredentialsTest.Explicit (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.ExplicitShort
-2017-11-10 18:46:23.420097Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (19!=20)
-2017-11-10 18:46:23.420118Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (39!=40)
+2017-11-10 21:32:14.349185Z [WARN] Credentials@0x7ffc3d491440: access key id length invalid! (19!=20)
+2017-11-10 21:32:14.349211Z [WARN] Credentials@0x7ffc3d491440: secret access key length invalid! (39!=40)
 [0;32m[       OK ] [mCredentialsTest.ExplicitShort (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.ExplicitLong
-2017-11-10 18:46:23.420133Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (21!=20)
-2017-11-10 18:46:23.420138Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (41!=40)
+2017-11-10 21:32:14.349231Z [WARN] Credentials@0x7ffc3d491440: access key id length invalid! (21!=20)
+2017-11-10 21:32:14.349237Z [WARN] Credentials@0x7ffc3d491440: secret access key length invalid! (41!=40)
 [0;32m[       OK ] [mCredentialsTest.ExplicitLong (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.Environment
 [0;32m[       OK ] [mCredentialsTest.Environment (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.EnvironmentShort
-2017-11-10 18:46:23.420164Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (19!=20)
-2017-11-10 18:46:23.420169Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (39!=40)
+2017-11-10 21:32:14.349271Z [WARN] Credentials@0x7ffc3d491440: access key id length invalid! (19!=20)
+2017-11-10 21:32:14.349281Z [WARN] Credentials@0x7ffc3d491440: secret access key length invalid! (39!=40)
 [0;32m[       OK ] [mCredentialsTest.EnvironmentShort (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.EnvironmentLong
-2017-11-10 18:46:23.420184Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (21!=20)
-2017-11-10 18:46:23.420189Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (41!=40)
+2017-11-10 21:32:14.349308Z [WARN] Credentials@0x7ffc3d491440: access key id length invalid! (21!=20)
+2017-11-10 21:32:14.349317Z [WARN] Credentials@0x7ffc3d491440: secret access key length invalid! (41!=40)
 [0;32m[       OK ] [mCredentialsTest.EnvironmentLong (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.ExplicitOverridesEnvironment
 [0;32m[       OK ] [mCredentialsTest.ExplicitOverridesEnvironment (0 ms)
@@ -117,8 +119,8 @@ sizeof(Style)=16
 [0;32m[ RUN      ] [mCredentialsTest.InputTaken
 [0;32m[       OK ] [mCredentialsTest.InputTaken (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.Missing
-2017-11-10 18:46:23.420239Z [WARN] Credentials@0x7fffd3bc96b0: access key id length invalid! (0!=20)
-2017-11-10 18:46:23.420244Z [WARN] Credentials@0x7fffd3bc96b0: secret access key length invalid! (0!=40)
+2017-11-10 21:32:14.349392Z [WARN] Credentials@0x7ffc3d491440: access key id length invalid! (0!=20)
+2017-11-10 21:32:14.349401Z [WARN] Credentials@0x7ffc3d491440: secret access key length invalid! (0!=40)
 [0;32m[       OK ] [mCredentialsTest.Missing (0 ms)
 [0;32m[ RUN      ] [mCredentialsTest.Settors
 [0;32m[       OK ] [mCredentialsTest.Settors (0 ms)
@@ -227,7 +229,7 @@ sizeof(Style)=16
 
 [0;32m[----------] [m7 tests from MultiplexTest
 [0;32m[ RUN      ] [mMultiplexTest.Heap
-[0;32m[       OK ] [mMultiplexTest.Heap (0 ms)
+[0;32m[       OK ] [mMultiplexTest.Heap (1 ms)
 [0;32m[ RUN      ] [mMultiplexTest.Stack
 [0;32m[       OK ] [mMultiplexTest.Stack (0 ms)
 [0;32m[ RUN      ] [mMultiplexTest.Complete
@@ -240,7 +242,7 @@ sizeof(Style)=16
 [0;32m[       OK ] [mMultiplexTest.Plex (0 ms)
 [0;32m[ RUN      ] [mMultiplexTest.Simplex
 [0;32m[       OK ] [mMultiplexTest.Simplex (0 ms)
-[0;32m[----------] [m7 tests from MultiplexTest (0 ms total)
+[0;32m[----------] [m7 tests from MultiplexTest (1 ms total)
 
 [0;32m[----------] [m4 tests from PropertiesTest
 [0;32m[ RUN      ] [mPropertiesTest.Heap
@@ -268,12 +270,12 @@ sizeof(Style)=16
 [0;32m[ RUN      ] [mSelectionTest.Heap
 [0;32m[       OK ] [mSelectionTest.Heap (0 ms)
 [0;32m[ RUN      ] [mSelectionTest.Stack
-[0;32m[       OK ] [mSelectionTest.Stack (1 ms)
+[0;32m[       OK ] [mSelectionTest.Stack (0 ms)
 [0;32m[ RUN      ] [mSelectionTest.Explicit
 [0;32m[       OK ] [mSelectionTest.Explicit (0 ms)
 [0;32m[ RUN      ] [mSelectionTest.Settors
 [0;32m[       OK ] [mSelectionTest.Settors (0 ms)
-[0;32m[----------] [m4 tests from SelectionTest (1 ms total)
+[0;32m[----------] [m4 tests from SelectionTest (0 ms total)
 
 [0;32m[----------] [m6 tests from BucketBaseTest
 [0;32m[ RUN      ] [mBucketBaseTest.Heap
@@ -307,7 +309,7 @@ URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt"
 [0;32m[       OK ] [mObjectBaseTest.PathURI (0 ms)
 [0;32m[ RUN      ] [mObjectBaseTest.CopyConstructor
 [0;32m[       OK ] [mObjectBaseTest.CopyConstructor (0 ms)
-[0;32m[----------] [m6 tests from ObjectBaseTest (0 ms total)
+[0;32m[----------] [m6 tests from ObjectBaseTest (1 ms total)
 
 [0;32m[----------] [m1 test from GrantBaseTest
 [0;32m[ RUN      ] [mGrantBaseTest.Sanity
@@ -323,111 +325,115 @@ URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt"
 
 [0;32m[----------] [m7 tests from BucketTest
 [0;32m[ RUN      ] [mBucketTest.Heap
-[0;32m[       OK ] [mBucketTest.Heap (1915 ms)
+[0;32m[       OK ] [mBucketTest.Heap (26836 ms)
 [0;32m[ RUN      ] [mBucketTest.Stack
-[0;32m[       OK ] [mBucketTest.Stack (989 ms)
+[0;32m[       OK ] [mBucketTest.Stack (31112 ms)
 [0;32m[ RUN      ] [mBucketTest.Explicit
-[0;32m[       OK ] [mBucketTest.Explicit (1363 ms)
+[0;32m[       OK ] [mBucketTest.Explicit (2098 ms)
 [0;32m[ RUN      ] [mBucketTest.Complete
-[0;32m[       OK ] [mBucketTest.Complete (1079 ms)
+[0;32m[       OK ] [mBucketTest.Complete (29412 ms)
 [0;32m[ RUN      ] [mBucketTest.Simplex
-[0;32m[       OK ] [mBucketTest.Simplex (1533 ms)
+[0;32m[       OK ] [mBucketTest.Simplex (26914 ms)
 [0;32m[ RUN      ] [mBucketTest.Service
-[0;32m[       OK ] [mBucketTest.Service (1504 ms)
+[0;32m[       OK ] [mBucketTest.Service (28861 ms)
 [0;32m[ RUN      ] [mBucketTest.Manifest
-2017-11-10 18:46:32.207749Z [NOTE] ServiceManifest@0x7fffd3bc87c0: canonical="buckettestmanifest1-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364792="2017-11-11T01:46:32Z"
-2017-11-10 18:46:32.571444Z [NOTE] ServiceManifest@0x7fffd3bc8970: canonical="buckettestmanifest1-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364792="2017-11-11T01:46:32Z"
-2017-11-10 18:46:32.571501Z [NOTE] ServiceManifest@0x7fffd3bc8970: canonical="buckettestmanifest2-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364793="2017-11-11T01:46:33Z"
-2017-11-10 18:46:33.410766Z [NOTE] ServiceManifest@0x7fffd3bc8b20: canonical="buckettestmanifest2-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510364793="2017-11-11T01:46:33Z"
-[0;32m[       OK ] [mBucketTest.Manifest (2534 ms)
-[0;32m[----------] [m7 tests from BucketTest (10918 ms total)
+2017-11-10 21:34:40.627571Z [NOTE] ServiceManifest@0x7ffc3d490550: canonical="buckettestmanifest1-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510374881="2017-11-11T04:34:41Z"
+2017-11-10 21:34:41.264871Z [NOTE] ServiceManifest@0x7ffc3d490700: canonical="buckettestmanifest1-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510374881="2017-11-11T04:34:41Z"
+2017-11-10 21:34:41.264894Z [NOTE] ServiceManifest@0x7ffc3d490700: canonical="buckettestmanifest2-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510374881="2017-11-11T04:34:41Z"
+2017-11-10 21:34:42.123593Z [NOTE] ServiceManifest@0x7ffc3d4908b0: canonical="buckettestmanifest2-unittest-hayloft-diag-com" owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" created=1510374881="2017-11-11T04:34:41Z"
+[0;32m[       OK ] [mBucketTest.Manifest (3508 ms)
+[0;32m[----------] [m7 tests from BucketTest (148741 ms total)
 
 [0;32m[----------] [m6 tests from ObjectTest
 [0;32m[ RUN      ] [mObjectTest.Heap
-[0;32m[       OK ] [mObjectTest.Heap (2108 ms)
+2017-11-10 21:35:11.840795Z [NOTE] URL="https://objecttestheap-unittest-hayloft-diag-com.s3.amazonaws.com/Object.txt?AWSAccessKeyId=AKIAJGS7JBY7V6C4M36Q&Expires=2147483647&Signature=CW1sH9T7Vqm1fvE5waWxwfy3SRM%3D"
+[0;32m[       OK ] [mObjectTest.Heap (29754 ms)
 [0;32m[ RUN      ] [mObjectTest.Complete
-[0;32m[       OK ] [mObjectTest.Complete (2941 ms)
+2017-11-10 21:35:45.900947Z [NOTE] URL="https://objecttestcomplete-unittest-hayloft-diag-com.s3.amazonaws.com/Object.txt?AWSAccessKeyId=AKIAJGS7JBY7V6C4M36Q&Expires=2147483647&Signature=4BxZoUHqU1ibuHDMsk/CWhsWcF8%3D"
+[0;32m[       OK ] [mObjectTest.Complete (34182 ms)
 [0;32m[ RUN      ] [mObjectTest.Simplex
-[0;32m[       OK ] [mObjectTest.Simplex (2280 ms)
+2017-11-10 21:36:15.685874Z [NOTE] URL="https://objecttestsimplex-unittest-hayloft-diag-com.s3.amazonaws.com/Object.txt?AWSAccessKeyId=AKIAJGS7JBY7V6C4M36Q&Expires=2147483647&Signature=m7cdaEbc1OlG3YtqI/O5B6no268%3D"
+[0;32m[       OK ] [mObjectTest.Simplex (29551 ms)
 [0;32m[ RUN      ] [mObjectTest.Service
-[0;32m[       OK ] [mObjectTest.Service (2433 ms)
+2017-11-10 21:36:44.862982Z [NOTE] URL="https://objecttestservice-unittest-hayloft-diag-com.s3.amazonaws.com/Object.txt?AWSAccessKeyId=AKIAJGS7JBY7V6C4M36Q&Expires=2147483647&Signature=gthZV3hYyrjyv8OBUIsWqGUzUAM%3D"
+[0;32m[       OK ] [mObjectTest.Service (29299 ms)
 [0;32m[ RUN      ] [mObjectTest.Manifest
-2017-11-10 18:46:45.179276Z [NOTE] BucketManifest@0x7fffd3bc7520: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
-2017-11-10 18:46:45.756345Z [NOTE] BucketManifest@0x7fffd3bc7810: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
-2017-11-10 18:46:45.756369Z [NOTE] BucketManifest@0x7fffd3bc7810: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
-2017-11-10 18:46:45.828760Z [NOTE] BucketManifest@0x7fffd3bc7b00: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
-2017-11-10 18:46:45.908953Z [NOTE] BucketManifest@0x7fffd3bc7df0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
-2017-11-10 18:46:46.014680Z [NOTE] BucketManifest@0x7fffd3bc80e0: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364805="2017-11-11T01:46:45Z"
-2017-11-10 18:46:46.014702Z [NOTE] BucketManifest@0x7fffd3bc80e0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
-2017-11-10 18:46:46.188186Z [NOTE] BucketManifest@0x7fffd3bc83d0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
-2017-11-10 18:46:46.474819Z [NOTE] BucketManifest@0x7fffd3bc89b0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510364806="2017-11-11T01:46:46Z"
-[0;32m[       OK ] [mObjectTest.Manifest (2890 ms)
+2017-11-10 21:36:47.354132Z [NOTE] BucketManifest@0x7ffc3d48f2b0: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375007="2017-11-11T04:36:47Z"
+2017-11-10 21:36:47.890237Z [NOTE] BucketManifest@0x7ffc3d48f5a0: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375007="2017-11-11T04:36:47Z"
+2017-11-10 21:36:47.890291Z [NOTE] BucketManifest@0x7ffc3d48f5a0: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375008="2017-11-11T04:36:48Z"
+2017-11-10 21:36:47.970249Z [NOTE] BucketManifest@0x7ffc3d48f890: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375007="2017-11-11T04:36:47Z"
+2017-11-10 21:36:48.049976Z [NOTE] BucketManifest@0x7ffc3d48fb80: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375008="2017-11-11T04:36:48Z"
+2017-11-10 21:36:48.129801Z [NOTE] BucketManifest@0x7ffc3d48fe70: key="Object1.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375007="2017-11-11T04:36:47Z"
+2017-11-10 21:36:48.129852Z [NOTE] BucketManifest@0x7ffc3d48fe70: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375008="2017-11-11T04:36:48Z"
+2017-11-10 21:36:48.206885Z [NOTE] BucketManifest@0x7ffc3d490160: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375008="2017-11-11T04:36:48Z"
+2017-11-10 21:36:48.440315Z [NOTE] BucketManifest@0x7ffc3d490740: key="Object2.txt" etag=""e8a592047cf39985e60ece63603d7e0e"" size=79217 owner="e0ef31b7055c50d2cd9f06e443dac3e05b50bf9a08a2bb420f890c6c9bb07568" display="coverclock" modified=1510375008="2017-11-11T04:36:48Z"
+[0;32m[       OK ] [mObjectTest.Manifest (3166 ms)
 [0;32m[ RUN      ] [mObjectTest.Copy
-[0;32m[       OK ] [mObjectTest.Copy (3329 ms)
-[0;32m[----------] [m6 tests from ObjectTest (15981 ms total)
+[0;32m[       OK ] [mObjectTest.Copy (5631 ms)
+[0;32m[----------] [m6 tests from ObjectTest (131584 ms total)
 
 [0;32m[----------] [m4 tests from GrantTest
 [0;32m[ RUN      ] [mGrantTest.GetSynchronous
-[0;32m[       OK ] [mGrantTest.GetSynchronous (1973 ms)
+[0;32m[       OK ] [mGrantTest.GetSynchronous (1744 ms)
 [0;32m[ RUN      ] [mGrantTest.GetAsynchronous
-[0;32m[       OK ] [mGrantTest.GetAsynchronous (3327 ms)
+[0;32m[       OK ] [mGrantTest.GetAsynchronous (4795 ms)
 [0;32m[ RUN      ] [mGrantTest.GetPublicRead
-[0;32m[       OK ] [mGrantTest.GetPublicRead (2391 ms)
+[0;32m[       OK ] [mGrantTest.GetPublicRead (2003 ms)
 [0;32m[ RUN      ] [mGrantTest.SetGet
-[0;32m[       OK ] [mGrantTest.SetGet (3277 ms)
-[0;32m[----------] [m4 tests from GrantTest (10968 ms total)
+[0;32m[       OK ] [mGrantTest.SetGet (1863 ms)
+[0;32m[----------] [m4 tests from GrantTest (10405 ms total)
 
 [0;32m[----------] [m12 tests from ComplexTest
 [0;32m[ RUN      ] [mComplexTest.Stack
-[0;32m[       OK ] [mComplexTest.Stack (0 ms)
+[0;32m[       OK ] [mComplexTest.Stack (1 ms)
 [0;32m[ RUN      ] [mComplexTest.Success
-[0;32m[       OK ] [mComplexTest.Success (4838 ms)
+[0;32m[       OK ] [mComplexTest.Success (4913 ms)
 [0;32m[ RUN      ] [mComplexTest.Recoverable
-2017-11-10 18:47:06.127101Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
-[0;32m[       OK ] [mComplexTest.Recoverable (7117 ms)
+2017-11-10 21:37:09.996167Z [NOTE] Action@0x7ffc3d491270: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Recoverable (7119 ms)
 [0;32m[ RUN      ] [mComplexTest.Recoverables
-2017-11-10 18:47:13.243845Z [NOTE] Action@0x7fffd3bc92d0: status=63="ErrorInternalError"
-2017-11-10 18:47:13.243871Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
-2017-11-10 18:47:15.244158Z [NOTE] Action@0x7fffd3bc92d0: status=63="ErrorInternalError"
-2017-11-10 18:47:15.244214Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
-2017-11-10 18:47:18.246567Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
-[0;32m[       OK ] [mComplexTest.Recoverables (11909 ms)
+2017-11-10 21:37:17.114970Z [NOTE] Action@0x7ffc3d491060: status=63="ErrorInternalError"
+2017-11-10 21:37:17.115000Z [NOTE] Action@0x7ffc3d491270: status=63="ErrorInternalError"
+2017-11-10 21:37:19.115299Z [NOTE] Action@0x7ffc3d491060: status=63="ErrorInternalError"
+2017-11-10 21:37:19.115359Z [NOTE] Action@0x7ffc3d491270: status=63="ErrorInternalError"
+2017-11-10 21:37:22.117767Z [NOTE] Action@0x7ffc3d491270: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Recoverables (11820 ms)
 [0;32m[ RUN      ] [mComplexTest.Unrecoverable
-2017-11-10 18:47:25.152770Z [NOTE] Action@0x7fffd3bc94e0: status=47="AbortedByCallback"
+2017-11-10 21:37:28.934837Z [NOTE] Action@0x7ffc3d491270: status=47="AbortedByCallback"
 [0;32m[       OK ] [mComplexTest.Unrecoverable (1 ms)
 [0;32m[ RUN      ] [mComplexTest.Irrecoverable
-2017-11-10 18:47:25.153455Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
-2017-11-10 18:47:27.153787Z [NOTE] Action@0x7fffd3bc94e0: status=63="ErrorInternalError"
+2017-11-10 21:37:28.935529Z [NOTE] Action@0x7ffc3d491270: status=63="ErrorInternalError"
+2017-11-10 21:37:30.935828Z [NOTE] Action@0x7ffc3d491270: status=63="ErrorInternalError"
 [0;32m[       OK ] [mComplexTest.Irrecoverable (2001 ms)
 [0;32m[ RUN      ] [mComplexTest.Unretryable
-2017-11-10 18:47:27.154659Z [NOTE] Action@0x7fffd3bc94e0: status=46="ConnectionFailed"
-[0;32m[       OK ] [mComplexTest.Unretryable (1 ms)
+2017-11-10 21:37:30.936219Z [NOTE] Action@0x7ffc3d491270: status=46="ConnectionFailed"
+[0;32m[       OK ] [mComplexTest.Unretryable (0 ms)
 [0;32m[ RUN      ] [mComplexTest.Unstartable
-2017-11-10 18:47:27.155392Z [ERRR] Complex: Action@0x7fffd3bc94f0: start failed!
+2017-11-10 21:37:30.936598Z [ERRR] Complex: Action@0x7ffc3d491280: start failed!
 [0;32m[       OK ] [mComplexTest.Unstartable (0 ms)
 [0;32m[ RUN      ] [mComplexTest.Unresettable
-2017-11-10 18:47:27.156127Z [NOTE] Action@0x7fffd3bc94e0: status=46="ConnectionFailed"
+2017-11-10 21:37:30.937129Z [NOTE] Action@0x7ffc3d491270: status=46="ConnectionFailed"
 [0;32m[       OK ] [mComplexTest.Unresettable (1 ms)
 [0;32m[ RUN      ] [mComplexTest.Application
-2017-11-10 18:47:29.706197Z [NOTE] Action@0x7fffd3bc8f50: status=63="ErrorInternalError"
-2017-11-10 18:47:31.706573Z [NOTE] Action@0x7fffd3bc8f50: status=63="ErrorInternalError"
-2017-11-10 18:47:39.445724Z [NOTE] Action@0x7fffd3bc8c10: status=63="ErrorInternalError"
-2017-11-10 18:47:41.446078Z [NOTE] Action@0x7fffd3bc8c10: status=63="ErrorInternalError"
-2017-11-10 18:47:44.446540Z [NOTE] Action@0x7fffd3bc8c10: status=63="ErrorInternalError"
-[0;32m[       OK ] [mComplexTest.Application (25098 ms)
+2017-11-10 21:37:33.469186Z [NOTE] Action@0x7ffc3d490ce0: status=63="ErrorInternalError"
+2017-11-10 21:37:35.469487Z [NOTE] Action@0x7ffc3d490ce0: status=63="ErrorInternalError"
+2017-11-10 21:37:43.442077Z [NOTE] Action@0x7ffc3d4909a0: status=63="ErrorInternalError"
+2017-11-10 21:37:45.442425Z [NOTE] Action@0x7ffc3d4909a0: status=63="ErrorInternalError"
+2017-11-10 21:37:48.442860Z [NOTE] Action@0x7ffc3d4909a0: status=63="ErrorInternalError"
+[0;32m[       OK ] [mComplexTest.Application (25350 ms)
 [0;32m[ RUN      ] [mComplexTest.Factory
-2017-11-10 18:47:57.038263Z [NOTE] Action@0x7fffd3bc8f50: status=47="AbortedByCallback"
-2017-11-10 18:48:02.983251Z [NOTE] Action@0x7fffd3bc8c00: status=47="AbortedByCallback"
-[0;32m[       OK ] [mComplexTest.Factory (16255 ms)
+2017-11-10 21:38:01.616920Z [NOTE] Action@0x7ffc3d490ce0: status=47="AbortedByCallback"
+2017-11-10 21:38:07.703692Z [NOTE] Action@0x7ffc3d490990: status=47="AbortedByCallback"
+[0;32m[       OK ] [mComplexTest.Factory (18263 ms)
 [0;32m[ RUN      ] [mComplexTest.Polled
-2017-11-10 18:48:13.283128Z [NOTE] Action@0x7fffd3bc8f50: status=47="AbortedByCallback"
-2017-11-10 18:48:20.079421Z [NOTE] Action@0x7fffd3bc8c00: status=47="AbortedByCallback"
-[0;32m[       OK ] [mComplexTest.Polled (17214 ms)
-[0;32m[----------] [m12 tests from ComplexTest (84436 ms total)
+2017-11-10 21:38:18.951369Z [NOTE] Action@0x7ffc3d490ce0: status=47="AbortedByCallback"
+2017-11-10 21:38:25.785391Z [NOTE] Action@0x7ffc3d490990: status=47="AbortedByCallback"
+[0;32m[       OK ] [mComplexTest.Polled (16929 ms)
+[0;32m[----------] [m12 tests from ComplexTest (86398 ms total)
 
 [0;32m[----------] [m7 tests from ManifestTest
 [0;32m[ RUN      ] [mManifestTest.Part0Disable
-2017-11-10 18:48:25.724260Z [NOTE] ManifestTest is disabled; to run, execute subsequent sub-tests individually.
+2017-11-10 21:38:31.479189Z [NOTE] ManifestTest is disabled; to run, execute subsequent sub-tests individually.
 [0;32m[       OK ] [mManifestTest.Part0Disable (0 ms)
 [0;32m[ RUN      ] [mManifestTest.Part1Setup
 [0;32m[       OK ] [mManifestTest.Part1Setup (0 ms)
@@ -443,6 +449,19 @@ URI="http://s3-ap-northeast-1.amazonaws.com/pathuri.path.diag.com/Path.txt"
 [0;32m[       OK ] [mManifestTest.Part9Cleanup (0 ms)
 [0;32m[----------] [m7 tests from ManifestTest (0 ms total)
 
+[0;32m[----------] [m3 tests from ConvergenceTest
+[0;32m[ RUN      ] [mConvergenceTest.Synchronous
+[0;32m[       OK ] [mConvergenceTest.Synchronous (4411 ms)
+[0;32m[ RUN      ] [mConvergenceTest.Complete
+[0;32m[       OK ] [mConvergenceTest.Complete (24370 ms)
+[0;32m[ RUN      ] [mConvergenceTest.Service
+[0;32m[       OK ] [mConvergenceTest.Service (24381 ms)
+[0;32m[----------] [m3 tests from ConvergenceTest (53162 ms total)
+
 [0;32m[----------] [mGlobal test environment tear-down
-[0;32m[==========] [m146 tests from 22 test cases ran. (122306 ms total)
-[0;32m[  PASSED  ] [m146 tests.
+[0;32m[==========] [m149 tests from 23 test cases ran. (430294 ms total)
+[0;32m[  PASSED  ] [m149 tests.
+]0;jsloan@nickel: ~/src/com-diag-hayloft/Hayloft[01;32mjsloan@nickel[00m:[01;34m~/src/com-diag-hayloft/Hayloft[00m$ exit
+exit
+
+Script done on Fri 10 Nov 2017 02:44:09 PM MST

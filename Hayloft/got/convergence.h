@@ -53,15 +53,11 @@ TEST_F(ConvergenceTest, Synchronous) {
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead1(BUCKET1);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead2(BUCKET1);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
-#endif
 	/**/
 	BucketCreate bucketcreate1(BUCKET1);
 	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
@@ -84,18 +80,14 @@ TEST_F(ConvergenceTest, Synchronous) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1);
 	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
-#endif
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2);
 	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
-#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
@@ -141,15 +133,11 @@ TEST_F(ConvergenceTest, Complete) {
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	Multiplex multiplex;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead1(BUCKET1, multiplex);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead2(BUCKET1, multiplex);
 	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
-#endif
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
 	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
@@ -172,18 +160,14 @@ TEST_F(ConvergenceTest, Complete) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1, multiplex);
 	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
-#endif
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2, multiplex);
 	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
-#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
@@ -229,15 +213,11 @@ TEST_F(ConvergenceTest, Service) {
 	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Multiplex multiplex;
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead1(BUCKET1, multiplex);
 	EXPECT_TRUE(service_until_nonexistent(buckethead1, LEVEL));
-#endif
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead2(BUCKET1, multiplex);
 	EXPECT_TRUE(service_until_nonexistent(buckethead2, LEVEL));
-#endif
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
 	EXPECT_TRUE(service_until_successful(bucketcreate1, LEVEL));
@@ -260,18 +240,14 @@ TEST_F(ConvergenceTest, Service) {
 	}
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead1(OBJECT1, multiplex);
 	EXPECT_TRUE(service_until_successful(objecthead1, LEVEL));
-#endif
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2, multiplex);
 	EXPECT_TRUE(service_until_successful(objectcopy, LEVEL));
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	ObjectHead objecthead2(OBJECT2, multiplex);
 	EXPECT_TRUE(service_until_successful(objecthead2, LEVEL));
-#endif
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);

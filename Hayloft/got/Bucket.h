@@ -48,7 +48,6 @@ typedef Fixture BucketTest;
 
 TEST_F(BucketTest, Heap) {
 	static const char BUCKET[] = "BucketTestHeap";
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; buckethead->isRetryable() && (ii < LIMIT); ++ii) {
@@ -66,7 +65,6 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_FALSE(buckethead->isSuccessful());
 		delete buckethead;
 	}
-#endif
 	{
 		BucketCreate * bucketcreate = new BucketCreate(BUCKET);
 		for (int ii = 0; bucketcreate->isRetryable() && (ii < LIMIT); ++ii) {
@@ -84,7 +82,6 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_TRUE(bucketcreate->isSuccessful());
 		delete bucketcreate;
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; (buckethead->isRetryable() || (!buckethead->isSuccessful())) && (ii < LIMIT); ++ii) {
@@ -106,7 +103,6 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_TRUE(buckethead->isSuccessful());
 		delete buckethead;
 	}
-#endif
 	{
 		BucketDelete * bucketdelete = new BucketDelete(BUCKET);
 		for (int ii = 0; (bucketdelete->isRetryable() || bucketdelete->isNonexistent()) && (ii < LIMIT); ++ii) {
@@ -128,7 +124,6 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_TRUE(bucketdelete->isSuccessful());
 		delete bucketdelete;
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead * buckethead = new BucketHead(BUCKET);
 		for (int ii = 0; (buckethead->isRetryable() || buckethead->isSuccessful()) && (ii < LIMIT); ++ii) {
@@ -150,12 +145,10 @@ TEST_F(BucketTest, Heap) {
 		ASSERT_FALSE(buckethead->isSuccessful());
 		delete buckethead;
 	}
-#endif
 }
 
 TEST_F(BucketTest, Stack) {
 	static const char BUCKET[] = "BucketTestStack";
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
@@ -171,7 +164,6 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketCreate bucketcreate(BUCKET);
 		for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
@@ -187,7 +179,6 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
@@ -207,7 +198,6 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketDelete bucketdelete(BUCKET);
 		for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
@@ -227,7 +217,6 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET);
 		for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
@@ -247,7 +236,6 @@ TEST_F(BucketTest, Stack) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 }
 
 TEST_F(BucketTest, Explicit) {
@@ -261,7 +249,6 @@ TEST_F(BucketTest, Explicit) {
 	AccessPublicRead access;
 	Context context(credentials, constraint, protocol, style, access);
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	BucketHead buckethead(BUCKET, context, session);
 	for (int ii = 0; buckethead.isRetryable() && (ii < LIMIT); ++ii) {
 		logger.debug("RETRYING %s@%d\n", __FILE__, __LINE__);
@@ -275,7 +262,6 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 	/**/
 	BucketCreate bucketcreate(BUCKET, context, session);
 	for (int ii = 0; bucketcreate.isRetryable() && (ii < LIMIT); ++ii) {
@@ -291,7 +277,6 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(bucketcreate.isNonexistent());
 	ASSERT_TRUE(bucketcreate.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_TRUE(buckethead.start());
 	for (int ii = 0; (buckethead.isRetryable() || (!buckethead.isSuccessful())) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
@@ -313,7 +298,6 @@ TEST_F(BucketTest, Explicit) {
 	ASSERT_NE(buckethead.getRegion(), (char *)0);
 	ASSERT_NE(bucketcreate.getRegion(), (char *)0);
 	EXPECT_EQ(std::strcmp(buckethead.getRegion(), bucketcreate.getRegion()), 0);
-#endif
 	/**/
 	BucketDelete bucketdelete(BUCKET, context, session);
 	for (int ii = 0; (bucketdelete.isRetryable() || bucketdelete.isNonexistent()) && (ii < LIMIT); ++ii) {
@@ -333,7 +317,6 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(bucketdelete.isNonexistent());
 	ASSERT_TRUE(bucketdelete.isSuccessful());
 	/**/
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	EXPECT_TRUE(buckethead.start());
 	for (int ii = 0; (buckethead.isRetryable() || buckethead.isSuccessful()) && (ii < LIMIT); ++ii) {
 		if (buckethead.isRetryable()) {
@@ -351,13 +334,11 @@ TEST_F(BucketTest, Explicit) {
 	EXPECT_FALSE(buckethead.isInaccessible());
 	EXPECT_TRUE(buckethead.isNonexistent());
 	ASSERT_FALSE(buckethead.isSuccessful());
-#endif
 }
 
 TEST_F(BucketTest, Complete) {
 	static const char BUCKET[] = "BucketTestComplete";
 	Multiplex multiplex;
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -389,7 +370,6 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketCreate bucketcreate(BUCKET, multiplex);
 		EXPECT_FALSE(bucketcreate == true);
@@ -421,7 +401,6 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -458,7 +437,6 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketDelete bucketdelete(BUCKET, multiplex);
 		EXPECT_FALSE(bucketdelete == true);
@@ -495,7 +473,6 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -532,13 +509,11 @@ TEST_F(BucketTest, Complete) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 }
 
 TEST_F(BucketTest, Simplex) {
 	static const char BUCKET[] = "BucketTestSimplex";
 	Simplex simplex;
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, simplex);
 		EXPECT_FALSE(buckethead == true);
@@ -562,7 +537,6 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketCreate bucketcreate(BUCKET, simplex);
 		EXPECT_FALSE(bucketcreate == true);
@@ -586,7 +560,6 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, simplex);
 		EXPECT_FALSE(buckethead == true);
@@ -615,7 +588,6 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketDelete bucketdelete(BUCKET, simplex);
 		EXPECT_FALSE(bucketdelete == true);
@@ -644,7 +616,6 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, simplex);
 		EXPECT_FALSE(buckethead == true);
@@ -673,13 +644,11 @@ TEST_F(BucketTest, Simplex) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 }
 
 TEST_F(BucketTest, Service) {
 	static const char BUCKET[] = "BucketTestService";
 	Multiplex multiplex;
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -716,7 +685,6 @@ TEST_F(BucketTest, Service) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketCreate bucketcreate(BUCKET, multiplex);
 		EXPECT_FALSE(bucketcreate == true);
@@ -753,7 +721,6 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(bucketcreate.isNonexistent());
 		ASSERT_TRUE(bucketcreate.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -795,7 +762,6 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(buckethead.isNonexistent());
 		ASSERT_TRUE(buckethead.isSuccessful());
 	}
-#endif
 	{
 		BucketDelete bucketdelete(BUCKET, multiplex);
 		EXPECT_FALSE(bucketdelete == true);
@@ -837,7 +803,6 @@ TEST_F(BucketTest, Service) {
 		EXPECT_FALSE(bucketdelete.isNonexistent());
 		ASSERT_TRUE(bucketdelete.isSuccessful());
 	}
-#ifdef COM_DIAG_HAYLOFT_UNITTEST_CONSISTENCY
 	{
 		BucketHead buckethead(BUCKET, multiplex);
 		EXPECT_FALSE(buckethead == true);
@@ -879,7 +844,6 @@ TEST_F(BucketTest, Service) {
 		EXPECT_TRUE(buckethead.isNonexistent());
 		ASSERT_FALSE(buckethead.isSuccessful());
 	}
-#endif
 }
 
 TEST_F(BucketTest, Manifest) {
