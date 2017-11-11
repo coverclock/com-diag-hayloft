@@ -31,7 +31,19 @@ namespace hayloft {
 
 class Action;
 
-static const ::com::diag::grandote::MaskableLogger::Level CONVERGENCE_LOG_LEVEL = ::com::diag::grandote::MaskableLogger::INFORMATION;
+namespace convergence {
+
+static const int TRIES = 30;
+
+static const Milliseconds DELAY = 20000; // 20 seconds.
+
+static const int ITERATIONS = intmaxof(int); // Big.
+
+static const Milliseconds TIMEOUT = 60000; // 60 seconds.
+
+static const ::com::diag::grandote::MaskableLogger::Level LEVEL = ::com::diag::grandote::MaskableLogger::INFORMATION;
+
+}
 
 /**
  * Handle the error recovery and consistency convergence logic for an Action
@@ -49,7 +61,7 @@ static const ::com::diag::grandote::MaskableLogger::Level CONVERGENCE_LOG_LEVEL 
  * @param level is the logging level.
  * @return true if the desired state was achieved.
  */
-extern bool complete_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, ::com::diag::grandote::MaskableLogger::Level level);
+extern bool complete_generic(Action & action, bool converge, bool invert, int tries = convergence::TRIES, Milliseconds delay = convergence::DELAY, ::com::diag::grandote::MaskableLogger::Level level = convergence::LEVEL);
 
 /**
  * Complete until the state of this Action converges to any non-retryable state.
@@ -57,11 +69,10 @@ extern bool complete_generic(Action & action, bool converge, bool invert, int tr
  * See complete_generic.
  *
  * @param action refers to the action.
- * @param level is the logging level.
  * @return true any non-retryable state was achieved.
  */
-inline bool complete(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return complete_generic(action, false, false, 30, 20000, level);
+inline bool complete(Action & action) {
+	return complete_generic(action, false, false);
 }
 
 /**
@@ -70,11 +81,10 @@ inline bool complete(Action & action, ::com::diag::grandote::MaskableLogger::Lev
  * See complete_generic.
  *
  * @param action refers to the action.
- * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool complete_until_successful(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return complete_generic(action, true, false, 30, 20000, level);
+inline bool complete_until_successful(Action & action) {
+	return complete_generic(action, true, false);
 }
 
 /**
@@ -83,11 +93,10 @@ inline bool complete_until_successful(Action & action, ::com::diag::grandote::Ma
  * See complete_generic.
  *
  * @param action refers to the action.
- * @param level is the logging level.
  * @return true if a Non-existence state was achieved.
  */
-inline bool complete_until_nonexistent(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return complete_generic(action, true, true, 30, 20000, level);
+inline bool complete_until_nonexistent(Action & action) {
+	return complete_generic(action, true, true);
 }
 
 /**
@@ -116,7 +125,7 @@ inline bool complete_until_nonexistent(Action & action, ::com::diag::grandote::M
  * @param level is the logging level.
  * @return true if the desired state was achieved.
  */
-extern bool service_generic(Action & action, bool converge, bool invert, int tries, Milliseconds delay, int iterations, Milliseconds timeout, ::com::diag::grandote::MaskableLogger::Level level);
+extern bool service_generic(Action & action, bool converge, bool invert, int tries = convergence::TRIES, Milliseconds delay = convergence::DELAY, int iterations = convergence::ITERATIONS, Milliseconds timeout = convergence::TIMEOUT, ::com::diag::grandote::MaskableLogger::Level level = convergence::LEVEL);
 
 /**
  * Service until the state of this Action converges to any non-retryable state.
@@ -124,11 +133,10 @@ extern bool service_generic(Action & action, bool converge, bool invert, int tri
  * See service_generic.
  *
  * @param action refers to the action.
- * @param level is the logging level.
  * @return true any non-retryable state was achieved.
  */
-inline bool service(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return service_generic(action, false, false, 30, 20000, intmaxof(int), 60000, level);
+inline bool service(Action & action) {
+	return service_generic(action, false, false);
 }
 
 /**
@@ -137,11 +145,10 @@ inline bool service(Action & action, ::com::diag::grandote::MaskableLogger::Leve
  * See service_generic.
  *
  * @param action refers to the action.
- * @param level is the logging level.
  * @return true if a Success state was achieved.
  */
-inline bool service_until_successful(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return service_generic(action, true, false, 30, 20000, intmaxof(int), 60000, level);
+inline bool service_until_successful(Action & action) {
+	return service_generic(action, true, false);
 }
 
 /**
@@ -150,11 +157,10 @@ inline bool service_until_successful(Action & action, ::com::diag::grandote::Mas
  * See service_generic.
  *
  * @param action refers to the action.
- * @param level is the logging level.
  * @return true if a Non-existence state was achieved.
  */
-inline bool service_until_nonexistent(Action & action, ::com::diag::grandote::MaskableLogger::Level level = CONVERGENCE_LOG_LEVEL) {
-	return service_generic(action, true, true, 30, 20000, intmaxof(int), 60000, level);
+inline bool service_until_nonexistent(Action & action) {
+	return service_generic(action, true, true);
 }
 
 }

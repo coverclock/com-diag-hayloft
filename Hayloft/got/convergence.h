@@ -47,23 +47,22 @@ typedef ::com::diag::hayloft::Object HayloftObject; // Resolve Object ambiguity.
 typedef Fixture ConvergenceTest;
 
 TEST_F(ConvergenceTest, Synchronous) {
-	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestSynchronous1");
 	Bucket BUCKET2("ConvergenceTestSynchronous2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
 	/**/
 	BucketHead buckethead1(BUCKET1);
-	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
+	EXPECT_TRUE(complete_until_nonexistent(buckethead1));
 	/**/
 	BucketHead buckethead2(BUCKET1);
-	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
+	EXPECT_TRUE(complete_until_nonexistent(buckethead2));
 	/**/
 	BucketCreate bucketcreate1(BUCKET1);
-	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate1));
 	/**/
 	BucketCreate bucketcreate2(BUCKET2);
-	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate2));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
     ASSERT_FALSE(input == (PathInput *)0);
@@ -81,13 +80,13 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
 	ObjectHead objecthead1(OBJECT1);
-	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead1));
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2);
-	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectcopy));
 	/**/
 	ObjectHead objecthead2(OBJECT2);
-	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead2));
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
@@ -105,16 +104,16 @@ TEST_F(ConvergenceTest, Synchronous) {
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1);
-	EXPECT_TRUE(complete_until_successful(objectdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete1));
 	/**/
 	ObjectDelete objectdelete2(OBJECT2);
-	EXPECT_TRUE(complete_until_successful(objectdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete2));
 	/**/
 	BucketDelete bucketdelete1(BUCKET1);
-	EXPECT_TRUE(complete_until_successful(bucketdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete1));
 	/**/
 	BucketDelete bucketdelete2(BUCKET2);
-	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete2));
 	/**/
 	std::string command = "diff ";
 	command += "dat/unittest.txt";
@@ -126,7 +125,6 @@ TEST_F(ConvergenceTest, Synchronous) {
 }
 
 TEST_F(ConvergenceTest, Complete) {
-	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Bucket BUCKET1("ConvergenceTestComplete1");
 	Bucket BUCKET2("ConvergenceTestComplete2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
@@ -134,16 +132,16 @@ TEST_F(ConvergenceTest, Complete) {
 	Multiplex multiplex;
 	/**/
 	BucketHead buckethead1(BUCKET1, multiplex);
-	EXPECT_TRUE(complete_until_nonexistent(buckethead1, LEVEL));
+	EXPECT_TRUE(complete_until_nonexistent(buckethead1));
 	/**/
 	BucketHead buckethead2(BUCKET1, multiplex);
-	EXPECT_TRUE(complete_until_nonexistent(buckethead2, LEVEL));
+	EXPECT_TRUE(complete_until_nonexistent(buckethead2));
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
-	EXPECT_TRUE(complete_until_successful(bucketcreate1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate1));
 	/**/
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
-	EXPECT_TRUE(complete_until_successful(bucketcreate2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketcreate2));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
     ASSERT_FALSE(input == (PathInput *)0);
@@ -161,13 +159,13 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
 	ObjectHead objecthead1(OBJECT1, multiplex);
-	EXPECT_TRUE(complete_until_successful(objecthead1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead1));
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2, multiplex);
-	EXPECT_TRUE(complete_until_successful(objectcopy, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectcopy));
 	/**/
 	ObjectHead objecthead2(OBJECT2, multiplex);
-	EXPECT_TRUE(complete_until_successful(objecthead2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objecthead2));
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
@@ -185,16 +183,16 @@ TEST_F(ConvergenceTest, Complete) {
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, multiplex);
-	EXPECT_TRUE(complete_until_successful(objectdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete1));
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, multiplex);
-	EXPECT_TRUE(complete_until_successful(objectdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(objectdelete2));
 	/**/
 	BucketDelete bucketdelete1(BUCKET1, multiplex);
-	EXPECT_TRUE(complete_until_successful(bucketdelete1, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete1));
 	/**/
 	BucketDelete bucketdelete2(BUCKET2, multiplex);
-	EXPECT_TRUE(complete_until_successful(bucketdelete2, LEVEL));
+	EXPECT_TRUE(complete_until_successful(bucketdelete2));
 	/**/
 	std::string command = "diff ";
 	command += "dat/unittest.txt";
@@ -210,20 +208,19 @@ TEST_F(ConvergenceTest, Service) {
 	Bucket BUCKET2("ConvergenceTestService2");
 	HayloftObject OBJECT1("Object1.txt", BUCKET1);
 	HayloftObject OBJECT2("Object2.txt", BUCKET2);
-	static const MaskableLogger::Level LEVEL = MaskableLogger::CONFIGURATION;
 	Multiplex multiplex;
 	/**/
 	BucketHead buckethead1(BUCKET1, multiplex);
-	EXPECT_TRUE(service_until_nonexistent(buckethead1, LEVEL));
+	EXPECT_TRUE(service_until_nonexistent(buckethead1));
 	/**/
 	BucketHead buckethead2(BUCKET1, multiplex);
-	EXPECT_TRUE(service_until_nonexistent(buckethead2, LEVEL));
+	EXPECT_TRUE(service_until_nonexistent(buckethead2));
 	/**/
 	BucketCreate bucketcreate1(BUCKET1, multiplex);
-	EXPECT_TRUE(service_until_successful(bucketcreate1, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketcreate1));
 	/**/
 	BucketCreate bucketcreate2(BUCKET2, multiplex);
-	EXPECT_TRUE(service_until_successful(bucketcreate2, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketcreate2));
 	/**/
 	PathInput * input = new PathInput("dat/unittest.txt");
     ASSERT_FALSE(input == (PathInput *)0);
@@ -241,13 +238,13 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(objectput1.isSuccessful());
 	/**/
 	ObjectHead objecthead1(OBJECT1, multiplex);
-	EXPECT_TRUE(service_until_successful(objecthead1, LEVEL));
+	EXPECT_TRUE(service_until_successful(objecthead1));
 	/**/
 	ObjectCopy objectcopy(OBJECT1, OBJECT2, multiplex);
-	EXPECT_TRUE(service_until_successful(objectcopy, LEVEL));
+	EXPECT_TRUE(service_until_successful(objectcopy));
 	/**/
 	ObjectHead objecthead2(OBJECT2, multiplex);
-	EXPECT_TRUE(service_until_successful(objecthead2, LEVEL));
+	EXPECT_TRUE(service_until_successful(objecthead2));
 	/**/
 	PathOutput * output2 = new PathOutput(OBJECT2.getKey());
 	ObjectGet objectget2(OBJECT2, output2);
@@ -265,16 +262,16 @@ TEST_F(ConvergenceTest, Service) {
 	EXPECT_TRUE(objectget2.isSuccessful());
 	/**/
 	ObjectDelete objectdelete1(OBJECT1, multiplex);
-	EXPECT_TRUE(service_until_successful(objectdelete1, LEVEL));
+	EXPECT_TRUE(service_until_successful(objectdelete1));
 	/**/
 	ObjectDelete objectdelete2(OBJECT2, multiplex);
-	EXPECT_TRUE(service_until_successful(objectdelete2, LEVEL));
+	EXPECT_TRUE(service_until_successful(objectdelete2));
 	/**/
 	BucketDelete bucketdelete1(BUCKET1, multiplex);
-	EXPECT_TRUE(service_until_successful(bucketdelete1, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketdelete1));
 	/**/
 	BucketDelete bucketdelete2(BUCKET2, multiplex);
-	EXPECT_TRUE(service_until_successful(bucketdelete2, LEVEL));
+	EXPECT_TRUE(service_until_successful(bucketdelete2));
 	/**/
 	std::string command = "diff ";
 	command += "dat/unittest.txt";

@@ -39,10 +39,10 @@ public:
 	 * servicing.
 	 */
 	enum Ready {
-		READY		= (1 << 0),						/* Sockets are READY */
-		PENDING		= (1 << 1),						/* Actions are PENDING */
-		RETRY		= (1 << 2),						/* Failed but RETRYable */
-		ERROR		= (1 << (widthof(int) - 1))		/* Failed with ERROR */
+		READY		= (1 << 0),						/* sockets are READY */
+		PENDING		= (1 << 1),						/* actions are PENDING */
+		RETRY		= (1 << 2),						/* RETRYable error */
+		ERROR		= (1 << (widthof(int) - 1))		/* unrecoverable ERROR */
 	};
 
 	/**
@@ -140,7 +140,7 @@ public:
 	 * and return a mask of Ready bits indicating what their state is.
 	 *
 	 * @param timeout is a timeout duration in milliseconds.
-	 * @return a mask of Ready bits containing ERROR, RETRY, or READY.
+	 * @return a mask of Ready bits containing ERROR, RETRY, PENDING, or READY.
 	 */
 	virtual int ready(Milliseconds timeout = TIMEOUT);
 
