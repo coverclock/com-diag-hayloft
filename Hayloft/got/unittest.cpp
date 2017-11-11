@@ -35,6 +35,7 @@ static const Milliseconds TIMEOUT = Fixture::timeout(60000); /* one minute */
 
 #if 1
 #include "sizeof.h"
+#include "Debug.h"
 #include "Endpoint.h"
 #include "Session.h"
 #include "Credentials.h"
