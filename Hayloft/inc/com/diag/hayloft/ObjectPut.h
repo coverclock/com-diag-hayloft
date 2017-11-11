@@ -33,13 +33,13 @@ class Bucket;
 
 /**
  * ObjectPut is an Object Action which puts an S3 object into an S3 bucket,
- * overwriting any existing S3 object with the same key. By default, a Desperado
+ * overwriting any existing S3 object with the same key. By default, a Grandote
  * Input functor is used as the application data source. Other data sources can
- * be used by either implementing the Desperado Input functor interface, or by
- * overriding the appropriate methods in this object. When Desperado Input
+ * be used by either implementing the Grandote Input functor interface, or by
+ * overriding the appropriate methods in this object. When Grandote Input
  * functors are used, the functors can be either UNTAKEN (passed by reference)
  * or TAKEN (passed by pointer). In the latter case, the TAKEN functor will be
- * deleted when this Action completes. (Some Desperado Output functors rely on
+ * deleted when this Action completes. (Some Grandote Output functors rely on
  * destruction to close the underlying data source.)
  */
 class ObjectPut : public Object {

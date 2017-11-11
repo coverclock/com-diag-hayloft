@@ -39,6 +39,14 @@ package. But I chose to build it from scratch to patch in support for
 enabling verbose debugging in libcurl and to support the use of the
 Charles Web Debugging Proxy.
 
+(Grandote is a fork of the Digital Aggregates Desperadito C++ library
+ported to run on top of Diminuto. Desperadito is a fork of the Digital
+Aggregates Desperado C++ library plus some general purposes classes that
+were originally in Hayloft itself. Portions of Desperado, Desperadito,
+and Diminuto have found there way into some of the code bases of my
+clients. Grandote and Diminuto are the only of these libraries that I
+am maintaining going forward.)
+
 NOTA BENE (2017)
 
 This code worked when I wrote it six years ago in 2011. When I revisited
@@ -247,7 +255,7 @@ implemented in the Grandote library.)
     0xffe0			plus output from show functions
     0xfff0			plus debug output
 
-The Desperado log levels are mapped to the appropriate log levels in the
+The Grandote log levels are mapped to the appropriate log levels in the
 underlying logging mechanism. For example, SYSLOG has eight log levels.
 
     COM_DIAG_HAYLOFT_UNITTEST_NOLIMIT

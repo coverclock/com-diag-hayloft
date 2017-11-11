@@ -32,12 +32,12 @@ class Bucket;
 
 /**
  * ObjectPut is an Object Action which gets an S3 object from an S3 bucket. By
- * default, a Desperado Output functor is used as the application data sink.
- * Other data sinks can be used by either implementing the Desperado Output
+ * default, a Grandote Output functor is used as the application data sink.
+ * Other data sinks can be used by either implementing the Grandote Output
  * functor interface, or by overriding the appropriate methods in this object.
- * When Desperado Output functors are used, the functors can be either UNTAKEN
+ * When Grandote Output functors are used, the functors can be either UNTAKEN
  * (passed by reference) or TAKEN (passed by pointer). In the latter case, the
- * TAKEN functor will be deleted when this Action completes. (Some Desperado
+ * TAKEN functor will be deleted when this Action completes. (Some Grandote
  * Input functors rely on destruction to close the underlying data sink.)
  */
 class ObjectGet : public Object {
