@@ -44,8 +44,7 @@ ported to run on top of Diminuto. Desperadito is a fork of the Digital
 Aggregates Desperado C++ library plus some general purposes classes that
 were originally in Hayloft itself. Portions of Desperado, Desperadito,
 and Diminuto have found their way into some of the code bases of my
-clients. Grandote and Diminuto are the only of these libraries that I
-am maintaining going forward.)
+clients. I am no longer maintaining Desperadito or Desperado.)
 
 NOTA BENE (2017)
 
