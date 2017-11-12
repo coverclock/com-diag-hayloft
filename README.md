@@ -23,28 +23,33 @@ languages like Python for embedded S3 applications.
 
 DEPENDENCIES
 
-Hayloft has direct dependencies on Bryan Ischo's libs3 2.0 library,
-and on Digital Aggregates's libgrandote C++ systems programming
+You have to be pretty determined to use Hayloft because it has a
+lot of dependencies.
+
+Hayloft has direct dependencies on Bryan Ischo's S3 library libs3
+2.0, and on Digital Aggregates's Grandote C++ systems programming
 library.
 
-libs3 depends on libcurl, libssl, libcrypto, and libxml2 libraries.
+libs3 depends on the cURL, SSL, Crypto, and XML2 libraries.
 
-libgrandote depends on Digital Aggregates libdiminuto C systems
-programming library.
+Grandote depends on the Digital Aggregates Diminuto C systems
+programming library, Google Test (or Google Mock), and the Digital
+Aggregates Google Test helper framework Lariat.
 
-libdiminuto depends on libpthread, librt, libdl, and libm.
+Diminuto depends on the standard pthread (POSIX thread), rt
+(real-time), dl (dynamic linker), and math libraries.
 
 Hayloft can be used with the standard libs3-2 available as an Ubuntu
 package. But I chose to build it from scratch to patch in support for
 enabling verbose debugging in libcurl and to support the use of the
 Charles Web Debugging Proxy.
 
-(Grandote is a fork of the Digital Aggregates Desperadito C++ library
+Grandote is a fork of the Digital Aggregates Desperadito C++ library
 ported to run on top of Diminuto. Desperadito is a fork of the Digital
 Aggregates Desperado C++ library plus some general purposes classes that
 were originally in Hayloft itself. Portions of Desperado, Desperadito,
 and Diminuto have found their way into some of the code bases of my
-clients. I am no longer maintaining Desperadito or Desperado.)
+clients. I am no longer maintaining Desperadito or Desperado.
 
 NOTA BENE (2017)
 
