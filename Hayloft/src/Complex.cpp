@@ -238,12 +238,13 @@ void Complex::complete(Action & action, Status ultimate, const ::S3ErrorDetails 
 
 void * Complex::run() {
 	::com::diag::grandote::Seconds time;
+    bool notified = false;
 
 	logger->debug("Complex: begin\n");
 
 	// This thread runs forever until notified by the last Complex destructor.
 
-	while (!thread.notified()) {
+	while ((!notified) && (!(notified = thread.notified()))) {
 
 		Milliseconds delay = RETRY;
 
@@ -324,7 +325,7 @@ void * Complex::run() {
 
 			if (active <= 0) {
 				::com::diag::grandote::CriticalSection guard(shared);
-				while (starting.empty() && restarting.empty() && (!thread.notified())) {
+				while (starting.empty() && restarting.empty() && (!notified) && (!(notified = thread.notified()))) {
 					int error = ready.wait(shared);
 					if (error != 0) {
 						logger->error("Complex: wait failed! error=%d=\"%s\"\n", error, ::strerror(error));
